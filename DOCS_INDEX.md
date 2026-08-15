@@ -47,6 +47,9 @@
 | 21 | `GAME_DATA_SCHEMA.md` | **数据模型规格**：主战役存档、地图 LOD、项目/科技/势力、迁移与离线结算 | ✅ 核心完成（v0.1） |
 | 22 | `P1-S01_UI_SPEC.md` | **首个纵向切片界面规格**：河谷外拓的固定布局、Canvas 图层、交互和视觉 token | ✅ 已冻结 |
 | 23 | `P1-S01_IMPLEMENTATION_SPEC.md` | **首个纵向切片任务包**：范围、初始数据、事件、测试、验收与 DeepSeek 回报格式 | ✅ 已冻结 |
+| 24 | `P1-S01_VISUAL_BASELINE.md` | **视觉基准包**：远/中/近景地图、固定 UI 框架、颜色、图层、禁止项与截图验收 | ✅ 已冻结 |
+| 25 | `DEEPSEEK_IMPLEMENTATION_CONTRACT.md` | **实现交接约定**：DeepSeek 的职责边界、回报纪律与仅正式完成后触发评审的规则 | ✅ 生效中 |
+| 26 | `P1-S01-A_VISUAL_REWORK_TASK.md` | **当前施工单**：把视觉基准转成 DeepSeek 可执行的远/中/近景返工步骤与交接命令 | ✅ 可直接下发 |
 
 ---
 
