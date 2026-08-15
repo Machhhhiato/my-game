@@ -20,12 +20,16 @@ DeepSeek 是本项目的**实现工程师**，不是视觉设计师、产品负�
 仅当以下条件全部成立时，作为最后一个动作执行：
 
 ```bash
+mkdir -p .codex/review-reports
+# 先将最终 Harness 回报的相同内容写入：
+# .codex/review-reports/<任务编号>.md
 node scripts/review-handoff.mjs mark \
   --task <任务编号> \
   --summary "<一句话完成内容>" \
+  --report .codex/review-reports/<任务编号>.md \
   --artifact <截图或关键产物路径> [--artifact <更多产物路径>]
 ```
 
-该命令会重新执行 `npm run typecheck`、`npm run build` 和 `git diff --check`；全部通过且产物存在后，才会原子写入 `.codex/review-ready.json`。若任一步失败，不产生完成信号，继续修复或报告失败。
+该 Markdown 必须包含：修改文件、执行命令及结果、截图/关键产物路径、客观已知限制、待裁决问题。该命令会重新执行 `npm run typecheck`、`npm run build` 和 `git diff --check`；全部通过且产物和正式回报存在后，才会原子写入 `.codex/review-ready.json`。若任一步失败，不产生完成信号，继续修复或报告失败。
 
-Codex 只监听此完成信号后再读取 Harness 的最终回报，因此不要在中间阶段运行该命令，也不要手工创建、编辑或保留该 JSON 文件。
+Codex 只在完成信号出现后执行 `node scripts/review-handoff.mjs read --task <任务编号>` 读取正式回报，因此不要在中间阶段运行该命令，也不要手工创建、编辑或保留该 JSON 文件。

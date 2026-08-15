@@ -91,12 +91,16 @@ screenshot-ledger.png           精密备件资源账锚定资源项下方
 然后执行：
 
 ```bash
+mkdir -p .codex/review-reports
+# 将你在 Harness 的最终回报同样写入以下文件；必须包含修改文件、命令结果、截图路径、已知限制和待裁决问题。
+# .codex/review-reports/P1-S01-A-visual-rework.md
 npm run typecheck
 npm run build
 git diff --check
 node scripts/review-handoff.mjs mark \
   --task P1-S01-A-visual-rework \
   --summary "河谷外拓战略地图已按视觉基准完成远中近景返工" \
+  --report .codex/review-reports/P1-S01-A-visual-rework.md \
   --artifact screenshot-visual-far.png \
   --artifact screenshot-visual-medium.png \
   --artifact screenshot-visual-close.png \
@@ -104,6 +108,6 @@ node scripts/review-handoff.mjs mark \
   --artifact screenshot-ledger.png
 ```
 
-前三条如有失败，修复后重跑；最后一条只能在前三条成功后作为**最后一个动作**运行。不要在开发中途运行它，也不要手动写 `.codex/review-ready.json`。
+前三条如有失败，修复后重跑；最后一条只能在前三条成功、正式回报已写入后作为**最后一个动作**运行。不要在开发中途运行它，也不要手动写 `.codex/review-ready.json`。
 
 最终 Harness 回报只报告：修改文件、命令结果、截图路径、客观已知限制、需要裁决的问题。不要对视觉是否通过下结论，等待 Codex/创意负责人评审。
