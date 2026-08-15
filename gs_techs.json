@@ -1,0 +1,650 @@
+{
+ "animal_husbandry": {
+  "era": "ancient",
+  "unlocks": [
+   "Pasture",
+   "Camp",
+   "Kurgan",
+   "Horses"
+  ],
+  "desc": "Allows harvesting of Cattle, Sheep, and Deer."
+ },
+ "archery": {
+  "era": "ancient",
+  "unlocks": [
+   "Temple of Artemis",
+   "Archer",
+   "Pítati Archer",
+   "Hul&#x27;che"
+  ],
+  "desc": "Archery is the method by which a person uses the spring power stored in a bent stick to shoot a slender pointed projectile a great distance at rapid speed. A…"
+ },
+ "astrology": {
+  "era": "ancient",
+  "unlocks": [
+   "Shrine",
+   "Stonehenge",
+   "Holy Site",
+   "Lavra"
+  ],
+  "desc": "Now considered a “pseudoscience,” astrology is based on the premise that there is some sort of relationship between celestial objects and phenomena and events…"
+ },
+ "bronze_working": {
+  "era": "ancient",
+  "unlocks": [
+   "Barracks",
+   "Basilikoi Paides",
+   "Encampment",
+   "Ikanda"
+  ],
+  "desc": "Allows chopping of Rainforest. Reveals Iron."
+ },
+ "irrigation": {
+  "era": "ancient",
+  "unlocks": [
+   "Hanging Gardens",
+   "Palgum",
+   "Plantation",
+   "Stepwell"
+  ],
+  "desc": "Allows clearing of Marsh, and harvesting of Bananas."
+ },
+ "masonry": {
+  "era": "ancient",
+  "unlocks": [
+   "Ancient Walls",
+   "Pyramids",
+   "Battering Ram",
+   "Great Wall"
+  ],
+  "desc": "Allows harvesting of Stone."
+ },
+ "mining": {
+  "era": "ancient",
+  "unlocks": [
+   "Mine",
+   "Quarry"
+  ],
+  "desc": "Allows chopping of Woods, and harvesting of Copper."
+ },
+ "pottery": {
+  "era": "ancient",
+  "unlocks": [
+   "Granary",
+   "Great Bath",
+   "Mekewap"
+  ],
+  "desc": "Allows harvesting of Bonus resources improved by Farms."
+ },
+ "sailing": {
+  "era": "ancient",
+  "unlocks": [
+   "Galley",
+   "Viking Longship",
+   "Bireme",
+   "Fishing Boats"
+  ],
+  "desc": "Allows Builders to embark."
+ },
+ "writing": {
+  "era": "ancient",
+  "unlocks": [
+   "Library",
+   "Etemenanki",
+   "Campus",
+   "Seowon"
+  ],
+  "desc": "Writing is a technology that – like a few others – quite literally changed the course of civilization. The ability to set things down so as to remember them –…"
+ },
+ "celestial_navigation": {
+  "era": "classical",
+  "unlocks": [
+   "Lighthouse",
+   "Great Lighthouse",
+   "Harbor",
+   "Royal Navy Dockyard"
+  ],
+  "desc": "Allows Traders to embark, and allows harvesting of Fish and Crabs."
+ },
+ "construction": {
+  "era": "classical",
+  "unlocks": [
+   "Terracotta Army",
+   "Toa",
+   "Lumber Mill",
+   "Trap"
+  ],
+  "desc": "When the architects and engineers get done mucking about, the contractors take over. Once there was agriculture and a reason to stay in one place, the first…"
+ },
+ "currency": {
+  "era": "classical",
+  "unlocks": [],
+  "desc": "Unlocks ability to create Industries"
+ },
+ "engineering": {
+  "era": "classical",
+  "unlocks": [
+   "Machu Picchu",
+   "Aqueduct",
+   "Bath",
+   "Catapult"
+  ],
+  "desc": "Engineering is the science (or perhaps “art,” if engineers themselves are involved in the discussion) of using science to design things: buildings, roads and…"
+ },
+ "horseback_riding": {
+  "era": "classical",
+  "unlocks": [
+   "Stable",
+   "Ordu",
+   "Horseman",
+   "Saka Horse Archer"
+  ],
+  "desc": "There is archaeological evidence that around 4000 BC humans had used bits on their horses in the basins of the Dnieper and Don rivers; skeletons of horses…"
+ },
+ "iron_working": {
+  "era": "classical",
+  "unlocks": [
+   "Jebel Barkal",
+   "Oppidum",
+   "Swordsman",
+   "Legion"
+  ],
+  "desc": "While the use of iron has been dated back to 4000 BC, the Hittites were the first to extract the ore, smelt it and fashion weapons – thus setting off the Iron…"
+ },
+ "mathematics": {
+  "era": "classical",
+  "unlocks": [
+   "Petra",
+   "Consulate",
+   "Diplomatic Quarter"
+  ],
+  "desc": "+1 Movement for all naval units."
+ },
+ "shipbuilding": {
+  "era": "classical",
+  "unlocks": [
+   "Colossus",
+   "Quadrireme",
+   "Dromon",
+   "Kampung"
+  ],
+  "desc": "Allows all land units to embark."
+ },
+ "apprenticeship": {
+  "era": "medieval",
+  "unlocks": [
+   "Workshop",
+   "Industrial Zone",
+   "Hansa",
+   "Man-At-Arms"
+  ],
+  "desc": "+1 Production to the Mine improvement."
+ },
+ "buttress": {
+  "era": "medieval",
+  "unlocks": [
+   "Hagia Sophia",
+   "Dam"
+  ],
+  "desc": "Buttresses are architectural elements that reinforce walls, allowing for the construction of higher walls than unsupported construction would permit. The…"
+ },
+ "castles": {
+  "era": "medieval",
+  "unlocks": [
+   "Medieval Walls",
+   "Alhambra",
+   "Courser",
+   "Black Army"
+  ],
+  "desc": "Bonus Culture for the Great Wall improvement for adjacency. Gain a free Spy if playing as Catherine de Medici (Black Queen)."
+ },
+ "education": {
+  "era": "medieval",
+  "unlocks": [
+   "University",
+   "University of Sankore",
+   "Alchemical Society",
+   "Navigation School"
+  ],
+  "desc": "Humans learn things, and civilization results. Obviously education has been around as long as mankind has. Through most of history, it was an informal affair,…"
+ },
+ "machinery": {
+  "era": "medieval",
+  "unlocks": [
+   "Kilwa Kisiwani",
+   "Siege Tower",
+   "Crossbowman",
+   "Crouching Tiger"
+  ],
+  "desc": "When humans began to develop tasks that they or their animals could not (or would not) do, they invented machines. From those first simple machines – the…"
+ },
+ "military_engineering": {
+  "era": "medieval",
+  "unlocks": [
+   "Armory",
+   "Military Engineer",
+   "Trebuchet",
+   "Domrey"
+  ],
+  "desc": "Loosely defined as “the art and practice of designing and building military works and maintaining lines of military transport and communications,” military…"
+ },
+ "military_tactics": {
+  "era": "medieval",
+  "unlocks": [
+   "Huey Teocalli",
+   "Berserker",
+   "Pikeman",
+   "Impi"
+  ],
+  "desc": "Until the Middle Ages, “tactics” was limited to mostly running at the enemy in a frontal assault, leavened by the occasional maneuver to turn the flank of the…"
+ },
+ "stirrups": {
+  "era": "medieval",
+  "unlocks": [
+   "Knight",
+   "Mamluk",
+   "Keshig",
+   "Mandekalu Cavalry"
+  ],
+  "desc": "Pasture improvements receive +1 Food."
+ },
+ "astronomy": {
+  "era": "renaissance",
+  "unlocks": [
+   "Potala Palace"
+  ],
+  "desc": "If one stares into the night sky long enough, one discovers astronomy (or if none too bright, astrology – but that’s another topic). Up to the Renaissance,…"
+ },
+ "banking": {
+  "era": "renaissance",
+  "unlocks": [
+   "Bank",
+   "Great Zimbabwe",
+   "Grand Bazaar",
+   "Gilded Vault"
+  ],
+  "desc": "Although there had been “banks” before – Hammurabi even set down laws governing banking in his famous Code – mostly these were private individuals that made…"
+ },
+ "cartography": {
+  "era": "renaissance",
+  "unlocks": [
+   "Casa de Contratación ",
+   "Caravel",
+   "Nau"
+  ],
+  "desc": "+2 Gold from the Fishing Boat improvement. All naval and embarked units can navigate Ocean tiles."
+ },
+ "gunpowder": {
+  "era": "renaissance",
+  "unlocks": [],
+  "desc": "Quarry improvements receive +1 Production. Unlocks a Governor title for Suleiman (Kanuni)."
+ },
+ "mass_production": {
+  "era": "renaissance",
+  "unlocks": [
+   "Shipyard",
+   "Venetian Arsenal"
+  ],
+  "desc": "Until the Industrial Revolution, the idea of “mass production” was limited to pottery (molds), Chinese crossbows with interchangeable parts, and assembly line…"
+ },
+ "metal_casting": {
+  "era": "renaissance",
+  "unlocks": [
+   "Bombard",
+   "Pike and Shot",
+   "Carolean"
+  ],
+  "desc": "Metal casting is the process by which a craftsman can make multiple, identical metal objects by pouring molten metal into a mold. The oldest such yet found is…"
+ },
+ "printing": {
+  "era": "renaissance",
+  "unlocks": [
+   "Forbidden City"
+  ],
+  "desc": "Provides one more level of diplomatic visibility on all other civilizations. All Tourism yields from Great Works of Writing are doubled."
+ },
+ "siege_tactics": {
+  "era": "renaissance",
+  "unlocks": [
+   "Renaissance Walls",
+   "Tsikhe",
+   "Fort"
+  ],
+  "desc": "In essence, siege tactics haven’t changed much since Megiddo (c. 1457 BC), Tyre (332 BC), Carthage (149-146 BC), and Masada (73-74 AD) – not to mention Troy…"
+ },
+ "square_rigging": {
+  "era": "renaissance",
+  "unlocks": [
+   "Frigate",
+   "De Zeven Provinciën"
+  ],
+  "desc": "+1 Movement for embarked units."
+ },
+ "ballistics": {
+  "era": "industrial",
+  "unlocks": [
+   "Field Cannon",
+   "Cuirassier",
+   "Rough Rider",
+   "Modernized Trap"
+  ],
+  "desc": "The mechanics of throwing things have been known for quite a while; primitive cultures are quite adept at throwing things. The science of those mechanics is…"
+ },
+ "economics": {
+  "era": "industrial",
+  "unlocks": [],
+  "desc": "Unlocks ability to found Corporations"
+ },
+ "industrialization": {
+  "era": "industrial",
+  "unlocks": [
+   "Factory",
+   "Electronics Factory",
+   "Ruhr Valley",
+   "Coal Power Plant"
+  ],
+  "desc": "+1 Production to the Mine improvement."
+ },
+ "military_science": {
+  "era": "industrial",
+  "unlocks": [
+   "Military Academy",
+   "Cavalry",
+   "Cossack",
+   "Redcoat"
+  ],
+  "desc": "Military Science is the study of the theory and application of “organized coercive force,” both friendly and enemy. Until the end of the Second World War,…"
+ },
+ "rifling": {
+  "era": "industrial",
+  "unlocks": [
+   "Ranger",
+   "Highlander",
+   "Reinforced Barricade"
+  ],
+  "desc": "Rifling is merely the cutting of helical grooves into the inner part of a gun barrel so as to induce spin in a ball or bullet which serves to gyroscopically…"
+ },
+ "sanitation": {
+  "era": "industrial",
+  "unlocks": [
+   "Sewer",
+   "Országház",
+   "Medic"
+  ],
+  "desc": "Stepwell improvements receive +1 Housing."
+ },
+ "scientific_theory": {
+  "era": "industrial",
+  "unlocks": [
+   "Oxford University"
+  ],
+  "desc": "Allows Research Agreement diplomatic action. +1 Food from the Plantation improvement."
+ },
+ "steam_power": {
+  "era": "industrial",
+  "unlocks": [
+   "Panama Canal",
+   "Canal",
+   "Ironclad"
+  ],
+  "desc": "+2 Movement for embarked units."
+ },
+ "chemistry": {
+  "era": "modern",
+  "unlocks": [
+   "Research Lab",
+   "AT Crew",
+   "Mountain Tunnel"
+  ],
+  "desc": "As astronomy evolved from astrology, chemistry evolved from another pseudoscience: alchemy. Alchemy spans four millennia and three continents; never…"
+ },
+ "combustion": {
+  "era": "modern",
+  "unlocks": [
+   "Golden Gate Bridge",
+   "Tank",
+   "Supply Convoy"
+  ],
+  "desc": "+1 Movement for embarked units."
+ },
+ "electricity": {
+  "era": "modern",
+  "unlocks": [
+   "Seaport",
+   "Hydroelectric Dam",
+   "Oil Power Plant",
+   "Submarine"
+  ],
+  "desc": "Mankind has known electricity existed since the first bunch of Neanderthals got blasted by a lightning bolt; in fact, for millennia afterwards, electricity in…"
+ },
+ "flight": {
+  "era": "modern",
+  "unlocks": [
+   "Hangar",
+   "Aerodrome",
+   "Observation Balloon",
+   "Biplane"
+  ],
+  "desc": "Receive Tourism on all improvements that provide Culture. Amount of Tourism generated is equivalent to the improvement's Culture output."
+ },
+ "radio": {
+  "era": "modern",
+  "unlocks": [
+   "Broadcast Center",
+   "Film Studio",
+   "Seaside Resort",
+   "Aluminum"
+  ],
+  "desc": "The idea of “wireless” communication begins with experiments in wireless telegraphy – sending impulses through the ground, water and even steel railroad…"
+ },
+ "refining": {
+  "era": "modern",
+  "unlocks": [
+   "Battleship",
+   "Oil Well",
+   "Oil"
+  ],
+  "desc": "Petroleum refining developed in parallel with the chemical revolution of the late 19th and early 20th Centuries, starting with the drilling of the first oil…"
+ },
+ "replaceable_parts": {
+  "era": "modern",
+  "unlocks": [
+   "Food Market",
+   "Infantry",
+   "Digger"
+  ],
+  "desc": "Upgrades Farm improvements to Mechanized Agriculture. +1 Food Adjacency bonus for every Farm improvement they are adjacent to."
+ },
+ "steel": {
+  "era": "modern",
+  "unlocks": [],
+  "desc": "+1 Production from the Lumber Mill improvement. Unlocks Urban Defenses, giving all of your cities an automatic 400 Fortification Strength and the ability to…"
+ },
+ "advanced_ballistics": {
+  "era": "atomic",
+  "unlocks": [
+   "Anti-Air Gun",
+   "Machine Gun"
+  ],
+  "desc": "Once humans started shooting off rockets, the need for a new understanding of ballistics became clear. The flight of rockets, jets, missiles, spacecraft and…"
+ },
+ "advanced_flight": {
+  "era": "atomic",
+  "unlocks": [
+   "Airport",
+   "Fighter",
+   "P-51 Mustang",
+   "Bomber"
+  ],
+  "desc": "As the Second World War progressed, a new form of aircraft made its appearance, pioneered by the Germans but with the Americans and British not far behind.…"
+ },
+ "combined_arms": {
+  "era": "atomic",
+  "unlocks": [
+   "Aircraft Carrier",
+   "Destroyer",
+   "Uranium"
+  ],
+  "desc": "Since the earliest age, able military commanders had integrated formations of infantry, archers and whatever passed for cavalry in battle with more or less…"
+ },
+ "computers": {
+  "era": "atomic",
+  "unlocks": [
+   "Flood Barrier",
+   "Drone"
+  ],
+  "desc": "Grants the ability to construct an additional Spy. +100% Tourism across your empire."
+ },
+ "nuclear_fission": {
+  "era": "atomic",
+  "unlocks": [
+   "Nuclear Power Plant",
+   "Manhattan Project",
+   "Build Nuclear Device"
+  ],
+  "desc": "Mushroom clouds and boundless energy; utopia or annihilation. The technology of nuclear fission carries the promise of both, or neither. In physics and…"
+ },
+ "plastics": {
+  "era": "atomic",
+  "unlocks": [
+   "Spec Ops",
+   "Offshore Oil Rig"
+  ],
+  "desc": "+1 Food to Fishing Boats."
+ },
+ "rocketry": {
+  "era": "atomic",
+  "unlocks": [
+   "Spaceport",
+   "Missile Silo",
+   "Launch Earth Satellite"
+  ],
+  "desc": "+1 Production from the Quarry improvement."
+ },
+ "synthetic_materials": {
+  "era": "atomic",
+  "unlocks": [
+   "Biosphère",
+   "Helicopter",
+   "Geothermal Plant"
+  ],
+  "desc": "+1 Gold to Camps."
+ },
+ "composites": {
+  "era": "information",
+  "unlocks": [
+   "Modern AT",
+   "Modern Armor",
+   "Wind Farm"
+  ],
+  "desc": "A composite is any material made from two or more materials with significantly differing physical or chemical properties; composites are distinct from alloys…"
+ },
+ "guidance_systems": {
+  "era": "information",
+  "unlocks": [
+   "Rocket Artillery",
+   "Mobile SAM"
+  ],
+  "desc": "With the advent of rocketry, it became rather important not to get lost when launching a nuclear-tipped missile at the enemy or shooting a man into space. A…"
+ },
+ "lasers": {
+  "era": "information",
+  "unlocks": [
+   "Jet Fighter",
+   "Missile Cruiser"
+  ],
+  "desc": "The term “laser” is an acronym for “light amplification by stimulated emission of radiation,” which pretty much describes what it happens to be. The theory…"
+ },
+ "nanotechnology": {
+  "era": "information",
+  "unlocks": [
+   "Launch Mars Colony"
+  ],
+  "desc": "Tiny machines inside animals and humans snipping, slicing, splicing, melding or mutating cells. Tiny machines creating new materials on the molecular level.…"
+ },
+ "nuclear_fusion": {
+  "era": "information",
+  "unlocks": [
+   "Operation Ivy",
+   "Build Thermonuclear Device"
+  ],
+  "desc": "In contrast to nuclear fission – where energy is generated by the division of a nucleus – nuclear fusion occurs when two or more atomic nuclei slam together…"
+ },
+ "robotics": {
+  "era": "information",
+  "unlocks": [
+   "Giant Death Robot"
+  ],
+  "desc": "+1 Production to Pastures."
+ },
+ "satellites": {
+  "era": "information",
+  "unlocks": [
+   "Mechanized Infantry",
+   "Solar Farm",
+   "Launch Moon Landing"
+  ],
+  "desc": "“Beep … beep … beep.” So it began. Sputnik, with an onboard radio signal transmitter, was launched in October 1957 AD by Soviet Russia. Orbiting overhead, the…"
+ },
+ "stealth_technology": {
+  "era": "information",
+  "unlocks": [
+   "Jet Bomber"
+  ],
+  "desc": "The ability to creep around unseen and unleash havoc is the fantasy of every five-year-old; modern scientists are close to making it reality. Modern stealth…"
+ },
+ "telecommunications": {
+  "era": "information",
+  "unlocks": [
+   "Nuclear Submarine"
+  ],
+  "desc": "The Internet and cable television, cell phones and satellite radio … it’s all telecommunications. Civilization is wrapped in a web of electromagnetic waves…"
+ },
+ "advanced_ai": {
+  "era": "future",
+  "unlocks": [],
+  "desc": "Unlocks Giant Death Robot upgrade: Drone Air Defense +100 Anti-Air Strength."
+ },
+ "advanced_power_cells": {
+  "era": "future",
+  "unlocks": [],
+  "desc": "CO2 emissions from units reduced by 50%. Unlocks Giant Death Robot upgrade: Particle Beam Siege Cannon Ranged attacks against Cities and Encampments are 100%…"
+ },
+ "cybernetics": {
+  "era": "future",
+  "unlocks": [],
+  "desc": "Unlocks Giant Death Robot upgrade: Enhanced Mobility +3 Movement. Can perform a Jump action to cross over mountain terrain."
+ },
+ "future_tech": {
+  "era": "future",
+  "unlocks": [],
+  "desc": "Can be completed multiple times, increasing your points towards the Score Victory. Also grants all of your cities +5% Production towards city projects each…"
+ },
+ "offworld_mission": {
+  "era": "future",
+  "unlocks": [
+   "Launch Lagrange Laser Station",
+   "Build Terrestrial Laser Station"
+  ],
+  "desc": "If human beings are to settle away from planet Earth, it will be necessary to develop competencies for life isolated from the main planet—simple matters like…"
+ },
+ "predictive_systems": {
+  "era": "future",
+  "unlocks": [
+   "Offshore Wind Farm"
+  ],
+  "desc": "+1 Production to Quarry, Oil Well, and Oil Rig improvements."
+ },
+ "seasteads": {
+  "era": "future",
+  "unlocks": [
+   "Seastead"
+  ],
+  "desc": "Awards 1 Diplomatic Victory point."
+ },
+ "smart_materials": {
+  "era": "future",
+  "unlocks": [],
+  "desc": "Unlocks Giant Death Robot upgrade: Reinforced Armor Plating +10 Combat Strength when defending against land and naval units."
+ }
+}
