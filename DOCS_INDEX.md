@@ -50,6 +50,7 @@
 | 24 | `P1-S01_VISUAL_BASELINE.md` | **视觉基准包**：远/中/近景地图、固定 UI 框架、颜色、图层、禁止项与截图验收 | ✅ 已冻结 |
 | 25 | `DEEPSEEK_IMPLEMENTATION_CONTRACT.md` | **实现交接约定**：DeepSeek 的职责边界、回报纪律与仅正式完成后触发评审的规则 | ✅ 生效中 |
 | 26 | `P1-S01-A_VISUAL_REWORK_TASK.md` | **当前施工单**：把视觉基准转成 DeepSeek 可执行的远/中/近景返工步骤与交接命令 | ✅ 可直接下发 |
+| 27 | `P1-S01-B_MAP_VISUAL_CORRECTION.md` | **地图视觉矫正施工图**：矩形视口、宏观大陆、河谷微地形、18 个功能区群与第二次验收 | ✅ 可直接下发 |
 
 ---
 
