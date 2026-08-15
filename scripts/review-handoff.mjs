@@ -72,6 +72,10 @@ function mark(options) {
   };
   const artifacts = options.artifacts.map((item) => validateFile(item, '产物'));
   const report = validateFile(options.report, '正式回报');
+  const requiredReportPrefix = `.codex${sep}review-reports${sep}`;
+  if (!report.startsWith(requiredReportPrefix)) {
+    throw new Error('正式回报必须写入 .codex/review-reports/<任务编号>.md');
+  }
 
   run('npm', ['run', 'typecheck']);
   run('npm', ['run', 'build']);
