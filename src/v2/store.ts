@@ -1,26 +1,15 @@
 import { create } from 'zustand';
 import type {
-  CampaignSaveV2, DirectionId, MapLayerId, PlayerCommandState,
+  CampaignSaveV3, DirectionId, MapLayerId, PlayerCommandState,
   PolicyId, ProjectId, ResourceId, SecurityPostureId,
 } from './types';
-import { initV2, saveGameV2, hasRetiredV1Save, backupRetiredV1Save } from './save';
-import { PROJECTS } from './data';
+import { initV3, saveGameV3, hasRetiredV1Save, backupRetiredV1Save } from './save';
+import { settlePlanPeriod } from './simulation';
 
 export type PanelId = 'nation' | 'plan' | 'direction' | 'project' | 'policy' | 'research' | 'report';
 
-const PERIOD_SECONDS = 45;
-const PERIODS_PER_YEAR = 6;
-
-export function periodLabel(elapsed: number): { year: number; period: number } {
-  const total = Math.floor(elapsed / PERIOD_SECONDS);
-  return {
-    year: 1 + Math.floor(total / PERIODS_PER_YEAR),
-    period: 1 + (total % PERIODS_PER_YEAR),
-  };
-}
-
 interface V2Store {
-  state: CampaignSaveV2;
+  state: CampaignSaveV3;
   version: number;
   // 瞬态 UI（不入存档）
   panel: PanelId | null;
@@ -61,7 +50,7 @@ interface V2Store {
   confirmPeriod(): void;
 }
 
-const init = initV2();
+const init = initV3();
 
 export const useV2 = create<V2Store>((set, get) => ({
   state: init.state,
@@ -99,14 +88,14 @@ export const useV2 = create<V2Store>((set, get) => ({
     backupRetiredV1Save();
     const s = get().state;
     s.retiredNoticeShown = true;
-    saveGameV2(s);
+    saveGameV3(s);
     set({ retirementNotice: false });
   },
 
   setLayer: (id) => {
     const s = get().state;
     s.activeLayers = [id];
-    saveGameV2(s);
+    saveGameV3(s);
     set({ state: { ...s } });
   },
 
@@ -117,21 +106,21 @@ export const useV2 = create<V2Store>((set, get) => ({
     // 至少保留一个图层
     if (next.length === 0) return;
     s.activeLayers = next;
-    saveGameV2(s);
+    saveGameV3(s);
     set({ state: { ...s } });
   },
 
   setActiveLayers: (ids) => {
     const s = get().state;
     s.activeLayers = ids.length > 0 ? [...ids] : ['political'];
-    saveGameV2(s);
+    saveGameV3(s);
     set({ state: { ...s } });
   },
 
   setSpeed: (v) => {
     const s = get().state;
     s.clock.speed = v;
-    saveGameV2(s);
+    saveGameV3(s);
     set({ state: { ...s } });
   },
 
@@ -147,48 +136,19 @@ export const useV2 = create<V2Store>((set, get) => ({
   confirmPeriod: () => {
     const s = get().state;
     const p = get().pending;
-    s.player = { ...p };
-    const proj = PROJECTS[p.flagshipProjectId ?? 'water_life'];
-    s.log = [
-      ...s.log,
-      {
-        id: s.log.length + 1,
-        period: `第 ${s.clock.period} 期`,
-        place: '统筹与账目',
-        summary: `本期命令已确认：优先「${proj.name}」；挤占 ${proj.cost}；主要风险 ${proj.risk}。`,
-        severity: 'info' as const,
-        nodeId: 'valley_outpost',
-      },
-    ].slice(-40);
-    saveGameV2(s);
-    set({ state: { ...s }, confirmSummaryOpen: false, staged: false, pending: { ...s.player } });
+    const result = settlePlanPeriod(s, p);
+    saveGameV3(result.newState);
+    set({
+      state: result.newState,
+      confirmSummaryOpen: false,
+      staged: false,
+      pending: { ...result.newState.player },
+      panel: 'report',
+    });
   },
 }));
 
-// ===== 极简时钟循环（仅推进时间显示，不做资源结算） =====
-let last = performance.now();
-let acc = 0;
-let saveCounter = 0;
-
+// ===== 速度按钮仅保存外观/存储值；P1-S02 日历只随结算前进 =====
 export function startV2Loop(): void {
-  setInterval(() => {
-    const now = performance.now();
-    const dt = Math.min(100, now - last);
-    last = now;
-    const s = useV2.getState().state;
-    if (s.clock.speed > 0) {
-      acc += (dt / 1000) * s.clock.speed;
-      const whole = Math.floor(acc);
-      if (whole >= 1) {
-        acc -= whole;
-        s.clock.elapsed += whole;
-        const pl = periodLabel(s.clock.elapsed);
-        s.clock.year = pl.year;
-        s.clock.period = pl.period;
-        saveCounter++;
-        if (saveCounter >= 15) { saveCounter = 0; saveGameV2(s); }
-        useV2.getState().refresh();
-      }
-    }
-  }, 100);
+  // 不推进 year/period/elapsed，避免速度按钮造成未结算的日历跳期。
 }

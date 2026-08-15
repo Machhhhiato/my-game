@@ -166,7 +166,7 @@ export interface Clock {
 }
 
 export interface CampaignSaveV2 {
-  version: 2;
+  version: number;
   seed: number;
   startedAt: number;
   lastSavedAt: number;
@@ -180,4 +180,44 @@ export interface CampaignSaveV2 {
   logUnread: number;
   /** 是否已展示过旧原型退役提示 */
   retiredNoticeShown: boolean;
+}
+
+// ============ P1-S02 计划期结算闭环类型 ============
+export type CapacityId = keyof CapacityState;
+export type DebtId = keyof DebtState;
+
+export interface PlanPeriodReport {
+  year: number;
+  period: number;
+  command: PlayerCommandState;
+  resourceDelta: Record<ResourceId, number>;
+  capacityDelta: Record<CapacityId, number>;
+  debtDelta: Record<DebtId, number>;
+  project: { id: ProjectId; name: string; progressFrom: number; progressTo: number; efficiency: number } | null;
+  event: { id: string; name: string; summary: string } | null;
+  reasons: string[];
+  seedKey: string;
+}
+
+export interface CampaignSaveV3 extends CampaignSaveV2 {
+  version: 3;
+  projectProgress: Record<ProjectId, number>;
+  reports: PlanPeriodReport[];
+  settlementCount: number;
+  eventFlags: Record<string, boolean>;
+}
+
+export interface SettlementResult {
+  newState: CampaignSaveV3;
+  report: PlanPeriodReport;
+  logEntries: V2LogEntry[];
+  summary: string;
+}
+
+export interface SettlementPreview {
+  flagshipProject: string;
+  mostStressedResource: { id: ResourceId; name: string; delta: number } | null;
+  largestDebtChange: { id: DebtId; name: string; delta: number } | null;
+  event: { id: string; name: string } | null;
+  summary: string;
 }

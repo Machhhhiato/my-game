@@ -1,13 +1,13 @@
 import { createRoot } from 'react-dom/client';
 import { V2App } from './v2/ui/V2App';
 import { useV2, startV2Loop } from './v2/store';
-import { saveGameV2 } from './v2/save';
+import { saveGameV3 } from './v2/save';
 import './v2/v2.css';
 
 const root = createRoot(document.getElementById('root')!);
 root.render(<V2App />);
 startV2Loop();
-window.addEventListener('beforeunload', () => saveGameV2(useV2.getState().state));
+window.addEventListener('beforeunload', () => saveGameV3(useV2.getState().state));
 
 // 验收截图参数：
 //   ?shot=far      默认远景完整星球（无浮窗）

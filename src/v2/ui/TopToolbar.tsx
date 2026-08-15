@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useV2 } from '../store';
 import { RESOURCE_DEFS, RESOURCE_ORDER } from '../data';
-import { saveGameV2 } from '../save';
+import { saveGameV3 } from '../save';
 import type { DangerLevel } from '../types';
 
 const DANGER_COLOR: Record<DangerLevel, string> = {
@@ -23,7 +23,7 @@ export function TopToolbar() {
   const [toast, setToast] = useState<string | null>(null);
 
   const onSave = () => {
-    saveGameV2(useV2.getState().state);
+    saveGameV3(useV2.getState().state);
     setToast('已保存');
     setTimeout(() => setToast(null), 1600);
   };

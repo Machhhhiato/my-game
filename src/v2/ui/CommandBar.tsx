@@ -1,5 +1,5 @@
 import { useV2, type PanelId } from '../store';
-import { PROJECTS } from '../data';
+import { previewPlanPeriod } from '../simulation';
 
 const CMD: { id: PanelId; label: string }[] = [
   { id: 'plan', label: '计划' },
@@ -8,6 +8,10 @@ const CMD: { id: PanelId; label: string }[] = [
   { id: 'policy', label: '法令' },
   { id: 'report', label: '报告' },
 ];
+
+function fmt(n: number): string {
+  return `${n >= 0 ? '+' : ''}${n}`;
+}
 
 export function CommandBar() {
   const panel = useV2(s => s.panel);
@@ -27,19 +31,23 @@ export function CommandBar() {
   if (pending.policyId !== state.player.policyId) count++;
   if (pending.securityPosture !== state.player.securityPosture) count++;
 
-  const proj = PROJECTS[pending.flagshipProjectId ?? 'water_life'];
-
   return (
     <div className="v2-cmdbar-wrap">
-      {confirmSummaryOpen && (
-        <div className="v2-confirm-bar">
-          <span className="v2-confirm-text">
-            本期优先：{proj.name}；挤占：{proj.cost}；主要风险：{proj.risk}。
-          </span>
-          <button className="v2-confirm-go" onClick={() => confirmPeriod()}>确认</button>
-          <button className="v2-confirm-cancel" onClick={() => setConfirmSummary(false)}>取消</button>
-        </div>
-      )}
+      {confirmSummaryOpen && (() => {
+        const preview = previewPlanPeriod(state, pending);
+        return (
+          <div className="v2-confirm-bar">
+            <span className="v2-confirm-text">
+              本期优先：{preview.flagshipProject}；
+              最紧张：{preview.mostStressedResource ? `${preview.mostStressedResource.name} ${fmt(preview.mostStressedResource.delta)}` : '无'}；
+              债务：{preview.largestDebtChange ? `${preview.largestDebtChange.name} ${fmt(preview.largestDebtChange.delta)}` : '无'}；
+              {preview.event ? `预警：${preview.event.name}` : '无硬事件预警'}
+            </span>
+            <button className="v2-confirm-go" onClick={() => confirmPeriod()}>确认</button>
+            <button className="v2-confirm-cancel" onClick={() => setConfirmSummary(false)}>取消</button>
+          </div>
+        );
+      })()}
       <footer className="v2-cmdbar">
         <span className="v2-cmd-pending">
           待确认 {count}

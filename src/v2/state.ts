@@ -1,4 +1,4 @@
-import type { CampaignSaveV2, LedgerValue, ResourceLedger } from './types';
+import type { CampaignSaveV2, CampaignSaveV3, LedgerValue, ResourceLedger } from './types';
 import { NODES, REGIONS } from './data';
 
 export const V2_SEED = 7007;
@@ -85,5 +85,18 @@ export function newCampaignV2(): CampaignSaveV2 {
     ],
     logUnread: 4,
     retiredNoticeShown: false,
+  };
+}
+
+/** v3 新局：在 v2 基础上增加结算字段 */
+export function newCampaignV3(): CampaignSaveV3 {
+  const v2 = newCampaignV2();
+  return {
+    ...v2,
+    version: 3,
+    projectProgress: { water_life: 0, seed_protein: 0, workshop_calib: 0, archive_beacon: 0 },
+    reports: [],
+    settlementCount: 0,
+    eventFlags: {},
   };
 }

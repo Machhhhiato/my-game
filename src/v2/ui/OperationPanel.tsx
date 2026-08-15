@@ -4,7 +4,13 @@ import {
   DIRECTIONS, PROJECTS, POLICIES, SECURITY_POSTURES,
   DIRECTION_ORDER, PROJECT_ORDER, POLICY_ORDER,
 } from '../data';
+import { RESOURCE_NAMES, DEBT_NAMES, RESOURCE_IDS, DEBT_IDS } from '../simulation';
 import type { DirectionId, PolicyId, ProjectId, SecurityPostureId } from '../types';
+
+function df(n: number): string {
+  const r = Math.round(n * 10) / 10;
+  return r > 0 ? `+${r}` : `${r}`;
+}
 
 const CAPACITY_LABELS: [string, string][] = [
   ['materialBase', '物质'], ['knowledgeBase', '知识'], ['coerciveCapacity', '强制'],
@@ -169,18 +175,65 @@ export function OperationPanel() {
         </>
       )}
 
-      {panel === 'report' && (
-        <>
-          <Title onClose={close}>地区执行报告</Title>
-          <div className="v2-report-title">第 {state.clock.period} 期 · 河谷地区执行报告</div>
-          <div className="v2-report-body">
-            <p>翡翠河谷水网保持运行，滤芯储备低于目标；工务所已申请 2 单位备件，尚未分配。</p>
-            <p>外拓营登记 31 人，住房债 20，净水/热量双重缺口未见缓解。</p>
-            <p>旧渡口行旅营有登记旅团抵达，接纳政策尚未定案，公共信用保持为正。</p>
-            <p>南部酸雨带地表试验地暴露，生态债新增 2 单位，无自由扩张选项。</p>
-          </div>
-        </>
-      )}
+      {panel === 'report' && (() => {
+        const latest = state.reports[state.reports.length - 1];
+        if (!latest) {
+          return (
+            <>
+              <Title onClose={close}>地区执行报告</Title>
+              <div className="v2-note">尚未结算计划期。</div>
+            </>
+          );
+        }
+        return (
+          <>
+            <Title onClose={close}>地区执行报告</Title>
+            <div className="v2-report-title">第 {latest.year} 年第 {latest.period} 期 · 河谷统合报告</div>
+            <div className="v2-section">
+              <div className="v2-sub">命令</div>
+              <div className="v2-kv"><span>主方向</span><b>{DIRECTIONS[latest.command.primaryDirection].name}</b></div>
+              <div className="v2-kv"><span>旗舰工程</span><b>{latest.command.flagshipProjectId ? PROJECTS[latest.command.flagshipProjectId].name : '无'}</b></div>
+              <div className="v2-kv"><span>法令</span><b>{POLICIES[latest.command.policyId].name}</b></div>
+              <div className="v2-kv"><span>安全姿态</span><b>{SECURITY_POSTURES.find(s => s.id === latest.command.securityPosture)!.name}</b></div>
+            </div>
+            {latest.project && (
+              <div className="v2-section">
+                <div className="v2-sub">工程进度</div>
+                <div className="v2-kv">
+                  <span>{latest.project.name}</span>
+                  <b>{latest.project.progressFrom} → {latest.project.progressTo}（+{latest.project.progressTo - latest.project.progressFrom}；效率 {Math.round(latest.project.efficiency * 100)}%）</b>
+                </div>
+              </div>
+            )}
+            <div className="v2-section">
+              <div className="v2-sub">资源变化</div>
+              {RESOURCE_IDS.filter(id => latest.resourceDelta[id] !== 0).map(id => (
+                <div className="v2-kv" key={id}>
+                  <span>{RESOURCE_NAMES[id]}</span>
+                  <b style={{ color: latest.resourceDelta[id] < 0 ? '#B86158' : '#D9EBD1' }}>{df(latest.resourceDelta[id])}</b>
+                </div>
+              ))}
+            </div>
+            <div className="v2-section">
+              <div className="v2-sub">债务变化</div>
+              {DEBT_IDS.filter(id => latest.debtDelta[id] !== 0).map(id => (
+                <div className="v2-kv" key={id}>
+                  <span>{DEBT_NAMES[id]}</span>
+                  <b>{df(latest.debtDelta[id])}</b>
+                </div>
+              ))}
+            </div>
+            <div className="v2-section">
+              <div className="v2-sub">事件 / 风险</div>
+              <div className="v2-note">{latest.event ? `${latest.event.name}：${latest.event.summary}` : '本期无新增硬事件；风险继续积累'}</div>
+            </div>
+            <div className="v2-section">
+              <div className="v2-sub">原因</div>
+              {latest.reasons.map((r, i) => <div className="v2-note" key={i}>{i + 1}. {r}</div>)}
+            </div>
+          </>
+        );
+      })()}
     </div>
   );
 }
