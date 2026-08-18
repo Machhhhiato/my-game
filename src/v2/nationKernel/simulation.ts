@@ -23,6 +23,29 @@ function applyEffect(state: NationKernelState, effect: EffectSpec, sourceId: Ker
     capabilities[effect.capability.id] = effect.capability;
     record(state, sourceId, `polity:${effect.targetPolityId}.capability.${effect.capability.id}`, before, effect.capability.maturity, effect.reasonKey);
   }
+  if (effect.kind === 'region' && !state.regions[effect.region.id]) {
+    const region = structuredClone(effect.region);
+    state.regions[region.id] = region;
+    for (const cityId of effect.reassignCityIds ?? []) {
+      const city = state.cities[cityId];
+      if (city == null || city.polityId !== region.polityId) continue;
+      const previousRegion = state.regions[city.regionId];
+      if (previousRegion != null) previousRegion.cityIds = previousRegion.cityIds.filter((id) => id !== cityId);
+      city.regionId = region.id;
+      if (!region.cityIds.includes(cityId)) region.cityIds.push(cityId);
+      record(state, sourceId, `city:${cityId}.region`, previousRegion?.id ?? 'absent', region.id, effect.reasonKey);
+    }
+    record(state, sourceId, `region:${region.id}.status`, 'absent', 'registered', effect.reasonKey);
+  }
+  if (effect.kind === 'polityProfile' && state.polities[effect.polityId]) {
+    const polity = state.polities[effect.polityId];
+    const before = `${polity.templateId}/${polity.archetype}/${polity.simulationTier}`;
+    polity.templateId = effect.templateId;
+    polity.archetype = effect.archetype;
+    polity.simulationTier = effect.simulationTier;
+    polity.strategicIntent = [...effect.strategicIntent];
+    record(state, sourceId, `polity:${polity.id}.profile`, before, `${polity.templateId}/${polity.archetype}/${polity.simulationTier}`, effect.reasonKey);
+  }
   if (effect.kind === 'city' && !state.cities[effect.city.id]) {
     const city = structuredClone(effect.city);
     state.cities[city.id] = city;
@@ -52,6 +75,53 @@ function applyEffect(state: NationKernelState, effect: EffectSpec, sourceId: Ker
     state.networks[network.id] = network;
     record(state, sourceId, `network:${network.id}.status`, 'absent', network.lifecycle.status, effect.reasonKey);
   }
+  if (effect.kind === 'design' && !state.designs[effect.design.id]) {
+    const design = structuredClone(effect.design);
+    state.designs[design.id] = design;
+    record(state, sourceId, `design:${design.id}.status`, 'absent', design.status, effect.reasonKey);
+  }
+  if (effect.kind === 'productionLine' && !state.productionLines[effect.productionLine.id]) {
+    const line = structuredClone(effect.productionLine);
+    state.productionLines[line.id] = line;
+    record(state, sourceId, `productionLine:${line.id}.status`, 'absent', line.status, effect.reasonKey);
+  }
+  if (effect.kind === 'stockpile' && !state.stockpiles[effect.stockpile.id]) {
+    const stockpile = structuredClone(effect.stockpile);
+    state.stockpiles[stockpile.id] = stockpile;
+    record(state, sourceId, `stockpile:${stockpile.id}.quantity`, 'absent', stockpile.quantity, effect.reasonKey);
+  }
+  if (effect.kind === 'formation' && !state.formations[effect.formation.id]) {
+    const formation = structuredClone(effect.formation);
+    state.formations[formation.id] = formation;
+    record(state, sourceId, `formation:${formation.id}.status`, 'absent', formation.mission, effect.reasonKey);
+  }
+  if (effect.kind === 'vessel' && !state.vessels[effect.vessel.id]) {
+    const vessel = structuredClone(effect.vessel);
+    state.vessels[vessel.id] = vessel;
+    if (effect.fleetId != null && state.fleets[effect.fleetId] != null) {
+      const fleet = state.fleets[effect.fleetId];
+      fleet.vesselIds = [...(fleet.vesselIds ?? []), vessel.id];
+    }
+    record(state, sourceId, `vessel:${vessel.id}.status`, 'absent', vessel.lifecycle.status, effect.reasonKey);
+  }
+  if (effect.kind === 'spaceAsset' && !state.spaceAssets[effect.spaceAsset.id]) {
+    const asset = structuredClone(effect.spaceAsset);
+    state.spaceAssets[asset.id] = asset;
+    record(state, sourceId, `spaceAsset:${asset.id}.status`, 'absent', asset.lifecycle.status, effect.reasonKey);
+  }
+  if (effect.kind === 'spaceMission') {
+    const existing = state.spaceMissions[effect.spaceMission.id];
+    if (existing == null) {
+      const mission = structuredClone(effect.spaceMission);
+      state.spaceMissions[mission.id] = mission;
+      record(state, sourceId, `spaceMission:${mission.id}.status`, 'absent', mission.status, effect.reasonKey);
+    } else if (existing.status !== effect.spaceMission.status) {
+      const before = existing.status;
+      existing.status = effect.spaceMission.status;
+      if (effect.spaceMission.status === 'completed') existing.completedDay = state.calendar.day;
+      record(state, sourceId, `spaceMission:${existing.id}.status`, before, existing.status, effect.reasonKey);
+    }
+  }
   if (effect.kind === 'fleet' && state.fleets[effect.fleetId]) {
     const fleet = state.fleets[effect.fleetId];
     if (effect.readinessDelta != null) { const before = fleet.readiness; fleet.readiness = round(clamp(before + effect.readinessDelta, 0, 100), 1); record(state, sourceId, `fleet:${fleet.id}.readiness`, before, fleet.readiness, effect.reasonKey); }
@@ -71,6 +141,7 @@ function applyEffect(state: NationKernelState, effect: EffectSpec, sourceId: Ker
 function activeStaff(state: NationKernelState, polityId: KernelId): number { return Object.values(state.operations).filter((operation) => operation.polityId === polityId && operation.status === 'active').reduce((sum, operation) => sum + operation.staffRequired, 0); }
 export function availableWorkforce(state: NationKernelState, polityId: KernelId): number { const polity = state.polities[polityId]; if (polity == null) return 0; const workforce = polity.workforce; return Math.max(0, workforce.healthy - workforce.dependents - workforce.essential - workforce.maintenance - workforce.publicServices - workforce.administration - workforce.defense - activeStaff(state, polityId)); }
 function demandsMet(state: NationKernelState, demands: ReadonlyArray<OperationState['startDemands'][number]>): boolean { return demands.every((demand) => (quantity(state, demand.target, demand.quantityId)?.current ?? 0) >= demand.amount); }
+function stockpileDemandsMet(state: NationKernelState, demands: ReadonlyArray<NonNullable<OperationState['startStockpileDemands']>[number]>): boolean { return demands.every((demand) => (state.stockpiles[demand.stockpileId]?.quantity ?? 0) - (state.stockpiles[demand.stockpileId]?.reserved ?? 0) >= demand.amount); }
 function prerequisitesMet(state: NationKernelState, operation: OperationState): boolean {
   const requirements = operation.prerequisites;
   if (requirements == null) return true;
@@ -78,12 +149,20 @@ function prerequisitesMet(state: NationKernelState, operation: OperationState): 
   return (requirements.capabilityIds ?? []).every((id) => capabilities[id] != null)
     && (requirements.facilityIds ?? []).every((id) => state.facilities[id]?.lifecycle.status === 'operating')
     && (requirements.networkIds ?? []).every((id) => state.networks[id]?.lifecycle.status === 'operating')
-    && (requirements.completedOperationIds ?? []).every((id) => state.operations[id]?.status === 'completed');
+    && (requirements.completedOperationIds ?? []).every((id) => state.operations[id]?.status === 'completed')
+    && (requirements.designIds ?? []).every((id) => state.designs[id]?.status === 'standardized');
 }
 export function startOperation(state: NationKernelState, operationId: KernelId): NationKernelState {
-  const operation = state.operations[operationId]; if (operation == null || operation.status !== 'planned' || !prerequisitesMet(state, operation) || !demandsMet(state, operation.startDemands) || availableWorkforce(state, operation.polityId) < operation.staffRequired) return state;
+  const operation = state.operations[operationId]; if (operation == null || operation.status !== 'planned' || !prerequisitesMet(state, operation) || !demandsMet(state, operation.startDemands) || !stockpileDemandsMet(state, operation.startStockpileDemands ?? []) || availableWorkforce(state, operation.polityId) < operation.staffRequired) return state;
   const next = clone(state); const active = next.operations[operationId];
   for (const demand of active.startDemands) applyEffect(next, { kind: 'quantity', timing: 'onStart', target: demand.target, quantityId: demand.quantityId, operation: 'add', value: -demand.amount, reasonKey: 'operation.input.reserved' }, active.id);
+  for (const demand of active.startStockpileDemands ?? []) {
+    const stockpile = next.stockpiles[demand.stockpileId];
+    if (stockpile == null) continue;
+    const before = stockpile.quantity;
+    stockpile.quantity -= demand.amount;
+    record(next, active.id, `stockpile:${stockpile.id}.quantity`, before, stockpile.quantity, 'operation.stockpile.reserved');
+  }
   active.status = 'active'; active.startedDay = next.calendar.day; record(next, active.id, `operation:${active.id}.status`, 'planned', 'active', 'operation.started'); active.effects.filter((effect) => effect.timing === 'onStart').forEach((effect) => applyEffect(next, effect, active.id)); return next;
 }
 function advanceOperation(state: NationKernelState, operation: OperationState): void {
@@ -95,6 +174,18 @@ function advanceOperation(state: NationKernelState, operation: OperationState): 
   operation.status = 'completed'; operation.completedDay = state.calendar.day; record(state, operation.id, `operation:${operation.id}.status`, 'active', 'completed', 'operation.completed'); operation.effects.filter((effect) => effect.timing === 'onComplete').forEach((effect) => applyEffect(state, effect, operation.id));
 }
 function advanceFacilities(state: NationKernelState): void { for (const facility of Object.values(state.facilities)) { if (facility.lifecycle.status !== 'operating') continue; facility.recurringEffects.filter((effect) => effect.timing === 'perDay').forEach((effect) => applyEffect(state, effect, facility.id)); if (facility.maintenanceStaffRequired > 0 && state.polities[facility.polityId]?.workforce.maintenance < facility.maintenanceStaffRequired) { facility.lifecycle.maintenanceBacklog += 1; facility.lifecycle.condition = clamp(facility.lifecycle.condition - 0.2, 0, 100); } } }
+function advanceProductionLines(state: NationKernelState): void {
+  for (const line of Object.values(state.productionLines)) {
+    if (line.status !== 'operating') continue;
+    const facility = state.facilities[line.facilityId]; const design = state.designs[line.designId]; const stockpile = state.stockpiles[line.stockpileId];
+    if (facility?.lifecycle.status !== 'operating' || design?.status !== 'standardized' || stockpile == null) continue;
+    const output = round(Math.max(0, line.dailyOutput * line.efficiency), 2);
+    if (output === 0) continue;
+    const before = stockpile.quantity;
+    stockpile.quantity = stockpile.capacity == null ? before + output : Math.min(stockpile.capacity, before + output);
+    record(state, line.id, `stockpile:${stockpile.id}.quantity`, before, stockpile.quantity, 'productionLine.output');
+  }
+}
 function advanceRegionalServices(state: NationKernelState): void {
   for (const region of Object.values(state.regions)) {
     const assignments = region.serviceAssignments;
@@ -128,5 +219,5 @@ export function changeRegionalServiceAssignment(state: NationKernelState, region
   return next;
 }
 export function rebuildMetroSummaries(state: NationKernelState): void { for (const metro of Object.values(state.metros)) metro.totalPopulation = metro.memberCityIds.reduce((sum, cityId) => sum + (state.cities[cityId]?.population ?? 0), 0); }
-export function advanceNationKernelDays(state: NationKernelState, days: number): NationKernelState { let next = state; for (let i = 0; i < days; i += 1) { next = clone(next); next.calendar = calendarFor(next.calendar.day + 1); advanceFacilities(next); advanceRegionalServices(next); Object.values(next.operations).forEach((operation) => advanceOperation(next, operation)); rebuildMetroSummaries(next); next.observations = next.observations.filter((observation) => next.calendar.day - observation.observedDay <= 360); next.ledger = next.ledger.slice(-500); } return next; }
+export function advanceNationKernelDays(state: NationKernelState, days: number): NationKernelState { let next = state; for (let i = 0; i < days; i += 1) { next = clone(next); next.calendar = calendarFor(next.calendar.day + 1); advanceFacilities(next); advanceProductionLines(next); advanceRegionalServices(next); Object.values(next.operations).forEach((operation) => advanceOperation(next, operation)); rebuildMetroSummaries(next); next.observations = next.observations.filter((observation) => next.calendar.day - observation.observedDay <= 360); next.ledger = next.ledger.slice(-500); } return next; }
 export function polity(state: NationKernelState, id: KernelId): PolityState | null { return state.polities[id] ?? null; }

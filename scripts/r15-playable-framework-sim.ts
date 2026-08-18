@@ -50,9 +50,11 @@ function run(): TextIdleState {
   let state = newTextIdleState(515);
   assert(state.developmentStage === 'emergency', 'starter campaign must begin in emergency stage');
   assert(textPlaytestGuidance(state).title.startsWith('生存应急'), 'starter campaign needs an actionable emergency objective');
-  assert(availableTextExplorationTargets(state).length === 3, 'starter campaign must offer three clear exploration directions');
+  const startingExplorations = availableTextExplorationTargets(state);
+  assert(['starter.explore.north', 'starter.explore.east', 'starter.explore.west'].every((id) => startingExplorations.includes(id)), 'starter campaign must offer three clear initial exploration directions');
   assert(availableTextTechs(state).length === 3, 'starter campaign must show three research paths with exploration blockers');
-  assert(availableTextProjects(state).length === 0, 'starter engineering must wait for completed research');
+  assert(availableTextProjects(state).includes('starter.project.temporary-shelter'), 'starter campaign must expose a basic non-research engineering option');
+  assert(startTextProject(state, 'starter.project.temporary-shelter') === state, 'basic shelter must still require an explored site');
 
   state = exploreAndWait(state, 'starter.explore.north');
   state = startResearchAndWait(state, 'starter.tech.water-survey');

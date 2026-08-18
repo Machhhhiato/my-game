@@ -154,6 +154,22 @@ function fixtureSummary(state: NationKernelState): Array<{ label: string; value:
   ];
 }
 
+function nationalStrengthSummary(state: NationKernelState, polityId: string): Array<{ label: string; value: string; detail: string }> {
+  const values = state.quantities[scopeKey({ kind: 'polity', id: polityId })] ?? {};
+  const quantityValue = (id: string): number => values[id]?.current ?? 0;
+  const playerCities = Object.values(state.cities).filter((city) => city.polityId === polityId);
+  const serviceValues = playerCities.flatMap((city) => ['service.waterCoverage', 'service.healthCoverage', 'service.educationCoverage'].map((id) => state.quantities[scopeKey({ kind: 'city', id: city.id })]?.[id]?.current).filter((value): value is number => value != null));
+  const serviceAverage = serviceValues.length === 0 ? null : serviceValues.reduce((sum, value) => sum + value, 0) / serviceValues.length;
+  return [
+    { label: '人口与劳动力', value: `${numberText(state.polities[polityId].population.residents)} / ${numberText(availableWorkforce(state, polityId))}`, detail: '居民 / 可调度人手' },
+    { label: '建设与维护', value: `${numberText(quantityValue('construction.ndu'))} NDU`, detail: `维修积压 ${numberText(quantityValue('maintenance.backlog'))}` },
+    { label: '科研能力', value: numberText(quantityValue('capacity.research')), detail: '标准化与技术转化' },
+    { label: '物流网络', value: numberText(quantityValue('capacity.logistics')), detail: `${Object.keys(state.networks).length} 条可运行网络` },
+    { label: '公共服务', value: serviceAverage == null ? '—' : `${numberText(serviceAverage)}%`, detail: '城市供水、医疗、教育均值' },
+    { label: '防卫战备', value: numberText(quantityValue('capacity.defense') || quantityValue('defense.readiness')), detail: `${Object.keys(state.fleets).length} 支可数舰队` },
+  ];
+}
+
 function operationBlockers(state: NationKernelState, operation: NationKernelState['operations'][string]): string[] {
   const blockers: string[] = [];
   const capabilities = state.polities[operation.polityId]?.capabilities ?? {};
@@ -201,6 +217,7 @@ export function NationKernelInspector({ initialFixture }: { initialFixture?: str
     () => Object.values(state.polities).filter((polity) => polity.id !== player.id),
     [state.polities, player.id],
   );
+  const strengthSummary = useMemo(() => nationalStrengthSummary(state, player.id), [state, player.id]);
   const operationDefinitions = useMemo<Map<string, OperationPresentation>>(() => {
     const requiredCityIds = ['city.north-core', 'city.north-port', 'city.central', 'city.coast-core', 'city.coast-satellite'];
     if (!requiredCityIds.every((id) => state.cities[id] != null)) return new Map();
@@ -252,6 +269,7 @@ export function NationKernelInspector({ initialFixture }: { initialFixture?: str
           <button onClick={startEligible} type="button">启动当前可用</button>
           <button onClick={() => advance(1)} type="button">推进 1 日</button>
           <button onClick={() => advance(10)} type="button">推进 10 日</button>
+          <button onClick={() => window.location.assign(window.location.pathname)} type="button">返回文字试玩</button>
         </div>
       </header>
 
@@ -274,6 +292,11 @@ export function NationKernelInspector({ initialFixture }: { initialFixture?: str
         {fixtureSummary(state).map((item) => (
           <article className="kernel-stat-card" key={item.label}><span>{item.label}</span><strong>{item.value}</strong></article>
         ))}
+      </section>
+
+      <section className="kernel-strength" aria-label="国家实力摘要">
+        <header><div><p className="kernel-kicker">NATIONAL CAPACITY · DEVELOPMENT VIEW</p><h2>国家实力摘要</h2></div><p>不折算成单一战力：每项实力都对应人口、设施、网络、服务或可数装备。</p></header>
+        <div>{strengthSummary.map((item) => <article key={item.label}><span>{item.label}</span><strong>{item.value}</strong><small>{item.detail}</small></article>)}</div>
       </section>
 
       <section className="kernel-grid">

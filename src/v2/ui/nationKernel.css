@@ -1,7 +1,9 @@
 .kernel-inspector {
-  min-height: 100vh;
+  height: 100vh;
   box-sizing: border-box;
   padding: 28px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   color: #e7eef4;
   background: radial-gradient(circle at 65% -15%, #193246 0, #09121d 42%, #060b12 100%);
   font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -23,6 +25,15 @@
 .kernel-controls button:hover, .kernel-controls button.is-active { border-color: #d4a54c; color: #ffe3a1; background: #1f2630; }
 
 .kernel-overview { flex-wrap: wrap; gap: 10px; max-width: 1600px; margin: 0 auto 12px; }
+.kernel-strength { max-width: 1600px; margin: 0 auto 12px; border: 1px solid #294257; background: rgba(11, 23, 35, .92); }
+.kernel-strength header { display: flex; align-items: end; justify-content: space-between; gap: 18px; padding: 12px 14px; border-bottom: 1px solid #294257; }
+.kernel-strength h2 { margin: 2px 0 0; font-size: 15px; }
+.kernel-strength p { margin: 0; color: #9bb1bf; font-size: 12px; line-height: 1.45; }
+.kernel-strength > div { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.kernel-strength article { min-width: 0; padding: 12px 14px; border-right: 1px solid rgba(41, 66, 87, .62); }
+.kernel-strength article:last-child { border-right: 0; }
+.kernel-strength span, .kernel-strength small { display: block; color: #7e9bad; font-size: 12px; }
+.kernel-strength strong { display: block; margin: 5px 0; color: #f0d18b; font-size: 18px; overflow-wrap: anywhere; }
 .kernel-primary-card, .kernel-stat-card, .kernel-panel { border: 1px solid #294257; background: rgba(11, 23, 35, .92); box-shadow: 0 10px 25px rgba(0, 0, 0, .14); }
 .kernel-primary-card { flex: 1 1 250px; min-width: 250px; padding: 14px 16px; }
 .kernel-stat-card { flex: 0 1 130px; min-width: 126px; padding: 14px 16px; }
@@ -62,4 +73,7 @@
   .kernel-header { flex-direction: column; }
   .kernel-controls { justify-content: flex-start; }
   .kernel-grid { grid-template-columns: 1fr; }
+  .kernel-strength header { align-items: flex-start; flex-direction: column; }
+  .kernel-strength > div { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kernel-strength article:nth-child(2n) { border-right: 0; }
 }

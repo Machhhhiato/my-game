@@ -1,7 +1,7 @@
 import type { MetricId } from '../types';
 import { automationGate, TEXT_POLICIES, TEXT_PROJECT_ORDER, TEXT_PROJECTS, TEXT_TECH_ORDER, TEXT_TECHS } from './content';
 import { TEXT_EXPLORATION_TARGETS } from './exploration';
-import type { ReserveId, TextEmergencyOrderId, TextExplorationTargetId, TextFocusId, TextIdleState, TextPhaseId, TextPolicyId, TextProjectId, TextRequirements, TextSlot, TextTechId } from './types';
+import type { ReserveId, TextEmergencyOrderId, TextExplorationTargetId, TextFocusId, TextIdleState, TextPendingPopulation, TextPhaseId, TextPolicyId, TextProjectId, TextRequirements, TextSlot, TextTechId } from './types';
 
 const RESERVES: ReserveId[] = ['water', 'food', 'repair'];
 const METRICS: MetricId[] = ['livelihood', 'industry', 'energy', 'research', 'administration', 'logistics', 'military', 'stability', 'ecology'];
@@ -10,6 +10,8 @@ const PHASES: TextPhaseId[] = ['early', 'mid', 'late'];
 const FAILURE_LIMIT_DAYS = 12;
 
 function clone(state: TextIdleState): TextIdleState { return structuredClone(state) as TextIdleState; }
+/** Keeps a hot-reloaded v7 in-memory playtest state safe until its next local save migration. */
+function ensureGrowthState(state: TextIdleState): void { state.pendingPopulation ??= []; state.routeFacts ??= []; }
 function clamp(value: number, low = 0, high = 100): number { return Math.max(low, Math.min(high, value)); }
 function has<T extends string>(items: readonly T[], required: readonly T[] | undefined): boolean { return !required || required.every((id) => items.includes(id)); }
 function discoveriesMet(state: TextIdleState, required: readonly string[] | undefined): boolean { return !required || required.every((id) => state.discoveries.some((discovery) => discovery.id === id)); }
@@ -50,6 +52,7 @@ function refreshWorkforce(state: TextIdleState): void {
   state.workforce.emergencyStaff = state.emergencyOrder?.teamSize ?? 0;
   state.workforce.explorationStaff = state.exploration?.teamSize ?? 0;
 }
+function populationMultiplier(state: TextIdleState): number { return state.population / 28; }
 
 /** UI 只显示这个结果；所有岗位分配都是后台可追溯事实。 */
 export function textAvailableWorkforce(state: TextIdleState): number {
@@ -59,6 +62,27 @@ export function textAvailableWorkforce(state: TextIdleState): number {
 export function textReserveCapacity(state: TextIdleState, reserve: ReserveId): number {
   const capacityGain = state.completedProjects.reduce((sum, id) => sum + ((TEXT_PROJECTS[id]?.output[reserve] ?? 0) > 0 ? 4 : 0), 0);
   return Math.min(60, 18 + capacityGain);
+}
+export function textPopulationCapacity(state: TextIdleState): number {
+  return 30 + state.completedProjects.reduce((sum, id) => sum + (TEXT_PROJECTS[id]?.runtime.housingCapacity ?? 0), 0);
+}
+export function textReceptionBlockers(state: TextIdleState, arrival: TextPendingPopulation): string[] {
+  const blockers: string[] = [];
+  if (state.population + arrival.population > textPopulationCapacity(state)) blockers.push(`现有住处和公共服务最多还能接纳 ${Math.max(0, textPopulationCapacity(state) - state.population)} 人`);
+  if (state.reserves.water < 8 || state.reserves.food < 8) blockers.push('需先把饮水和食物储备恢复到 8 天以上');
+  return blockers;
+}
+export function acceptTextPopulation(state: TextIdleState, id: string): TextIdleState {
+  ensureGrowthState(state);
+  const arrival = state.pendingPopulation.find((entry) => entry.id === id);
+  if (arrival == null || textReceptionBlockers(state, arrival).length > 0) return state;
+  const next = clone(state);
+  next.population += arrival.population;
+  next.workforce.dependents += arrival.dependents;
+  next.pendingPopulation = next.pendingPopulation.filter((entry) => entry.id !== id);
+  refreshWorkforce(next);
+  addReport(next, 'completion', 'population.accepted', { id, population: arrival.population, dependents: arrival.dependents });
+  return next;
 }
 export function textAutomationUnlocked(state: TextIdleState): boolean {
   const gate = automationGate();
@@ -96,14 +120,14 @@ export function textProjectBlockers(state: TextIdleState, id: TextProjectId): st
   return blockers;
 }
 
-export function newTextIdleState(seed = 1): TextIdleState {
+export function newTextIdleState(seed = 1, campaignTemplateId = 'campaign.starter-v1'): TextIdleState {
   const state: TextIdleState = {
-    version: 6, seed, day: 0, calendar: calendarForDay(0), population: 28,
+    version: 8, campaignTemplateId, seed, day: 0, calendar: calendarForDay(0), population: 28,
     reserves: { water: 18, food: 18, repair: 12 },
     construction: { stock: 12, capacity: 48, dailyProduction: 0 },
     workforce: { dependents: 4, essentialStaff: 15, civicAndSecurityStaff: 3, researchStaff: 0, projectStaff: 0, policyStaff: 0, emergencyStaff: 0, explorationStaff: 0 },
     emergencyOrder: null,
-    exploration: null, discoveries: [],
+    exploration: null, discoveries: [], pendingPopulation: [], routeFacts: [],
     failure: { level: 'stable', shortageDays: 0, lastChangedOn: 0 },
     developmentStage: 'emergency',
     dailyLedger: { day: 0, reserveNet: { water: 0, food: 0, repair: 0 }, constructionNet: 0, metricDelta: {}, focusId: 'settle' },
@@ -143,12 +167,18 @@ export function textPolicyBlockers(state: TextIdleState, id: TextPolicyId): stri
 }
 
 /** 临时行动持续一个旬，替代过去每游戏日抢点三次的征集按钮。 */
+export function textEmergencyOrderBlockers(state: TextIdleState): string[] {
+  const blockers: string[] = [];
+  if (state.failure.level === 'lost') blockers.push('共同体已经失守，当前战役无法继续下达行动');
+  if (state.emergencyOrder) blockers.push('已有一支临时队伍在执行征集，需待其完成后再改派');
+  if (textAvailableWorkforce(state) < 2) blockers.push('需要空出 2 名人员执行临时征集');
+  return blockers;
+}
 export function issueEmergencyOrder(state: TextIdleState, id: TextEmergencyOrderId): TextIdleState {
-  if (state.failure.level === 'lost') return state;
+  if (textEmergencyOrderBlockers(state).length > 0) return state;
   const next = clone(state);
   refreshWorkforce(next);
-  const available = textAvailableWorkforce(next) + (next.emergencyOrder?.teamSize ?? 0);
-  if (available < 2) return state;
+  if (textAvailableWorkforce(next) < 2) return state;
   next.emergencyOrder = { id, teamSize: 2, daysRemaining: 10, startedOn: next.day };
   refreshWorkforce(next);
   addReport(next, 'system', 'emergency.order.started', { id });
@@ -163,7 +193,7 @@ export function availableTextExplorationTargets(state: TextIdleState): TextExplo
 }
 export function textCanStartExploration(state: TextIdleState, id: TextExplorationTargetId): boolean {
   const target = TEXT_EXPLORATION_TARGETS[id];
-  return target != null && state.failure.level !== 'lost' && state.exploration == null && textAvailableWorkforce(state) >= target.teamRequired && availableTextExplorationTargets(state).includes(id);
+  return target != null && state.failure.level !== 'lost' && state.exploration == null && discoveriesMet(state, target.requirements?.discoveries) && textAvailableWorkforce(state) >= target.teamRequired && availableTextExplorationTargets(state).includes(id);
 }
 export function textExplorationBlockers(state: TextIdleState, id: TextExplorationTargetId): string[] {
   const target = TEXT_EXPLORATION_TARGETS[id];
@@ -171,6 +201,7 @@ export function textExplorationBlockers(state: TextIdleState, id: TextExploratio
   const blockers: string[] = [];
   if (state.exploration) blockers.push('勘察队正在执行另一项探索');
   if (!availableTextExplorationTargets(state).includes(id)) blockers.push('该区域已经完成勘察');
+  if (!discoveriesMet(state, target.requirements?.discoveries)) blockers.push('需要先完成前一轮勘察并归档发现');
   if (textAvailableWorkforce(state) < target.teamRequired) blockers.push(`需要空出 ${target.teamRequired} 名勘察人员`);
   return blockers;
 }
@@ -252,7 +283,7 @@ function autoChoose<T extends TextTechId | TextProjectId>(state: TextIdleState, 
 }
 function projectOutputs(state: TextIdleState): { output: Record<ReserveId, number>; cost: Record<ReserveId, number>; metricEffects: Partial<Record<MetricId, number>> } {
   const output: Record<ReserveId, number> = { water: 0.42, food: 0.42, repair: 0.23 };
-  const cost: Record<ReserveId, number> = { ...DAILY_CONSUMPTION };
+  const cost: Record<ReserveId, number> = Object.fromEntries(RESERVES.map((reserve) => [reserve, Number((DAILY_CONSUMPTION[reserve] * populationMultiplier(state)).toFixed(2))])) as Record<ReserveId, number>;
   const metricEffects: Partial<Record<MetricId, number>> = {};
   if (state.nationalFocus.id === 'settle' && state.nationalFocus.transitionDays === 0) { output.water += 0.04; output.food += 0.04; output.repair += 0.02; }
   if (state.nationalFocus.id === 'build' && state.nationalFocus.transitionDays === 0) { output.water -= 0.03; output.food -= 0.03; }
@@ -300,13 +331,29 @@ function advanceSlot(state: TextIdleState, slot: 'research' | 'project'): void {
 function advanceExploration(state: TextIdleState): void {
   if (!state.exploration) return;
   state.exploration.daysRemaining -= 1;
-  if (state.exploration.daysRemaining > 0) return;
   const target = TEXT_EXPLORATION_TARGETS[state.exploration.targetId];
+  if (state.exploration.daysRemaining > 0) {
+    const elapsed = state.exploration.totalDays - state.exploration.daysRemaining;
+    if (target?.updates?.length && elapsed === Math.ceil(state.exploration.totalDays / 2)) addReport(state, 'system', 'exploration.progress', { id: target.id });
+    return;
+  }
   if (target != null) {
     for (const discovery of target.discoveries) {
       if (!state.discoveries.some((known) => known.id === discovery.id)) {
         state.discoveries.push({ id: discovery.id, targetId: target.id, kind: discovery.kind, coordinateRef: discovery.coordinateRef, discoveredOn: state.day });
       }
+    }
+    for (const result of target.results ?? []) {
+      if (result.kind === 'materials') {
+        state.construction.stock = clamp(Number((state.construction.stock + (result.construction ?? 0)).toFixed(2)), 0, state.construction.capacity);
+        for (const reserve of RESERVES) state.reserves[reserve] = clamp(Number((state.reserves[reserve] + (result.reserves?.[reserve] ?? 0)).toFixed(2)), 0, textReserveCapacity(state, reserve));
+      } else if (result.kind === 'survivor-contact' && !state.pendingPopulation.some((entry) => entry.id === result.id)) {
+        state.pendingPopulation.push({ id: result.id, sourceTargetId: target.id, label: result.label, population: result.population, dependents: result.dependents, coordinateRef: target.coordinateRef, discoveredOn: state.day });
+      } else if (result.kind === 'route' && !state.routeFacts.some((entry) => entry.id === result.id)) {
+        state.routeFacts.push({ id: result.id, sourceTargetId: target.id, label: result.label, coordinateRef: target.coordinateRef, discoveredOn: state.day });
+        state.metrics.logistics = clamp(state.metrics.logistics + 0.8);
+      }
+      addReport(state, 'completion', `exploration.result.${result.kind}`, { id: result.id, target: target.id, population: result.kind === 'survivor-contact' ? result.population : 0 });
     }
   }
   const id = state.exploration.targetId;
@@ -345,6 +392,7 @@ function refreshDevelopmentStage(state: TextIdleState): void {
 export function advanceTextIdleDay(state: TextIdleState): TextIdleState {
   if (state.failure.level === 'lost') return state;
   const next = clone(state);
+  ensureGrowthState(next);
   next.day += 1;
   next.calendar = calendarForDay(next.day);
   if (next.nationalFocus.transitionDays > 0) next.nationalFocus.transitionDays -= 1;
@@ -364,7 +412,7 @@ export function advanceTextIdleDay(state: TextIdleState): TextIdleState {
     next.reserves[reserve] = clamp(Number((before + net).toFixed(2)), 0, textReserveCapacity(next, reserve));
     if (before > 0 && next.reserves[reserve] === 0) addReport(next, 'warning', 'reserve.depleted', { reserve });
   }
-  const constructionProduction = Number(((0.26 + next.metrics.industry / 500 + (next.emergencyOrder?.id === 'salvage' ? 0.46 : 0)) * focusMultiplier(next, 'construction')).toFixed(2));
+  const constructionProduction = Number(((0.26 + next.metrics.industry / 500 + (next.emergencyOrder?.id === 'repair' || next.emergencyOrder?.id === 'salvage' ? 0.46 : 0)) * focusMultiplier(next, 'construction')).toFixed(2));
   const constructionBefore = next.construction.stock;
   next.construction.dailyProduction = constructionProduction;
   next.construction.stock = clamp(Number((constructionBefore + constructionProduction).toFixed(2)), 0, next.construction.capacity);

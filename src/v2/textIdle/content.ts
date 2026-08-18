@@ -11,7 +11,7 @@ export type RawTechnology = {
 };
 export type RawProject = {
   id: string; domain: string; kind: string; prerequisites: string[]; discoveryPrerequisites?: string[]; playerCopyKey: string;
-  runtime: { time: { workDays: number; milestones: number[] }; staffing: { builders: number }; demand: { constructionSupply: number; maintenanceLoad: string }; result: { reserveOutput: Partial<Record<ReserveId, number>>; metricEffects: Partial<Record<MetricId, number>>; facilityState: string; mapClass: string; automationFacility: boolean } };
+  runtime: { time: { workDays: number; milestones: number[] }; staffing: { builders: number }; demand: { constructionSupply: number; maintenanceLoad: string }; result: { reserveOutput: Partial<Record<ReserveId, number>>; metricEffects: Partial<Record<MetricId, number>>; facilityState: string; mapClass: string; automationFacility: boolean; housingCapacity?: number } };
 };
 export type RawPolicy = {
   id: string; familyId: string; theme: string; prerequisites: string[]; playerCopyKey: string;
@@ -60,7 +60,7 @@ export function installStage1Catalog(source: Stage1CatalogSource): void {
   })) as Record<TextTechId, TextTechnology>;
   TEXT_PROJECTS = Object.fromEntries(source.projects.map((entry) => {
     const copy = projectCopy.get(entry.playerCopyKey) ?? fallbackCopy(entry.id);
-    return [entry.id, { id: entry.id, name: copy.title, summary: copy.summary, work: entry.runtime.time.workDays, teamRequired: entry.runtime.staffing.builders, startCost: entry.runtime.demand.constructionSupply, requirements: { techs: entry.prerequisites, discoveries: entry.discoveryPrerequisites ?? [] }, output: entry.runtime.result.reserveOutput, metricEffects: entry.runtime.result.metricEffects, runtime: { milestones: entry.runtime.time.milestones, maintenanceLoad: entry.runtime.demand.maintenanceLoad, facilityState: entry.runtime.result.facilityState, mapClass: entry.runtime.result.mapClass, automationFacility: entry.runtime.result.automationFacility } } satisfies TextProject];
+    return [entry.id, { id: entry.id, name: copy.title, summary: copy.summary, work: entry.runtime.time.workDays, teamRequired: entry.runtime.staffing.builders, startCost: entry.runtime.demand.constructionSupply, requirements: { techs: entry.prerequisites, discoveries: entry.discoveryPrerequisites ?? [] }, output: entry.runtime.result.reserveOutput, metricEffects: entry.runtime.result.metricEffects, runtime: { milestones: entry.runtime.time.milestones, maintenanceLoad: entry.runtime.demand.maintenanceLoad, facilityState: entry.runtime.result.facilityState, mapClass: entry.runtime.result.mapClass, automationFacility: entry.runtime.result.automationFacility, housingCapacity: entry.runtime.result.housingCapacity } } satisfies TextProject];
   })) as Record<TextProjectId, TextProject>;
   TEXT_POLICIES = Object.fromEntries(source.policies.map((entry) => {
     const copy = policyCopy.get(entry.playerCopyKey) ?? fallbackCopy(entry.id);

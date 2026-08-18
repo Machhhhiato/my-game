@@ -70,17 +70,45 @@ export interface TextExplorationDiscovery {
   label: string;
 }
 
+/** 探索结果是可追溯事实；它们不能由显示名称、坐标或 UI 特判推断。 */
+export type TextExplorationResult =
+  | { kind: 'materials'; id: string; label: string; construction?: number; reserves?: Partial<Record<ReserveId, number>>; dailyLife: string; }
+  | { kind: 'survivor-contact'; id: string; label: string; population: number; dependents: number; dailyLife: string; }
+  | { kind: 'route'; id: string; label: string; dailyLife: string; };
+
+export interface TextPendingPopulation {
+  id: string;
+  sourceTargetId: TextExplorationTargetId;
+  label: string;
+  population: number;
+  dependents: number;
+  coordinateRef: string;
+  discoveredOn: number;
+}
+
+export interface TextRouteFact {
+  id: string;
+  sourceTargetId: TextExplorationTargetId;
+  label: string;
+  coordinateRef: string;
+  discoveredOn: number;
+}
+
 export interface TextExplorationTarget {
   id: TextExplorationTargetId;
   direction: string;
   name: string;
   summary: string;
+  requirements?: Pick<TextRequirements, 'discoveries'>;
+  /** 勘察过程中的有限记录；它们只解释进度，不替代发现或工程事实。 */
+  updates?: string[];
   /** 文字战略图坐标；空间层会使用同一目标的 coordinateRef，而非该展示位置。 */
   mapPosition: [number, number];
   coordinateRef: string;
   durationDays: number;
   teamRequired: number;
   discoveries: TextExplorationDiscovery[];
+  results?: TextExplorationResult[];
 }
 
 export interface TextExplorationRuntime {
@@ -131,7 +159,7 @@ export interface TextProject {
   output: Partial<Record<ReserveId, number>>;
   consumptionMultiplier?: Partial<Record<ReserveId, number>>;
   metricEffects: Partial<Record<MetricId, number>>;
-  runtime: { milestones: number[]; maintenanceLoad: string; facilityState: string; mapClass: string; automationFacility: boolean };
+  runtime: { milestones: number[]; maintenanceLoad: string; facilityState: string; mapClass: string; automationFacility: boolean; housingCapacity?: number };
 }
 
 export interface TextPolicy {
@@ -171,7 +199,9 @@ export interface TextReport {
 }
 
 export interface TextIdleState {
-  version: 6;
+  version: 8;
+  /** Scenario presentation/geometry source; capability contracts remain shared. */
+  campaignTemplateId: string;
   seed: number;
   /** 内部日序号；玩家日期读取 calendar。 */
   day: number;
@@ -183,6 +213,8 @@ export interface TextIdleState {
   emergencyOrder: TextEmergencyOrder | null;
   exploration: TextExplorationRuntime | null;
   discoveries: TextDiscovery[];
+  pendingPopulation: TextPendingPopulation[];
+  routeFacts: TextRouteFact[];
   failure: TextFailureState;
   developmentStage: TextDevelopmentStage;
   dailyLedger: TextDailyLedger;
