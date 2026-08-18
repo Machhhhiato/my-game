@@ -1,0 +1,65 @@
+.kernel-inspector {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 28px;
+  color: #e7eef4;
+  background: radial-gradient(circle at 65% -15%, #193246 0, #09121d 42%, #060b12 100%);
+  font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.kernel-header,
+.kernel-overview,
+.kernel-grid,
+.kernel-controls,
+.kernel-panel header,
+.kernel-row { display: flex; }
+
+.kernel-header { align-items: flex-start; justify-content: space-between; gap: 24px; max-width: 1600px; margin: 0 auto 22px; }
+.kernel-header h1 { margin: 3px 0 8px; font-size: 26px; letter-spacing: .04em; }
+.kernel-header p { max-width: 680px; margin: 0; color: #9bb1bf; line-height: 1.6; }
+.kernel-kicker { color: #d4a54c !important; font: 700 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .14em; }
+.kernel-controls { flex-wrap: wrap; justify-content: flex-end; gap: 8px; max-width: 590px; }
+.kernel-controls button { border: 1px solid #34536a; padding: 9px 12px; color: #c7d7e2; background: #0b1723; cursor: pointer; font: 600 13px/1.1 inherit; }
+.kernel-controls button:hover, .kernel-controls button.is-active { border-color: #d4a54c; color: #ffe3a1; background: #1f2630; }
+
+.kernel-overview { flex-wrap: wrap; gap: 10px; max-width: 1600px; margin: 0 auto 12px; }
+.kernel-primary-card, .kernel-stat-card, .kernel-panel { border: 1px solid #294257; background: rgba(11, 23, 35, .92); box-shadow: 0 10px 25px rgba(0, 0, 0, .14); }
+.kernel-primary-card { flex: 1 1 250px; min-width: 250px; padding: 14px 16px; }
+.kernel-stat-card { flex: 0 1 130px; min-width: 126px; padding: 14px 16px; }
+.kernel-primary-card span, .kernel-stat-card span { display: block; color: #7e9bad; font-size: 12px; }
+.kernel-primary-card strong { display: block; margin: 6px 0; color: #f0d18b; font: 700 14px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+.kernel-primary-card small { color: #bdd0dc; line-height: 1.45; }
+.kernel-stat-card strong { display: block; margin-top: 5px; font-size: 21px; }
+
+.kernel-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 1600px; margin: 0 auto; align-items: start; }
+.kernel-panel { min-width: 0; }
+.kernel-panel header { align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; border-bottom: 1px solid #294257; }
+.kernel-panel h2, .kernel-panel h3 { margin: 0; }
+.kernel-panel h2 { font-size: 15px; }
+.kernel-panel h3 { margin: 12px 0 5px; color: #d4a54c; font-size: 12px; letter-spacing: .06em; }
+.kernel-panel header span { color: #7e9bad; font-size: 12px; text-align: right; }
+.kernel-quantities { grid-column: 1 / -1; }
+.kernel-table { overflow-x: auto; }
+.kernel-row { min-width: 720px; border-bottom: 1px solid rgba(41, 66, 87, .62); }
+.kernel-row:last-child { border-bottom: 0; }
+.kernel-row > * { flex: 1 0 19%; padding: 9px 14px; color: #c4d2db; font-size: 13px; }
+.kernel-row > *:first-child { flex-basis: 43%; }
+.kernel-row code, .kernel-object-list code { color: #9ed6e9; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+.kernel-table-head > * { color: #7893a5; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.kernel-object-list { padding: 0 14px 12px; }
+.kernel-object-list p { margin: 0; padding: 9px 0; color: #c4d2db; border-bottom: 1px solid rgba(41, 66, 87, .52); font-size: 13px; line-height: 1.55; }
+.kernel-object-list p:last-child { border-bottom: 0; }
+.kernel-operation { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(41, 66, 87, .52); }
+.kernel-operation p { flex: 1; border-bottom: 0; }
+.kernel-operation button { flex: 0 0 auto; border: 1px solid #34536a; padding: 7px 9px; color: #c7d7e2; background: #0b1723; cursor: pointer; font: 600 12px/1.1 inherit; }
+.kernel-operation button:hover { border-color: #d4a54c; color: #ffe3a1; }
+.kernel-empty { color: #7e9bad !important; font-style: italic; }
+.kernel-ledger { max-height: 580px; overflow: auto; }
+.kernel-ledger b { color: #f0d18b; font-weight: 700; }
+
+@media (max-width: 920px) {
+  .kernel-inspector { padding: 16px; }
+  .kernel-header { flex-direction: column; }
+  .kernel-controls { justify-content: flex-start; }
+  .kernel-grid { grid-template-columns: 1fr; }
+}

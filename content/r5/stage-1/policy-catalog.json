@@ -1,0 +1,2406 @@
+[
+  {
+    "id": "policy-01-early",
+    "familyId": "policy-01",
+    "theme": "livelihood",
+    "family": "配给",
+    "version": "early",
+    "name": "井口配给整顿",
+    "prerequisites": [
+      "w2"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-01-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "livelihood": 0.22,
+          "stability": 0.08
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.1.early"
+  },
+  {
+    "id": "policy-01-capable",
+    "familyId": "policy-01",
+    "theme": "livelihood",
+    "family": "配给",
+    "version": "capable",
+    "name": "公共供给排程",
+    "prerequisites": [
+      "w2",
+      "w2-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-01-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "livelihood": 0.22,
+          "stability": 0.08
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.1.capable"
+  },
+  {
+    "id": "policy-01-institutional",
+    "familyId": "policy-01",
+    "theme": "livelihood",
+    "family": "配给",
+    "version": "institutional",
+    "name": "区域基本供给章程",
+    "prerequisites": [
+      "f4",
+      "f4-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "livelihood": 0.22,
+          "stability": 0.08
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.1.institutional"
+  },
+  {
+    "id": "policy-02-early",
+    "familyId": "policy-02",
+    "theme": "livelihood",
+    "family": "公共卫生",
+    "version": "early",
+    "name": "饮水与清洁轮值",
+    "prerequisites": [
+      "h2"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-02-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "livelihood": 0.22,
+          "stability": 0.08
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.2.early"
+  },
+  {
+    "id": "policy-02-capable",
+    "familyId": "policy-02",
+    "theme": "livelihood",
+    "family": "公共卫生",
+    "version": "capable",
+    "name": "街区卫生服务",
+    "prerequisites": [
+      "h2",
+      "h2-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-02-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "livelihood": 0.22,
+          "stability": 0.08
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.2.capable"
+  },
+  {
+    "id": "policy-02-institutional",
+    "familyId": "policy-02",
+    "theme": "livelihood",
+    "family": "公共卫生",
+    "version": "institutional",
+    "name": "区域公共卫生规程",
+    "prerequisites": [
+      "h4",
+      "h4-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "livelihood": 0.22,
+          "stability": 0.08
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.2.institutional"
+  },
+  {
+    "id": "policy-03-early",
+    "familyId": "policy-03",
+    "theme": "livelihood",
+    "family": "劳动安全",
+    "version": "early",
+    "name": "危险作业临时守则",
+    "prerequisites": [
+      "h3"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-03-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "livelihood": 0.22,
+          "stability": 0.08
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.3.early"
+  },
+  {
+    "id": "policy-03-capable",
+    "familyId": "policy-03",
+    "theme": "livelihood",
+    "family": "劳动安全",
+    "version": "capable",
+    "name": "工务安全与补偿令",
+    "prerequisites": [
+      "h3",
+      "h3-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-03-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "livelihood": 0.22,
+          "stability": 0.08
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.3.capable"
+  },
+  {
+    "id": "policy-03-institutional",
+    "familyId": "policy-03",
+    "theme": "livelihood",
+    "family": "劳动安全",
+    "version": "institutional",
+    "name": "区域劳动与居住保障",
+    "prerequisites": [
+      "a5",
+      "a5-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "livelihood": 0.22,
+          "stability": 0.08
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.3.institutional"
+  },
+  {
+    "id": "policy-04-early",
+    "familyId": "policy-04",
+    "theme": "livelihood",
+    "family": "迁入安置",
+    "version": "early",
+    "name": "临时来访登记",
+    "prerequisites": [
+      "a1"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-04-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "livelihood": 0.22,
+          "stability": 0.08
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.4.early"
+  },
+  {
+    "id": "policy-04-capable",
+    "familyId": "policy-04",
+    "theme": "livelihood",
+    "family": "迁入安置",
+    "version": "capable",
+    "name": "安置与服务接续",
+    "prerequisites": [
+      "a1",
+      "a1-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-04-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "livelihood": 0.22,
+          "stability": 0.08
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.4.capable"
+  },
+  {
+    "id": "policy-04-institutional",
+    "familyId": "policy-04",
+    "theme": "livelihood",
+    "family": "迁入安置",
+    "version": "institutional",
+    "name": "跨区迁入成员章程",
+    "prerequisites": [
+      "h5",
+      "h5-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "livelihood": 0.22,
+          "stability": 0.08
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.4.institutional"
+  },
+  {
+    "id": "policy-05-early",
+    "familyId": "policy-05",
+    "theme": "production",
+    "family": "工务动员",
+    "version": "early",
+    "name": "紧急维修轮班",
+    "prerequisites": [
+      "i3"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-05-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "industry": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.5.early"
+  },
+  {
+    "id": "policy-05-capable",
+    "familyId": "policy-05",
+    "theme": "production",
+    "family": "工务动员",
+    "version": "capable",
+    "name": "公共工务队列",
+    "prerequisites": [
+      "i3",
+      "i3-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-05-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "industry": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.5.capable"
+  },
+  {
+    "id": "policy-05-institutional",
+    "familyId": "policy-05",
+    "theme": "production",
+    "family": "工务动员",
+    "version": "institutional",
+    "name": "区域维护优先级制度",
+    "prerequisites": [
+      "i5",
+      "i5-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "industry": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.5.institutional"
+  },
+  {
+    "id": "policy-06-early",
+    "familyId": "policy-06",
+    "theme": "production",
+    "family": "技能培训",
+    "version": "early",
+    "name": "现场师傅带训",
+    "prerequisites": [
+      "s2"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-06-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "industry": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.6.early"
+  },
+  {
+    "id": "policy-06-capable",
+    "familyId": "policy-06",
+    "theme": "production",
+    "family": "技能培训",
+    "version": "capable",
+    "name": "学徒岗位计划",
+    "prerequisites": [
+      "s2",
+      "s2-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-06-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "industry": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.6.capable"
+  },
+  {
+    "id": "policy-06-institutional",
+    "familyId": "policy-06",
+    "theme": "production",
+    "family": "技能培训",
+    "version": "institutional",
+    "name": "公共技术教育服务",
+    "prerequisites": [
+      "s4",
+      "s4-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "industry": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.6.institutional"
+  },
+  {
+    "id": "policy-07-early",
+    "familyId": "policy-07",
+    "theme": "production",
+    "family": "材料回收",
+    "version": "early",
+    "name": "回收物交付规则",
+    "prerequisites": [
+      "i1"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-07-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "industry": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.7.early"
+  },
+  {
+    "id": "policy-07-capable",
+    "familyId": "policy-07",
+    "theme": "production",
+    "family": "材料回收",
+    "version": "capable",
+    "name": "危险拆解许可",
+    "prerequisites": [
+      "i1",
+      "i1-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-07-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "industry": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.7.capable"
+  },
+  {
+    "id": "policy-07-institutional",
+    "familyId": "policy-07",
+    "theme": "production",
+    "family": "材料回收",
+    "version": "institutional",
+    "name": "区域材料循环条例",
+    "prerequisites": [
+      "i5",
+      "i5-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "industry": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.7.institutional"
+  },
+  {
+    "id": "policy-08-early",
+    "familyId": "policy-08",
+    "theme": "production",
+    "family": "能源节制",
+    "version": "early",
+    "name": "关键负荷优先表",
+    "prerequisites": [
+      "e1"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-08-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "industry": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.8.early"
+  },
+  {
+    "id": "policy-08-capable",
+    "familyId": "policy-08",
+    "theme": "production",
+    "family": "能源节制",
+    "version": "capable",
+    "name": "社区分区保电",
+    "prerequisites": [
+      "e1",
+      "e1-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-08-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "industry": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.8.capable"
+  },
+  {
+    "id": "policy-08-institutional",
+    "familyId": "policy-08",
+    "theme": "production",
+    "family": "能源节制",
+    "version": "institutional",
+    "name": "区域保供与申诉机制",
+    "prerequisites": [
+      "e5",
+      "e5-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "industry": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.8.institutional"
+  },
+  {
+    "id": "policy-09-early",
+    "familyId": "policy-09",
+    "theme": "governance",
+    "family": "账目公开",
+    "version": "early",
+    "name": "公共物资告示",
+    "prerequisites": [
+      "a2"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-09-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "administration": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.9.early"
+  },
+  {
+    "id": "policy-09-capable",
+    "familyId": "policy-09",
+    "theme": "governance",
+    "family": "账目公开",
+    "version": "capable",
+    "name": "工程与劳力核账日",
+    "prerequisites": [
+      "a2",
+      "a2-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-09-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "administration": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.9.capable"
+  },
+  {
+    "id": "policy-09-institutional",
+    "familyId": "policy-09",
+    "theme": "governance",
+    "family": "账目公开",
+    "version": "institutional",
+    "name": "区域预算公开制度",
+    "prerequisites": [
+      "a4",
+      "a4-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "administration": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.9.institutional"
+  },
+  {
+    "id": "policy-10-early",
+    "familyId": "policy-10",
+    "theme": "governance",
+    "family": "申诉调解",
+    "version": "early",
+    "name": "配给争议临时调解",
+    "prerequisites": [
+      "a3"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-10-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "administration": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.10.early"
+  },
+  {
+    "id": "policy-10-capable",
+    "familyId": "policy-10",
+    "theme": "governance",
+    "family": "申诉调解",
+    "version": "capable",
+    "name": "工程损害申诉程序",
+    "prerequisites": [
+      "a3",
+      "a3-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-10-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "administration": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.10.capable"
+  },
+  {
+    "id": "policy-10-institutional",
+    "familyId": "policy-10",
+    "theme": "governance",
+    "family": "申诉调解",
+    "version": "institutional",
+    "name": "巡回裁决与复核制度",
+    "prerequisites": [
+      "a5",
+      "a5-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "administration": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.10.institutional"
+  },
+  {
+    "id": "policy-11-early",
+    "familyId": "policy-11",
+    "theme": "governance",
+    "family": "地方协作",
+    "version": "early",
+    "name": "邻里事务会议",
+    "prerequisites": [
+      "a1"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-11-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "administration": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.11.early"
+  },
+  {
+    "id": "policy-11-capable",
+    "familyId": "policy-11",
+    "theme": "governance",
+    "family": "地方协作",
+    "version": "capable",
+    "name": "街区服务委员会",
+    "prerequisites": [
+      "a1",
+      "a1-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-11-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "administration": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.11.capable"
+  },
+  {
+    "id": "policy-11-institutional",
+    "familyId": "policy-11",
+    "theme": "governance",
+    "family": "地方协作",
+    "version": "institutional",
+    "name": "有限自治执行章程",
+    "prerequisites": [
+      "a5",
+      "a5-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "administration": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.11.institutional"
+  },
+  {
+    "id": "policy-12-early",
+    "familyId": "policy-12",
+    "theme": "governance",
+    "family": "公共采购",
+    "version": "early",
+    "name": "紧急物资询价",
+    "prerequisites": [
+      "a2"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-12-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "administration": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.12.early"
+  },
+  {
+    "id": "policy-12-capable",
+    "familyId": "policy-12",
+    "theme": "governance",
+    "family": "公共采购",
+    "version": "capable",
+    "name": "工务公开采购",
+    "prerequisites": [
+      "a2",
+      "a2-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-12-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "administration": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.12.capable"
+  },
+  {
+    "id": "policy-12-institutional",
+    "familyId": "policy-12",
+    "theme": "governance",
+    "family": "公共采购",
+    "version": "institutional",
+    "name": "区域公共采购与检验制度",
+    "prerequisites": [
+      "s5",
+      "s5-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "administration": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.12.institutional"
+  },
+  {
+    "id": "policy-13-early",
+    "familyId": "policy-13",
+    "theme": "mobility_security",
+    "family": "护运",
+    "version": "early",
+    "name": "临时同行护送",
+    "prerequisites": [
+      "l2"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-13-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "logistics": 0.22,
+          "military": 0.12
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.13.early"
+  },
+  {
+    "id": "policy-13-capable",
+    "familyId": "policy-13",
+    "theme": "mobility_security",
+    "family": "护运",
+    "version": "capable",
+    "name": "标准护运交接",
+    "prerequisites": [
+      "l2",
+      "l2-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-13-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "logistics": 0.22,
+          "military": 0.12
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.13.capable"
+  },
+  {
+    "id": "policy-13-institutional",
+    "familyId": "policy-13",
+    "theme": "mobility_security",
+    "family": "护运",
+    "version": "institutional",
+    "name": "区域通道安全服务",
+    "prerequisites": [
+      "q4",
+      "q4-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "logistics": 0.22,
+          "military": 0.12
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.13.institutional"
+  },
+  {
+    "id": "policy-14-early",
+    "familyId": "policy-14",
+    "theme": "mobility_security",
+    "family": "灾害救援",
+    "version": "early",
+    "name": "灾后互助轮班",
+    "prerequisites": [
+      "q3"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-14-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "logistics": 0.22,
+          "military": 0.12
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.14.early"
+  },
+  {
+    "id": "policy-14-capable",
+    "familyId": "policy-14",
+    "theme": "mobility_security",
+    "family": "灾害救援",
+    "version": "capable",
+    "name": "专业救援优先序",
+    "prerequisites": [
+      "q3",
+      "q3-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-14-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "logistics": 0.22,
+          "military": 0.12
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.14.capable"
+  },
+  {
+    "id": "policy-14-institutional",
+    "familyId": "policy-14",
+    "theme": "mobility_security",
+    "family": "灾害救援",
+    "version": "institutional",
+    "name": "区域救援与恢复协定",
+    "prerequisites": [
+      "l5",
+      "l5-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "logistics": 0.22,
+          "military": 0.12
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.14.institutional"
+  },
+  {
+    "id": "policy-15-early",
+    "familyId": "policy-15",
+    "theme": "mobility_security",
+    "family": "巡逻",
+    "version": "early",
+    "name": "风险点巡查",
+    "prerequisites": [
+      "q1"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-15-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "logistics": 0.22,
+          "military": 0.12
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.15.early"
+  },
+  {
+    "id": "policy-15-capable",
+    "familyId": "policy-15",
+    "theme": "mobility_security",
+    "family": "巡逻",
+    "version": "capable",
+    "name": "联合值守规则",
+    "prerequisites": [
+      "q1",
+      "q1-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-15-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "logistics": 0.22,
+          "military": 0.12
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.15.capable"
+  },
+  {
+    "id": "policy-15-institutional",
+    "familyId": "policy-15",
+    "theme": "mobility_security",
+    "family": "巡逻",
+    "version": "institutional",
+    "name": "公民防卫监督规程",
+    "prerequisites": [
+      "q5",
+      "q5-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "logistics": 0.22,
+          "military": 0.12
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.15.institutional"
+  },
+  {
+    "id": "policy-16-early",
+    "familyId": "policy-16",
+    "theme": "mobility_security",
+    "family": "基础设施守备",
+    "version": "early",
+    "name": "关键设施看护",
+    "prerequisites": [
+      "q2"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-16-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "logistics": 0.22,
+          "military": 0.12
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.16.early"
+  },
+  {
+    "id": "policy-16-capable",
+    "familyId": "policy-16",
+    "theme": "mobility_security",
+    "family": "基础设施守备",
+    "version": "capable",
+    "name": "设施故障与破坏响应",
+    "prerequisites": [
+      "q2",
+      "q2-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-16-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "logistics": 0.22,
+          "military": 0.12
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.16.capable"
+  },
+  {
+    "id": "policy-16-institutional",
+    "familyId": "policy-16",
+    "theme": "mobility_security",
+    "family": "基础设施守备",
+    "version": "institutional",
+    "name": "区域关键服务防护制度",
+    "prerequisites": [
+      "e5",
+      "e5-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "logistics": 0.22,
+          "military": 0.12
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.16.institutional"
+  },
+  {
+    "id": "policy-17-early",
+    "familyId": "policy-17",
+    "theme": "ecology_frontier",
+    "family": "流域保护",
+    "version": "early",
+    "name": "取水点不破坏约定",
+    "prerequisites": [
+      "w3"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-17-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "ecology": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.17.early"
+  },
+  {
+    "id": "policy-17-capable",
+    "familyId": "policy-17",
+    "theme": "ecology_frontier",
+    "family": "流域保护",
+    "version": "capable",
+    "name": "街区节水与排污规则",
+    "prerequisites": [
+      "w3",
+      "w3-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-17-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "ecology": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.17.capable"
+  },
+  {
+    "id": "policy-17-institutional",
+    "familyId": "policy-17",
+    "theme": "ecology_frontier",
+    "family": "流域保护",
+    "version": "institutional",
+    "name": "跨镇流域共同规约",
+    "prerequisites": [
+      "w5",
+      "w5-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "ecology": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.17.institutional"
+  },
+  {
+    "id": "policy-18-early",
+    "familyId": "policy-18",
+    "theme": "ecology_frontier",
+    "family": "污染整治",
+    "version": "early",
+    "name": "污染点临时隔离",
+    "prerequisites": [
+      "x2"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-18-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "ecology": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.18.early"
+  },
+  {
+    "id": "policy-18-capable",
+    "familyId": "policy-18",
+    "theme": "ecology_frontier",
+    "family": "污染整治",
+    "version": "capable",
+    "name": "修复工队工作规则",
+    "prerequisites": [
+      "x2",
+      "x2-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-18-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "ecology": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.18.capable"
+  },
+  {
+    "id": "policy-18-institutional",
+    "familyId": "policy-18",
+    "theme": "ecology_frontier",
+    "family": "污染整治",
+    "version": "institutional",
+    "name": "区域污染责任与补偿制度",
+    "prerequisites": [
+      "x3",
+      "x3-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "ecology": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.18.institutional"
+  },
+  {
+    "id": "policy-19-early",
+    "familyId": "policy-19",
+    "theme": "ecology_frontier",
+    "family": "勘探协约",
+    "version": "early",
+    "name": "外出勘察登记",
+    "prerequisites": [
+      "x1"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-19-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "ecology": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.19.early"
+  },
+  {
+    "id": "policy-19-capable",
+    "familyId": "policy-19",
+    "theme": "ecology_frontier",
+    "family": "勘探协约",
+    "version": "capable",
+    "name": "邻近聚落接触准则",
+    "prerequisites": [
+      "x1",
+      "x1-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-19-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "ecology": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.19.capable"
+  },
+  {
+    "id": "policy-19-institutional",
+    "familyId": "policy-19",
+    "theme": "ecology_frontier",
+    "family": "勘探协约",
+    "version": "institutional",
+    "name": "区域勘探收益与退出协约",
+    "prerequisites": [
+      "x5",
+      "x5-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "ecology": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.19.institutional"
+  },
+  {
+    "id": "policy-20-early",
+    "familyId": "policy-20",
+    "theme": "ecology_frontier",
+    "family": "生态补偿",
+    "version": "early",
+    "name": "施工损害记录",
+    "prerequisites": [
+      "w3"
+    ],
+    "durationDays": 21,
+    "target": "当前聚居地与直接服务对象",
+    "benefit": "以明确优先序集中有限能力",
+    "cost": "挤占未被列入优先序的需求，并需要公开解释",
+    "endResult": "到期复核、续期或归档",
+    "upgradesTo": "policy-20-capable",
+    "runtime": {
+      "time": {
+        "durationDays": 21,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 1
+      },
+      "demand": {
+        "coordinationLoad": 1
+      },
+      "result": {
+        "metricEffects": {
+          "ecology": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 9
+      }
+    },
+    "playerCopyKey": "r5.policy.20.early"
+  },
+  {
+    "id": "policy-20-capable",
+    "familyId": "policy-20",
+    "theme": "ecology_frontier",
+    "family": "生态补偿",
+    "version": "capable",
+    "name": "受影响地块修复承诺",
+    "prerequisites": [
+      "w3",
+      "w3-p08"
+    ],
+    "durationDays": 45,
+    "target": "聚居地、外拓点与对应服务人员",
+    "benefit": "把临时规则接入稳定设施和岗位",
+    "cost": "增加维护、记录和申诉处理负担",
+    "endResult": "旧版本自动归档；按绩效转入制度版本或撤销",
+    "upgradesTo": "policy-20-institutional",
+    "runtime": {
+      "time": {
+        "durationDays": 45,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 2
+      },
+      "demand": {
+        "coordinationLoad": 2
+      },
+      "result": {
+        "metricEffects": {
+          "ecology": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 20
+      }
+    },
+    "playerCopyKey": "r5.policy.20.capable"
+  },
+  {
+    "id": "policy-20-institutional",
+    "familyId": "policy-20",
+    "theme": "ecology_frontier",
+    "family": "生态补偿",
+    "version": "institutional",
+    "name": "区域生态补偿与复核规则",
+    "prerequisites": [
+      "x3",
+      "x3-p19"
+    ],
+    "durationDays": 90,
+    "target": "区域内适用地点；保留现场执行例外申报",
+    "benefit": "让统一调配拥有长期、可审计的执行接口",
+    "cost": "规则过硬会压制现场知识，必须保留复核与例外渠道",
+    "endResult": "按区域评估续行、修订或废止",
+    "upgradesTo": null,
+    "runtime": {
+      "time": {
+        "durationDays": 90,
+        "milestones": [
+          100
+        ]
+      },
+      "staffing": {
+        "administrators": 3
+      },
+      "demand": {
+        "coordinationLoad": 3
+      },
+      "result": {
+        "metricEffects": {
+          "ecology": 0.22
+        },
+        "reserveOutput": {},
+        "cooldownDays": 41
+      }
+    },
+    "playerCopyKey": "r5.policy.20.institutional"
+  }
+]

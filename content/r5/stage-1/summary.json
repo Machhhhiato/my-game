@@ -1,0 +1,15 @@
+{
+  "stage": "stage-1",
+  "technologyCount": 1000,
+  "projectCount": 1000,
+  "policyFamilyCount": 20,
+  "policyVersionCount": 60,
+  "mapManifestCount": 1000,
+  "mapAssetFamilyCount": 40,
+  "reusableLandmarkImageCount": 320,
+  "ratios": {
+    "crossRegion": 0.4,
+    "publicOrEcology": 0.3,
+    "securityOrDiplomacy": 0.32
+  }
+}

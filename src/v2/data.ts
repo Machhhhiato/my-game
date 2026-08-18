@@ -24,23 +24,23 @@ export const RESOURCE_ORDER: ResourceId[] = [
 ];
 
 export const RESOURCE_DEFS: Record<ResourceId, ResourceDef> = {
-  safeWater: { id: 'safeWater', name: '安全水', symbol: '水', short: '水' },
-  calories: { id: 'calories', name: '热量', symbol: '热', short: '热' },
-  bioLandCapital: { id: 'bioLandCapital', name: '生物土地资本', symbol: '地', short: '地' },
-  reclaimedMaterial: { id: 'reclaimedMaterial', name: '回收材料', symbol: '材', short: '材' },
-  precisionParts: { id: 'precisionParts', name: '精密备件', symbol: '件', short: '件' },
-  effectiveLabor: { id: 'effectiveLabor', name: '有效劳力', symbol: '劳', short: '劳' },
-  publicCredit: { id: 'publicCredit', name: '公共信用', symbol: '信', short: '信' },
+  safeWater: { id: 'safeWater', name: '可饮用水', symbol: '水', short: '水' },
+  calories: { id: 'calories', name: '食物储备', symbol: '热', short: '热' },
+  bioLandCapital: { id: 'bioLandCapital', name: '耕地与种源', symbol: '地', short: '地' },
+  reclaimedMaterial: { id: 'reclaimedMaterial', name: '可用材料', symbol: '材', short: '材' },
+  precisionParts: { id: 'precisionParts', name: '关键备件', symbol: '件', short: '件' },
+  effectiveLabor: { id: 'effectiveLabor', name: '可投入人手', symbol: '劳', short: '劳' },
+  publicCredit: { id: 'publicCredit', name: '协作信任', symbol: '信', short: '信' },
 };
 
-// ============ 方向 ============
+// ============ 方向（P1-S03A 首局玩家语言） ============
 export const DIRECTIONS: Record<string, DirectionDef> = {
-  survival: { id: 'survival', name: '生存优先', desc: '集中保障水、热量与劳力，压缩非必需消耗。' },
-  balanced: { id: 'balanced', name: '均衡发展', desc: '在生存与建设之间保持均衡，降低单项风险。' },
-  science: { id: 'science', name: '科技倾斜', desc: '优先档案校验与短波信标，加速知识与预警。' },
-  industry: { id: 'industry', name: '工业倾斜', desc: '优先工务校准与回收材料，扩大物质基础。' },
-  military: { id: 'military', name: '军事倾斜', desc: '强化警戒与护运，压缩外部渗透与失窃风险。' },
-  space: { id: 'space', name: '航天前瞻', desc: '远期目标；当前年代无轨道能力，仅作远景备案。' },
+  survival: { id: 'survival', name: '供水与食物', desc: '先让所有人有水喝、有饭吃。' },
+  balanced: { id: 'balanced', name: '定居与照护', desc: '少冒险，优先安顿、卫生与日常秩序。' },
+  science: { id: 'science', name: '学徒与资料', desc: '暂时少一部分人手，换来更会修、更会判断的人。' },
+  industry: { id: 'industry', name: '工务与材料', desc: '多回收、多维修，为下一座设施打基础。' },
+  military: { id: 'military', name: '护运与警戒', desc: '保护水网、道路和夜间营地，但会占用人手。' },
+  space: { id: 'space', name: '远期筹备（不可执行）', desc: '当前年代没有条件；按钮禁用并解释原因。' },
 };
 export const DIRECTION_ORDER = ['survival', 'balanced', 'science', 'industry', 'military', 'space'] as const;
 
@@ -92,9 +92,9 @@ export const SECURITY_POSTURES: { id: SecurityPostureId; name: string; desc: str
 
 // ============ 地图层 ============
 export const MAP_LAYERS: { id: MapLayerId; name: string }[] = [
-  { id: 'political', name: '政治执行' },
-  { id: 'population', name: '城市人口' },
-  { id: 'ecology', name: '资源生态' },
+  { id: 'political', name: '统一治理' },
+  { id: 'population', name: '聚居与人口' },
+  { id: 'ecology', name: '地形与环境' },
 ];
 
 // ============ 地区（覆盖层多边形） ============
@@ -106,7 +106,7 @@ export const REGIONS: Region[] = [
     outline: [
       [35.6, 21.5], [38.6, 20.7], [42.6, 17.5], [42.1, 14.8], [39.9, 14.6], [37.0, 18.0],
     ],
-    description: '直接管辖核心区，含第 07 号、外拓营、水网与试验田；初始镜头与主战场。',
+    description: '中央直辖的核心区域，包含第 07 号、外拓营、水网与试验田。',
   },
   {
     id: 'old_ferry',
@@ -115,7 +115,7 @@ export const REGIONS: Region[] = [
     outline: [
       [42.4, 16.5], [45.4, 15.1], [47.0, 13.4], [46.2, 11.8], [43.8, 12.7], [41.9, 14.6],
     ],
-    description: '协作契约走廊，含行旅营、断续道路、临时居民与贸易/登记机会。',
+    description: '纳入统一调度的协作走廊，连接行旅营、断续道路与临时住处。',
   },
   {
     id: 'south_acid',
@@ -124,7 +124,7 @@ export const REGIONS: Region[] = [
     outline: [
       [37.0, -11.5], [45.0, -11.0], [47.0, -15.0], [43.0, -22.0], [36.0, -20.0], [34.0, -16.0],
     ],
-    description: '争议/风险区：地表试验地、污染与酸雨事件，不提供自由扩张。',
+    description: '暂受风险管制的南部地带；酸雨和污染限制了居住与开垦。',
   },
 ];
 
@@ -139,15 +139,15 @@ export const NODES: MapNode[] = [
     lat: 18.6,
     politicalStatus: 'direct',
     symbol: 'wellhead',
-    statusLine: '后方直接管辖的核心设施；遗产模块与维护债并存。',
+    statusLine: '中央直辖 · 净水、维修、医疗、档案和后方保障集中于此。',
     facts: [
       '净水、维修、医疗、档案、发电与后方安全六项职能集于一处。',
-      '档案室冷却组维护债上升，校验作业被推迟一期。',
+      '档案室冷却组待修，资料校验已被迫延后。',
       '遗产模块承载旧文明档案，误拆风险需优先规避。',
     ],
-    bottleneck: '维护债 38：冷却组与泵组备件不足，工务负荷偏高。',
-    nextRisk: '滤芯耗竭——净水续命工程占用的精密备件将使储备进一步低于目标。',
-    actions: ['查看净水续命项目', '优先勘测井口环与地下通道', '纳入下期维护预算'],
+    bottleneck: '泵房和冷却组待修：关键备件不足，维修班组已接近负荷上限。',
+    nextRisk: '滤材继续消耗会先影响西岸供水，随后迫使公共厨房缩减用水。',
+    actions: ['查看净水工程', '勘察井口周边', '安排维护优先序'],
   },
   {
     id: 'valley_outpost',
@@ -158,15 +158,15 @@ export const NODES: MapNode[] = [
     lat: 16.4,
     politicalStatus: 'direct',
     symbol: 'warmlight',
-    statusLine: '河谷直接管辖的聚居灯火；人口、住房与净水/热量是当前主线。',
+    statusLine: '中央直辖 · 河谷第一处地表聚居点，居民依赖水网、临时住处和试验田。',
     facts: [
-      '登记 31 人、儿童 6、照护负担 4，健康有效劳力 21。',
-      '水网接续尚未完工，安全水与热量受净水续命工程挤占。',
+      '登记居民 31 人，其中儿童 6 人；可投入重体力劳动的人手有限。',
+      '水网接续尚未完工，饮水和食物仍主要依赖临时安排。',
       '暖金聚居灯火沿河分布，试验田已圈定待种源圃投入。',
     ],
-    bottleneck: '住房债 20 与净水/热量双重缺口，社会承受力承压。',
-    nextRisk: '若种源圃与菌蛋白室继续推迟，热量储备将跌向危险线。',
-    actions: ['查看旗舰工程', '优先勘测水网接续', '纳入下期人口与住房计划'],
+    bottleneck: '临时住处拥挤，供水和食物都没有稳定来源；照护人员无法长期兼任施工。',
+    nextRisk: '培养温室继续推迟，会让下一轮酸雨直接压低外拓营的食物保障。',
+    actions: ['查看在建设施', '勘察水网接续', '安排安置与照护'],
   },
   {
     id: 'old_ferry_camp',
@@ -177,14 +177,14 @@ export const NODES: MapNode[] = [
     lat: 13.8,
     politicalStatus: 'compact',
     symbol: 'waylight',
-    statusLine: '协作契约下的临时灯火；接纳与贸易状态摇摆，信用是主要杠杆。',
+    statusLine: '统一协作区 · 临时行旅营依靠河谷补给，正在等待接纳与登记安排。',
     facts: [
       '断续道路连接河谷，登记旅团已抵达并请求临时接纳与水源。',
-      '临时人口带来技能与登记机会，也带来住房与信任压力。',
-      '公共信用是维持协作的关键，登记争议可能触发信任债。',
+      '临时来访者带来技能和交换机会，也需要床位、饮水和明确的登记安排。',
+      '接纳过程若不公开，容易演变成对配给和劳动分配的争议。',
     ],
-    bottleneck: '接纳政策未定——谨慎登记与开放接纳之间尚未取舍。',
-    nextRisk: '登记争议：接纳政策或公共信用阈值将触发临时人口与住房压力。',
-    actions: ['查看接纳政策', '优先接触行旅营代表', '纳入下期贸易与登记计划'],
+    bottleneck: '接纳办法尚未确定：登记、短期安置和劳动安排都缺少统一顺序。',
+    nextRisk: '若登记争议拖延，行旅营会同时失去补给信心和继续协作的意愿。',
+    actions: ['查看接纳安排', '接触行旅营代表', '制定登记与交换方案'],
   },
 ];

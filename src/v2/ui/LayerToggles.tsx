@@ -5,9 +5,9 @@ import type { MapLayerId } from '../types';
 
 const LEGEND: Record<MapLayerId, { label: string; swatch: string; style: string }[]> = {
   political: [
-    { label: '直辖执行（翡翠河谷）', swatch: '#D4A848', style: 'solid' },
-    { label: '协作执行（旧渡口）', swatch: '#4F9CB7', style: 'hatch' },
-    { label: '争议/拒不执行（南部酸雨）', swatch: '#B86158', style: 'dash' },
+    { label: '中央直辖（翡翠河谷）', swatch: '#D4A848', style: 'solid' },
+    { label: '统一协作区（旧渡口）', swatch: '#4F9CB7', style: 'hatch' },
+    { label: '风险管制区（南部酸雨带）', swatch: '#B86158', style: 'dash' },
   ],
   population: [
     { label: '聚居灯火（外拓营）', swatch: '#D4A848', style: 'solid' },

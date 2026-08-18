@@ -1,5 +1,5 @@
 // ============ 三层覆盖层（政治执行 / 城市人口 / 资源生态），低透明 + 边界/斜纹 ============
-import type { MapLayerId } from '../types';
+import type { MapLayerId, WorldBlueprint } from '../types';
 import { NODES, REGIONS } from '../data';
 import { TEX_W, TEX_H, getRivers } from './terrain';
 import { mulberry32 } from './noise';
@@ -127,9 +127,9 @@ function buildPopulation(g: CanvasRenderingContext2D): void {
   drawClusterDots(g, nFerry.lon, nFerry.lat, '#73CBE7', 9, 1.4, 7013);
 }
 
-function buildEcology(g: CanvasRenderingContext2D, seed: number): void {
+function buildEcology(g: CanvasRenderingContext2D, world: WorldBlueprint): void {
   // 主河网高亮（水 #73CBE7）
-  const rivers = getRivers(seed);
+  const rivers = getRivers(world);
   g.save();
   g.lineCap = 'round';
   rivers.forEach((path, i) => {
@@ -148,7 +148,7 @@ function buildEcology(g: CanvasRenderingContext2D, seed: number): void {
   hatchPolygon(g, valley.outline, '#D9EBD1', 0.12, 16);
   // 南部酸雨/污染斑点（不整片填充，避免形成大色带）
   const acid = REGIONS.find(r => r.id === 'south_acid')!;
-  const rnd = mulberry32(seed ^ 0xabc);
+  const rnd = mulberry32(world.seed ^ 0xabc);
   const axs = acid.outline.map(p => p[0]), ays = acid.outline.map(p => p[1]);
   const minX = Math.min(...axs), maxX = Math.max(...axs), minY = Math.min(...ays), maxY = Math.max(...ays);
   g.save();
@@ -176,12 +176,12 @@ function buildEcology(g: CanvasRenderingContext2D, seed: number): void {
   g.restore();
 }
 
-export function buildLayerTexture(seed: number, layer: MapLayerId): HTMLCanvasElement {
+export function buildLayerTexture(world: WorldBlueprint, layer: MapLayerId): HTMLCanvasElement {
   const c = document.createElement('canvas');
   c.width = TEX_W; c.height = TEX_H;
   const g = c.getContext('2d')!;
   if (layer === 'political') buildPolitical(g);
   else if (layer === 'population') buildPopulation(g);
-  else buildEcology(g, seed);
+  else buildEcology(g, world);
   return c;
 }

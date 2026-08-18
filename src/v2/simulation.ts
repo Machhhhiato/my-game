@@ -1,46 +1,21 @@
-// ============ P1-S02 计划期结算：纯函数，不依赖 React/Zustand/Canvas/DOM/time/Math.random ============
-import type {
-  CampaignSaveV3, PlayerCommandState, ResourceId, CapacityId, DebtId, ProjectId,
-  DirectionId, PolicyId, SecurityPostureId,
-  PlanPeriodReport, SettlementResult, SettlementPreview, V2LogEntry,
-} from './types';
-import { PROJECTS, POLICIES, SECURITY_POSTURES } from './data';
+// ============ P1-S03C 持续运行国家指标：单一日步因果源（纯函数，无 React/Zustand/DOM/time/Math.random） ============
+import type { CampaignSaveV5, FocusId, MetricId, SlotState } from './types';
+import {
+  METRIC_ORDER, METRIC_DEFS, FOCUS_ORDER, FOCUS_DEFS,
+  PROJECT_ORDER, PROJECT_DEFS, RESEARCH_ORDER, RESEARCH_DEFS,
+  TRANSITION_DAYS, TRANSITION_START, TRANSITION_STEP, HANDOVER_DAYS, HANDOVER_START, EVENT_DETAIL_PLACEHOLDER,
+} from './nation';
 
-export const RESOURCE_IDS: ResourceId[] = [
-  'safeWater', 'calories', 'bioLandCapital', 'reclaimedMaterial',
-  'precisionParts', 'effectiveLabor', 'publicCredit',
-];
-export const CAPACITY_IDS: CapacityId[] = [
-  'materialBase', 'knowledgeBase', 'coerciveCapacity',
-  'integrationCapacity', 'socialCapacity', 'logisticsResilience',
-];
-export const DEBT_IDS: DebtId[] = [
-  'maintenance', 'ecology', 'housing', 'trust', 'military', 'integration',
-];
-
-export const RESOURCE_NAMES: Record<ResourceId, string> = {
-  safeWater: '安全水', calories: '热量', bioLandCapital: '生物土地资本',
-  reclaimedMaterial: '回收材料', precisionParts: '精密备件',
-  effectiveLabor: '有效劳力', publicCredit: '公共信用',
-};
-export const CAPACITY_NAMES: Record<CapacityId, string> = {
-  materialBase: '物质', knowledgeBase: '知识', coerciveCapacity: '强制',
-  integrationCapacity: '统合', socialCapacity: '社会', logisticsResilience: '后勤',
-};
-export const DEBT_NAMES: Record<DebtId, string> = {
-  maintenance: '维护债', ecology: '生态债', housing: '住房债',
-  trust: '信任债', military: '军事债', integration: '统合债',
+export {
+  METRIC_ORDER, METRIC_DEFS, FOCUS_ORDER, FOCUS_DEFS,
+  PROJECT_ORDER, PROJECT_DEFS, RESEARCH_ORDER, RESEARCH_DEFS,
 };
 
-/** clamp(lo, hi, v)：与规格公式 clamp(0.55, 1.10, x) 的参数顺序一致 */
+export const DAYS_PER_PERIOD = 60;
+
 function clamp(lo: number, hi: number, v: number): number {
   return Math.max(lo, Math.min(hi, v));
 }
-function sign(n: number): -1 | 0 | 1 {
-  return n > 0 ? 1 : n < 0 ? -1 : 0;
-}
-
-/** 确定性本地哈希 0..99（FNV-1a） */
 function hashString99(key: string): number {
   let h = 2166136261 >>> 0;
   for (let i = 0; i < key.length; i++) {
@@ -50,314 +25,250 @@ function hashString99(key: string): number {
   return h % 100;
 }
 
-type ResD = Partial<Record<ResourceId, number>>;
-type CapD = Partial<Record<CapacityId, number>>;
-type DebtD = Partial<Record<DebtId, number>>;
+export function yearOf(day: number): number {
+  return Math.floor((day - 1) / 360) + 1;
+}
+export function periodOf(day: number): number {
+  return Math.floor((day - 1) / DAYS_PER_PERIOD) + 1;
+}
 
-// ============ 规则表（数值严格按 P1-S02_SETTLEMENT_SPEC.md 第 5 节） ============
-const FIXED_ACCOUNT: ResD = {
-  safeWater: -2, calories: -2, bioLandCapital: -1, reclaimedMaterial: -1,
-  precisionParts: -2, effectiveLabor: -5, publicCredit: +1,
+export function transitionLabel(s: CampaignSaveV5): string | null {
+  if (s.focus.transitionDaysRemaining > 0) {
+    return `中央改组中 · 还需 ${s.focus.transitionDaysRemaining} 日恢复满负荷`;
+  }
+  return null;
+}
+
+// ============ 量化“倾向/完成改变”的日变化率（最小确定性默认，见最终回报待裁决项） ============
+function baseRate(m: MetricId): number {
+  switch (m) {
+    case 'livelihood': return 0.04;
+    case 'industry': return 0.03;
+    case 'energy': return 0.02;
+    case 'research': return 0.03;
+    case 'administration': return 0.03;
+    case 'logistics': return 0.03;
+    case 'military': return 0.01;
+    case 'stability': return 0.02;
+    case 'ecology': return -0.02;
+  }
+}
+
+const FOCUS_RATE: Record<FocusId, Partial<Record<MetricId, number>>> = {
+  survival: { livelihood: 0.04, logistics: 0.03, research: -0.02, industry: -0.02 },
+  balanced: { livelihood: 0.02, stability: 0.02, administration: 0.02 },
+  industry: { industry: 0.05, logistics: 0.03, livelihood: -0.02, ecology: -0.02 },
+  science: { research: 0.05, administration: 0.03, industry: -0.02, logistics: -0.02 },
+  military: { military: 0.04, logistics: 0.02, industry: -0.02, stability: -0.01 },
 };
 
-const DIRECTION_RULES: Record<DirectionId, { res: ResD; cap: CapD; debt: DebtD; keyword: string }> = {
-  survival: { res: { safeWater: 3, calories: 2 }, cap: { socialCapacity: 1 }, debt: {}, keyword: '配给与维修优先' },
-  balanced: { res: { safeWater: 1, calories: 1, reclaimedMaterial: 1 }, cap: {}, debt: { maintenance: -1 }, keyword: '分散风险' },
-  science: { res: { precisionParts: -1, effectiveLabor: -1, publicCredit: 1 }, cap: { knowledgeBase: 3 }, debt: { maintenance: 1 }, keyword: '校验与学徒挤占' },
-  industry: { res: { reclaimedMaterial: 3, bioLandCapital: -1, effectiveLabor: -2 }, cap: { materialBase: 3 }, debt: { ecology: 1 }, keyword: '回收与工务挤占' },
-  military: { res: { effectiveLabor: -2, publicCredit: -1 }, cap: { coerciveCapacity: 3 }, debt: { military: 1 }, keyword: '护运与警戒挤占' },
-  space: { res: { precisionParts: -2, publicCredit: -2 }, cap: { knowledgeBase: 1 }, debt: { integration: 1 }, keyword: '年代能力不足的远景备案' },
+const PROJECT_EFFECT: Record<string, Partial<Record<MetricId, number>>> = {
+  water_life: { livelihood: 0.04 },
+  seed_protein: { livelihood: 0.03, ecology: 0.03 },
+  workshop_calib: { industry: 0.05 },
+  archive_beacon: { administration: 0.04, logistics: 0.03 },
+};
+const RESEARCH_EFFECT: Record<string, Partial<Record<MetricId, number>>> = {
+  membrane_reuse: { livelihood: 0.02 },
+  field_methods: { ecology: 0.03 },
+  maintenance_training: { industry: 0.03, administration: 0.03 },
 };
 
-const PROJECT_RULES: Record<ProjectId, { res: ResD; cap: CapD; debt: DebtD; baseProgress: number; laborReq: number }> = {
-  water_life: { res: { safeWater: 5, precisionParts: -2, effectiveLabor: -1 }, cap: { logisticsResilience: 3 }, debt: { maintenance: -5 }, baseProgress: 25, laborReq: 1 },
-  seed_protein: { res: { calories: 5, bioLandCapital: 3, safeWater: -2, effectiveLabor: -2 }, cap: { socialCapacity: 2 }, debt: { ecology: 1 }, baseProgress: 25, laborReq: 2 },
-  workshop_calib: { res: { reclaimedMaterial: 5, calories: -2, effectiveLabor: -2 }, cap: { materialBase: 3 }, debt: { maintenance: -6, ecology: 2 }, baseProgress: 25, laborReq: 2 },
-  archive_beacon: { res: { precisionParts: -1, effectiveLabor: -1, publicCredit: 3 }, cap: { knowledgeBase: 4 }, debt: { trust: -2 }, baseProgress: 25, laborReq: 1 },
-};
-
-const POLICY_RULES: Record<PolicyId, { res: ResD; cap: CapD; debt: DebtD }> = {
-  mixed_ration: { res: {}, cap: {}, debt: { trust: -1 } },
-  cautious_register: { res: { publicCredit: -1 }, cap: {}, debt: { housing: -2, integration: 1 } },
-  apprentice_first: { res: { effectiveLabor: -1 }, cap: { knowledgeBase: 2 }, debt: { maintenance: -1 } },
-  labor_protection: { res: { reclaimedMaterial: -1, effectiveLabor: 1 }, cap: {}, debt: { maintenance: 2, trust: -1 } },
-  community_housing: { res: { reclaimedMaterial: -2, publicCredit: -1 }, cap: { socialCapacity: 2 }, debt: { housing: -4 } },
-};
-
-const SECURITY_RULES: Record<SecurityPostureId, { res: ResD; cap: CapD; debt: DebtD }> = {
-  low: { res: { effectiveLabor: 1 }, cap: {}, debt: { military: 2 } },
-  escort: { res: {}, cap: {}, debt: {} },
-  heightened: { res: { effectiveLabor: -2, precisionParts: -1 }, cap: { coerciveCapacity: 1 }, debt: { military: 3 } },
-};
-
-// ============ 结算内部计算 ============
-interface Computation {
-  resourceDelta: Record<ResourceId, number>;
-  capacityDelta: Record<CapacityId, number>;
-  debtDelta: Record<DebtId, number>;
-  project: { id: ProjectId; name: string; progressFrom: number; progressTo: number; efficiency: number } | null;
-  event: { id: string; name: string; summary: string; place: string } | null;
-  temporaryPopulationDelta: number;
-  reasons: string[];
-  seedKey: string;
+function mainMetric(slotId: string): MetricId {
+  if (slotId === 'water_life' || slotId === 'membrane_reuse') return 'livelihood';
+  if (slotId === 'seed_protein' || slotId === 'field_methods') return 'ecology';
+  if (slotId === 'workshop_calib' || slotId === 'maintenance_training') return 'industry';
+  return 'administration';
 }
 
-function emptyRes(): Record<ResourceId, number> {
-  return { safeWater: 0, calories: 0, bioLandCapital: 0, reclaimedMaterial: 0, precisionParts: 0, effectiveLabor: 0, publicCredit: 0 };
-}
-function emptyCap(): Record<CapacityId, number> {
-  return { materialBase: 0, knowledgeBase: 0, coerciveCapacity: 0, integrationCapacity: 0, socialCapacity: 0, logisticsResilience: 0 };
-}
-function emptyDebt(): Record<DebtId, number> {
-  return { maintenance: 0, ecology: 0, housing: 0, trust: 0, military: 0, integration: 0 };
-}
-
-function applyRes(res: Record<ResourceId, number>, d: ResD, mult = 1): void {
-  for (const k of Object.keys(d) as ResourceId[]) res[k] += (d[k] ?? 0) * mult;
-}
-function applyCap(cap: Record<CapacityId, number>, d: CapD, mult = 1): void {
-  for (const k of Object.keys(d) as CapacityId[]) cap[k] += (d[k] ?? 0) * mult;
-}
-function applyDebt(debt: Record<DebtId, number>, d: DebtD, mult = 1): void {
-  for (const k of Object.keys(d) as DebtId[]) debt[k] += (d[k] ?? 0) * mult;
-}
-
-function computePlanPeriod(state: CampaignSaveV3, command: PlayerCommandState): Computation {
-  const res = emptyRes();
-  const cap = emptyCap();
-  const debt = emptyDebt();
-  let temporaryPopulationDelta = 0;
-
-  // 1. 固定账户收支
-  applyRes(res, FIXED_ACCOUNT);
-
-  // 2. 主方向 100%，辅方向 50%（主辅相同视为无辅方向）
-  applyRes(res, DIRECTION_RULES[command.primaryDirection].res, 1);
-  applyCap(cap, DIRECTION_RULES[command.primaryDirection].cap, 1);
-  applyDebt(debt, DIRECTION_RULES[command.primaryDirection].debt, 1);
-  if (command.secondaryDirection && command.secondaryDirection !== command.primaryDirection) {
-    applyRes(res, DIRECTION_RULES[command.secondaryDirection].res, 0.5);
-    applyCap(cap, DIRECTION_RULES[command.secondaryDirection].cap, 0.5);
-    applyDebt(debt, DIRECTION_RULES[command.secondaryDirection].debt, 0.5);
-  }
-
-  // 3. 旗舰工程（仅选中项完整生效）及进度
-  let project: Computation['project'] = null;
-  if (command.flagshipProjectId) {
-    const pr = PROJECT_RULES[command.flagshipProjectId];
-    applyRes(res, pr.res);
-    applyCap(cap, pr.cap);
-    applyDebt(debt, pr.debt);
-
-    const logistics = state.nation.capacities.logisticsResilience.value;
-    const maintenance = state.nation.debts.maintenance.value;
-    const laborStock = state.nation.resources.effectiveLabor.stock;
-    const efficiency = clamp(0.55, 1.10,
-      0.85 + (logistics - 30) / 200 - maintenance / 500 - Math.max(0, pr.laborReq - laborStock) / 100);
-    const progressFrom = state.projectProgress[command.flagshipProjectId] ?? 0;
-    const step = Math.round(pr.baseProgress * efficiency);
-    const progressTo = clamp(0, 100, progressFrom + step);
-    project = {
-      id: command.flagshipProjectId,
-      name: PROJECTS[command.flagshipProjectId].name,
-      progressFrom,
-      progressTo,
-      efficiency,
-    };
-  }
-
-  // 4. 法令与安全姿态
-  applyRes(res, POLICY_RULES[command.policyId].res);
-  applyCap(cap, POLICY_RULES[command.policyId].cap);
-  applyDebt(debt, POLICY_RULES[command.policyId].debt);
-  applyRes(res, SECURITY_RULES[command.securityPosture].res);
-  applyCap(cap, SECURITY_RULES[command.securityPosture].cap);
-  applyDebt(debt, SECURITY_RULES[command.securityPosture].debt);
-
-  // 5. 基础债务（用修正后库存）
-  const postStock = (id: ResourceId): number => state.nation.resources[id].stock + res[id];
-  if (postStock('precisionParts') < 24) debt.maintenance += 2;
-  if (postStock('precisionParts') < 12) debt.maintenance += 1;
-  if (postStock('bioLandCapital') < 40) debt.ecology += 1;
-  if (postStock('effectiveLabor') < 20) debt.housing += 1;
-  if (postStock('publicCredit') < 40) debt.trust += 2;
-  debt.military += command.securityPosture === 'low' ? 1 : command.securityPosture === 'heightened' ? 2 : 0;
-  if (postStock('publicCredit') < 40) debt.integration += 1;
-
-  // 6. 条件事件（每期最多一条，按优先级）
-  let event: Computation['event'] = null;
-  if (command.flagshipProjectId === 'water_life' && postStock('precisionParts') <= 12 && !state.eventFlags.filter_strain) {
-    res.safeWater -= 8; res.publicCredit -= 3; debt.maintenance += 2;
-    event = { id: 'filter_strain', name: '滤芯拆借', summary: '滤芯拆借，净水储备被迫下调', place: '翡翠河谷水网' };
-  } else if (postStock('bioLandCapital') <= 22 && !state.eventFlags.acid_rain) {
-    const roll = hashString99(`${state.seed}:${state.settlementCount}:acid_rain`);
-    if (roll < 40) {
-      res.bioLandCapital -= 4; debt.ecology += 5;
-      event = { id: 'acid_rain', name: '酸雨冲刷', summary: '酸雨冲刷试验地，土壤基质报废', place: '南部酸雨带' };
-    }
-  } else if (command.policyId === 'cautious_register' && postStock('publicCredit') <= 36 && !state.eventFlags.ferry_dispute) {
-    res.publicCredit -= 5; debt.housing += 3; debt.trust += 4; temporaryPopulationDelta += 4;
-    event = { id: 'ferry_dispute', name: '登记争议', summary: '登记争议扩大，临时安置压力上升', place: '旧渡口行旅营' };
-  }
-
-  // 7. 原因与 seedKey
-  const dir = DIRECTION_RULES[command.primaryDirection];
-  const reasons = [
-    `固定账户收支：水 ${FIXED_ACCOUNT.safeWater}、热量 ${FIXED_ACCOUNT.calories}、土地 ${FIXED_ACCOUNT.bioLandCapital}、材料 ${FIXED_ACCOUNT.reclaimedMaterial}、备件 ${FIXED_ACCOUNT.precisionParts}、劳力 ${FIXED_ACCOUNT.effectiveLabor}、信用 ${FIXED_ACCOUNT.publicCredit}。`,
-    `命令修正：${dir.keyword}${project ? `；旗舰工程「${project.name}」推进 +${project.progressTo - project.progressFrom}` : ''}；${POLICIES[command.policyId].name}；${SECURITY_POSTURES.find(s => s.id === command.securityPosture)!.name}。`,
-    event ? `事件兑现：${event.summary}。` : '基础债务按库存结算；本期无新增硬事件，风险继续积累。',
-  ];
-  const seedKey = `${state.seed}:${state.settlementCount}`;
-
-  return { resourceDelta: res, capacityDelta: cap, debtDelta: debt, project, event, temporaryPopulationDelta, reasons, seedKey };
-}
-
-// ============ 预览（不改输入，与结算数值一致） ============
-export function previewPlanPeriod(state: CampaignSaveV3, command: PlayerCommandState): SettlementPreview {
-  const comp = computePlanPeriod(state, command);
-
-  let mostStressedResource: SettlementPreview['mostStressedResource'] = null;
-  let minRatio = Infinity;
-  for (const id of RESOURCE_IDS) {
-    const post = state.nation.resources[id].stock + comp.resourceDelta[id];
-    const target = state.nation.resources[id].reserveTarget;
-    const ratio = target > 0 ? post / target : Infinity;
-    if (ratio < minRatio) minRatio = ratio;
-  }
-  if (minRatio < 1) {
-    for (const id of RESOURCE_IDS) {
-      const post = state.nation.resources[id].stock + comp.resourceDelta[id];
-      const target = state.nation.resources[id].reserveTarget;
-      const ratio = target > 0 ? post / target : Infinity;
-      if (Math.abs(ratio - minRatio) < 1e-9) {
-        mostStressedResource = { id, name: RESOURCE_NAMES[id], delta: comp.resourceDelta[id] };
-        break;
-      }
-    }
-  }
-
-  let largestDebtChange: SettlementPreview['largestDebtChange'] = null;
-  let maxAbs = 0;
-  for (const id of DEBT_IDS) {
-    const a = Math.abs(comp.debtDelta[id]);
-    if (a > maxAbs) maxAbs = a;
-  }
-  if (maxAbs > 0) {
-    for (const id of DEBT_IDS) {
-      if (Math.abs(comp.debtDelta[id]) === maxAbs) {
-        largestDebtChange = { id, name: DEBT_NAMES[id], delta: comp.debtDelta[id] };
-        break;
-      }
-    }
-  }
-
-  return {
-    flagshipProject: projectName(command),
-    mostStressedResource,
-    largestDebtChange,
-    event: comp.event ? { id: comp.event.id, name: comp.event.name } : null,
-    summary: buildSummary(state, comp),
+function completedEffect(s: CampaignSaveV5): Record<MetricId, number> {
+  const acc: Record<MetricId, number> = {
+    livelihood: 0, industry: 0, energy: 0, research: 0, administration: 0, logistics: 0, military: 0, stability: 0, ecology: 0,
   };
+  if (s.project.id && s.project.milestones.p100) {
+    for (const [k, v] of Object.entries(PROJECT_EFFECT[s.project.id] ?? {})) acc[k as MetricId] += v;
+  }
+  if (s.research.id && s.research.milestones.p100) {
+    for (const [k, v] of Object.entries(RESEARCH_EFFECT[s.research.id] ?? {})) acc[k as MetricId] += v;
+  }
+  return acc;
 }
 
-function projectName(command: PlayerCommandState): string {
-  if (command.flagshipProjectId && PROJECTS[command.flagshipProjectId]) return PROJECTS[command.flagshipProjectId].name;
-  return '无旗舰工程';
+function metricDailyRate(s: CampaignSaveV5, id: MetricId): number {
+  const ce = completedEffect(s);
+  return baseRate(id) + (FOCUS_RATE[s.focus.id][id] ?? 0) + ce[id];
 }
 
-function buildSummary(state: CampaignSaveV3, comp: Computation): string {
-  const proj = comp.project ? `优先「${comp.project.name}」(+${comp.project.progressTo - comp.project.progressFrom})` : '无旗舰工程';
-  const evt = comp.event ? `事件「${comp.event.name}」` : '无新增硬事件';
-  return `第 ${state.clock.year} 年第 ${state.clock.period} 期结算：${proj}；${evt}`;
+function handoverEfficiency(slot: SlotState): number {
+  if (slot.handoverDays <= 0) return 1;
+  return HANDOVER_START + (HANDOVER_DAYS - slot.handoverDays) * ((1 - HANDOVER_START) / HANDOVER_DAYS);
 }
 
-// ============ 结算（不改输入，返回新状态） ============
-export function settlePlanPeriod(state: CampaignSaveV3, command: PlayerCommandState): SettlementResult {
-  const comp = computePlanPeriod(state, command);
-  const newState = structuredClone(state) as CampaignSaveV3;
+function projectSpeed(s: CampaignSaveV5): number {
+  const i = s.metrics.industry.value, l = s.metrics.logistics.value, a = s.metrics.administration.value;
+  const factor = clamp(0.4, 1.2, (i + l + a) / 240);
+  return 0.5 * factor;
+}
+function researchSpeed(s: CampaignSaveV5): number {
+  const r = s.metrics.research.value, e = s.metrics.energy.value, a = s.metrics.administration.value;
+  const factor = clamp(0.4, 1.2, (r + e + a) / 240);
+  return 0.5 * factor;
+}
 
-  // 应用 delta（库存 clamp ≥0；能力/债务 clamp 0..100）
-  for (const id of RESOURCE_IDS) {
-    const lv = newState.nation.resources[id];
-    const d = comp.resourceDelta[id];
-    lv.stock = Math.max(0, lv.stock + d);
-    lv.trend = sign(d);
+function applyMilestones(slot: SlotState, slotId: string, s: CampaignSaveV5): void {
+  if (!slot.milestones.p25 && slot.progress >= 25) {
+    slot.milestones.p25 = true;
+    s.metrics[mainMetric(slotId)].value = clamp(0, 100, s.metrics[mainMetric(slotId)].value + 1);
   }
-  for (const id of CAPACITY_IDS) {
-    const s = newState.nation.capacities[id];
-    const d = comp.capacityDelta[id];
-    s.value = clamp(0, 100, s.value + d);
-    s.trend = sign(d);
+  if (!slot.milestones.p50 && slot.progress >= 50) {
+    slot.milestones.p50 = true;
+    s.metrics[mainMetric(slotId)].value = clamp(0, 100, s.metrics[mainMetric(slotId)].value + 1);
   }
-  for (const id of DEBT_IDS) {
-    const s = newState.nation.debts[id];
-    const d = comp.debtDelta[id];
-    s.value = clamp(0, 100, s.value + d);
-    s.trend = sign(d);
+  if (!slot.milestones.p75 && slot.progress >= 75) {
+    slot.milestones.p75 = true;
+    s.metrics[mainMetric(slotId)].value = clamp(0, 100, s.metrics[mainMetric(slotId)].value + 1);
   }
+  if (!slot.milestones.p100 && slot.progress >= 100) {
+    slot.milestones.p100 = true;
+    s.metrics[mainMetric(slotId)].value = clamp(0, 100, s.metrics[mainMetric(slotId)].value + 2);
+  }
+}
 
-  // 工程进度
-  if (comp.project) {
-    newState.projectProgress[comp.project.id] = comp.project.progressTo;
-  }
+// ============ 切换（不暂停、不扣永久数值、不清进度） ============
+export function setFocus(state: CampaignSaveV5, id: FocusId): CampaignSaveV5 {
+  const s = structuredClone(state) as CampaignSaveV5;
+  s.focus = { id, transitionDaysRemaining: TRANSITION_DAYS, transitionEfficiency: TRANSITION_START };
+  return s;
+}
+export function setProject(state: CampaignSaveV5, id: string): CampaignSaveV5 {
+  const s = structuredClone(state) as CampaignSaveV5;
+  s.project = { id, progress: 0, handoverDays: HANDOVER_DAYS, milestones: { p25: false, p50: false, p75: false, p100: false } };
+  return s;
+}
+export function setResearch(state: CampaignSaveV5, id: string): CampaignSaveV5 {
+  const s = structuredClone(state) as CampaignSaveV5;
+  s.research = { id, progress: 0, handoverDays: HANDOVER_DAYS, milestones: { p25: false, p50: false, p75: false, p100: false } };
+  return s;
+}
 
-  // 事件标记 + 临时人口
-  if (comp.event) {
-    newState.eventFlags[comp.event.id] = true;
-  }
-  if (comp.temporaryPopulationDelta !== 0) {
-    newState.nation.population.temporary = Math.max(0, newState.nation.population.temporary + comp.temporaryPopulationDelta);
-  }
-
-  // 命令提交
-  newState.player = { ...command };
-
-  // 报告（最多 12 份）
-  const report: PlanPeriodReport = {
-    year: state.clock.year,
-    period: state.clock.period,
-    command: { ...command },
-    resourceDelta: { ...comp.resourceDelta },
-    capacityDelta: { ...comp.capacityDelta },
-    debtDelta: { ...comp.debtDelta },
-    project: comp.project ? { ...comp.project } : null,
-    event: comp.event ? { id: comp.event.id, name: comp.event.name, summary: comp.event.summary } : null,
-    reasons: [...comp.reasons],
-    seedKey: comp.seedKey,
-  };
-  newState.reports = [...newState.reports, report].slice(-12);
-
-  // 日志（最多 40 条）
-  let nextId = newState.log.length ? Math.max(...newState.log.map(e => e.id)) + 1 : 1;
-  const logEntries: V2LogEntry[] = [
-    {
-      id: nextId++,
-      period: `第 ${state.clock.period} 期`,
-      place: '统筹与账目',
-      summary: buildSummary(state, comp),
-      severity: 'info',
-    },
+// ============ 事件（非阻塞；正文用占位符） ============
+function ensureEvents(s: CampaignSaveV5): void {
+  if (s.events.length > 0) return;
+  s.events = [
+    { id: 'water_wear', location: '翡翠河谷水网', cause: EVENT_DETAIL_PLACEHOLDER, affectedMetric: 'livelihood', consequence: EVENT_DETAIL_PLACEHOLDER, suggestion: EVENT_DETAIL_PLACEHOLDER, warningDay: 12 + hashString99(`${s.seed}:water_wear`) % 40, active: false },
+    { id: 'acid_rain', location: '南部酸雨带', cause: EVENT_DETAIL_PLACEHOLDER, affectedMetric: 'ecology', consequence: EVENT_DETAIL_PLACEHOLDER, suggestion: EVENT_DETAIL_PLACEHOLDER, warningDay: 30 + hashString99(`${s.seed}:acid_rain`) % 50, active: false },
+    { id: 'ferry_dispute', location: '旧渡口行旅营', cause: EVENT_DETAIL_PLACEHOLDER, affectedMetric: 'stability', consequence: EVENT_DETAIL_PLACEHOLDER, suggestion: EVENT_DETAIL_PLACEHOLDER, warningDay: 50 + hashString99(`${s.seed}:ferry_dispute`) % 50, active: false },
   ];
-  if (comp.event) {
-    logEntries.push({
-      id: nextId++,
-      period: `第 ${state.clock.period} 期`,
-      place: comp.event.place,
-      summary: comp.event.summary,
-      severity: 'danger',
-    });
+}
+
+const EVENT_PENALTY: Record<string, Partial<Record<MetricId, number>>> = {
+  water_wear: { livelihood: -0.03 },
+  acid_rain: { ecology: -0.04 },
+  ferry_dispute: { stability: -0.02 },
+};
+
+function tickEvents(s: CampaignSaveV5): void {
+  ensureEvents(s);
+  for (const ev of s.events) {
+    if (!ev.active && s.day >= ev.warningDay) ev.active = true;
   }
-  newState.log = [...newState.log, ...logEntries].slice(-40);
-  newState.logUnread = Math.min(99, newState.logUnread + logEntries.length);
+}
+function eventPenalty(s: CampaignSaveV5, id: MetricId): number {
+  let p = 0;
+  for (const ev of s.events) {
+    if (ev.active) p += EVENT_PENALTY[ev.id]?.[id] ?? 0;
+  }
+  return p;
+}
 
-  newState.settlementCount += 1;
+// ============ 推进一天 ============
+export function advanceOneDay(state: CampaignSaveV5): CampaignSaveV5 {
+  const s = structuredClone(state) as CampaignSaveV5;
 
-  // 8. 日历：只有此步推进
-  newState.clock.period += 1;
-  if (newState.clock.period > 6) {
-    newState.clock.period = 1;
-    newState.clock.year += 1;
+  // 改组惯性
+  if (s.focus.transitionDaysRemaining > 0) {
+    s.focus.transitionDaysRemaining -= 1;
+    s.focus.transitionEfficiency = Math.min(1, TRANSITION_START + (TRANSITION_DAYS - s.focus.transitionDaysRemaining) * TRANSITION_STEP);
+  } else {
+    s.focus.transitionEfficiency = 1;
+  }
+  // 交接
+  if (s.project.handoverDays > 0) s.project.handoverDays -= 1;
+  if (s.research.handoverDays > 0) s.research.handoverDays -= 1;
+
+  const te = s.focus.transitionEfficiency;
+  const ph = handoverEfficiency(s.project);
+  const rh = handoverEfficiency(s.research);
+
+  // 指标（正向速率 × 改组效率）
+  for (const id of METRIC_ORDER) {
+    let rate = metricDailyRate(s, id) + eventPenalty(s, id);
+    const applied = rate > 0 ? rate * te : rate;
+    s.metrics[id].value = clamp(0, 100, s.metrics[id].value + applied);
+    s.metrics[id].dailyRate = rate;
   }
 
-  return { newState, report, logEntries, summary: buildSummary(state, comp) };
+  // 工程/科研进度
+  if (s.project.id) {
+    const step = projectSpeed(s) * te * ph;
+    s.project.progress = clamp(0, 100, s.project.progress + step);
+    applyMilestones(s.project, s.project.id, s);
+  }
+  if (s.research.id) {
+    const step = researchSpeed(s) * te * rh;
+    s.research.progress = clamp(0, 100, s.research.progress + step);
+    applyMilestones(s.research, s.research.id, s);
+  }
+
+  // 事件
+  tickEvents(s);
+
+  // 周报 / 60 日滚动简报（不暂停）
+  if (s.day % 7 === 0) {
+    s.log = [...s.log, {
+      id: s.log.length ? Math.max(...s.log.map(e => e.id)) + 1 : 1,
+      period: `第 ${periodOf(s.day)} 期`,
+      place: '河谷执行周报',
+      summary: buildWeeklySummary(s),
+      severity: 'info' as const,
+    }].slice(-40);
+    s.logUnread = Math.min(99, s.logUnread + 1);
+  }
+  if (s.day % DAYS_PER_PERIOD === 0) {
+    s.log = [...s.log, {
+      id: s.log.length ? Math.max(...s.log.map(e => e.id)) + 1 : 1,
+      period: `第 ${periodOf(s.day)} 期`,
+      place: '中央滚动简报',
+      summary: `第 ${periodOf(s.day)} 期中央滚动简报：${buildMetricSummary(s)}`,
+      severity: 'info' as const,
+    }].slice(-40);
+    s.logUnread = Math.min(99, s.logUnread + 1);
+  }
+
+  s.day += 1;
+  return s;
+}
+
+export function advanceDays(state: CampaignSaveV5, days: number): CampaignSaveV5 {
+  let s = structuredClone(state) as CampaignSaveV5;
+  for (let i = 0; i < days; i++) s = advanceOneDay(s);
+  return s;
+}
+
+function buildWeeklySummary(s: CampaignSaveV5): string {
+  const up: string[] = [];
+  const down: string[] = [];
+  for (const id of METRIC_ORDER) {
+    const r = s.metrics[id].dailyRate;
+    if (r > 0.005) up.push(METRIC_DEFS[id].name);
+    else if (r < -0.005) down.push(METRIC_DEFS[id].name);
+  }
+  const u = up.length ? `回升：${up.join('、')}` : '无回升';
+  const d = down.length ? `承压：${down.join('、')}` : '无承压';
+  const evt = s.events.filter(e => e.active).map(e => e.location);
+  return `本周 ${u}；${d}${evt.length ? `；警报：${evt.join('、')}` : ''}。`;
+}
+
+function buildMetricSummary(s: CampaignSaveV5): string {
+  return METRIC_ORDER.map(id => `${METRIC_DEFS[id].name} ${Math.round(s.metrics[id].value)}`).join('、');
 }

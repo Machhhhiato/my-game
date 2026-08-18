@@ -18,7 +18,7 @@ export function ObserverDrawer() {
       </button>
       {observerOpen && (
         <div className="v2-observer-body">
-          <div className="v2-obs-group">地点 3</div>
+          <div className="v2-obs-group">重点地点</div>
           {state.nodes.map(n => (
             <button
               key={n.id}
@@ -29,12 +29,12 @@ export function ObserverDrawer() {
               <span className="v2-obs-line">{n.statusLine}</span>
             </button>
           ))}
-          <div className="v2-obs-group">工程 1</div>
+          <div className="v2-obs-group">正在建设</div>
           <button className="v2-obs-item" onClick={() => requestFocus('valley_outpost')}>
             <span className="v2-obs-name">{proj.name}</span>
             <span className="v2-obs-line">风险：{proj.risk}</span>
           </button>
-          <div className="v2-obs-group">待办</div>
+          <div className="v2-obs-group">需要留意</div>
           {todos.map(t => (
             <button
               key={t.id}

@@ -1,27 +1,25 @@
+import { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { V2App } from './v2/ui/V2App';
+import { TextIdleApp } from './v2/ui/TextIdleApp';
 import { useV2, startV2Loop } from './v2/store';
-import { saveGameV3 } from './v2/save';
+import { saveGameV6 } from './v2/save';
 import './v2/v2.css';
 
 const root = createRoot(document.getElementById('root')!);
-root.render(<V2App />);
-startV2Loop();
-window.addEventListener('beforeunload', () => saveGameV3(useV2.getState().state));
+const NationKernelInspector = lazy(() => import('./v2/ui/NationKernelInspector').then((module) => ({ default: module.NationKernelInspector })));
+const query = new URLSearchParams(window.location.search);
+const kernelFixture = query.get('kernel');
+const showMapPrototype = query.get('map') === '1';
 
-// 验收截图参数：
-//   ?shot=far      默认远景完整星球（无浮窗）
-//   ?shot=medium   翡翠河谷中景（三层均开，相机/图层由 PlanetCanvas 设置）
-//   ?shot=close    河谷近景功能区群（三层均开）
-//   ?shot=object   选中翡翠河谷外拓营，显示锚定对象浮窗
-//   ?shot=ledger   点击精密备件，显示锚定资源账
-const params = new URLSearchParams(window.location.search);
-const mode = params.get('shot');
-if (mode === 'object') {
-  setTimeout(() => useV2.getState().selectNode('valley_outpost'), 900);
-} else if (mode === 'ledger') {
-  setTimeout(() => {
-    const btn = document.querySelector<HTMLElement>('[data-res="precisionParts"]');
-    btn?.click();
-  }, 900);
+if (kernelFixture != null) {
+  root.render(<Suspense fallback={<main /> }><NationKernelInspector initialFixture={kernelFixture} /></Suspense>);
+} else if (showMapPrototype) {
+  root.render(<V2App />);
+  startV2Loop();
+  window.addEventListener('beforeunload', () => saveGameV6(useV2.getState().state));
+} else {
+  root.render(<TextIdleApp />);
 }
+
+// 默认是 R10 文字挂机验证层；保留 ?map=1 进入既有地图原型。

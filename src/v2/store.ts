@@ -1,34 +1,26 @@
 import { create } from 'zustand';
-import type {
-  CampaignSaveV3, DirectionId, MapLayerId, PlayerCommandState,
-  PolicyId, ProjectId, ResourceId, SecurityPostureId,
-} from './types';
-import { initV3, saveGameV3, hasRetiredV1Save, backupRetiredV1Save } from './save';
-import { settlePlanPeriod } from './simulation';
+import type { CampaignSaveV6, FocusId, MapLayerId, ResourceId, RunMode, V6PolicyId, V6ProjectId, V6TechId } from './types';
+import { initV6, saveGameV6, hasRetiredV1Save, backupRetiredV1Save, backupCurrentV6Save } from './save';
+import { newCampaignV6 } from './state';
+import { advanceOneDayV6, setNationalPolicyV6, setSlotModeV6, startPolicyV6, startProjectV6, startResearchV6 } from './simulationV6';
 
-export type PanelId = 'nation' | 'plan' | 'direction' | 'project' | 'policy' | 'research' | 'report';
+export type PanelId = 'nation' | 'focus' | 'policy' | 'project' | 'research' | 'report';
 
 interface V2Store {
-  state: CampaignSaveV3;
+  state: CampaignSaveV6;
   version: number;
-  // 瞬态 UI（不入存档）
   panel: PanelId | null;
   resourceLedger: ResourceId | null;
   selectedNodeId: string | null;
   observerOpen: boolean;
   logCollapsed: boolean;
   logHistoryOpen: boolean;
-  confirmSummaryOpen: boolean;
   retirementNotice: boolean;
-  pending: PlayerCommandState;
-  staged: boolean;
   focusNodeId: string | null;
   focusSeq: number;
-  // 浮窗锚定（相对 .v2-map / .v2-app，由 PlanetCanvas/TopToolbar 计算）
   selectedAnchor: { x: number; y: number; visible: boolean } | null;
   ledgerAnchor: { left: number; top: number } | null;
   mapSize: { w: number; h: number };
-  // actions
   refresh(): void;
   setPanel(p: PanelId | null): void;
   openResource(id: ResourceId | null, anchor?: { left: number; top: number }): void;
@@ -39,18 +31,20 @@ interface V2Store {
   toggleObserver(): void;
   setLogCollapsed(b: boolean): void;
   setLogHistory(b: boolean): void;
-  setConfirmSummary(b: boolean): void;
   dismissRetirement(): void;
   setLayer(id: MapLayerId): void;
   toggleLayer(id: MapLayerId): void;
   setActiveLayers(ids: MapLayerId[]): void;
   setSpeed(v: 0 | 1 | 2 | 4): void;
-  stageCommand(patch: Partial<PlayerCommandState>): void;
-  resetStaging(): void;
-  confirmPeriod(): void;
+  setFocus(id: FocusId): void;
+  setProject(id: V6ProjectId): void;
+  setResearch(id: V6TechId): void;
+  setPolicy(id: V6PolicyId): void;
+  setSlotMode(slot: 'project' | 'research', mode: RunMode): void;
+  restartCampaign(): void;
 }
 
-const init = initV3();
+const init = initV6();
 
 export const useV2 = create<V2Store>((set, get) => ({
   state: init.state,
@@ -61,10 +55,7 @@ export const useV2 = create<V2Store>((set, get) => ({
   observerOpen: false,
   logCollapsed: false,
   logHistoryOpen: false,
-  confirmSummaryOpen: false,
   retirementNotice: hasRetiredV1Save() && !init.state.retiredNoticeShown,
-  pending: { ...init.state.player },
-  staged: false,
   focusNodeId: null,
   focusSeq: 0,
   selectedAnchor: null,
@@ -82,20 +73,19 @@ export const useV2 = create<V2Store>((set, get) => ({
   toggleObserver: () => set(s => ({ observerOpen: !s.observerOpen })),
   setLogCollapsed: (b) => set({ logCollapsed: b }),
   setLogHistory: (b) => set({ logHistoryOpen: b }),
-  setConfirmSummary: (b) => set({ confirmSummaryOpen: b }),
 
   dismissRetirement: () => {
     backupRetiredV1Save();
     const s = get().state;
     s.retiredNoticeShown = true;
-    saveGameV3(s);
+    saveGameV6(s);
     set({ retirementNotice: false });
   },
 
   setLayer: (id) => {
     const s = get().state;
     s.activeLayers = [id];
-    saveGameV3(s);
+    saveGameV6(s);
     set({ state: { ...s } });
   },
 
@@ -103,52 +93,103 @@ export const useV2 = create<V2Store>((set, get) => ({
     const s = get().state;
     const cur = s.activeLayers;
     const next = cur.includes(id) ? cur.filter(x => x !== id) : [...cur, id];
-    // 至少保留一个图层
     if (next.length === 0) return;
     s.activeLayers = next;
-    saveGameV3(s);
+    saveGameV6(s);
     set({ state: { ...s } });
   },
 
   setActiveLayers: (ids) => {
     const s = get().state;
     s.activeLayers = ids.length > 0 ? [...ids] : ['political'];
-    saveGameV3(s);
+    saveGameV6(s);
     set({ state: { ...s } });
   },
 
   setSpeed: (v) => {
     const s = get().state;
     s.clock.speed = v;
-    saveGameV3(s);
+    saveGameV6(s);
     set({ state: { ...s } });
   },
 
-  stageCommand: (patch) => {
-    set(s => ({
-      pending: { ...s.pending, ...patch },
-      staged: true,
-    }));
+  setFocus: (id) => {
+    const s = get().state;
+    const next = setNationalPolicyV6(s, id);
+    saveGameV6(next);
+    set({ state: next });
   },
 
-  resetStaging: () => set(s => ({ pending: { ...s.state.player }, staged: false })),
-
-  confirmPeriod: () => {
+  setProject: (id) => {
     const s = get().state;
-    const p = get().pending;
-    const result = settlePlanPeriod(s, p);
-    saveGameV3(result.newState);
-    set({
-      state: result.newState,
-      confirmSummaryOpen: false,
-      staged: false,
-      pending: { ...result.newState.player },
-      panel: 'report',
-    });
+    const next = startProjectV6(s, id);
+    saveGameV6(next);
+    set({ state: next });
+  },
+
+  setResearch: (id) => {
+    const s = get().state;
+    const next = startResearchV6(s, id);
+    saveGameV6(next);
+    set({ state: next });
+  },
+
+  setPolicy: (id) => {
+    const next = startPolicyV6(get().state, id);
+    saveGameV6(next);
+    set({ state: next });
+  },
+
+  setSlotMode: (slot, mode) => {
+    const next = setSlotModeV6(get().state, slot, mode);
+    saveGameV6(next);
+    set({ state: next });
+  },
+
+  restartCampaign: () => {
+    backupCurrentV6Save();
+    const fresh = newCampaignV6();
+    saveGameV6(fresh);
+    set((s) => ({
+      state: fresh,
+      version: s.version + 1,
+      panel: null,
+      resourceLedger: null,
+      selectedNodeId: null,
+      selectedAnchor: null,
+      focusNodeId: null,
+      logHistoryOpen: false,
+    }));
   },
 }));
 
-// ===== 速度按钮仅保存外观/存储值；P1-S02 日历只随结算前进 =====
+// ===== 持续时钟：速度驱动游戏日推进（1×=0.5s/日、2×=0.25s/日、4×=0.125s/日）；仅手动暂停 =====
+let lastT = performance.now();
+let acc = 0;
+let saveCounter = 0;
+
 export function startV2Loop(): void {
-  // 不推进 year/period/elapsed，避免速度按钮造成未结算的日历跳期。
+  setInterval(() => {
+    const now = performance.now();
+    const dt = Math.min(200, now - lastT) / 1000;
+    lastT = now;
+    const st = useV2.getState();
+    const s = st.state;
+    if (s.clock.speed === 0) return;
+
+    acc += dt * 2 * s.clock.speed;
+    let days = Math.floor(acc);
+    days = Math.min(days, 4);
+    if (days < 1) return;
+    acc -= days;
+
+    let cur = s;
+    for (let i = 0; i < days; i++) cur = advanceOneDayV6(cur);
+    saveCounter += days;
+    if (saveCounter >= 7) {
+      saveCounter = 0;
+      saveGameV6(cur);
+    }
+    useV2.setState({ state: cur });
+  }, 50);
 }

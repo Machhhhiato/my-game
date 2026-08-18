@@ -10,6 +10,10 @@ export function PlanetCanvas() {
   const vpRef = useRef<MapViewport>({ width: 800, height: 600 });
 
   const shot = new URLSearchParams(window.location.search).get('shot');
+  /** R9 地理骨架验收入口；仅替换画布底图，不改变存档、时间或现有 UI。 */
+  const skeletonMode = new URLSearchParams(window.location.search).get('skeleton') === '1';
+  /** R9.2 路线讨论入口：在同一骨架上显示多聚居点和合格工程候选点，但不预画道路。 */
+  const spatialLabMode = new URLSearchParams(window.location.search).get('routeLab') === '1';
   const focus = focusCamera(41.5, 16.0);
   const camRef = useRef<MapCamera>({
     zoom: shot === 'medium' ? 3.2 : shot === 'close' ? 7.0 : 1.5,
@@ -26,12 +30,23 @@ export function PlanetCanvas() {
   const lastFocusSeqRef = useRef(0);
   const lastSelRef = useRef<string | null>(null);
   const lastLayersRef = useRef<string>('');
+  const lastFacilitiesRef = useRef<string>('');
 
   useEffect(() => {
     if (shot === 'medium' || shot === 'close') {
       useV2.getState().setActiveLayers(['political', 'population', 'ecology']);
     }
   }, [shot]);
+
+  useEffect(() => {
+    const redraw = () => { dirtyRef.current = true; };
+    window.addEventListener('facility-sprite-ready', redraw);
+    window.addEventListener('world-surface-ready', redraw);
+    return () => {
+      window.removeEventListener('facility-sprite-ready', redraw);
+      window.removeEventListener('world-surface-ready', redraw);
+    };
+  }, []);
 
   // 全幅画布：测量容器尺寸，作为逻辑视口
   useEffect(() => {
@@ -98,9 +113,11 @@ export function PlanetCanvas() {
       }
 
       const layerKey = snap.state.activeLayers.join(',');
-      if (snap.selectedNodeId !== lastSelRef.current || layerKey !== lastLayersRef.current) {
+      const facilityKey = Object.values(snap.state.facilities).map((facility) => `${facility.stage}:${facility.reachedMilestones.join('-')}`).join('|');
+      if (snap.selectedNodeId !== lastSelRef.current || layerKey !== lastLayersRef.current || facilityKey !== lastFacilitiesRef.current) {
         lastSelRef.current = snap.selectedNodeId;
         lastLayersRef.current = layerKey;
+        lastFacilitiesRef.current = facilityKey;
         needDraw = true;
       }
 
@@ -116,7 +133,11 @@ export function PlanetCanvas() {
               canvas.width = bw;
               canvas.height = bh;
             }
-            drawPlanetMap(ctx, snap.state, cam, snap.state.activeLayers, snap.selectedNodeId, hoverRef.current, interactingRef.current, vp);
+            drawPlanetMap(
+              ctx, snap.state, cam, snap.state.activeLayers, snap.selectedNodeId,
+              hoverRef.current, interactingRef.current, vp,
+              spatialLabMode ? 'spatial-lab' : skeletonMode ? 'skeleton' : 'terrain',
+            );
           }
         }
         updateAnchor();

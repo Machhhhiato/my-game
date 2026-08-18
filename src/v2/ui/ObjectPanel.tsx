@@ -7,9 +7,9 @@ const KIND_LABEL: Record<string, string> = {
   waypoint: '行旅营',
 };
 const STATUS_LABEL: Record<string, string> = {
-  direct: '直接管辖',
-  compact: '协作契约',
-  contested: '争议/风险',
+  direct: '中央直辖',
+  compact: '统一协作区',
+  contested: '风险管制区',
 };
 
 const PANEL_W = 320;
@@ -49,8 +49,8 @@ export function ObjectPanel() {
   }
 
   const onAction = (a: string) => {
-    if (a.includes('旗舰工程') || a.includes('净水续命')) setPanel('project');
-    else if (a.includes('接纳政策')) setPanel('policy');
+    if (a.includes('设施') || a.includes('净水工程')) setPanel('project');
+    else if (a.includes('接纳安排')) setPanel('policy');
   };
 
   return (
@@ -76,7 +76,7 @@ export function ObjectPanel() {
       </div>
       <div className="v2-objpanel-actions">
         {node.actions.map((a, i) => (
-          <button key={i} className="v2-objpanel-action" onClick={() => onAction(a)} title="战略级行动">
+          <button key={i} className="v2-objpanel-action" onClick={() => onAction(a)} title="打开相关安排">
             {a}
           </button>
         ))}

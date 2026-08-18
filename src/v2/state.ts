@@ -1,5 +1,9 @@
-import type { CampaignSaveV2, CampaignSaveV3, LedgerValue, ResourceLedger } from './types';
+import type { CampaignSaveV2, CampaignSaveV3, CampaignSaveV4, CampaignSaveV5, CampaignSaveV6, FacilityId, LedgerValue, MetricId, MetricValue, ResourceLedger } from './types';
 import { NODES, REGIONS } from './data';
+import { DAILY_LIVING_NEED } from './terms';
+import { METRIC_DEFS, METRIC_ORDER } from './nation';
+import { LDU_START, METRIC_BASELINE } from './content/metrics';
+import { alignMapNodesToWorld, generateWorldBlueprint, validateWorldBlueprint } from './worldBlueprint';
 
 export const V2_SEED = 7007;
 
@@ -98,5 +102,106 @@ export function newCampaignV3(): CampaignSaveV3 {
     reports: [],
     settlementCount: 0,
     eventFlags: {},
+  };
+}
+
+/** v4 新局：真实时间 + 四条生活底线 */
+export function newCampaignV4(): CampaignSaveV4 {
+  const v3 = newCampaignV3();
+  const water = v3.nation.resources.safeWater;
+  const food = v3.nation.resources.calories;
+  return {
+    ...v3,
+    version: 4,
+    runtime: {
+      activeCommand: null,
+      dayInPeriod: 0,
+      dayRemainder: 0,
+      weeklyStart: null,
+      periodStart: null,
+      pausedReason: 'awaiting_plan',
+      startedPeriod: null,
+      budget: null,
+      periodEvent: null,
+    },
+    living: {
+      waterDays: Math.round(water.stock / DAILY_LIVING_NEED.water),
+      foodDays: Math.round(food.stock / DAILY_LIVING_NEED.food),
+      shelteredBeds: 31,
+      repairBacklog: v3.nation.debts.maintenance.value,
+    },
+  };
+}
+
+/** v5 新局：持续运行的国家指标 */
+export function newCampaignV5(): CampaignSaveV5 {
+  const v2 = newCampaignV2();
+  const metrics = {} as Record<MetricId, MetricValue>;
+  for (const id of METRIC_ORDER) {
+    metrics[id] = {
+      value: METRIC_DEFS[id].initial,
+      dailyRate: 0,
+      sources: [...METRIC_DEFS[id].sources],
+      bottleneck: METRIC_DEFS[id].bottleneck,
+    };
+  }
+  return {
+    ...v2,
+    version: 5,
+    day: 1,
+    clock: { ...v2.clock, speed: 0 },
+    focus: { id: 'balanced', transitionDaysRemaining: 0, transitionEfficiency: 1 },
+    project: { id: null, progress: 0, handoverDays: 0, milestones: { p25: false, p50: false, p75: false, p100: false } },
+    research: { id: null, progress: 0, handoverDays: 0, milestones: { p25: false, p50: false, p75: false, p100: false } },
+    metrics,
+    population: 31,
+    events: [],
+  };
+}
+
+/**
+ * v6 从元年第一日开始：旧档的进展不被猜测性转换，避免把旧原型伪装成真实历史。
+ * v2 的地图和外壳字段只作为渲染容器保留；v6 的模拟事实均由下列字段提供。
+ */
+export function newCampaignV6(migrationNote?: string): CampaignSaveV6 {
+  const v2 = newCampaignV2();
+  const metrics = {} as Record<MetricId, MetricValue>;
+  for (const id of Object.keys(METRIC_BASELINE) as MetricId[]) {
+    metrics[id] = { value: METRIC_BASELINE[id].initial, dailyRate: 0, sources: [], bottleneck: '' };
+  }
+  const facilities = {} as Record<FacilityId, CampaignSaveV6['facilities'][FacilityId]>;
+  for (const id of ['water_main', 'valley_greenhouse', 'ferry_workshop', 'well_radio_tower'] as FacilityId[]) {
+    facilities[id] = { stage: 'locked', reachedMilestones: [], damagedBy: null };
+  }
+  const world = generateWorldBlueprint(v2.seed);
+  validateWorldBlueprint(world);
+  return {
+    ...v2,
+    version: 6,
+    day: 1,
+    clock: { ...v2.clock, speed: 0 },
+    nationalPolicy: { id: 'balanced', transitionDaysRemaining: 0, transitionEfficiency: 1 },
+    currentPolicy: null,
+    policyCooldowns: {},
+    projectSlot: { id: null, mode: 'manual', progressWork: 0, status: 'idle', handoverDays: 0, autoEligibleDay: null, waitingForUnlock: false },
+    researchSlot: { id: null, mode: 'manual', progressWork: 0, status: 'idle', handoverDays: 0, autoEligibleDay: null, waitingForUnlock: false },
+    completed: { techs: [], projects: [] },
+    facilities,
+    metrics,
+    population: 31,
+    supply: { scale: { era: 'settlement', unit: 'LDU', dailyDemand: 1, labelId: 'supply.settlement' }, coverage: { ...LDU_START } },
+    events: [
+      { id: 'water_wear', active: false, resolved: false },
+      { id: 'acid_rain', active: false, resolved: false },
+      { id: 'ferry_injury', active: false, resolved: false },
+      { id: 'road_ambush', active: false, resolved: false },
+    ],
+    notificationHistory: [
+      { id: 'campaign-1', day: 1, kind: 'system', copyKey: 'campaign.begin', params: {} },
+      ...(migrationNote ? [{ id: 'migration-1', day: 1, kind: 'system' as const, copyKey: 'system.migrated_to_v6', params: {} }] : []),
+    ],
+    nodes: alignMapNodesToWorld(v2.nodes, world),
+    world,
+    ...(migrationNote ? { migrationNote } : {}),
   };
 }

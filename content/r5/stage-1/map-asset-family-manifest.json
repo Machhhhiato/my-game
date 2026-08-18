@@ -1,0 +1,682 @@
+[
+  {
+    "assetFamily": "r5-water-core",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-water-link",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-water-mitigation",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-water-interconnect",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-food-core",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-food-link",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-food-mitigation",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-food-interconnect",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-industry-core",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-industry-link",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-industry-mitigation",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-industry-interconnect",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-energy-core",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-energy-link",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-energy-mitigation",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-energy-interconnect",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-logistics-core",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-logistics-link",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-logistics-mitigation",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-logistics-interconnect",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-security-core",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-security-link",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-security-mitigation",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-security-interconnect",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-admin-core",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-admin-link",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-admin-mitigation",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-admin-interconnect",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-social-core",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-social-link",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-social-mitigation",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-social-interconnect",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-science-core",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-science-link",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-science-mitigation",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-science-interconnect",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-frontier-core",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-frontier-link",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-frontier-mitigation",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  },
+  {
+    "assetFamily": "r5-frontier-interconnect",
+    "appliesToProjectCount": 5,
+    "scope": "同一设施类型跨地点复用；项目本身仅提供旗帜、规模圈、施工状态与名称。",
+    "requiredImages": [
+      "foundation",
+      "structure",
+      "commissioning",
+      "operational",
+      "operational-clear",
+      "operational-rain",
+      "operational-snow",
+      "operational-dust"
+    ],
+    "imageCount": 8,
+    "status": "R5 清单冻结；等待 R6 玩家文字与后续地图美术门批准后由 Codex 统一制作。"
+  }
+]
