@@ -23,6 +23,23 @@ function applyEffect(state: NationKernelState, effect: EffectSpec, sourceId: Ker
     capabilities[effect.capability.id] = effect.capability;
     record(state, sourceId, `polity:${effect.targetPolityId}.capability.${effect.capability.id}`, before, effect.capability.maturity, effect.reasonKey);
   }
+  if (effect.kind === 'city' && !state.cities[effect.city.id]) {
+    const city = structuredClone(effect.city);
+    state.cities[city.id] = city;
+    const region = state.regions[city.regionId];
+    if (region != null && !region.cityIds.includes(city.id)) region.cityIds.push(city.id);
+    if (city.metroId != null && state.metros[city.metroId] != null && !state.metros[city.metroId].memberCityIds.includes(city.id)) state.metros[city.metroId].memberCityIds.push(city.id);
+    if (effect.initialQuantities != null) state.quantities[`city:${city.id}`] = Object.fromEntries(Object.entries(effect.initialQuantities).map(([id, current]) => [id, { current, updatedDay: state.calendar.day, sourceIds: [sourceId] }]));
+    record(state, sourceId, `city:${city.id}.status`, 'absent', city.stage, effect.reasonKey);
+  }
+  if (effect.kind === 'populationTransfer') {
+    const from = state.cities[effect.fromCityId]; const to = state.cities[effect.toCityId];
+    if (from != null && to != null && effect.amount > 0 && from.population >= effect.amount) {
+      const before = `${from.population}/${to.population}`;
+      from.population -= effect.amount; to.population += effect.amount;
+      record(state, sourceId, `city:${from.id}->${to.id}.population`, before, `${from.population}/${to.population}`, effect.reasonKey);
+    }
+  }
   if (effect.kind === 'lifecycle' && state.facilities[effect.facilityId]) { const facility = state.facilities[effect.facilityId]; const before = facility.lifecycle.status; facility.lifecycle.status = effect.status; record(state, sourceId, `facility:${facility.id}.status`, before, effect.status, effect.reasonKey); }
   if (effect.kind === 'facility' && !state.facilities[effect.facility.id]) {
     const facility = structuredClone(effect.facility);
@@ -78,6 +95,38 @@ function advanceOperation(state: NationKernelState, operation: OperationState): 
   operation.status = 'completed'; operation.completedDay = state.calendar.day; record(state, operation.id, `operation:${operation.id}.status`, 'active', 'completed', 'operation.completed'); operation.effects.filter((effect) => effect.timing === 'onComplete').forEach((effect) => applyEffect(state, effect, operation.id));
 }
 function advanceFacilities(state: NationKernelState): void { for (const facility of Object.values(state.facilities)) { if (facility.lifecycle.status !== 'operating') continue; facility.recurringEffects.filter((effect) => effect.timing === 'perDay').forEach((effect) => applyEffect(state, effect, facility.id)); if (facility.maintenanceStaffRequired > 0 && state.polities[facility.polityId]?.workforce.maintenance < facility.maintenanceStaffRequired) { facility.lifecycle.maintenanceBacklog += 1; facility.lifecycle.condition = clamp(facility.lifecycle.condition - 0.2, 0, 100); } } }
+function advanceRegionalServices(state: NationKernelState): void {
+  for (const region of Object.values(state.regions)) {
+    const assignments = region.serviceAssignments;
+    if (assignments == null) continue;
+    for (const cityId of region.cityIds) {
+      const quantities = state.quantities[`city:${cityId}`];
+      if (quantities == null) continue;
+      const assigned = assignments[cityId] ?? 0;
+      const target = clamp(assigned * 25, 0, 100);
+      for (const quantityId of ['service.waterCoverage', 'service.healthCoverage']) {
+        const value = quantities[quantityId];
+        if (value == null) continue;
+        const before = value.current;
+        value.current = round(before + Math.sign(target - before) * Math.min(2, Math.abs(target - before)), 1);
+        value.updatedDay = state.calendar.day;
+        record(state, region.id, `city:${cityId}.${quantityId}`, before, value.current, 'regional.service.dispatch');
+      }
+    }
+  }
+}
+export function changeRegionalServiceAssignment(state: NationKernelState, regionId: KernelId, cityId: KernelId, delta: number): NationKernelState {
+  const region = state.regions[regionId];
+  if (region == null || !region.cityIds.includes(cityId) || delta === 0) return state;
+  const player = state.polities[region.polityId]; const assignments = region.serviceAssignments ?? {};
+  const current = assignments[cityId] ?? 0; const used = Object.values(assignments).reduce((sum, value) => sum + value, 0);
+  if (delta < 0 && current < Math.abs(delta)) return state;
+  if (delta > 0 && (player?.workforce.publicServices ?? 0) - used < delta) return state;
+  const next = clone(state); const nextRegion = next.regions[regionId];
+  nextRegion.serviceAssignments = { ...(nextRegion.serviceAssignments ?? {}), [cityId]: current + delta };
+  record(next, regionId, `region:${regionId}.service.${cityId}`, current, current + delta, 'regional.service.reassigned');
+  return next;
+}
 export function rebuildMetroSummaries(state: NationKernelState): void { for (const metro of Object.values(state.metros)) metro.totalPopulation = metro.memberCityIds.reduce((sum, cityId) => sum + (state.cities[cityId]?.population ?? 0), 0); }
-export function advanceNationKernelDays(state: NationKernelState, days: number): NationKernelState { let next = state; for (let i = 0; i < days; i += 1) { next = clone(next); next.calendar = calendarFor(next.calendar.day + 1); advanceFacilities(next); Object.values(next.operations).forEach((operation) => advanceOperation(next, operation)); rebuildMetroSummaries(next); next.observations = next.observations.filter((observation) => next.calendar.day - observation.observedDay <= 360); next.ledger = next.ledger.slice(-500); } return next; }
+export function advanceNationKernelDays(state: NationKernelState, days: number): NationKernelState { let next = state; for (let i = 0; i < days; i += 1) { next = clone(next); next.calendar = calendarFor(next.calendar.day + 1); advanceFacilities(next); advanceRegionalServices(next); Object.values(next.operations).forEach((operation) => advanceOperation(next, operation)); rebuildMetroSummaries(next); next.observations = next.observations.filter((observation) => next.calendar.day - observation.observedDay <= 360); next.ledger = next.ledger.slice(-500); } return next; }
 export function polity(state: NationKernelState, id: KernelId): PolityState | null { return state.polities[id] ?? null; }

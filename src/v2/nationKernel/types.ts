@@ -25,7 +25,7 @@ export interface PolityState {
   territoryRegionIds: KernelId[]; population: PopulationSummary; workforce: WorkforceState;
   capabilities: Record<KernelId, CapabilityState>; activeOperationIds: KernelId[]; cohesion: number; strategicIntent: string[];
 }
-export interface RegionState { id: KernelId; polityId: KernelId; cityIds: KernelId[]; ruralPopulation: number; integration: { registry: number; services: number; justice: number; security: number; executionQuality: number; }; environmentPressure: number; }
+export interface RegionState { id: KernelId; polityId: KernelId; cityIds: KernelId[]; ruralPopulation: number; integration: { registry: number; services: number; justice: number; security: number; executionQuality: number; }; environmentPressure: number; serviceAssignments?: Record<KernelId, number>; }
 export interface CityState { id: KernelId; polityId: KernelId; regionId: KernelId; metroId?: KernelId; geoRef: GeoReference; stage: 'outpost' | 'settlement' | 'town' | 'city' | 'metropolis'; role: string; population: number; builtAreaKm2: number; facilityIds: KernelId[]; }
 export interface MetroAreaState { id: KernelId; polityId: KernelId; memberCityIds: KernelId[]; coreCityId: KernelId; totalPopulation: number; sharedNetworkIds: KernelId[]; coordinationLoad: number; }
 export interface FacilityState { id: KernelId; moduleId: KernelId; polityId: KernelId; hostCityId?: KernelId; geoRef?: GeoReference; authority: AuthorityState; lifecycle: LifecycleState; maintenanceStaffRequired: number; recurringEffects: EffectSpec[]; }
@@ -41,6 +41,8 @@ export type EffectTiming = 'onStart' | 'perDay' | 'onComplete';
 export type EffectSpec =
   | { kind: 'quantity'; timing: EffectTiming; target: ScopeRef; quantityId: KernelId; operation: 'add' | 'multiply' | 'set'; value: number; reasonKey: string; }
   | { kind: 'capability'; timing: EffectTiming; targetPolityId: KernelId; capability: CapabilityState; reasonKey: string; }
+  | { kind: 'city'; timing: EffectTiming; city: CityState; initialQuantities?: Record<KernelId, number>; reasonKey: string; }
+  | { kind: 'populationTransfer'; timing: EffectTiming; fromCityId: KernelId; toCityId: KernelId; amount: number; reasonKey: string; }
   | { kind: 'lifecycle'; timing: EffectTiming; facilityId: KernelId; status: LifecycleStatus; reasonKey: string; }
   | { kind: 'facility'; timing: EffectTiming; facility: FacilityState; reasonKey: string; }
   | { kind: 'network'; timing: EffectTiming; network: NetworkState; reasonKey: string; }

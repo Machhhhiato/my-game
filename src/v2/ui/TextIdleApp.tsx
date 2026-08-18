@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
+import { RegionalCampaignApp } from './RegionalCampaignApp';
 import { TEXT_POLICIES, TEXT_PROJECTS, TEXT_TECHS } from '../textIdle/content';
 import { TEXT_EXPLORATION_TARGETS } from '../textIdle/exploration';
 import { textPlaytestGuidance } from '../textIdle/playtestGuidance';
+import { createRegionalNationFromTextIdle } from '../textIdle/regionalBridge';
 import { installStarterContent, STARTER_CONTENT_COUNTS } from '../textIdle/starterContent';
 import {
   advanceTextIdleDay, availableTextExplorationTargets, availableTextPolicies, availableTextProjects, availableTextTechs,
@@ -138,6 +140,7 @@ export function TextIdleApp() {
   const [catalogError] = useState<string | null>(null);
   const [activityTick, setActivityTick] = useState(0);
   const [focusMenuOpen, setFocusMenuOpen] = useState(false);
+  const [campaignMode, setCampaignMode] = useState<'settlement' | 'regional'>(() => localStorage.getItem('always-game-regional-v1') != null ? 'regional' : 'settlement');
   const available = useMemo(() => ({
     techs: availableTextTechs(state),
     projects: availableTextProjects(state),
@@ -151,17 +154,17 @@ export function TextIdleApp() {
   }, []);
   useEffect(() => { if (catalogReady) localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }, [catalogReady, state]);
   useEffect(() => {
-    if (!catalogReady || speed === 0) return undefined;
+    if (!catalogReady || speed === 0 || campaignMode === 'regional') return undefined;
     const timer = window.setInterval(() => {
       setState((previous) => advanceTextIdleDay(previous));
     }, BASE_DAY_INTERVAL_MS / speed);
     return () => window.clearInterval(timer);
-  }, [catalogReady, speed]);
+  }, [campaignMode, catalogReady, speed]);
   useEffect(() => {
-    if (speed === 0) return undefined;
+    if (speed === 0 || campaignMode === 'regional') return undefined;
     const timer = window.setInterval(() => setActivityTick((value) => value + 1), 4_200);
     return () => window.clearInterval(timer);
-  }, [speed]);
+  }, [campaignMode, speed]);
 
   const activeResearch = state.research.id ? TEXT_TECHS[state.research.id] : null;
   const activeProject = state.project.id ? TEXT_PROJECTS[state.project.id] : null;
@@ -171,6 +174,11 @@ export function TextIdleApp() {
   const importantReports = state.reports.filter(isImportantReport).slice(-6).reverse();
   const activities = activitiesFor(state);
   const activeActivity = activities[activityTick % activities.length];
+
+  if (campaignMode === 'regional') {
+    const regional = createRegionalNationFromTextIdle(state);
+    if (regional != null) return <RegionalCampaignApp initialState={regional} onRestart={() => { setCampaignMode('settlement'); setState(newTextIdleState(410)); }} />;
+  }
 
   if (catalogError) return <main className="text-idle-shell"><section className="text-idle-card catalog-state"><h1>内容读取失败</h1><p>{catalogError}</p></section></main>;
   if (!catalogReady) return <main className="text-idle-shell"><section className="text-idle-card catalog-state"><span className="text-idle-kicker">正在准备第一阶段</span><h1>载入科技、工程与政策目录…</h1><p>内容目录会作为独立数据读取，不占用主界面的启动资源。</p></section></main>;
@@ -264,7 +272,7 @@ export function TextIdleApp() {
         <div className="archive-columns">
           <section><strong>研究 · {state.completedTechs.length}</strong>{state.completedTechs.length === 0 ? <span>尚无完成研究</span> : state.completedTechs.slice(-4).reverse().map((id) => <span key={id}>{TEXT_TECHS[id]?.name}</span>)}</section>
           <section><strong>工程 · {state.completedProjects.length}</strong>{state.completedProjects.length === 0 ? <span>尚无投用工程</span> : state.completedProjects.slice(-4).reverse().map((id) => <span key={id}>{TEXT_PROJECTS[id]?.name}</span>)}</section>
-          <section><strong>发展阶段</strong><span>{stageName(state.developmentStage)}</span><span>{state.developmentStage === 'settled' ? '基础供给已由设施和班次持续维持。' : '完成设施与固定值守自动化后，进入稳定聚居。'}</span></section>
+          <section><strong>发展阶段</strong><span>{stageName(state.developmentStage)}</span>{state.developmentStage === 'settled' ? <><span>基础供给已由设施和班次持续维持。</span><button className="regional-entry" onClick={() => setCampaignMode('regional')}>进入区域网络</button></> : <span>完成设施与固定值守自动化后，进入稳定聚居。</span>}</section>
         </div>
       </article>
     </section>
