@@ -11,10 +11,13 @@ export type TextDevelopmentStage = 'emergency' | 'recovery' | 'settled';
 export type TextTechId = string;
 export type TextProjectId = string;
 export type TextPolicyId = string;
+export type TextExplorationTargetId = string;
+export type TextDiscoveryId = string;
 
 export interface TextRequirements {
   techs?: TextTechId[];
   operationalProjects?: TextProjectId[];
+  discoveries?: TextDiscoveryId[];
 }
 
 /** 玩家显示为“某年某月上/中/下旬”；内部仍按日结算。 */
@@ -35,6 +38,7 @@ export interface TextWorkforce {
   projectStaff: number;
   policyStaff: number;
   emergencyStaff: number;
+  explorationStaff: number;
 }
 
 export interface TextConstructionSupply {
@@ -47,6 +51,43 @@ export interface TextEmergencyOrder {
   id: TextEmergencyOrderId;
   teamSize: number;
   daysRemaining: number;
+  startedOn: number;
+}
+
+/** 已知事实可在文字层先使用，未来由同一 coordinateRef 回接到星球候选地点。 */
+export interface TextDiscovery {
+  id: TextDiscoveryId;
+  targetId: TextExplorationTargetId;
+  kind: 'knowledge' | 'engineering-site';
+  coordinateRef: string;
+  discoveredOn: number;
+}
+
+export interface TextExplorationDiscovery {
+  id: TextDiscoveryId;
+  kind: TextDiscovery['kind'];
+  coordinateRef: string;
+  label: string;
+}
+
+export interface TextExplorationTarget {
+  id: TextExplorationTargetId;
+  direction: string;
+  name: string;
+  summary: string;
+  /** 文字战略图坐标；空间层会使用同一目标的 coordinateRef，而非该展示位置。 */
+  mapPosition: [number, number];
+  coordinateRef: string;
+  durationDays: number;
+  teamRequired: number;
+  discoveries: TextExplorationDiscovery[];
+}
+
+export interface TextExplorationRuntime {
+  targetId: TextExplorationTargetId;
+  daysRemaining: number;
+  totalDays: number;
+  teamSize: number;
   startedOn: number;
 }
 
@@ -130,7 +171,7 @@ export interface TextReport {
 }
 
 export interface TextIdleState {
-  version: 5;
+  version: 6;
   seed: number;
   /** 内部日序号；玩家日期读取 calendar。 */
   day: number;
@@ -140,6 +181,8 @@ export interface TextIdleState {
   construction: TextConstructionSupply;
   workforce: TextWorkforce;
   emergencyOrder: TextEmergencyOrder | null;
+  exploration: TextExplorationRuntime | null;
+  discoveries: TextDiscovery[];
   failure: TextFailureState;
   developmentStage: TextDevelopmentStage;
   dailyLedger: TextDailyLedger;

@@ -1,6 +1,7 @@
 import type { MetricId } from '../types';
 import { automationGate, TEXT_POLICIES, TEXT_PROJECT_ORDER, TEXT_PROJECTS, TEXT_TECH_ORDER, TEXT_TECHS } from './content';
-import type { ReserveId, TextEmergencyOrderId, TextFocusId, TextIdleState, TextPhaseId, TextPolicyId, TextProjectId, TextRequirements, TextSlot, TextTechId } from './types';
+import { TEXT_EXPLORATION_TARGETS } from './exploration';
+import type { ReserveId, TextEmergencyOrderId, TextExplorationTargetId, TextFocusId, TextIdleState, TextPhaseId, TextPolicyId, TextProjectId, TextRequirements, TextSlot, TextTechId } from './types';
 
 const RESERVES: ReserveId[] = ['water', 'food', 'repair'];
 const METRICS: MetricId[] = ['livelihood', 'industry', 'energy', 'research', 'administration', 'logistics', 'military', 'stability', 'ecology'];
@@ -11,8 +12,12 @@ const FAILURE_LIMIT_DAYS = 12;
 function clone(state: TextIdleState): TextIdleState { return structuredClone(state) as TextIdleState; }
 function clamp(value: number, low = 0, high = 100): number { return Math.max(low, Math.min(high, value)); }
 function has<T extends string>(items: readonly T[], required: readonly T[] | undefined): boolean { return !required || required.every((id) => items.includes(id)); }
-function requirementsMet(state: TextIdleState, requirements: TextRequirements): boolean {
+function discoveriesMet(state: TextIdleState, required: readonly string[] | undefined): boolean { return !required || required.every((id) => state.discoveries.some((discovery) => discovery.id === id)); }
+function structuralRequirementsMet(state: TextIdleState, requirements: TextRequirements): boolean {
   return has(state.completedTechs, requirements.techs) && has(state.completedProjects, requirements.operationalProjects);
+}
+function requirementsMet(state: TextIdleState, requirements: TextRequirements): boolean {
+  return structuralRequirementsMet(state, requirements) && discoveriesMet(state, requirements.discoveries);
 }
 function addReport(state: TextIdleState, kind: TextIdleState['reports'][number]['kind'], copyKey: string, params: Record<string, string | number> = {}): void {
   state.reports.push({ id: `${state.day}.${state.reports.length + 1}`, day: state.day, kind, copyKey, params });
@@ -43,12 +48,13 @@ function refreshWorkforce(state: TextIdleState): void {
   state.workforce.projectStaff = state.project.id ? state.project.teamSize : 0;
   state.workforce.policyStaff = state.currentPolicy?.teamSize ?? 0;
   state.workforce.emergencyStaff = state.emergencyOrder?.teamSize ?? 0;
+  state.workforce.explorationStaff = state.exploration?.teamSize ?? 0;
 }
 
 /** UI 只显示这个结果；所有岗位分配都是后台可追溯事实。 */
 export function textAvailableWorkforce(state: TextIdleState): number {
   const workforce = state.workforce;
-  return Math.max(0, state.population - workforce.dependents - workforce.essentialStaff - workforce.civicAndSecurityStaff - workforce.researchStaff - workforce.projectStaff - workforce.policyStaff - workforce.emergencyStaff);
+  return Math.max(0, state.population - workforce.dependents - workforce.essentialStaff - workforce.civicAndSecurityStaff - workforce.researchStaff - workforce.projectStaff - workforce.policyStaff - workforce.emergencyStaff - workforce.explorationStaff);
 }
 export function textReserveCapacity(state: TextIdleState, reserve: ReserveId): number {
   const capacityGain = state.completedProjects.reduce((sum, id) => sum + ((TEXT_PROJECTS[id]?.output[reserve] ?? 0) > 0 ? 4 : 0), 0);
@@ -69,6 +75,7 @@ export function textResearchBlockers(state: TextIdleState, id: TextTechId): stri
   if (state.research.id) blockers.push('研究组正在处理另一项研究');
   if (!has(state.completedTechs, technology.requirements.techs)) blockers.push('需要先完成前置研究');
   if (!has(state.completedProjects, technology.requirements.operationalProjects)) blockers.push('需要相关设施已经投用');
+  if (!discoveriesMet(state, technology.requirements.discoveries)) blockers.push('需要先通过探索获得对应线索');
   if (textAvailableWorkforce(state) < technology.teamRequired) blockers.push(`需要空出 ${technology.teamRequired} 名研究人员`);
   return blockers;
 }
@@ -83,6 +90,7 @@ export function textProjectBlockers(state: TextIdleState, id: TextProjectId): st
   if (state.project.id) blockers.push('工务队正在建设另一项工程');
   if (!has(state.completedTechs, project.requirements.techs)) blockers.push('需要先完成前置研究');
   if (!has(state.completedProjects, project.requirements.operationalProjects)) blockers.push('需要相关设施已经投用');
+  if (!discoveriesMet(state, project.requirements.discoveries)) blockers.push('需要先发现合格地点');
   if (state.construction.stock < project.startCost) blockers.push(`还需 ${Number((project.startCost - state.construction.stock).toFixed(1))} 单位建设物资`);
   if (textAvailableWorkforce(state) < project.teamRequired) blockers.push(`需要空出 ${project.teamRequired} 名工务人员`);
   return blockers;
@@ -90,11 +98,12 @@ export function textProjectBlockers(state: TextIdleState, id: TextProjectId): st
 
 export function newTextIdleState(seed = 1): TextIdleState {
   const state: TextIdleState = {
-    version: 5, seed, day: 0, calendar: calendarForDay(0), population: 28,
+    version: 6, seed, day: 0, calendar: calendarForDay(0), population: 28,
     reserves: { water: 18, food: 18, repair: 12 },
     construction: { stock: 12, capacity: 48, dailyProduction: 0 },
-    workforce: { dependents: 4, essentialStaff: 15, civicAndSecurityStaff: 3, researchStaff: 0, projectStaff: 0, policyStaff: 0, emergencyStaff: 0 },
+    workforce: { dependents: 4, essentialStaff: 15, civicAndSecurityStaff: 3, researchStaff: 0, projectStaff: 0, policyStaff: 0, emergencyStaff: 0, explorationStaff: 0 },
     emergencyOrder: null,
+    exploration: null, discoveries: [],
     failure: { level: 'stable', shortageDays: 0, lastChangedOn: 0 },
     developmentStage: 'emergency',
     dailyLedger: { day: 0, reserveNet: { water: 0, food: 0, repair: 0 }, constructionNet: 0, metricDelta: {}, focusId: 'settle' },
@@ -108,10 +117,10 @@ export function newTextIdleState(seed = 1): TextIdleState {
 }
 
 export function availableTextTechs(state: TextIdleState): TextTechId[] {
-  return (Object.keys(TEXT_TECHS) as TextTechId[]).filter((id) => !state.completedTechs.includes(id) && requirementsMet(state, TEXT_TECHS[id].requirements));
+  return (Object.keys(TEXT_TECHS) as TextTechId[]).filter((id) => !state.completedTechs.includes(id) && structuralRequirementsMet(state, TEXT_TECHS[id].requirements));
 }
 export function availableTextProjects(state: TextIdleState): TextProjectId[] {
-  return (Object.keys(TEXT_PROJECTS) as TextProjectId[]).filter((id) => !state.completedProjects.includes(id) && requirementsMet(state, TEXT_PROJECTS[id].requirements));
+  return (Object.keys(TEXT_PROJECTS) as TextProjectId[]).filter((id) => !state.completedProjects.includes(id) && structuralRequirementsMet(state, TEXT_PROJECTS[id].requirements));
 }
 export function availableTextPolicies(state: TextIdleState): TextPolicyId[] {
   return (Object.keys(TEXT_POLICIES) as TextPolicyId[]).filter((id) => !state.policyCooldowns[id] && requirementsMet(state, TEXT_POLICIES[id].requirements));
@@ -128,6 +137,7 @@ export function textPolicyBlockers(state: TextIdleState, id: TextPolicyId): stri
   if (state.policyCooldowns[id]) blockers.push(`还需等待 ${state.policyCooldowns[id]} 日后复核`);
   if (!has(state.completedTechs, policy.requirements.techs)) blockers.push('需要先完成前置研究');
   if (!has(state.completedProjects, policy.requirements.operationalProjects)) blockers.push('需要相关设施已经投用');
+  if (!discoveriesMet(state, policy.requirements.discoveries)) blockers.push('需要先通过探索获得对应条件');
   if (textAvailableWorkforce(state) < policy.teamRequired) blockers.push(`需要空出 ${policy.teamRequired} 名行政人员`);
   return blockers;
 }
@@ -142,6 +152,35 @@ export function issueEmergencyOrder(state: TextIdleState, id: TextEmergencyOrder
   next.emergencyOrder = { id, teamSize: 2, daysRemaining: 10, startedOn: next.day };
   refreshWorkforce(next);
   addReport(next, 'system', 'emergency.order.started', { id });
+  return next;
+}
+
+export function availableTextExplorationTargets(state: TextIdleState): TextExplorationTargetId[] {
+  return (Object.keys(TEXT_EXPLORATION_TARGETS) as TextExplorationTargetId[]).filter((id) => {
+    const target = TEXT_EXPLORATION_TARGETS[id];
+    return target != null && !target.discoveries.every((discovery) => state.discoveries.some((known) => known.id === discovery.id));
+  });
+}
+export function textCanStartExploration(state: TextIdleState, id: TextExplorationTargetId): boolean {
+  const target = TEXT_EXPLORATION_TARGETS[id];
+  return target != null && state.failure.level !== 'lost' && state.exploration == null && textAvailableWorkforce(state) >= target.teamRequired && availableTextExplorationTargets(state).includes(id);
+}
+export function textExplorationBlockers(state: TextIdleState, id: TextExplorationTargetId): string[] {
+  const target = TEXT_EXPLORATION_TARGETS[id];
+  if (target == null) return ['探索目标尚未载入'];
+  const blockers: string[] = [];
+  if (state.exploration) blockers.push('勘察队正在执行另一项探索');
+  if (!availableTextExplorationTargets(state).includes(id)) blockers.push('该区域已经完成勘察');
+  if (textAvailableWorkforce(state) < target.teamRequired) blockers.push(`需要空出 ${target.teamRequired} 名勘察人员`);
+  return blockers;
+}
+export function startTextExploration(state: TextIdleState, id: TextExplorationTargetId): TextIdleState {
+  if (!textCanStartExploration(state, id)) return state;
+  const target = TEXT_EXPLORATION_TARGETS[id];
+  const next = clone(state);
+  next.exploration = { targetId: id, daysRemaining: target.durationDays, totalDays: target.durationDays, teamSize: target.teamRequired, startedOn: next.day };
+  refreshWorkforce(next);
+  addReport(next, 'system', 'exploration.started', { id });
   return next;
 }
 
@@ -258,6 +297,23 @@ function advanceSlot(state: TextIdleState, slot: 'research' | 'project'): void {
   refreshWorkforce(state);
   addReport(state, 'completion', 'project.completed', { id });
 }
+function advanceExploration(state: TextIdleState): void {
+  if (!state.exploration) return;
+  state.exploration.daysRemaining -= 1;
+  if (state.exploration.daysRemaining > 0) return;
+  const target = TEXT_EXPLORATION_TARGETS[state.exploration.targetId];
+  if (target != null) {
+    for (const discovery of target.discoveries) {
+      if (!state.discoveries.some((known) => known.id === discovery.id)) {
+        state.discoveries.push({ id: discovery.id, targetId: target.id, kind: discovery.kind, coordinateRef: discovery.coordinateRef, discoveredOn: state.day });
+      }
+    }
+  }
+  const id = state.exploration.targetId;
+  state.exploration = null;
+  refreshWorkforce(state);
+  addReport(state, 'completion', 'exploration.completed', { id });
+}
 function advanceFailure(state: TextIdleState): void {
   const depleted = RESERVES.find((reserve) => state.reserves[reserve] === 0);
   const previous = state.failure.level;
@@ -343,6 +399,7 @@ export function advanceTextIdleDay(state: TextIdleState): TextIdleState {
       addReport(next, 'system', 'emergency.order.completed', { id });
     }
   }
+  advanceExploration(next);
   next.dailyLedger = { day: next.day, reserveNet, constructionNet: Number((next.construction.stock - constructionBefore).toFixed(2)), metricDelta, focusId: next.nationalFocus.id };
   advanceFailure(next);
   refreshDevelopmentStage(next);

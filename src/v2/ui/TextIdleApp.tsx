@@ -1,16 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
 import { TEXT_POLICIES, TEXT_PROJECTS, TEXT_TECHS } from '../textIdle/content';
+import { TEXT_EXPLORATION_TARGETS } from '../textIdle/exploration';
+import { textPlaytestGuidance } from '../textIdle/playtestGuidance';
 import { installStarterContent, STARTER_CONTENT_COUNTS } from '../textIdle/starterContent';
 import {
-  advanceTextIdleDay, availableTextPolicies, availableTextProjects, availableTextTechs,
+  advanceTextIdleDay, availableTextExplorationTargets, availableTextPolicies, availableTextProjects, availableTextTechs,
   collectEmergencyReserve, newTextIdleState, setTextFocus, setTextSlotMode,
-  startTextPolicy, startTextProject, startTextResearch, textAutomationUnlocked, textAvailableWorkforce, textPolicyBlockers,
-  textProjectBlockers, textResearchBlockers, textReserveCapacity,
+  startTextExploration, startTextPolicy, startTextProject, startTextResearch, textAutomationUnlocked, textAvailableWorkforce, textExplorationBlockers,
+  textPolicyBlockers, textProjectBlockers, textResearchBlockers, textReserveCapacity,
 } from '../textIdle/simulation';
 import type { ReserveId, TextFocusId, TextIdleState, TextReport } from '../textIdle/types';
 import './textIdle.css';
 
-const SAVE_KEY = 'always-game-text-idle-v5';
+const SAVE_KEY = 'always-game-text-idle-v6';
 const BASE_DAY_INTERVAL_MS = 18_000;
 const RESERVES: Array<{ id: ReserveId; name: string; action: string }> = [
   { id: 'water', name: '饮水', action: '征集水源' },
@@ -29,7 +31,7 @@ function loadState(): TextIdleState {
     const raw = localStorage.getItem(SAVE_KEY);
     if (raw != null) {
       const parsed = JSON.parse(raw) as TextIdleState;
-      if (parsed?.version === 5 && parsed.reserves && parsed.research && parsed.project && parsed.calendar) return parsed;
+      if (parsed?.version === 6 && parsed.reserves && parsed.research && parsed.project && parsed.calendar && 'exploration' in parsed && Array.isArray(parsed.discoveries)) return parsed;
     }
   } catch { /* a damaged text-demo save simply starts fresh */ }
   return newTextIdleState(410);
@@ -41,8 +43,10 @@ function reportText(report: TextReport): string {
   const id = String(report.params.id ?? '');
   if (report.copyKey === 'research.completed') return `研究完成：${TEXT_TECHS[id as keyof typeof TEXT_TECHS]?.name ?? id}`;
   if (report.copyKey === 'project.completed') return `工程投用：${TEXT_PROJECTS[id as keyof typeof TEXT_PROJECTS]?.name ?? id}`;
+  if (report.copyKey === 'exploration.completed') return `探索完成：${TEXT_EXPLORATION_TARGETS[id]?.direction ?? ''}${TEXT_EXPLORATION_TARGETS[id]?.name ?? id} 的发现已归档。`;
   if (report.copyKey === 'research.started') return `开始研究：${TEXT_TECHS[id as keyof typeof TEXT_TECHS]?.name ?? id}`;
   if (report.copyKey === 'project.started') return `开始建设：${TEXT_PROJECTS[id as keyof typeof TEXT_PROJECTS]?.name ?? id}`;
+  if (report.copyKey === 'exploration.started') return `派出勘察队：前往${TEXT_EXPLORATION_TARGETS[id]?.direction ?? '外围区域'}。`;
   if (report.copyKey === 'auto.research.started') return `自动研究接续：${TEXT_TECHS[id as keyof typeof TEXT_TECHS]?.name ?? id}`;
   if (report.copyKey === 'auto.project.started') return `自动工程接续：${TEXT_PROJECTS[id as keyof typeof TEXT_PROJECTS]?.name ?? id}`;
   if (report.copyKey === 'reserve.depleted') return `${RESERVES.find((reserve) => reserve.id === report.params.reserve)?.name ?? '保障'}储备已经耗尽。`;
@@ -56,8 +60,14 @@ function reportText(report: TextReport): string {
   if (report.copyKey === 'failure.strained') return '保障开始紧张：一项储备已经耗尽，日常生活将首先受到影响。';
   if (report.copyKey === 'failure.critical') return '共同体进入临界状态：必须尽快恢复耗尽的保障储备。';
   if (report.copyKey === 'failure.lost') return '共同体已经失守：当前战役停止推进。';
+  if (report.copyKey === 'failure.recovered') return '保障已经恢复：共同体重新回到可维持状态。';
   if (report.copyKey === 'stage.settled') return '稳定聚居已建立：基础供给已能由固定设施和班次持续维持。';
   return '调度状态已经更新。';
+}
+function isImportantReport(report: TextReport): boolean {
+  return report.kind === 'completion'
+    || report.kind === 'warning'
+    || report.copyKey === 'failure.recovered';
 }
 
 function progress(current: number, total: number): string {
@@ -82,15 +92,57 @@ function policyOutcome(id: string): string {
   return reserveResult(policy?.output) || '执行期间会集中改善相关公共事务。';
 }
 
+type ActivityKind = 'routine' | 'gather' | 'explore' | 'research' | 'project';
+type Activity = { kind: ActivityKind; title: string; detail: string };
+function activitiesFor(state: TextIdleState): Activity[] {
+  const activities: Activity[] = [];
+  if (state.emergencyOrder) activities.push({ kind: 'gather', title: '临时征集', detail: `小队正在处理${RESERVES.find((reserve) => reserve.id === state.emergencyOrder?.id)?.name ?? '物资'}保障。` });
+  if (state.exploration) {
+    const target = TEXT_EXPLORATION_TARGETS[state.exploration.targetId];
+    activities.push({ kind: 'explore', title: '外围探索', detail: `勘察队正前往${target?.direction ?? '外围区域'}的${target?.name ?? '目标区域'}。` });
+  }
+  if (state.research.id) activities.push({ kind: 'research', title: '研究分析', detail: `研究组正在处理${TEXT_TECHS[state.research.id]?.name ?? '当前研究'}。` });
+  if (state.project.id) activities.push({ kind: 'project', title: '工程施工', detail: `工务队正在建设${TEXT_PROJECTS[state.project.id]?.name ?? '当前工程'}。` });
+  return activities.length > 0 ? activities : [{ kind: 'routine', title: '日常值守', detail: '共同体正在维持供给、巡查与公共事务。' }];
+}
+function ActivitySketch({ kind }: { kind: ActivityKind }) {
+  if (kind === 'explore') return <svg className="activity-sketch explore" viewBox="0 0 240 130" aria-hidden="true"><path className="ground" d="M12 105H228" /><path className="route" d="M42 96C84 58 128 90 190 42" /><circle className="marker" cx="190" cy="42" r="9" /><path className="person" d="M78 79v18m-8-9h16m-12 9-5 10m9-10 6 10" /><path className="compass" d="M118 56l12-16 4 20-16-4z" /></svg>;
+  if (kind === 'research') return <svg className="activity-sketch research" viewBox="0 0 240 130" aria-hidden="true"><path className="desk" d="M40 99h150m-124 0v17m92-17v17" /><path className="paper" d="M105 80l28-18 27 18-27 12z" /><path className="person" d="M78 70v27m-9-13h18m-12 13-6 11m10-11 7 11" /><circle className="scan" cx="139" cy="61" r="21" /><path className="notes" d="M169 51h26m-20 9h20m-16 9h14" /></svg>;
+  if (kind === 'project') return <svg className="activity-sketch project" viewBox="0 0 240 130" aria-hidden="true"><path className="ground" d="M14 105h212" /><path className="frame" d="M76 102l23-57 25 57m-12-31h46l19 31m-54-57v57m42-31v31" /><path className="plank" d="M67 102h121" /><path className="person" d="M53 78v20m-8-9h16m-12 9-5 10m9-10 6 10" /><path className="lift" d="M192 88V55m-8 9 8-9 8 9" /></svg>;
+  if (kind === 'gather') return <svg className="activity-sketch gather" viewBox="0 0 240 130" aria-hidden="true"><path className="ground" d="M14 105h212" /><path className="person" d="M92 67v31m-10-14h20m-14 14-6 10m11-10 8 10" /><path className="person second" d="M145 72v26m-9-12h18m-12 12-5 10m9-10 6 10" /><path className="crate" d="M170 88h29v18h-29zM170 97h29m-14-9v18" /><path className="carry" d="M107 82c14-14 28-11 40 0" /></svg>;
+  return <svg className="activity-sketch routine" viewBox="0 0 240 130" aria-hidden="true"><path className="ground" d="M14 105h212" /><path className="hut" d="M83 104V69l37-29 38 29v35m-66-1h56M111 104V82h18v22" /><path className="smoke" d="M144 57c-6-9 9-12 3-23" /><path className="person" d="M63 77v21m-8-10h16m-12 10-5 10m9-10 6 10" /></svg>;
+}
+function ExplorationAtlas({ state }: { state: TextIdleState }) {
+  const targets = Object.values(TEXT_EXPLORATION_TARGETS);
+  return <svg className="exploration-atlas" viewBox="0 0 320 180" role="img" aria-label="已知范围与探索方向">
+    <circle className="atlas-range" cx="160" cy="92" r="45" />
+    <circle className="atlas-hub" cx="160" cy="92" r="10" />
+    <text x="160" y="117" textAnchor="middle">聚居地</text>
+    {targets.map((target) => {
+      const complete = target.discoveries.every((discovery) => state.discoveries.some((known) => known.id === discovery.id));
+      const active = state.exploration?.targetId === target.id;
+      const status = active ? 'active' : complete ? 'known' : 'unknown';
+      return <g key={target.id} className={`atlas-target ${status}`}>
+        <path d={`M160 92 L${target.mapPosition[0]} ${target.mapPosition[1]}`} />
+        <circle cx={target.mapPosition[0]} cy={target.mapPosition[1]} r="10" />
+        <text x={target.mapPosition[0]} y={target.mapPosition[1] + (target.mapPosition[1] < 60 ? -15 : 25)} textAnchor="middle">{complete ? target.name : target.direction}</text>
+      </g>;
+    })}
+  </svg>;
+}
+
 export function TextIdleApp() {
   const [state, setState] = useState<TextIdleState>(loadState);
   const [speed, setSpeed] = useState<0 | 1 | 2 | 4>(1);
   const [catalogReady, setCatalogReady] = useState(false);
   const [catalogError] = useState<string | null>(null);
+  const [activityTick, setActivityTick] = useState(0);
+  const [focusMenuOpen, setFocusMenuOpen] = useState(false);
   const available = useMemo(() => ({
     techs: availableTextTechs(state),
     projects: availableTextProjects(state),
     policies: availableTextPolicies(state),
+    explorations: availableTextExplorationTargets(state),
   }), [catalogReady, state]);
 
   useEffect(() => {
@@ -101,18 +153,24 @@ export function TextIdleApp() {
   useEffect(() => {
     if (!catalogReady || speed === 0) return undefined;
     const timer = window.setInterval(() => {
-      setState((previous) => {
-        let next = previous;
-        for (let step = 0; step < speed; step += 1) next = advanceTextIdleDay(next);
-        return next;
-      });
+      setState((previous) => advanceTextIdleDay(previous));
     }, BASE_DAY_INTERVAL_MS / speed);
     return () => window.clearInterval(timer);
   }, [catalogReady, speed]);
+  useEffect(() => {
+    if (speed === 0) return undefined;
+    const timer = window.setInterval(() => setActivityTick((value) => value + 1), 4_200);
+    return () => window.clearInterval(timer);
+  }, [speed]);
 
   const activeResearch = state.research.id ? TEXT_TECHS[state.research.id] : null;
   const activeProject = state.project.id ? TEXT_PROJECTS[state.project.id] : null;
   const automationReady = textAutomationUnlocked(state);
+  const progressTransitionMs = speed === 0 ? 0 : Math.max(250, BASE_DAY_INTERVAL_MS / speed - 160);
+  const guidance = textPlaytestGuidance(state);
+  const importantReports = state.reports.filter(isImportantReport).slice(-6).reverse();
+  const activities = activitiesFor(state);
+  const activeActivity = activities[activityTick % activities.length];
 
   if (catalogError) return <main className="text-idle-shell"><section className="text-idle-card catalog-state"><h1>内容读取失败</h1><p>{catalogError}</p></section></main>;
   if (!catalogReady) return <main className="text-idle-shell"><section className="text-idle-card catalog-state"><span className="text-idle-kicker">正在准备第一阶段</span><h1>载入科技、工程与政策目录…</h1><p>内容目录会作为独立数据读取，不占用主界面的启动资源。</p></section></main>;
@@ -127,9 +185,17 @@ export function TextIdleApp() {
       </div>
     </header>
 
-    <section className="text-idle-alert">
-      <strong>当前目标</strong><span>{state.developmentStage === 'settled' ? '基础供给已经稳定。可以继续扩展，也可以重新开始尝试其他路线。' : '先维持保障，再把重复工作交给流程和设施。'}</span><small>本旬第 {state.calendar.dayInPhase} 日 · 建设物资 {state.construction.stock.toFixed(1)} / {state.construction.capacity} · 试玩样本：{STARTER_CONTENT_COUNTS.technologies} 项研究 · {STARTER_CONTENT_COUNTS.projects} 项工程</small>
+    <section className={`text-idle-alert ${guidance.tone}`} aria-live="polite">
+      <div><strong>{guidance.title}</strong><span>{guidance.summary}</span><small>本旬第 {state.calendar.dayInPhase} 日 · 建设物资 {state.construction.stock.toFixed(1)} / {state.construction.capacity}</small></div>
+      <p><b>下一步：</b>{guidance.nextAction}</p>
+      {guidance.steps.length > 0 && <ul className="stage-checklist">{guidance.steps.map((step) => <li key={step.label} className={step.complete ? 'done' : ''}>{step.complete ? '已完成' : '待完成'} · {step.label}</li>)}</ul>}
       {state.nationalFocus.transitionDays > 0 && <em>国策交接还需 {state.nationalFocus.transitionDays} 日</em>}
+      {state.failure.level === 'lost' && <button className="restart" onClick={() => setState(newTextIdleState(410))}>重新开始本轮试玩</button>}
+    </section>
+
+    <section className="focus-compact">
+      <button className="focus-toggle" onClick={() => setFocusMenuOpen((open) => !open)}>国家方针：{focusName(state.nationalFocus.id)}{state.nationalFocus.transitionDays > 0 ? `（交接 ${state.nationalFocus.transitionDays} 日）` : ''}</button>
+      {focusMenuOpen && <div className="focus-menu">{FOCUSES.map((focus) => <button key={focus.id} className={state.nationalFocus.id === focus.id ? 'selected' : ''} onClick={() => { setState((previous) => setTextFocus(previous, focus.id)); setFocusMenuOpen(false); }}>{focus.name}</button>)}</div>}
     </section>
 
     <section className="text-idle-grid">
@@ -149,15 +215,24 @@ export function TextIdleApp() {
         <p className="card-note">临时行动会持续一个旬并占用人手；设施投用后，基础供给会逐步自动维持。</p>
       </article>
 
-      <article className="text-idle-card focus-card">
-        <div className="card-heading"><div><span>国策</span><h2>{focusName(state.nationalFocus.id)}</h2></div><small>可随时调整，交接期间效率降低</small></div>
-        <div className="focus-options">{FOCUSES.map((focus) => <button key={focus.id} className={state.nationalFocus.id === focus.id ? 'selected' : ''} onClick={() => setState((previous) => setTextFocus(previous, focus.id))}>{focus.name}</button>)}</div>
-        <div className="metric-strip"><span>日常保障 {Math.round(state.metrics.livelihood)}</span><span>工务 {Math.round(state.metrics.industry)}</span><span>研究 {Math.round(state.metrics.research)}</span><span>秩序 {Math.round(state.metrics.stability)}</span></div>
+      <article className={speed === 0 ? 'text-idle-card activity-card is-paused' : 'text-idle-card activity-card'}>
+        <div className="card-heading"><div><span>共同体动态</span><h2>{activeActivity.title}</h2></div><small>{activities.length > 1 ? `正在轮播 ${activities.length} 项作业` : '当前主要作业'}</small></div>
+        <ActivitySketch kind={activeActivity.kind} />
+        <p className="activity-caption">{activeActivity.detail}</p>
+      </article>
+
+      <article className="text-idle-card exploration-card">
+        <div className="card-heading"><div><span>向外探索</span><h2>{state.exploration ? TEXT_EXPLORATION_TARGETS[state.exploration.targetId]?.name ?? '勘察中' : '选择方向'}</h2></div><small>{state.exploration ? `剩余 ${state.exploration.daysRemaining} 日` : `已归档 ${state.discoveries.length} 项发现`}</small></div>
+        <ExplorationAtlas state={state} />
+        {state.exploration ? <><p>{TEXT_EXPLORATION_TARGETS[state.exploration.targetId]?.summary}</p><div className="work-meter"><i style={{ width: progress(state.exploration.totalDays - state.exploration.daysRemaining, state.exploration.totalDays), transitionDuration: `${progressTransitionMs}ms` }} /></div><small>{progress(state.exploration.totalDays - state.exploration.daysRemaining, state.exploration.totalDays)} · 勘察队 {state.exploration.teamSize} 人</small></> : <div className="choice-list">{available.explorations.map((id) => {
+          const target = TEXT_EXPLORATION_TARGETS[id]; const blockers = textExplorationBlockers(state, id);
+          return <button key={id} disabled={blockers.length > 0} onClick={() => setState((previous) => startTextExploration(previous, id))}><strong>{target.direction} · {target.name}</strong><span>{target.summary}</span><em>完成后：获得研究线索与工程候选地</em>{blockers.length > 0 && <small>暂不能出发：{blockers[0]}</small>}</button>;
+        })}{available.explorations.length === 0 && <p className="choice-more">当前可达区域均已完成勘察。</p>}</div>}
       </article>
 
       <article className="text-idle-card work-card">
         <div className="card-heading"><div><span>研究</span><h2>{activeResearch?.name ?? (state.research.waitingForUnlock ? '等待前置条件' : '等待指令')}</h2></div><button disabled={!automationReady && state.research.mode !== 'auto'} className={state.research.mode === 'auto' ? 'small-toggle active' : 'small-toggle'} onClick={() => setState((previous) => setTextSlotMode(previous, 'research', previous.research.mode === 'auto' ? 'manual' : 'auto'))}>自动：{state.research.mode === 'auto' ? '开' : '关'}</button></div>
-        {activeResearch ? <><p>{activeResearch.summary}</p><p className="work-result">完成后：{technologyOutcome(activeResearch.id)}</p><div className="work-meter"><i style={{ width: progress(state.research.work, activeResearch.work) }} /></div><small>{progress(state.research.work, activeResearch.work)} · 研究组 {state.research.teamSize} 人</small></> : <div className="choice-list">{available.techs.slice(0, 6).map((id) => {
+        {activeResearch ? <><p>{activeResearch.summary}</p><p className="work-result">完成后：{technologyOutcome(activeResearch.id)}</p><div className="work-meter"><i style={{ width: progress(state.research.work, activeResearch.work), transitionDuration: `${progressTransitionMs}ms` }} /></div><small>{progress(state.research.work, activeResearch.work)} · 研究组 {state.research.teamSize} 人</small></> : <div className="choice-list">{available.techs.slice(0, 6).map((id) => {
           const blockers = textResearchBlockers(state, id);
           return <button key={id} disabled={blockers.length > 0} onClick={() => setState((previous) => startTextResearch(previous, id))}><strong>{TEXT_TECHS[id].name}</strong><span>{TEXT_TECHS[id].summary}</span><em>完成后：{technologyOutcome(id)}</em>{blockers.length > 0 && <small>暂不能开始：{blockers[0]}</small>}</button>;
         })}{available.techs.length > 6 && <p className="choice-more">另有 {available.techs.length - 6} 项已满足前置条件。</p>}</div>}
@@ -165,7 +240,7 @@ export function TextIdleApp() {
 
       <article className="text-idle-card work-card">
         <div className="card-heading"><div><span>工程</span><h2>{activeProject?.name ?? (state.project.waitingForUnlock ? '等待前置条件' : '等待指令')}</h2></div><button disabled={!automationReady && state.project.mode !== 'auto'} className={state.project.mode === 'auto' ? 'small-toggle active' : 'small-toggle'} onClick={() => setState((previous) => setTextSlotMode(previous, 'project', previous.project.mode === 'auto' ? 'manual' : 'auto'))}>自动：{state.project.mode === 'auto' ? '开' : '关'}</button></div>
-        {activeProject ? <><p>{activeProject.summary}</p><p className="work-result">投用后：{projectOutcome(activeProject.id)}</p><div className="work-meter"><i style={{ width: progress(state.project.work, activeProject.work) }} /></div><small>{progress(state.project.work, activeProject.work)} · 工务队 {state.project.teamSize} 人</small></> : <div className="choice-list">{available.projects.slice(0, 6).map((id) => {
+        {activeProject ? <><p>{activeProject.summary}</p><p className="work-result">投用后：{projectOutcome(activeProject.id)}</p><div className="work-meter"><i style={{ width: progress(state.project.work, activeProject.work), transitionDuration: `${progressTransitionMs}ms` }} /></div><small>{progress(state.project.work, activeProject.work)} · 工务队 {state.project.teamSize} 人</small></> : <div className="choice-list">{available.projects.slice(0, 6).map((id) => {
           const blockers = textProjectBlockers(state, id);
           return <button key={id} disabled={blockers.length > 0} onClick={() => setState((previous) => startTextProject(previous, id))}><strong>{TEXT_PROJECTS[id].name}</strong><span>{TEXT_PROJECTS[id].summary}</span><em>投用后：{projectOutcome(id)}</em>{blockers.length > 0 && <small>暂不能开工：{blockers[0]}</small>}</button>;
         })}{available.projects.length > 6 && <p className="choice-more">另有 {available.projects.length - 6} 项已满足前置条件。</p>}</div>}
@@ -181,7 +256,7 @@ export function TextIdleApp() {
 
       <article className="text-idle-card report-card">
         <div className="card-heading"><div><span>调度记录</span><h2>重要变化</h2></div><small>不会暂停时间</small></div>
-        <ol>{state.reports.slice(-6).reverse().map((report) => <li key={report.id}><time>第 {report.day} 日</time><span className={report.kind}>{reportText(report)}</span></li>)}</ol>
+        {importantReports.length === 0 ? <p className="card-note">尚未出现需要处理的重点变化。研究、工程完成或保障风险会显示在这里。</p> : <ol>{importantReports.map((report) => <li key={report.id}><time>第 {report.day} 日</time><span className={report.kind}>{reportText(report)}</span></li>)}</ol>}
       </article>
 
       <article className="text-idle-card archive-card">

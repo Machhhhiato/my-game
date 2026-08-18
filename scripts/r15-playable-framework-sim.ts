@@ -1,11 +1,14 @@
 import { TEXT_POLICIES, TEXT_PROJECTS, TEXT_TECHS } from '../src/v2/textIdle/content';
+import { textPlaytestGuidance } from '../src/v2/textIdle/playtestGuidance';
 import { installStarterContent } from '../src/v2/textIdle/starterContent';
 import {
   advanceTextIdleDay,
   advanceTextIdleDays,
+  availableTextExplorationTargets,
   availableTextProjects,
   availableTextTechs,
   newTextIdleState,
+  startTextExploration,
   startTextPolicy,
   startTextProject,
   startTextResearch,
@@ -37,16 +40,27 @@ function startProjectAndWait(state: TextIdleState, id: string): TextIdleState {
   return advanceUntil(next, (value) => value.completedProjects.includes(id), id);
 }
 
+function exploreAndWait(state: TextIdleState, id: string): TextIdleState {
+  const next = startTextExploration(state, id);
+  assert(next !== state, `could not start exploration ${id}`);
+  return advanceUntil(next, (value) => value.exploration == null && value.discoveries.some((discovery) => discovery.targetId === id), id);
+}
+
 function run(): TextIdleState {
   let state = newTextIdleState(515);
   assert(state.developmentStage === 'emergency', 'starter campaign must begin in emergency stage');
-  assert(availableTextTechs(state).length === 3, 'starter campaign must offer three clear initial research choices');
+  assert(textPlaytestGuidance(state).title.startsWith('生存应急'), 'starter campaign needs an actionable emergency objective');
+  assert(availableTextExplorationTargets(state).length === 3, 'starter campaign must offer three clear exploration directions');
+  assert(availableTextTechs(state).length === 3, 'starter campaign must show three research paths with exploration blockers');
   assert(availableTextProjects(state).length === 0, 'starter engineering must wait for completed research');
 
+  state = exploreAndWait(state, 'starter.explore.north');
   state = startResearchAndWait(state, 'starter.tech.water-survey');
   state = startProjectAndWait(state, 'starter.project.water-station');
+  state = exploreAndWait(state, 'starter.explore.east');
   state = startResearchAndWait(state, 'starter.tech.food-preservation');
   state = startProjectAndWait(state, 'starter.project.storage-shed');
+  state = exploreAndWait(state, 'starter.explore.west');
   state = startResearchAndWait(state, 'starter.tech.tool-recovery');
   state = startProjectAndWait(state, 'starter.project.repair-workshop');
   state = startResearchAndWait(state, 'starter.tech.water-routine');
@@ -58,6 +72,7 @@ function run(): TextIdleState {
 
   assert(textAutomationUnlocked(state), 'technology plus facility must unlock automation');
   assert(state.developmentStage === 'settled', 'starter path did not reach stable settlement');
+  assert(textPlaytestGuidance(state).tone === 'complete', 'settled state must show a clear stage-complete message');
   assert(availableTextTechs(state).every((id) => !state.completedTechs.includes(id)), 'completed technologies returned to selection');
   assert(availableTextProjects(state).every((id) => !state.completedProjects.includes(id)), 'completed projects returned to selection');
   const policyId = 'starter.policy.water-duty';

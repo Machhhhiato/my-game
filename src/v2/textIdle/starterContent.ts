@@ -1,5 +1,7 @@
 import { installStage1Catalog } from './content';
+import { installExplorationTargets } from './exploration';
 import type { Stage1CatalogSource } from './content';
+import type { TextExplorationTarget } from './types';
 
 /**
  * 可试玩首阶段不是正式剧本，也不借用河谷专名。
@@ -7,17 +9,17 @@ import type { Stage1CatalogSource } from './content';
  */
 const STARTER_SOURCE: Stage1CatalogSource = {
   techs: [
-    { id: 'starter.tech.water-survey', domain: 'water', tier: 1, class: 'breakthrough', prerequisites: [], playerCopyKey: 'starter.tech.water-survey', runtime: { time: { workDays: 8, milestones: [25, 50, 75, 100] }, staffing: { researchers: 2 }, demand: { researchLoad: 'standard' }, result: { capability: '可辨认安全取水点，并按固定流程检验水源。', automationEligible: false } } },
-    { id: 'starter.tech.food-preservation', domain: 'food', tier: 1, class: 'breakthrough', prerequisites: [], playerCopyKey: 'starter.tech.food-preservation', runtime: { time: { workDays: 8, milestones: [25, 50, 75, 100] }, staffing: { researchers: 2 }, demand: { researchLoad: 'standard' }, result: { capability: '可用简易保藏和轮换制度降低食物损耗。', automationEligible: false } } },
-    { id: 'starter.tech.tool-recovery', domain: 'industry', tier: 1, class: 'breakthrough', prerequisites: [], playerCopyKey: 'starter.tech.tool-recovery', runtime: { time: { workDays: 8, milestones: [25, 50, 75, 100] }, staffing: { researchers: 2 }, demand: { researchLoad: 'standard' }, result: { capability: '可检修常用工具，并按故障优先级安排维修。', automationEligible: false } } },
+    { id: 'starter.tech.water-survey', domain: 'water', tier: 1, class: 'breakthrough', prerequisites: [], discoveryPrerequisites: ['discovery.knowledge.water-sample'], playerCopyKey: 'starter.tech.water-survey', runtime: { time: { workDays: 8, milestones: [25, 50, 75, 100] }, staffing: { researchers: 2 }, demand: { researchLoad: 'standard' }, result: { capability: '可辨认安全取水点，并按固定流程检验水源。', automationEligible: false } } },
+    { id: 'starter.tech.food-preservation', domain: 'food', tier: 1, class: 'breakthrough', prerequisites: [], discoveryPrerequisites: ['discovery.knowledge.stores'], playerCopyKey: 'starter.tech.food-preservation', runtime: { time: { workDays: 8, milestones: [25, 50, 75, 100] }, staffing: { researchers: 2 }, demand: { researchLoad: 'standard' }, result: { capability: '可用简易保藏和轮换制度降低食物损耗。', automationEligible: false } } },
+    { id: 'starter.tech.tool-recovery', domain: 'industry', tier: 1, class: 'breakthrough', prerequisites: [], discoveryPrerequisites: ['discovery.knowledge.components'], playerCopyKey: 'starter.tech.tool-recovery', runtime: { time: { workDays: 8, milestones: [25, 50, 75, 100] }, staffing: { researchers: 2 }, demand: { researchLoad: 'standard' }, result: { capability: '可检修常用工具，并按故障优先级安排维修。', automationEligible: false } } },
     { id: 'starter.tech.water-routine', domain: 'water', tier: 2, class: 'branch', prerequisites: ['starter.tech.water-survey'], playerCopyKey: 'starter.tech.water-routine', runtime: { time: { workDays: 10, milestones: [25, 50, 75, 100] }, staffing: { researchers: 2 }, demand: { researchLoad: 'standard' }, result: { capability: '建立取水、检验和储存的例行操作规程。', automationEligible: false } } },
     { id: 'starter.tech.maintenance-routine', domain: 'industry', tier: 2, class: 'branch', prerequisites: ['starter.tech.tool-recovery'], playerCopyKey: 'starter.tech.maintenance-routine', runtime: { time: { workDays: 10, milestones: [25, 50, 75, 100] }, staffing: { researchers: 2 }, demand: { researchLoad: 'standard' }, result: { capability: '建立维修值守和备件登记规程。', automationEligible: false } } },
     { id: 'starter.tech.automatic-duty', domain: 'admin', tier: 2, class: 'refinement', prerequisites: ['starter.tech.water-routine', 'starter.tech.maintenance-routine'], engineeringPrerequisites: ['starter.project.water-station', 'starter.project.repair-workshop'], playerCopyKey: 'starter.tech.automatic-duty', runtime: { time: { workDays: 12, milestones: [25, 50, 75, 100] }, staffing: { researchers: 2 }, demand: { researchLoad: 'high' }, result: { capability: '将重复取水、巡视和维修交给固定值守班次。', automationEligible: true } } },
   ],
   projects: [
-    { id: 'starter.project.water-station', domain: 'water', kind: 'facility', prerequisites: ['starter.tech.water-survey'], playerCopyKey: 'starter.project.water-station', runtime: { time: { workDays: 12, milestones: [25, 50, 75, 100] }, staffing: { builders: 4 }, demand: { constructionSupply: 8, maintenanceLoad: 'low' }, result: { reserveOutput: { water: 0.30 }, metricEffects: { livelihood: 0.42 }, facilityState: '投用', mapClass: 'water-service', automationFacility: false } } },
-    { id: 'starter.project.storage-shed', domain: 'food', kind: 'facility', prerequisites: ['starter.tech.food-preservation'], playerCopyKey: 'starter.project.storage-shed', runtime: { time: { workDays: 12, milestones: [25, 50, 75, 100] }, staffing: { builders: 4 }, demand: { constructionSupply: 8, maintenanceLoad: 'low' }, result: { reserveOutput: { food: 0.30 }, metricEffects: { livelihood: 0.32 }, facilityState: '投用', mapClass: 'food-service', automationFacility: false } } },
-    { id: 'starter.project.repair-workshop', domain: 'industry', kind: 'facility', prerequisites: ['starter.tech.tool-recovery'], playerCopyKey: 'starter.project.repair-workshop', runtime: { time: { workDays: 14, milestones: [25, 50, 75, 100] }, staffing: { builders: 4 }, demand: { constructionSupply: 10, maintenanceLoad: 'medium' }, result: { reserveOutput: { repair: 0.32 }, metricEffects: { industry: 0.46 }, facilityState: '投用', mapClass: 'repair-workshop', automationFacility: false } } },
+    { id: 'starter.project.water-station', domain: 'water', kind: 'facility', prerequisites: ['starter.tech.water-survey'], discoveryPrerequisites: ['discovery.site.intake-axis'], playerCopyKey: 'starter.project.water-station', runtime: { time: { workDays: 12, milestones: [25, 50, 75, 100] }, staffing: { builders: 4 }, demand: { constructionSupply: 8, maintenanceLoad: 'low' }, result: { reserveOutput: { water: 0.30 }, metricEffects: { livelihood: 0.42 }, facilityState: '投用', mapClass: 'water-service', automationFacility: false } } },
+    { id: 'starter.project.storage-shed', domain: 'food', kind: 'facility', prerequisites: ['starter.tech.food-preservation'], discoveryPrerequisites: ['discovery.site.storehouse'], playerCopyKey: 'starter.project.storage-shed', runtime: { time: { workDays: 12, milestones: [25, 50, 75, 100] }, staffing: { builders: 4 }, demand: { constructionSupply: 8, maintenanceLoad: 'low' }, result: { reserveOutput: { food: 0.30 }, metricEffects: { livelihood: 0.32 }, facilityState: '投用', mapClass: 'food-service', automationFacility: false } } },
+    { id: 'starter.project.repair-workshop', domain: 'industry', kind: 'facility', prerequisites: ['starter.tech.tool-recovery'], discoveryPrerequisites: ['discovery.site.salvage-yard'], playerCopyKey: 'starter.project.repair-workshop', runtime: { time: { workDays: 14, milestones: [25, 50, 75, 100] }, staffing: { builders: 4 }, demand: { constructionSupply: 10, maintenanceLoad: 'medium' }, result: { reserveOutput: { repair: 0.32 }, metricEffects: { industry: 0.46 }, facilityState: '投用', mapClass: 'repair-workshop', automationFacility: false } } },
     { id: 'starter.project.intake-rig', domain: 'water', kind: 'facility', prerequisites: ['starter.tech.water-routine', 'starter.tech.automatic-duty'], playerCopyKey: 'starter.project.intake-rig', runtime: { time: { workDays: 16, milestones: [25, 50, 75, 100] }, staffing: { builders: 4 }, demand: { constructionSupply: 12, maintenanceLoad: 'medium' }, result: { reserveOutput: { water: 0.20, repair: 0.08 }, metricEffects: { livelihood: 0.50, industry: 0.20 }, facilityState: '投用', mapClass: 'intake-rig', automationFacility: true } } },
   ],
   policies: [
@@ -46,8 +48,15 @@ const STARTER_SOURCE: Stage1CatalogSource = {
   },
 };
 
+const STARTER_EXPLORATION_TARGETS: TextExplorationTarget[] = [
+  { id: 'starter.explore.north', direction: '北侧高地', name: '断层水线', summary: '沿高地落差寻找可持续取水点，并记录可能的引水位置。', mapPosition: [160, 24], coordinateRef: 'geo.demo.north-ridge.01', durationDays: 6, teamRequired: 2, discoveries: [{ id: 'discovery.knowledge.water-sample', kind: 'knowledge', coordinateRef: 'geo.demo.north-ridge.01', label: '水样与水文记录' }, { id: 'discovery.site.intake-axis', kind: 'engineering-site', coordinateRef: 'geo.demo.north-ridge.01', label: '取水工程候选地' }] },
+  { id: 'starter.explore.east', direction: '东侧旧区', name: '封闭仓间', summary: '检查旧建筑的遮蔽、通风和可回收保藏材料。', mapPosition: [270, 122], coordinateRef: 'geo.demo.east-old-quarter.01', durationDays: 6, teamRequired: 2, discoveries: [{ id: 'discovery.knowledge.stores', kind: 'knowledge', coordinateRef: 'geo.demo.east-old-quarter.01', label: '保藏记录与可用材料' }, { id: 'discovery.site.storehouse', kind: 'engineering-site', coordinateRef: 'geo.demo.east-old-quarter.01', label: '仓储工程候选地' }] },
+  { id: 'starter.explore.west', direction: '西侧残骸带', name: '维护残件区', summary: '清点尚可拆修的构件，确认安全作业范围。', mapPosition: [50, 122], coordinateRef: 'geo.demo.west-debris.01', durationDays: 6, teamRequired: 2, discoveries: [{ id: 'discovery.knowledge.components', kind: 'knowledge', coordinateRef: 'geo.demo.west-debris.01', label: '可回收部件记录' }, { id: 'discovery.site.salvage-yard', kind: 'engineering-site', coordinateRef: 'geo.demo.west-debris.01', label: '维修工程候选地' }] },
+];
+
 export function installStarterContent(): void {
   installStage1Catalog(STARTER_SOURCE);
+  installExplorationTargets(STARTER_EXPLORATION_TARGETS);
 }
 
 export const STARTER_CONTENT_COUNTS = {
