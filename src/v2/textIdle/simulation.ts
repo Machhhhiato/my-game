@@ -1,7 +1,7 @@
 import type { MetricId } from '../types';
 import { automationGate, TEXT_POLICIES, TEXT_PROJECT_ORDER, TEXT_PROJECTS, TEXT_TECH_ORDER, TEXT_TECHS } from './content';
 import { TEXT_EXPLORATION_TARGETS } from './exploration';
-import type { ReserveId, TextEmergencyOrderId, TextExplorationTargetId, TextFocusId, TextIdleState, TextPendingPopulation, TextPhaseId, TextPolicyId, TextProjectId, TextRequirements, TextSlot, TextTechId } from './types';
+import type { ReserveId, TextEmergencyOrderId, TextExplorationTargetId, TextFacilityFact, TextFocusId, TextIdleState, TextPendingPopulation, TextPhaseId, TextPolicyId, TextProjectId, TextRequirements, TextSlot, TextTechId } from './types';
 
 const RESERVES: ReserveId[] = ['water', 'food', 'repair'];
 const METRICS: MetricId[] = ['livelihood', 'industry', 'energy', 'research', 'administration', 'logistics', 'military', 'stability', 'ecology'];
@@ -11,7 +11,21 @@ const FAILURE_LIMIT_DAYS = 12;
 
 function clone(state: TextIdleState): TextIdleState { return structuredClone(state) as TextIdleState; }
 /** Keeps a hot-reloaded v7 in-memory playtest state safe until its next local save migration. */
-function ensureGrowthState(state: TextIdleState): void { state.pendingPopulation ??= []; state.routeFacts ??= []; }
+function homeCoordinateRef(state: TextIdleState): string { return `home:${state.campaignTemplateId}:${state.seed}`; }
+function projectSite(state: TextIdleState, projectId: TextProjectId): Pick<TextFacilityFact, 'coordinateRef' | 'sourceDiscoveryId'> {
+  const required = TEXT_PROJECTS[projectId]?.requirements.discoveries ?? [];
+  const source = state.discoveries.find((discovery) => required.includes(discovery.id) && discovery.kind === 'engineering-site');
+  return source ? { coordinateRef: source.coordinateRef, sourceDiscoveryId: source.id } : { coordinateRef: homeCoordinateRef(state) };
+}
+/** Migrates historic text saves into explicit spatial facts without changing their completed capabilities. */
+function ensureGrowthState(state: TextIdleState): void {
+  state.pendingPopulation ??= []; state.routeFacts ??= []; state.facilityFacts ??= [];
+  for (const projectId of state.completedProjects) {
+    if (state.facilityFacts.some((facility) => facility.projectId === projectId)) continue;
+    const site = projectSite(state, projectId);
+    state.facilityFacts.push({ id: `facility.${projectId}`, projectId, ...site, mapClass: TEXT_PROJECTS[projectId]?.runtime.mapClass ?? 'facility', status: 'operating', startedOn: state.day, operationalOn: state.day });
+  }
+}
 function clamp(value: number, low = 0, high = 100): number { return Math.max(low, Math.min(high, value)); }
 function has<T extends string>(items: readonly T[], required: readonly T[] | undefined): boolean { return !required || required.every((id) => items.includes(id)); }
 function discoveriesMet(state: TextIdleState, required: readonly string[] | undefined): boolean { return !required || required.every((id) => state.discoveries.some((discovery) => discovery.id === id)); }
@@ -122,12 +136,12 @@ export function textProjectBlockers(state: TextIdleState, id: TextProjectId): st
 
 export function newTextIdleState(seed = 1, campaignTemplateId = 'campaign.starter-v1'): TextIdleState {
   const state: TextIdleState = {
-    version: 8, campaignTemplateId, seed, day: 0, calendar: calendarForDay(0), population: 28,
+    version: 9, campaignTemplateId, seed, day: 0, calendar: calendarForDay(0), population: 28,
     reserves: { water: 18, food: 18, repair: 12 },
     construction: { stock: 12, capacity: 48, dailyProduction: 0 },
     workforce: { dependents: 4, essentialStaff: 15, civicAndSecurityStaff: 3, researchStaff: 0, projectStaff: 0, policyStaff: 0, emergencyStaff: 0, explorationStaff: 0 },
     emergencyOrder: null,
-    exploration: null, discoveries: [], pendingPopulation: [], routeFacts: [],
+    exploration: null, discoveries: [], pendingPopulation: [], routeFacts: [], facilityFacts: [],
     failure: { level: 'stable', shortageDays: 0, lastChangedOn: 0 },
     developmentStage: 'emergency',
     dailyLedger: { day: 0, reserveNet: { water: 0, food: 0, repair: 0 }, constructionNet: 0, metricDelta: {}, focusId: 'settle' },
@@ -245,9 +259,12 @@ export function startTextResearch(state: TextIdleState, id: TextTechId): TextIdl
 export function startTextProject(state: TextIdleState, id: TextProjectId): TextIdleState {
   if (!textCanStartProject(state, id) || state.failure.level === 'lost') return state;
   const next = clone(state);
+  ensureGrowthState(next);
   const project = TEXT_PROJECTS[id];
+  const site = projectSite(next, id);
   next.construction.stock = Number((next.construction.stock - project.startCost).toFixed(2));
   next.project = { ...next.project, id, work: 0, teamSize: project.teamRequired, startCost: project.startCost, waitingForUnlock: false };
+  next.facilityFacts.push({ id: `facility.${id}`, projectId: id, ...site, mapClass: project.runtime.mapClass, status: 'building', startedOn: next.day });
   refreshWorkforce(next);
   addReport(next, 'system', 'project.started', { id, staff: project.teamRequired, cost: project.startCost });
   return next;
@@ -277,6 +294,8 @@ function autoChoose<T extends TextTechId | TextProjectId>(state: TextIdleState, 
     const project = TEXT_PROJECTS[eligible];
     state.construction.stock = Number((state.construction.stock - project.startCost).toFixed(2));
     state.project = { ...state.project, id: eligible, work: 0, teamSize: project.teamRequired, startCost: project.startCost, waitingForUnlock: false };
+    const site = projectSite(state, eligible);
+    state.facilityFacts.push({ id: `facility.${eligible}`, projectId: eligible, ...site, mapClass: project.runtime.mapClass, status: 'building', startedOn: state.day });
   }
   refreshWorkforce(state);
   addReport(state, 'system', `auto.${kind}.started`, { id: eligible });
@@ -324,6 +343,8 @@ function advanceSlot(state: TextIdleState, slot: 'research' | 'project'): void {
   state.project.work += (0.8 + state.metrics.industry / 100) * focusMultiplier(state, 'project') * (state.project.teamSize / project.teamRequired);
   if (state.project.work < project.work) return;
   state.completedProjects.push(id);
+  const facility = state.facilityFacts.find((entry) => entry.projectId === id);
+  if (facility) { facility.status = 'operating'; facility.operationalOn = state.day; }
   state.project = { ...state.project, id: null, work: 0, teamSize: 0, startCost: 0 };
   refreshWorkforce(state);
   addReport(state, 'completion', 'project.completed', { id });

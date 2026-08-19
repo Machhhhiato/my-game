@@ -3,6 +3,7 @@ import { rebuildMetroSummaries } from '../nationKernel/simulation';
 import type { NationKernelState } from '../nationKernel/types';
 import { installRegionalCampaignContent } from './regionalCampaign';
 import { textAutomationUnlocked } from './simulation';
+import { geoReferenceForCoordinateRef } from './strategicMapModel';
 import type { TextIdleState } from './types';
 
 /**
@@ -30,6 +31,7 @@ export function createRegionalNationFromTextIdle(state: TextIdleState): NationKe
   delete next.operations['operation.policy'];
 
   next.calendar = { day: state.day, year: state.calendar.year, month: state.calendar.month, phase: state.calendar.phase };
+  core.geoRef = geoReferenceForCoordinateRef(`home:${state.campaignTemplateId}:${state.seed}`);
   const workforce = Math.max(0, state.population - state.workforce.dependents);
   player.templateId = 'template.regional-network';
   player.archetype = 'regionalState';
@@ -50,9 +52,11 @@ export function createRegionalNationFromTextIdle(state: TextIdleState): NationKe
   metro.sharedNetworkIds = [];
   for (const id of state.completedProjects) {
     const facilityId = `facility.${id}`;
+    const facilityFact = state.facilityFacts?.find((entry) => entry.projectId === id);
     if (next.facilities[facilityId] == null) next.facilities[facilityId] = {
       ...next.facilities['facility.water'], id: facilityId, moduleId: `module.${id}`, hostCityId: 'city.core',
-      lifecycle: { status: 'operating', condition: 100, maintenanceBacklog: 0, startedDay: state.day }, recurringEffects: [],
+      geoRef: facilityFact ? geoReferenceForCoordinateRef(facilityFact.coordinateRef) : core.geoRef,
+      lifecycle: { status: 'operating', condition: 100, maintenanceBacklog: 0, startedDay: facilityFact?.startedOn ?? state.day }, recurringEffects: [],
     };
   }
   delete next.facilities['facility.water'];

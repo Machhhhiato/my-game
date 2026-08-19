@@ -1,5 +1,5 @@
 import type { EffectSpec, IndustrialStrategyState, KernelCalendar, KernelId, NationKernelState, OperationState, PolityState, ProductionLineState, QuantityValue, RegionState, ScopeRef, TerritoryState } from './types';
-import { advanceCivilizationSystemsDay } from './civilizationSystems';
+import { advanceCivilizationSystemsDay, externalDirectionRuntime, industrialLogisticsDirectionRuntime } from './civilizationSystems';
 
 const PHASES: KernelCalendar['phase'][] = ['early', 'mid', 'late'];
 const clamp = (value: number, min = 0, max = Number.POSITIVE_INFINITY) => Math.max(min, Math.min(max, value));
@@ -275,6 +275,7 @@ function advanceFacilities(state: NationKernelState): void { for (const facility
     const industrial = facility.industrialCapacity; if (industrial != null && (industrial.damagedFactoryUnits ?? 0) > 0 && facility.lifecycle.maintenanceBacklog < 30) { const before = industrial.damagedFactoryUnits ?? 0; industrial.damagedFactoryUnits = round(clamp(before - industrial.repairRate, 0, industrial.factoryUnits), 2); industrial.usableFactoryUnits = Math.floor(industrial.factoryUnits - industrial.damagedFactoryUnits); if (industrial.damagedFactoryUnits !== before) record(state, facility.id, `facility:${facility.id}.damagedFactoryUnits`, before, industrial.damagedFactoryUnits, 'industrialFacility.repaired'); }
   } }
 function advanceProductionLines(state: NationKernelState): void {
+  const direction = industrialLogisticsDirectionRuntime(state);
   for (const line of Object.values(state.productionLines)) {
     if (line.status === 'retooling') { if (line.retoolingDaysRemaining != null) { const before = line.retoolingDaysRemaining; line.retoolingDaysRemaining = Math.max(0, before - 1); if (line.retoolingDaysRemaining === 0) { line.status = 'operating'; record(state, line.id, `productionLine:${line.id}.status`, 'retooling', 'operating', 'productionLine.retool-completed'); } } continue; }
     if (line.status !== 'operating') continue;
@@ -288,8 +289,8 @@ function advanceProductionLines(state: NationKernelState): void {
     const assignedFactories = Math.max(0, line.assignedFactoryUnits ?? 1) * availabilityRatio;
     const baseOutput = line.baseOutputPerFactory == null ? line.dailyOutput : line.baseOutputPerFactory * assignedFactories;
     const facilityConcentration = clamp(facility.industrialCapacity?.concentration ?? 0, 0, 1);
-    const policyOutput = Math.max(0, 1 + (strategy?.factoryOutputModifier ?? 0) + facilityConcentration * (strategy?.concentrationOutputModifier ?? 0));
-    const effectiveEfficiency = clamp(line.efficiency, 0, Math.max(0, (line.efficiencyCap ?? 1) + (strategy?.efficiencyCapModifier ?? 0)));
+    const policyOutput = Math.max(0, 1 + (strategy?.factoryOutputModifier ?? 0) + facilityConcentration * (strategy?.concentrationOutputModifier ?? 0)) * direction.productionOutputMultiplier;
+    const effectiveEfficiency = clamp(line.efficiency, 0, Math.max(0, (line.efficiencyCap ?? 1) + (strategy?.efficiencyCapModifier ?? 0) + direction.productionEfficiencyCapBonus));
     const output = round(Math.max(0, baseOutput * effectiveEfficiency * rampUp * inputAvailability * policyOutput), 2);
     if (output === 0) continue;
     const before = stockpile.quantity;
@@ -299,31 +300,32 @@ function advanceProductionLines(state: NationKernelState): void {
     record(state, line.id, `stockpile:${stockpile.id}.quantity`, before, stockpile.quantity, 'productionLine.output');
     if (line.rampUp != null && line.rampUp < 1) {
       const beforeRamp = line.rampUp;
-      line.rampUp = round(clamp(line.rampUp + (line.rampUpPerDay ?? 0), 0, 1), 2);
+      line.rampUp = round(clamp(line.rampUp + (line.rampUpPerDay ?? 0) * direction.productionRampMultiplier, 0, 1), 2);
       if (line.rampUp !== beforeRamp) record(state, line.id, `productionLine:${line.id}.rampUp`, beforeRamp, line.rampUp, 'productionLine.ramp-up');
     }
     if (line.efficiencyGainPerDay != null) {
       const beforeEfficiency = line.efficiency;
-      const cap = Math.max(0, (line.efficiencyCap ?? 1) + (strategy?.efficiencyCapModifier ?? 0));
-      const gain = line.efficiencyGainPerDay * (strategy?.efficiencyGrowthModifier ?? 1);
+      const cap = Math.max(0, (line.efficiencyCap ?? 1) + (strategy?.efficiencyCapModifier ?? 0) + direction.productionEfficiencyCapBonus);
+      const gain = line.efficiencyGainPerDay * (strategy?.efficiencyGrowthModifier ?? 1) * direction.productionEfficiencyGainMultiplier;
       line.efficiency = round(clamp(line.efficiency + gain, 0, cap), 3);
       if (line.efficiency !== beforeEfficiency) record(state, line.id, `productionLine:${line.id}.efficiency`, beforeEfficiency, line.efficiency, 'productionLine.efficiency-growth');
     }
   }
 }
 function advanceFormationEquipment(state: NationKernelState): void {
+  const direction = industrialLogisticsDirectionRuntime(state);
   for (const formation of Object.values(state.formations)) {
     for (const equipment of formation.equipment) {
       const stockpile = state.stockpiles[equipment.stockpileId]; const design = stockpile?.designId == null ? undefined : state.designs[stockpile.designId];
       const reliabilityWear = design?.performance?.reliability == null ? 0 : (1 - design.performance.reliability / 100) * 0.002;
       const maintenanceWear = (design?.maintenanceLoad ?? 0) * 0.0004;
-      const wearRate = formation.equipmentWearPerDay ?? reliabilityWear + maintenanceWear;
+      const wearRate = (formation.equipmentWearPerDay ?? reliabilityWear + maintenanceWear) * direction.equipmentWearMultiplier;
       if (wearRate <= 0) continue; const before = equipment.delivered ?? equipment.required; equipment.delivered = round(clamp(before - equipment.required * wearRate, 0, equipment.required), 3); if (Math.floor(before * 10) !== Math.floor(equipment.delivered * 10)) record(state, formation.id, `formation:${formation.id}.equipment.${equipment.stockpileId}`, before, equipment.delivered, 'formation.daily-equipment-wear');
     }
   }
   const formations = Object.values(state.formations).filter((formation) => formation.autoReplenish !== false).sort((a, b) => (b.replenishmentPriority ?? 1) - (a.replenishmentPriority ?? 1));
   for (const formation of formations) {
-    for (const equipment of formation.equipment) { const stockpile = state.stockpiles[equipment.stockpileId]; if (stockpile == null) continue; const beforeDelivered = equipment.delivered ?? equipment.required; const missing = Math.max(0, equipment.required - beforeDelivered); const transfer = round(Math.min(missing, Math.max(0, stockpile.quantity - stockpile.reserved)), 3); if (transfer <= 0) continue; const beforeStockpile = stockpile.quantity; equipment.delivered = round(beforeDelivered + transfer, 3); stockpile.quantity = round(stockpile.quantity - transfer, 3); if (transfer >= 0.1) record(state, formation.id, `stockpile:${stockpile.id}.quantity`, beforeStockpile, stockpile.quantity, 'formation.auto-replenishment'); }
+    for (const equipment of formation.equipment) { const stockpile = state.stockpiles[equipment.stockpileId]; if (stockpile == null) continue; const beforeDelivered = equipment.delivered ?? equipment.required; const missing = Math.max(0, equipment.required - beforeDelivered); const transfer = round(Math.min(missing, Math.max(0, stockpile.quantity - stockpile.reserved) * direction.replenishmentMultiplier), 3); if (transfer <= 0) continue; const beforeStockpile = stockpile.quantity; equipment.delivered = round(beforeDelivered + transfer, 3); stockpile.quantity = round(stockpile.quantity - transfer, 3); if (transfer >= 0.1) record(state, formation.id, `stockpile:${stockpile.id}.quantity`, beforeStockpile, stockpile.quantity, 'formation.auto-replenishment'); }
     const delivered = formation.equipment.reduce((sum, item) => sum + (item.delivered ?? item.required), 0); const required = formation.equipment.reduce((sum, item) => sum + item.required, 0); formation.equipmentReadiness = required === 0 ? 100 : round(delivered / required * 100, 1);
   }
 }
@@ -360,5 +362,5 @@ export function changeRegionalServiceAssignment(state: NationKernelState, region
   return next;
 }
 export function rebuildMetroSummaries(state: NationKernelState): void { for (const metro of Object.values(state.metros)) metro.totalPopulation = metro.memberCityIds.reduce((sum, cityId) => sum + (state.cities[cityId]?.population ?? 0), 0); }
-export function advanceNationKernelDays(state: NationKernelState, days: number): NationKernelState { let next = state; for (let i = 0; i < days; i += 1) { next = clone(next); next.calendar = calendarFor(next.calendar.day + 1); advanceFacilities(next); advanceProductionLines(next); advanceFormationEquipment(next); advanceRegionalServices(next); Object.values(next.operations).forEach((operation) => advanceOperation(next, operation)); advanceCivilizationSystemsDay(next); rebuildMetroSummaries(next); next.budget.stability = round(clamp(next.budget.stability - (next.industrialStrategy?.stabilityPressurePerDay ?? 0), 0, 100), 2); next.observations = next.observations.filter((observation) => next.calendar.day - observation.observedDay <= 360); next.ledger = next.ledger.slice(-500); } return next; }
+export function advanceNationKernelDays(state: NationKernelState, days: number): NationKernelState { let next = state; for (let i = 0; i < days; i += 1) { next = clone(next); next.calendar = calendarFor(next.calendar.day + 1); advanceFacilities(next); advanceProductionLines(next); advanceFormationEquipment(next); advanceRegionalServices(next); Object.values(next.operations).forEach((operation) => advanceOperation(next, operation)); advanceCivilizationSystemsDay(next); rebuildMetroSummaries(next); next.budget.stability = round(clamp(next.budget.stability - (next.industrialStrategy?.stabilityPressurePerDay ?? 0), 0, 100), 2); next.observations = next.observations.filter((observation) => next.calendar.day - observation.observedDay <= 360); next.ledger = next.ledger.slice(-Math.max(500, externalDirectionRuntime(next).ledgerRetentionDays)); } return next; }
 export function polity(state: NationKernelState, id: KernelId): PolityState | null { return state.polities[id] ?? null; }

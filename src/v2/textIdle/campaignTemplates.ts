@@ -38,9 +38,44 @@ export const RIDGE_TEXT_CAMPAIGN_TEMPLATE: TextCampaignTemplate = {
   ],
 };
 
+/** A third verification geography: shoreline access, tidal exposure and old-port salvage. */
+const COAST_PRESENTATION: Record<string, { direction: string; name: string }> = {
+  'starter.explore.north': { direction: '潮汐高崖', name: '潮痕裂隙' },
+  'starter.explore.east': { direction: '旧港外缘', name: '港廊储间' },
+  'starter.explore.west': { direction: '盐蚀堆场', name: '装卸残架' },
+  'starter.explore.north-recheck': { direction: '潮汐高崖', name: '潮位复测' },
+  'starter.explore.east-route': { direction: '旧港外缘', name: '港廊轮换复核' },
+  'starter.explore.west-route': { direction: '盐蚀堆场', name: '堆场转运试走' },
+  'starter.explore.east-rescue': { direction: '旧港外缘', name: '灯标联络' },
+  'starter.explore.west-salvage': { direction: '盐蚀堆场', name: '装卸架打捞' },
+  'starter.explore.north-outpost': { direction: '潮汐高崖', name: '崖岸观测点' },
+};
+
+function coastalTarget(target: TextExplorationTarget): TextExplorationTarget {
+  const presentation = COAST_PRESENTATION[target.id];
+  const coordinateRef = target.coordinateRef.replace('geo.demo.', 'geo.coast.');
+  return {
+    ...target,
+    id: target.id.replace('starter.', 'coast.'),
+    direction: presentation?.direction ?? target.direction,
+    name: presentation?.name ?? target.name,
+    summary: `在大水域接近区核验${presentation?.name ?? target.name}的通行、耐候与持续使用条件。`,
+    updates: ['正在记录潮位、风向与通行窗口。', '正在核验物资、人手和安全边界能否长期维持。'],
+    mapPosition: [320 - target.mapPosition[0], target.mapPosition[1]],
+    coordinateRef,
+    discoveries: target.discoveries.map((discovery) => ({ ...discovery, coordinateRef: discovery.coordinateRef.replace('geo.demo.', 'geo.coast.') })),
+  };
+}
+
+export const COAST_TEXT_CAMPAIGN_TEMPLATE: TextCampaignTemplate = {
+  id: 'campaign.coast-v1',
+  explorationTargets: STARTER_EXPLORATION_TARGETS.map(coastalTarget),
+};
+
 export const TEXT_CAMPAIGN_TEMPLATES: Record<string, TextCampaignTemplate> = {
   [DEFAULT_TEXT_CAMPAIGN_TEMPLATE.id]: DEFAULT_TEXT_CAMPAIGN_TEMPLATE,
   [RIDGE_TEXT_CAMPAIGN_TEMPLATE.id]: RIDGE_TEXT_CAMPAIGN_TEMPLATE,
+  [COAST_TEXT_CAMPAIGN_TEMPLATE.id]: COAST_TEXT_CAMPAIGN_TEMPLATE,
 };
 
 export function textCampaignTemplate(id: string | undefined): TextCampaignTemplate {

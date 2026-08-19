@@ -34,8 +34,8 @@ function loadState(): TextIdleState {
     const raw = localStorage.getItem(SAVE_KEY);
     if (raw != null) {
       const parsed = JSON.parse(raw) as Partial<Omit<TextIdleState, 'version'>> & { version?: number };
-      if ((parsed?.version === 6 || parsed?.version === 7 || parsed?.version === 8) && parsed.reserves && parsed.research && parsed.project && parsed.calendar && 'exploration' in parsed && Array.isArray(parsed.discoveries)) {
-        return { ...parsed, version: 8, campaignTemplateId: parsed.campaignTemplateId ?? 'campaign.starter-v1', pendingPopulation: parsed.pendingPopulation ?? [], routeFacts: parsed.routeFacts ?? [] } as TextIdleState;
+      if ((parsed?.version === 6 || parsed?.version === 7 || parsed?.version === 8 || parsed?.version === 9) && parsed.reserves && parsed.research && parsed.project && parsed.calendar && 'exploration' in parsed && Array.isArray(parsed.discoveries)) {
+        return { ...parsed, version: 9, campaignTemplateId: parsed.campaignTemplateId ?? 'campaign.starter-v1', pendingPopulation: parsed.pendingPopulation ?? [], routeFacts: parsed.routeFacts ?? [], facilityFacts: parsed.facilityFacts ?? [] } as TextIdleState;
       }
     }
   } catch { /* a damaged text-demo save simply starts fresh */ }

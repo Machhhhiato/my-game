@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { V2App } from './v2/ui/V2App';
 import { TextIdleApp } from './v2/ui/TextIdleApp';
+import { CampaignGlobeApp } from './v2/ui/CampaignGlobeApp';
 import { useV2, startV2Loop } from './v2/store';
 import { saveGameV6 } from './v2/save';
 import './v2/v2.css';
@@ -15,6 +16,7 @@ const kernelFixture = query.get('kernel');
 const kernelInspectorFixture = query.get('kernelInspector') ?? (kernelFixture === 'unified' ? null : kernelFixture);
 const showMapPrototype = query.get('map') === '1';
 const showGlobalUnificationPlaytest = query.get('playtest') === 'r37';
+const showLegacyTextPlaytest = query.get('text') === '1';
 
 if (showGlobalUnificationPlaytest) {
   root.render(<Suspense fallback={<main />}><StrategicCabinetApp onExit={() => window.location.assign(window.location.pathname)} /></Suspense>);
@@ -26,8 +28,10 @@ if (showGlobalUnificationPlaytest) {
   root.render(<V2App />);
   startV2Loop();
   window.addEventListener('beforeunload', () => saveGameV6(useV2.getState().state));
-} else {
+} else if (showLegacyTextPlaytest) {
   root.render(<TextIdleApp />);
+} else {
+  root.render(<CampaignGlobeApp />);
 }
 
-// 默认是 R10 文字挂机验证层；保留 ?map=1 进入既有地图原型。
+// R38 defaults to the shared 3D ground campaign; ?text=1 and ?map=1 retain legacy fixtures.

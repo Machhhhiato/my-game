@@ -46,7 +46,11 @@
 | 18 | `PRE_R37_MARITIME_AEROSPACE_SPACE.md` | 全球统一前的海运海军、航空导弹和基础卫星 | ✅ 第一轮完成 |
 | 19 | `R37_GLOBAL_UNIFICATION_NODE.md` | 十二类统一硬门与720日跨板块联合试跑 | ✅ 第一轮大节点完成 |
 | 20 | `UNIFIED_NATION_SECOND_PASS_PLAN.md` | 国家统一阶段数据、平衡、操作和UI第二轮计划 | 📋 下一阶段 |
-| 21 | `R37_PARADOX_BOARD_CONTENT_PASS.md` | 参考群星/钢铁雄心4的信息架构，为21板块填充方向与运行对象的首轮说明 | ✅ 首批内容与界面完成，待日结算接线 |
+| 21 | `R37_PARADOX_BOARD_CONTENT_PASS.md` | 参考群星/钢铁雄心4的信息架构，为21板块填充方向与运行对象的首轮说明 | ✅ 四条方向链均已接线 |
+| 22 | `R37_INDUSTRIAL_LOGISTICS_DIRECTION_IMPLEMENTATION.md` | 首条方向组合的日结算合同、路线差异与长周期验证 | ✅ 已实现并自动验证 |
+| 23 | `R37_ALL_BOARD_DIRECTION_IMPLEMENTATION.md` | 四条方向链的日结算合同、运行对象实时口径与全板块长周期验证 | ✅ 已实现并自动验证；待真实试玩 |
+| 24 | `R38_MAP_FIRST_EARLY_CAMPAIGN_PLAN.md` | 3D 星球主界面、文案修订、科研风险口径与前十年渐进式战役计划 | 🚧 实施中 |
+| 25 | `R38_GEOGRAPHIC_FACTS_IMPLEMENTATION.md` | 工程候选地、施工/投用设施与 Nation Kernel 位置继承合同 | ✅ 已实现并验证 |
 | 13 | `GALACTIC_FEDERATION_ERA_EXPANSION.md` | 1850—2250年：银河大统合联邦补全 | ✅ 完成 |
 | 14 | `TERMINUS_WAR_ERA_EXPANSION.md` | 2250—2450年：天灾与终局补全 | ✅ 完成 |
 | 15 | `CAMPAIGN_CHRONICLE.md` | **统合政府编年史与玩家战略框架**：单一主权、玩家操作、国家能力、全阶段主线 | ✅ 完成（最高层约束） |

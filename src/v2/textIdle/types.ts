@@ -94,6 +94,21 @@ export interface TextRouteFact {
   discoveredOn: number;
 }
 
+/**
+ * A built project is a persistent world fact. Its coordinate reference must come
+ * from a surveyed site or the already-known settlement, never from a UI layout.
+ */
+export interface TextFacilityFact {
+  id: string;
+  projectId: TextProjectId;
+  coordinateRef: string;
+  sourceDiscoveryId?: TextDiscoveryId;
+  mapClass: string;
+  status: 'building' | 'operating';
+  startedOn: number;
+  operationalOn?: number;
+}
+
 export interface TextExplorationTarget {
   id: TextExplorationTargetId;
   direction: string;
@@ -199,7 +214,7 @@ export interface TextReport {
 }
 
 export interface TextIdleState {
-  version: 8;
+  version: 9;
   /** Scenario presentation/geometry source; capability contracts remain shared. */
   campaignTemplateId: string;
   seed: number;
@@ -215,6 +230,7 @@ export interface TextIdleState {
   discoveries: TextDiscovery[];
   pendingPopulation: TextPendingPopulation[];
   routeFacts: TextRouteFact[];
+  facilityFacts: TextFacilityFact[];
   failure: TextFailureState;
   developmentStage: TextDevelopmentStage;
   dailyLedger: TextDailyLedger;

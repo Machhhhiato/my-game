@@ -18,6 +18,106 @@ export interface CivilizationSystemsPreset {
   globalUnification?: Partial<CivilizationSystemsState['globalUnification']>;
 }
 
+/**
+ * R37 second-pass contract: a direction changes the daily resolution of
+ * existing industrial facts; it is never stored as a free permanent stat.
+ */
+export interface IndustrialLogisticsDirectionRuntime {
+  productionOutputMultiplier: number; productionEfficiencyGainMultiplier: number; productionEfficiencyCapBonus: number; productionRampMultiplier: number;
+  equipmentWearMultiplier: number; replenishmentMultiplier: number; campaignEffectivenessMultiplier: number; campaignLossMultiplier: number;
+  logisticsCapacityMultiplier: number; logisticsResilienceBonus: number; logisticsDisruptionMultiplier: number; militarySupplyDemandMultiplier: number; civilianAvailabilityBonus: number;
+}
+
+export function industrialLogisticsDirectionRuntime(state: NationKernelState): IndustrialLogisticsDirectionRuntime {
+  const selected = state.civilizationSystems?.strategicDirections;
+  const runtime: IndustrialLogisticsDirectionRuntime = { productionOutputMultiplier: 1, productionEfficiencyGainMultiplier: 1, productionEfficiencyCapBonus: 0, productionRampMultiplier: 1, equipmentWearMultiplier: 1, replenishmentMultiplier: 1, campaignEffectivenessMultiplier: 1, campaignLossMultiplier: 1, logisticsCapacityMultiplier: 1, logisticsResilienceBonus: 0, logisticsDisruptionMultiplier: 1, militarySupplyDemandMultiplier: 1, civilianAvailabilityBonus: 0 };
+  switch (selected?.industry.selectedOptionId) {
+    case 'direction.industry.1': runtime.productionOutputMultiplier *= 1.12; runtime.productionEfficiencyCapBonus += .04; break;
+    case 'direction.industry.2': runtime.productionOutputMultiplier *= .98; runtime.productionEfficiencyGainMultiplier *= 1.25; runtime.productionRampMultiplier *= 1.25; break;
+    case 'direction.industry.3': runtime.productionOutputMultiplier *= 1.05; runtime.productionEfficiencyGainMultiplier *= 1.08; break;
+    case 'direction.industry.4': runtime.productionOutputMultiplier *= .96; runtime.equipmentWearMultiplier *= .88; runtime.civilianAvailabilityBonus += 2; break;
+  }
+  switch (selected?.equipment.selectedOptionId) {
+    case 'direction.equipment.1': runtime.campaignEffectivenessMultiplier *= 1.08; runtime.equipmentWearMultiplier *= 1.15; break;
+    case 'direction.equipment.2': runtime.equipmentWearMultiplier *= .72; runtime.replenishmentMultiplier *= 1.20; break;
+    case 'direction.equipment.3': runtime.productionEfficiencyGainMultiplier *= 1.20; runtime.productionRampMultiplier *= 1.15; break;
+    case 'direction.equipment.4': runtime.campaignEffectivenessMultiplier *= .94; runtime.campaignLossMultiplier *= .78; runtime.civilianAvailabilityBonus += 1; break;
+  }
+  switch (selected?.logistics.selectedOptionId) {
+    case 'direction.logistics.1': runtime.logisticsCapacityMultiplier *= 1.14; runtime.logisticsResilienceBonus -= 8; break;
+    case 'direction.logistics.2': runtime.logisticsCapacityMultiplier *= .97; runtime.logisticsResilienceBonus += 16; runtime.logisticsDisruptionMultiplier *= .70; break;
+    case 'direction.logistics.3': runtime.logisticsCapacityMultiplier *= 1.08; runtime.logisticsResilienceBonus -= 4; break;
+    case 'direction.logistics.4': runtime.logisticsCapacityMultiplier *= .94; runtime.militarySupplyDemandMultiplier *= .88; runtime.civilianAvailabilityBonus += 3; break;
+  }
+  return runtime;
+}
+
+export function industrialLogisticsDirectionExplanation(state: NationKernelState, domain: 'industry' | 'equipment' | 'logistics'): string | null {
+  const selected = state.civilizationSystems?.strategicDirections[domain]?.selectedOptionId;
+  const explanations: Record<string, string> = {
+    'direction.industry.1': '已接入日结算：成熟产线提高峰值产量与效率上限，但物流主轴更脆弱。',
+    'direction.industry.2': '已接入日结算：产线换型、爬坡与效率恢复更快，稳定量产峰值略低。',
+    'direction.industry.3': '已接入日结算：高绩效订单提高产出与学习速度，仍依赖现有工厂和库存。',
+    'direction.industry.4': '已接入日结算：维护磨损更低、民用供应更稳，但单日峰值产量下降。',
+    'direction.equipment.1': '已接入日结算：进攻效能提高，同时把更多维护负担压到现有装备链。',
+    'direction.equipment.2': '已接入日结算：装备磨损降低，库存会更快补回优先编制。',
+    'direction.equipment.3': '已接入日结算：设计反馈加快产线爬坡与效率学习，不凭空生成库存。',
+    'direction.equipment.4': '已接入日结算：降低己方战役损失，代价是较低的进攻效能。',
+    'direction.logistics.1': '已接入日结算：主干有效运力提高，但受中断时的韧性下降。',
+    'direction.logistics.2': '已接入日结算：保留备用路径，降低中断损失，峰值运力略低。',
+    'direction.logistics.3': '已接入日结算：和平期有效运力提高，但冗余与危机控制较弱。',
+    'direction.logistics.4': '已接入日结算：优先保障民生，降低军用补给占用，但攻势运力较少。',
+  };
+  return selected == null ? null : explanations[selected] ?? null;
+}
+
+interface GovernanceDirectionRuntime {
+  civilianAvailabilityBonus: number; healthAccessDrift: number; householdBurdenDrift: number; workforceDrift: number;
+  legitimacyDrift: number; complianceDrift: number; polarizationDrift: number; factionConvergenceMultiplier: number;
+  situationResponseMultiplier: number; situationPressureDrift: number;
+  reconstructionMultiplier: number; serviceGrowthMultiplier: number; registryGrowthMultiplier: number; trustGrowthMultiplier: number; resistanceDrift: number;
+  institutionDrift: number; integrationMultiplier: number; infrastructureDrift: number; debtDrift: number; inflationDrift: number;
+}
+
+function governanceDirectionRuntime(state: NationKernelState): GovernanceDirectionRuntime {
+  const selected = state.civilizationSystems?.strategicDirections;
+  const runtime: GovernanceDirectionRuntime = { civilianAvailabilityBonus: 0, healthAccessDrift: 0, householdBurdenDrift: 0, workforceDrift: 0, legitimacyDrift: 0, complianceDrift: 0, polarizationDrift: 0, factionConvergenceMultiplier: 1, situationResponseMultiplier: 1, situationPressureDrift: 0, reconstructionMultiplier: 1, serviceGrowthMultiplier: 1, registryGrowthMultiplier: 1, trustGrowthMultiplier: 1, resistanceDrift: 0, institutionDrift: 0, integrationMultiplier: 1, infrastructureDrift: 0, debtDrift: 0, inflationDrift: 0 };
+  const variant = (domain: StrategicDirectionDomain) => selected?.[domain].selectedOptionId?.slice(-1);
+  switch (variant('nation')) { case '1': runtime.complianceDrift += .0018; runtime.institutionDrift += .0012; runtime.resistanceDrift += .0008; break; case '2': runtime.complianceDrift += .0010; runtime.trustGrowthMultiplier *= 1.12; runtime.integrationMultiplier *= 1.10; break; case '3': runtime.infrastructureDrift += .0010; runtime.civilianAvailabilityBonus -= 1; runtime.polarizationDrift += .0006; break; case '4': runtime.civilianAvailabilityBonus += 2; runtime.legitimacyDrift += .0010; runtime.integrationMultiplier *= .94; break; }
+  switch (variant('politics')) { case '1': runtime.complianceDrift += .0025; runtime.legitimacyDrift -= .0012; runtime.polarizationDrift += .0015; break; case '2': runtime.factionConvergenceMultiplier *= 1.35; runtime.complianceDrift += .0010; break; case '3': runtime.infrastructureDrift += .0012; runtime.factionConvergenceMultiplier *= .92; runtime.polarizationDrift += .0008; break; case '4': runtime.legitimacyDrift += .0020; runtime.situationResponseMultiplier *= .90; break; }
+  switch (variant('society')) { case '1': runtime.workforceDrift += .0012; runtime.householdBurdenDrift += .0022; runtime.civilianAvailabilityBonus -= 2; break; case '2': runtime.healthAccessDrift += .0020; runtime.householdBurdenDrift -= .0022; runtime.integrationMultiplier *= 1.05; break; case '3': runtime.workforceDrift += .0018; runtime.householdBurdenDrift += .0008; runtime.polarizationDrift += .0008; break; case '4': runtime.civilianAvailabilityBonus += 3; runtime.healthAccessDrift += .0028; runtime.householdBurdenDrift -= .0014; runtime.debtDrift += .0012; break; }
+  switch (variant('events')) { case '1': runtime.situationResponseMultiplier *= 1.25; runtime.situationPressureDrift += .0010; break; case '2': runtime.situationResponseMultiplier *= .92; runtime.situationPressureDrift -= .0014; runtime.complianceDrift += .0008; break; case '3': runtime.situationResponseMultiplier *= 1.08; runtime.debtDrift += .0010; runtime.polarizationDrift += .0008; break; case '4': runtime.situationResponseMultiplier *= .88; runtime.legitimacyDrift += .0014; runtime.situationPressureDrift -= .0010; break; }
+  switch (variant('economy')) { case '1': runtime.civilianAvailabilityBonus += 1; runtime.inflationDrift += .0014; runtime.complianceDrift += .0006; break; case '2': runtime.infrastructureDrift += .0012; runtime.reconstructionMultiplier *= .96; runtime.inflationDrift += .0006; break; case '3': runtime.civilianAvailabilityBonus += 1; runtime.polarizationDrift += .0010; runtime.integrationMultiplier *= .96; break; case '4': runtime.civilianAvailabilityBonus += 3; runtime.debtDrift += .0018; runtime.inflationDrift += .0008; break; }
+  switch (variant('construction')) { case '1': runtime.reconstructionMultiplier *= 1.16; runtime.infrastructureDrift += .0015; runtime.trustGrowthMultiplier *= .92; break; case '2': runtime.reconstructionMultiplier *= .98; runtime.serviceGrowthMultiplier *= 1.18; runtime.infrastructureDrift += .0010; break; case '3': runtime.reconstructionMultiplier *= 1.08; runtime.serviceGrowthMultiplier *= 1.06; runtime.debtDrift += .0010; break; case '4': runtime.serviceGrowthMultiplier *= 1.20; runtime.healthAccessDrift += .0012; runtime.reconstructionMultiplier *= .96; break; }
+  switch (variant('regions')) { case '1': runtime.registryGrowthMultiplier *= 1.32; runtime.complianceDrift += .0016; runtime.resistanceDrift += .0014; break; case '2': runtime.trustGrowthMultiplier *= 1.30; runtime.resistanceDrift -= .0018; runtime.registryGrowthMultiplier *= .92; break; case '3': runtime.reconstructionMultiplier *= 1.12; runtime.integrationMultiplier *= .94; runtime.polarizationDrift += .0010; break; case '4': runtime.serviceGrowthMultiplier *= 1.26; runtime.trustGrowthMultiplier *= 1.16; runtime.integrationMultiplier *= 1.12; runtime.debtDrift += .0014; break; }
+  return runtime;
+}
+
+interface ExternalDirectionRuntime {
+  researchSpeedMultiplier: number; projectSpeedMultiplier: number; campaignIntelligenceBonus: number; campaignEffectivenessMultiplier: number; campaignLossMultiplier: number;
+  negotiationAcceptanceDrift: number; negotiationCredibilityDrift: number; cooperationProgressMultiplier: number;
+  maritimeSecurityDrift: number; escortEffectivenessMultiplier: number; airReadinessDrift: number; airDefenseMultiplier: number;
+  satelliteCoverageMultiplier: number; satelliteReliabilityDrift: number; institutionDrift: number; recognitionDrift: number; ledgerRetentionDays: number;
+}
+
+export function externalDirectionRuntime(state: NationKernelState): ExternalDirectionRuntime {
+  const selected = state.civilizationSystems?.strategicDirections;
+  const runtime: ExternalDirectionRuntime = { researchSpeedMultiplier: 1, projectSpeedMultiplier: 1, campaignIntelligenceBonus: 0, campaignEffectivenessMultiplier: 1, campaignLossMultiplier: 1, negotiationAcceptanceDrift: 0, negotiationCredibilityDrift: 0, cooperationProgressMultiplier: 1, maritimeSecurityDrift: 0, escortEffectivenessMultiplier: 1, airReadinessDrift: 0, airDefenseMultiplier: 1, satelliteCoverageMultiplier: 1, satelliteReliabilityDrift: 0, institutionDrift: 0, recognitionDrift: 0, ledgerRetentionDays: 360 };
+  const variant = (domain: StrategicDirectionDomain) => selected?.[domain].selectedOptionId?.slice(-1);
+  switch (variant('research')) { case '1': runtime.researchSpeedMultiplier *= 1.24; runtime.projectSpeedMultiplier *= 1.08; break; case '2': runtime.researchSpeedMultiplier *= .98; runtime.cooperationProgressMultiplier *= 1.15; break; case '3': runtime.researchSpeedMultiplier *= 1.12; runtime.projectSpeedMultiplier *= 1.16; break; case '4': runtime.researchSpeedMultiplier *= .94; runtime.institutionDrift += .0008; runtime.ledgerRetentionDays = 540; break; }
+  switch (variant('diplomacy')) { case '1': runtime.negotiationAcceptanceDrift += .045; runtime.negotiationCredibilityDrift -= .008; break; case '2': runtime.negotiationAcceptanceDrift += .026; runtime.cooperationProgressMultiplier *= 1.15; runtime.institutionDrift += .0008; break; case '3': runtime.negotiationAcceptanceDrift += .018; runtime.recognitionDrift += .0006; break; case '4': runtime.negotiationAcceptanceDrift += .012; runtime.recognitionDrift += .0016; runtime.campaignEffectivenessMultiplier *= .96; break; }
+  switch (variant('intelligence')) { case '1': runtime.campaignIntelligenceBonus += 9; runtime.negotiationCredibilityDrift += .010; break; case '2': runtime.campaignIntelligenceBonus += 6; runtime.negotiationCredibilityDrift += .016; break; case '3': runtime.campaignIntelligenceBonus += 7; runtime.negotiationAcceptanceDrift += .008; break; case '4': runtime.campaignIntelligenceBonus += 4; runtime.campaignLossMultiplier *= .94; break; }
+  switch (variant('military')) { case '1': runtime.campaignEffectivenessMultiplier *= 1.10; runtime.campaignLossMultiplier *= 1.12; break; case '2': runtime.campaignEffectivenessMultiplier *= .96; runtime.campaignLossMultiplier *= .84; break; case '3': runtime.campaignEffectivenessMultiplier *= 1.04; runtime.campaignLossMultiplier *= .96; break; case '4': runtime.campaignEffectivenessMultiplier *= .92; runtime.campaignLossMultiplier *= .82; runtime.recognitionDrift += .0006; break; }
+  switch (variant('army')) { case '1': runtime.campaignEffectivenessMultiplier *= 1.08; runtime.campaignLossMultiplier *= 1.10; break; case '2': runtime.campaignEffectivenessMultiplier *= .97; runtime.campaignLossMultiplier *= .86; break; case '3': runtime.campaignEffectivenessMultiplier *= 1.04; runtime.campaignLossMultiplier *= .98; break; case '4': runtime.campaignEffectivenessMultiplier *= .92; runtime.campaignLossMultiplier *= .80; break; }
+  switch (variant('navy')) { case '1': runtime.escortEffectivenessMultiplier *= 1.06; runtime.maritimeSecurityDrift += .0010; break; case '2': runtime.escortEffectivenessMultiplier *= 1.20; runtime.maritimeSecurityDrift += .0018; break; case '3': runtime.maritimeSecurityDrift += .0006; runtime.cooperationProgressMultiplier *= 1.05; break; case '4': runtime.maritimeSecurityDrift += .0014; runtime.recognitionDrift += .0010; break; }
+  switch (variant('air')) { case '1': runtime.campaignEffectivenessMultiplier *= 1.07; runtime.airReadinessDrift -= .0010; break; case '2': runtime.airDefenseMultiplier *= 1.18; runtime.campaignLossMultiplier *= .90; break; case '3': runtime.airReadinessDrift += .0014; runtime.campaignEffectivenessMultiplier *= 1.02; break; case '4': runtime.airReadinessDrift += .0020; runtime.campaignLossMultiplier *= .92; break; }
+  switch (variant('space')) { case '1': runtime.satelliteCoverageMultiplier *= 1.12; runtime.satelliteReliabilityDrift -= .0008; break; case '2': runtime.satelliteCoverageMultiplier *= 1.20; runtime.satelliteReliabilityDrift += .0010; break; case '3': runtime.satelliteCoverageMultiplier *= 1.10; runtime.cooperationProgressMultiplier *= 1.06; break; case '4': runtime.satelliteCoverageMultiplier *= 1.08; runtime.cooperationProgressMultiplier *= 1.18; runtime.recognitionDrift += .0008; break; }
+  switch (variant('war')) { case '1': runtime.campaignEffectivenessMultiplier *= 1.08; runtime.campaignLossMultiplier *= 1.14; runtime.negotiationAcceptanceDrift -= .012; break; case '2': runtime.campaignEffectivenessMultiplier *= .98; runtime.campaignLossMultiplier *= .88; runtime.negotiationAcceptanceDrift += .016; break; case '3': runtime.campaignEffectivenessMultiplier *= 1.01; runtime.campaignLossMultiplier *= .94; runtime.negotiationAcceptanceDrift += .010; break; case '4': runtime.campaignEffectivenessMultiplier *= .92; runtime.campaignLossMultiplier *= .78; runtime.negotiationAcceptanceDrift += .024; break; }
+  switch (variant('global')) { case '1': runtime.institutionDrift += .0010; runtime.recognitionDrift -= .0004; break; case '2': runtime.institutionDrift += .0016; runtime.recognitionDrift += .0010; runtime.cooperationProgressMultiplier *= 1.10; break; case '3': runtime.recognitionDrift += .0008; runtime.projectSpeedMultiplier *= 1.06; break; case '4': runtime.institutionDrift += .0014; runtime.recognitionDrift += .0016; runtime.cooperationProgressMultiplier *= 1.12; break; }
+  switch (variant('archive')) { case '1': runtime.ledgerRetentionDays = 300; runtime.institutionDrift += .0006; break; case '2': runtime.ledgerRetentionDays = 540; runtime.recognitionDrift += .0006; break; case '3': runtime.ledgerRetentionDays = 480; runtime.projectSpeedMultiplier *= 1.03; break; case '4': runtime.ledgerRetentionDays = 600; runtime.institutionDrift += .0012; runtime.negotiationCredibilityDrift += .006; break; }
+  return runtime;
+}
+
 export function installCivilizationSystems(state: NationKernelState, preset: CivilizationSystemsPreset = {}): NationKernelState {
   if (state.civilizationSystems != null) return state;
   const next = clone(state); const population = next.polities[next.playerPolityId]?.population.residents ?? 0;
@@ -180,38 +280,42 @@ function applyCampaignEquipmentLoss(state: NationKernelState, ids: KernelId[], l
   for (const id of ids) { const formation = state.formations[id]; if (formation == null) continue; for (const item of formation.equipment) item.delivered = round(clamp((item.delivered ?? item.required) - item.required * lossRatio, 0, item.required)); const delivered = formation.equipment.reduce((sum, item) => sum + (item.delivered ?? item.required), 0); const required = formation.equipment.reduce((sum, item) => sum + item.required, 0); formation.equipmentReadiness = required === 0 ? 100 : round(delivered / required * 100, 1); }
 }
 
-function advanceMaritimeAerospaceAndSpace(systems: CivilizationSystemsState): void {
+function advanceMaritimeAerospaceAndSpace(state: NationKernelState, systems: CivilizationSystemsState): void {
+  const direction = externalDirectionRuntime(state);
   const maritime = systems.maritime; const aerospace = systems.aerospace; const satellites = systems.satellites;
-  const convoyLossTarget = clamp((maritime.blockadePressure - maritime.escortCapacity * 1.4 - aerospace.airSuperiority * 0.25) * 0.12);
-  maritime.convoyLossRate = round(clamp(maritime.convoyLossRate + (convoyLossTarget - maritime.convoyLossRate) * 0.15)); maritime.routeSecurity = round(clamp(maritime.routeSecurity + (50 + maritime.escortCapacity * 1.2 + maritime.navalReadiness * 0.25 - maritime.blockadePressure - maritime.routeSecurity) * 0.08));
-  const airTarget = clamp(aerospace.combatAircraft * aerospace.aircraftReadiness / 100 * aerospace.fuelAvailability / 100 * 1.35 + satellites.reconnaissanceSatellites * satellites.reliability / 100 * 1.2);
-  aerospace.airSuperiority = round(clamp(aerospace.airSuperiority + (airTarget - aerospace.airSuperiority) * 0.12)); aerospace.strategicStrikeRisk = round(clamp(aerospace.missileStockpile * aerospace.missileReliability / 100 * 0.35));
-  const satelliteCount = satellites.reconnaissanceSatellites + satellites.communicationSatellites + satellites.weatherSatellites; const coverageTarget = clamp(satelliteCount * 18 * satellites.reliability / 100 * Math.min(1, satellites.groundStationCapacity / 50)); satellites.orbitalCoverage = round(clamp(satellites.orbitalCoverage + (coverageTarget - satellites.orbitalCoverage) * 0.1));
+  const convoyLossTarget = clamp((maritime.blockadePressure - maritime.escortCapacity * 1.4 * direction.escortEffectivenessMultiplier - aerospace.airSuperiority * .25) * .12);
+  maritime.convoyLossRate = round(clamp(maritime.convoyLossRate + (convoyLossTarget - maritime.convoyLossRate) * .15)); maritime.routeSecurity = round(clamp(maritime.routeSecurity + (50 + maritime.escortCapacity * 1.2 * direction.escortEffectivenessMultiplier + maritime.navalReadiness * .25 - maritime.blockadePressure - maritime.routeSecurity) * .08 + direction.maritimeSecurityDrift));
+  aerospace.aircraftReadiness = round(clamp(aerospace.aircraftReadiness + direction.airReadinessDrift)); const airTarget = clamp(aerospace.combatAircraft * aerospace.aircraftReadiness / 100 * aerospace.fuelAvailability / 100 * 1.35 + satellites.reconnaissanceSatellites * satellites.reliability / 100 * 1.2);
+  aerospace.airSuperiority = round(clamp(aerospace.airSuperiority + (airTarget - aerospace.airSuperiority) * .12)); aerospace.strategicStrikeRisk = round(clamp(aerospace.missileStockpile * aerospace.missileReliability / 100 * .35)); satellites.reliability = round(clamp(satellites.reliability + direction.satelliteReliabilityDrift));
+  const satelliteCount = satellites.reconnaissanceSatellites + satellites.communicationSatellites + satellites.weatherSatellites; const coverageTarget = clamp(satelliteCount * 18 * satellites.reliability / 100 * Math.min(1, satellites.groundStationCapacity / 50) * direction.satelliteCoverageMultiplier); satellites.orbitalCoverage = round(clamp(satellites.orbitalCoverage + (coverageTarget - satellites.orbitalCoverage) * .1));
 }
 
-function advanceLogistics(systems: CivilizationSystemsState): void {
+function advanceLogistics(state: NationKernelState, systems: CivilizationSystemsState): void {
+  const direction = industrialLogisticsDirectionRuntime(state);
   const maritime = Math.min(systems.maritime.merchantShipping, systems.maritime.portCapacity) * systems.maritime.routeSecurity / 100 * (1 - systems.maritime.convoyLossRate / 100);
   systems.logistics.maritimeThroughput = round(maritime);
   systems.logistics.airliftCapacity = round(systems.aerospace.transportAircraft * systems.aerospace.aircraftReadiness / 100 * systems.aerospace.fuelAvailability / 100 * 0.4);
-  const raw = systems.logistics.freightCapacity + systems.logistics.maritimeThroughput + systems.logistics.airliftCapacity;
-  const resilience = 0.7 + systems.logistics.redundancy / 100 * 0.3;
+  const raw = (systems.logistics.freightCapacity + systems.logistics.maritimeThroughput + systems.logistics.airliftCapacity) * direction.logisticsCapacityMultiplier;
+  const resilience = 0.7 + clamp(systems.logistics.redundancy + direction.logisticsResilienceBonus) / 100 * 0.3;
   const satelliteCoordination = 1 + systems.satellites.communicationSatellites * systems.satellites.reliability / 100 * 0.005;
-  systems.logistics.effectiveCapacity = round(raw * resilience * (1 - systems.logistics.disruption / 100) * satelliteCoordination);
+  systems.logistics.effectiveCapacity = round(raw * resilience * (1 - systems.logistics.disruption * direction.logisticsDisruptionMultiplier / 100) * satelliteCoordination);
   systems.logistics.bottleneck = round(Math.max(0, systems.logistics.militaryDemand + systems.logistics.civilianDemand - systems.logistics.effectiveCapacity));
 }
 
 function advanceCampaigns(state: NationKernelState, systems: CivilizationSystemsState): void {
+  const direction = industrialLogisticsDirectionRuntime(state);
+  const external = externalDirectionRuntime(state);
   for (const campaign of Object.values(systems.campaigns)) {
     if (campaign.status !== 'active') continue; campaign.elapsedDays += 1;
-    const supplyCoverage = clamp(systems.logistics.effectiveCapacity / Math.max(1, systems.logistics.militaryDemand + campaign.supplyDemand), 0, 1.2);
+    const supplyCoverage = clamp(systems.logistics.effectiveCapacity / Math.max(1, systems.logistics.militaryDemand * direction.militarySupplyDemandMultiplier + campaign.supplyDemand), 0, 1.2);
     const satelliteIntel = systems.satellites.reconnaissanceSatellites * systems.satellites.reliability / 100 * 2;
-    const intelligence = clamp(campaign.intelligence + satelliteIntel, 0, 100) / 100;
+    const intelligence = clamp(campaign.intelligence + satelliteIntel + external.campaignIntelligenceBonus, 0, 100) / 100;
     const airAdvantage = 1 + systems.aerospace.airSuperiority / 500;
-    const attacker = formationPower(state, campaign.attackerFormationIds, true) * supplyCoverage * (0.8 + intelligence * 0.2) * airAdvantage;
-    const defender = formationPower(state, campaign.defenderFormationIds, false) * (0.8 + campaign.defenderDepth / 250) * (1 + systems.aerospace.airDefense / 600);
+    const attacker = formationPower(state, campaign.attackerFormationIds, true) * supplyCoverage * (.8 + intelligence * .2) * airAdvantage * direction.campaignEffectivenessMultiplier * external.campaignEffectivenessMultiplier;
+    const defender = formationPower(state, campaign.defenderFormationIds, false) * (.8 + campaign.defenderDepth / 250) * (1 + systems.aerospace.airDefense * external.airDefenseMultiplier / 600);
     const balance = (attacker - defender) / Math.max(1, attacker + defender); const beforeControl = campaign.control;
     campaign.control = round(clamp(campaign.control + balance * (campaign.objective === 'limitedAdvance' ? 2.2 : 1.4), 0, 100));
-    const intensity = 0.001 + Math.abs(balance) * 0.002; const attackerLoss = intensity * (defender / Math.max(1, attacker)); const defenderLoss = intensity * (attacker / Math.max(1, defender));
+    const intensity = .001 + Math.abs(balance) * .002; const attackerLoss = intensity * (defender / Math.max(1, attacker)) * direction.campaignLossMultiplier * external.campaignLossMultiplier; const defenderLoss = intensity * (attacker / Math.max(1, defender));
     applyCampaignEquipmentLoss(state, campaign.attackerFormationIds, attackerLoss); applyCampaignEquipmentLoss(state, campaign.defenderFormationIds, defenderLoss);
     campaign.attackerPersonnelLosses = round(campaign.attackerPersonnelLosses + attackerLoss * campaign.attackerFormationIds.reduce((sum, id) => sum + (state.formations[id]?.personnel ?? 0), 0));
     campaign.defenderPersonnelLosses = round(campaign.defenderPersonnelLosses + defenderLoss * campaign.defenderFormationIds.reduce((sum, id) => sum + (state.formations[id]?.personnel ?? 0), 0));
@@ -225,25 +329,27 @@ function advanceCampaigns(state: NationKernelState, systems: CivilizationSystems
 }
 
 function advanceDiplomacy(state: NationKernelState, systems: CivilizationSystemsState): void {
+  const direction = externalDirectionRuntime(state);
   const activeCampaigns = Object.values(systems.campaigns).filter((campaign) => campaign.status === 'active' || campaign.status === 'stalemate');
   for (const negotiation of Object.values(systems.negotiations)) {
     if (negotiation.status !== 'active' && negotiation.status !== 'proposed') continue; const issue = systems.diplomaticIssues[negotiation.issueId]; if (issue == null) continue;
     const campaign = activeCampaigns.find((item) => issue.actorIds.includes(item.attackerPolityId) && issue.actorIds.includes(item.defenderPolityId)); const exhaustion = campaign == null ? 0 : (campaign.attackerExhaustion + campaign.defenderExhaustion) / 2;
-    negotiation.militaryLeverage = round(clamp(negotiation.militaryLeverage + (campaign == null ? 0 : (campaign.control - 50) * 0.03)));
-    negotiation.acceptance = round(clamp(50 + negotiation.concessionValue + negotiation.economicPressure * 0.3 + negotiation.credibility * 0.2 + negotiation.militaryLeverage * 0.4 + exhaustion * 0.25 - negotiation.demandLevel - issue.importance * 0.35));
+    negotiation.militaryLeverage = round(clamp(negotiation.militaryLeverage + (campaign == null ? 0 : (campaign.control - 50) * .03))); negotiation.credibility = round(clamp(negotiation.credibility + direction.negotiationCredibilityDrift));
+    negotiation.acceptance = round(clamp(50 + negotiation.concessionValue + negotiation.economicPressure * .3 + negotiation.credibility * .2 + negotiation.militaryLeverage * .4 + exhaustion * .25 - negotiation.demandLevel - issue.importance * .35 + direction.negotiationAcceptanceDrift));
     negotiation.status = negotiation.acceptance >= 65 ? 'accepted' : negotiation.acceptance <= 10 && negotiation.demandLevel > 70 ? 'rejected' : 'active';
     if (negotiation.status === 'accepted') { const settlementId = `settlement.${negotiation.id}`; negotiation.settlementId = settlementId; issue.status = 'settled'; systems.settlements[settlementId] = { id: settlementId, issueId: issue.id, actorIds: issue.actorIds, ceasefire: true, withdrawal: clamp(100 - negotiation.demandLevel), routeAccess: clamp(negotiation.concessionValue), reparations: clamp(negotiation.demandLevel - 40), monitoring: clamp(negotiation.credibility), legitimacy: clamp(100 - negotiation.demandLevel + negotiation.concessionValue), status: 'active' }; record(state, negotiation.id, `negotiation:${negotiation.id}.status`, 'active', 'accepted', 'negotiation.accepted'); }
   }
 }
 
 function advanceOccupations(state: NationKernelState, systems: CivilizationSystemsState): void {
+  const direction = governanceDirectionRuntime(state);
   for (const occupation of Object.values(systems.occupations)) {
     if (occupation.status === 'integrated' || occupation.status === 'failed') continue; const logisticsCoverage = clamp(systems.logistics.effectiveCapacity / Math.max(1, systems.logistics.civilianDemand + occupation.serviceDemand), 0, 1);
-    const reconstruction = systems.economy.reconstructionShare * systems.economy.output * logisticsCoverage; const serviceGrowth = reconstruction * 0.014;
+    const reconstruction = systems.economy.reconstructionShare * systems.economy.output * logisticsCoverage * direction.reconstructionMultiplier; const serviceGrowth = reconstruction * .014 * direction.serviceGrowthMultiplier;
     occupation.security = round(clamp(occupation.security + occupation.coercion * 0.006 + occupation.localCooperation * 0.003 - occupation.resistance * 0.002));
-    occupation.services = round(clamp(occupation.services + serviceGrowth)); occupation.reconstruction = round(clamp(occupation.reconstruction + reconstruction * 0.004)); occupation.registry = round(clamp(occupation.registry + (occupation.services > 25 ? 0.22 : 0.04)));
-    occupation.justice = round(clamp(occupation.justice + (occupation.registry > 25 ? 0.14 : 0.02))); occupation.civilianTrust = round(clamp(occupation.civilianTrust + serviceGrowth * 0.5 + occupation.justice * 0.002 - occupation.coercion * 0.001));
-    occupation.resistance = round(clamp(occupation.resistance + occupation.coercion * 0.002 - occupation.civilianTrust * 0.004 - occupation.security * 0.001)); occupation.localCooperation = round(clamp(occupation.localCooperation + occupation.civilianTrust * 0.002 - occupation.coercion * 0.0015));
+    occupation.services = round(clamp(occupation.services + serviceGrowth)); occupation.reconstruction = round(clamp(occupation.reconstruction + reconstruction * 0.004)); occupation.registry = round(clamp(occupation.registry + (occupation.services > 25 ? .22 : .04) * direction.registryGrowthMultiplier));
+    occupation.justice = round(clamp(occupation.justice + (occupation.registry > 25 ? .14 : .02) * direction.registryGrowthMultiplier)); occupation.civilianTrust = round(clamp(occupation.civilianTrust + (serviceGrowth * .5 + occupation.justice * .002 - occupation.coercion * .001) * direction.trustGrowthMultiplier));
+    occupation.resistance = round(clamp(occupation.resistance + occupation.coercion * .002 - occupation.civilianTrust * .004 - occupation.security * .001 + direction.resistanceDrift)); occupation.localCooperation = round(clamp(occupation.localCooperation + occupation.civilianTrust * .002 - occupation.coercion * .0015));
     if (occupation.security > 45 && occupation.registry > 35 && occupation.services > 35) occupation.status = 'civilAdministration';
     if (occupation.security > 60 && occupation.registry > 60 && occupation.services > 60 && occupation.justice > 45 && occupation.civilianTrust > 55) { occupation.status = 'integrated'; occupation.fiscalIntegration = round(clamp(occupation.fiscalIntegration + 20)); }
     occupation.displacedPopulation = round(Math.max(0, occupation.displacedPopulation - reconstruction * 0.2)); occupation.dailyCost = round(occupation.garrisonDemand * systems.economy.militaryShare + occupation.serviceDemand * systems.economy.reconstructionShare);
@@ -251,17 +357,21 @@ function advanceOccupations(state: NationKernelState, systems: CivilizationSyste
 }
 
 function advanceEconomyAndSociety(state: NationKernelState, systems: CivilizationSystemsState): void {
+  const direction = industrialLogisticsDirectionRuntime(state);
+  const governance = governanceDirectionRuntime(state);
   const economy = systems.economy; const politics = systems.politics; const demographics = systems.demographics; const activeWars = Object.values(systems.campaigns).filter((campaign) => campaign.status === 'active').length;
-  const militaryDemand = systems.logistics.militaryDemand + activeWars * 12; const fundedMilitary = economy.output * economy.militaryShare; economy.debt = round(Math.max(0, economy.debt + (militaryDemand - fundedMilitary) * 0.02)); economy.inflationPressure = round(clamp(economy.inflationPressure + Math.max(0, economy.militaryShare - 0.25) * 0.08 - economy.civilianShare * 0.02));
-  economy.civilianAvailability = round(clamp(60 + economy.civilianShare * 80 - systems.logistics.bottleneck * 0.35 - economy.inflationPressure * 0.2)); economy.repairFunding = round(clamp(economy.reconstructionShare * 220 + economy.logisticsShare * 80));
-  politics.warSupport = round(clamp(politics.warSupport - systems.demographics.warCasualties * 0.0002 - activeWars * 0.015 + Math.max(0, 55 - systems.globalUnification.resistancePressure) * 0.001)); politics.protestPressure = round(clamp(politics.protestPressure + Math.max(0, 55 - economy.civilianAvailability) * 0.01 + economy.inflationPressure * 0.003)); politics.legitimacy = round(clamp(politics.legitimacy + (economy.civilianAvailability - 60) * 0.002 - politics.protestPressure * 0.001 - politics.emergencyPower * 0.0004));
-  politics.regionalCompliance = round(clamp(politics.regionalCompliance + (politics.legitimacy - 55) * 0.001 - politics.emergencyPower * 0.0006 - politics.polarization * 0.0003)); politics.eliteCohesion = round(clamp(politics.eliteCohesion + (politics.warSupport - 50) * 0.0008 - politics.polarization * 0.0004)); politics.polarization = round(clamp(politics.polarization + politics.emergencyPower * 0.0008 + Math.max(0, 60 - economy.civilianAvailability) * 0.002 - economy.civilianShare * 0.002));
-  const adjustedDeaths = demographics.deathsPerThousand * (1 + Math.max(0, 60 - demographics.healthAccess) / 100); const adjustedBirths = demographics.birthsPerThousand * (1 - demographics.householdBurden / 180); const annualNaturalRate = (adjustedBirths - adjustedDeaths) / 1000; demographics.population = round(Math.max(0, demographics.population + demographics.population * annualNaturalRate / 360 + demographics.migrationPerDay - demographics.warCasualties * 0.001)); demographics.healthAccess = round(clamp(demographics.healthAccess + (economy.civilianAvailability - 60) * 0.001 - systems.logistics.bottleneck * 0.002)); demographics.householdBurden = round(clamp(demographics.householdBurden + activeWars * 0.01 + demographics.displaced / Math.max(1, demographics.population) * 5 - economy.civilianShare * 0.01)); demographics.displaced = round(Math.max(0, demographics.displaced - economy.reconstructionShare * 16 * Math.max(0.2, 1 - systems.logistics.bottleneck / 100))); demographics.workforceParticipation = round(clamp(demographics.workforceParticipation + (demographics.healthAccess - 60) * 0.0005 - (demographics.householdBurden - 40) * 0.0004));
+  const militaryDemand = systems.logistics.militaryDemand + activeWars * 12; const fundedMilitary = economy.output * economy.militaryShare; economy.debt = round(Math.max(0, economy.debt + (militaryDemand - fundedMilitary) * .02 + governance.debtDrift)); economy.inflationPressure = round(clamp(economy.inflationPressure + Math.max(0, economy.militaryShare - .25) * .08 - economy.civilianShare * .02 + governance.inflationDrift));
+  economy.civilianAvailability = round(clamp(60 + economy.civilianShare * 80 - systems.logistics.bottleneck * .35 - economy.inflationPressure * .2 + direction.civilianAvailabilityBonus + governance.civilianAvailabilityBonus)); economy.repairFunding = round(clamp(economy.reconstructionShare * 220 + economy.logisticsShare * 80));
+  politics.warSupport = round(clamp(politics.warSupport - systems.demographics.warCasualties * .0002 - activeWars * .015 + Math.max(0, 55 - systems.globalUnification.resistancePressure) * .001)); politics.protestPressure = round(clamp(politics.protestPressure + Math.max(0, 55 - economy.civilianAvailability) * .01 + economy.inflationPressure * .003)); politics.legitimacy = round(clamp(politics.legitimacy + (economy.civilianAvailability - 60) * .002 - politics.protestPressure * .001 - politics.emergencyPower * .0004 + governance.legitimacyDrift));
+  politics.regionalCompliance = round(clamp(politics.regionalCompliance + (politics.legitimacy - 55) * .001 - politics.emergencyPower * .0006 - politics.polarization * .0003 + governance.complianceDrift)); politics.eliteCohesion = round(clamp(politics.eliteCohesion + (politics.warSupport - 50) * .0008 - politics.polarization * .0004)); politics.polarization = round(clamp(politics.polarization + politics.emergencyPower * .0008 + Math.max(0, 60 - economy.civilianAvailability) * .002 - economy.civilianShare * .002 + governance.polarizationDrift));
+  const adjustedDeaths = demographics.deathsPerThousand * (1 + Math.max(0, 60 - demographics.healthAccess) / 100); const adjustedBirths = demographics.birthsPerThousand * (1 - demographics.householdBurden / 180); const annualNaturalRate = (adjustedBirths - adjustedDeaths) / 1000; demographics.population = round(Math.max(0, demographics.population + demographics.population * annualNaturalRate / 360 + demographics.migrationPerDay - demographics.warCasualties * .001)); demographics.healthAccess = round(clamp(demographics.healthAccess + (economy.civilianAvailability - 60) * .001 - systems.logistics.bottleneck * .002 + governance.healthAccessDrift)); demographics.householdBurden = round(clamp(demographics.householdBurden + activeWars * .01 + demographics.displaced / Math.max(1, demographics.population) * 5 - economy.civilianShare * .01 + governance.householdBurdenDrift)); demographics.displaced = round(Math.max(0, demographics.displaced - economy.reconstructionShare * 16 * governance.reconstructionMultiplier * Math.max(.2, 1 - systems.logistics.bottleneck / 100))); demographics.workforceParticipation = round(clamp(demographics.workforceParticipation + (demographics.healthAccess - 60) * .0005 - (demographics.householdBurden - 40) * .0004 + governance.workforceDrift));
 }
 
-function advanceGlobalUnification(systems: CivilizationSystemsState): void {
+function advanceGlobalUnification(state: NationKernelState, systems: CivilizationSystemsState): void {
+  const direction = governanceDirectionRuntime(state);
+  const external = externalDirectionRuntime(state);
   const global = systems.globalUnification; const occupations = Object.values(systems.occupations); const integrated = occupations.filter((occupation) => occupation.status === 'integrated').length; const settlements = Object.values(systems.settlements).filter((settlement) => settlement.status === 'active').length;
-  global.commonInstitutionScore = round(clamp(global.commonInstitutionScore + settlements * 0.005 + systems.politics.regionalCompliance * 0.0005)); global.integratedPopulationRatio = round(clamp(global.integratedPopulationRatio + integrated * 0.0003, 0, 1), 5); global.controlledTerritoryRatio = round(clamp(global.controlledTerritoryRatio + integrated * 0.0002, 0, 1), 5); global.sharedInfrastructure = round(clamp(global.sharedInfrastructure + systems.logistics.redundancy * 0.0005 + systems.satellites.orbitalCoverage * 0.0002)); global.resistancePressure = round(clamp(global.resistancePressure + occupations.reduce((sum, occupation) => sum + occupation.resistance - occupation.civilianTrust, 0) * 0.0002));
+  global.commonInstitutionScore = round(clamp(global.commonInstitutionScore + settlements * .005 + systems.politics.regionalCompliance * .0005 + direction.institutionDrift + external.institutionDrift)); global.integratedPopulationRatio = round(clamp(global.integratedPopulationRatio + integrated * .0003 * direction.integrationMultiplier, 0, 1), 5); global.controlledTerritoryRatio = round(clamp(global.controlledTerritoryRatio + integrated * .0002 * direction.integrationMultiplier, 0, 1), 5); global.sharedInfrastructure = round(clamp(global.sharedInfrastructure + systems.logistics.redundancy * .0005 + systems.satellites.orbitalCoverage * .0002 + direction.infrastructureDrift)); global.externalRecognition = round(clamp(global.externalRecognition + external.recognitionDrift)); global.resistancePressure = round(clamp(global.resistancePressure + occupations.reduce((sum, occupation) => sum + occupation.resistance - occupation.civilianTrust, 0) * .0002));
   const fiscalSustainable = systems.economy.debt / Math.max(1, systems.economy.output) <= 1.2; const connected = systems.satellites.communicationSatellites >= 1 && systems.logistics.maritimeThroughput >= 10 && systems.logistics.airliftCapacity >= 2; const deterrence = systems.aerospace.missileStockpile >= 1 && systems.aerospace.missileReliability >= 50;
   const unionReady = global.independentBlocs <= 1 && global.controlledTerritoryRatio >= 0.85 && global.integratedPopulationRatio >= 0.8 && global.commonInstitutionScore >= 65 && global.resistancePressure <= 35 && systems.politics.legitimacy >= 55 && global.sharedInfrastructure >= 55 && fiscalSustainable && connected && deterrence;
   global.stage = unionReady ? 'globalUnion' : global.controlledTerritoryRatio >= 0.7 ? 'hegemonicSettlement' : global.commonInstitutionScore >= 40 ? 'contestedOrder' : 'fragmented';
@@ -277,14 +387,15 @@ function applyDevelopmentEffect(systems: CivilizationSystemsState, effect: impor
 }
 
 function advanceDevelopmentContent(state: NationKernelState, systems: CivilizationSystemsState): void {
+  const direction = externalDirectionRuntime(state);
   for (const technology of Object.values(systems.technologies)) {
     if (technology.status === 'locked' && technology.prerequisiteIds.every((id) => systems.technologies[id]?.status === 'completed')) technology.status = 'available';
-    if (technology.status !== 'researching') continue; technology.progress = round(Math.min(technology.workRequired, technology.progress + systems.economy.output * systems.economy.researchShare / 10));
+    if (technology.status !== 'researching') continue; technology.progress = round(Math.min(technology.workRequired, technology.progress + systems.economy.output * systems.economy.researchShare / 10 * direction.researchSpeedMultiplier));
     if (technology.progress < technology.workRequired) continue; technology.status = 'completed'; applyDevelopmentEffect(systems, technology.effects); record(state, technology.id, `technology:${technology.id}.status`, 'researching', 'completed', 'technology.research-completed');
   }
   for (const project of Object.values(systems.developmentProjects)) {
     if (project.status === 'locked' && project.requiredTechnologyIds.every((id) => systems.technologies[id]?.status === 'completed')) project.status = 'available';
-    if (project.status !== 'building') continue; project.progress = round(Math.min(project.workRequired, project.progress + systems.economy.output * systems.economy.reconstructionShare / 10));
+    if (project.status !== 'building') continue; project.progress = round(Math.min(project.workRequired, project.progress + systems.economy.output * systems.economy.reconstructionShare / 10 * direction.projectSpeedMultiplier));
     if (project.progress < project.workRequired) continue; project.status = 'completed'; applyDevelopmentEffect(systems, project.effects); record(state, project.id, `developmentProject:${project.id}.status`, 'building', 'completed', 'developmentProject.completed');
   }
   for (const policy of Object.values(systems.policies)) {
@@ -294,6 +405,8 @@ function advanceDevelopmentContent(state: NationKernelState, systems: Civilizati
 }
 
 function advancePoliticsEventsAndCooperation(state: NationKernelState, systems: CivilizationSystemsState): void {
+  const direction = governanceDirectionRuntime(state);
+  const external = externalDirectionRuntime(state);
   systems.identity.reformCooldownDays = Math.max(0, systems.identity.reformCooldownDays - 1);
   for (const direction of Object.values(systems.strategicDirections)) direction.revisionCooldownDays = Math.max(0, direction.revisionCooldownDays - 1);
   const civilian = systems.economy.civilianAvailability; const security = 100 - systems.globalUnification.resistancePressure;
@@ -304,19 +417,19 @@ function advancePoliticsEventsAndCooperation(state: NationKernelState, systems: 
     if (faction.id === 'faction.industry') target = (systems.economy.output + systems.logistics.effectiveCapacity) / 2;
     if (faction.id === 'faction.security') target = (systems.politics.warSupport + systems.aerospace.missileReliability) / 2;
     if (faction.id === 'faction.science') target = systems.economy.researchShare * 260 + systems.satellites.orbitalCoverage * .35;
-    faction.satisfaction = round(clamp(faction.satisfaction + (target - faction.satisfaction) * .004));
+    faction.satisfaction = round(clamp(faction.satisfaction + (target - faction.satisfaction) * .004 * direction.factionConvergenceMultiplier));
   }
   for (const situation of Object.values(systems.situations)) {
     if (situation.status !== 'developing' && situation.status !== 'critical') continue;
     const response = systems.economy.reconstructionShare * 70 + systems.politics.regionalCompliance * .18 + systems.globalUnification.commonInstitutionScore * .12;
-    situation.progress = round(clamp(situation.progress + Math.max(.02, response / 100)));
-    situation.pressure = round(clamp(situation.pressure + systems.globalUnification.resistancePressure * .003 - response * .002));
+    situation.progress = round(clamp(situation.progress + Math.max(.02, response / 100) * direction.situationResponseMultiplier));
+    situation.pressure = round(clamp(situation.pressure + systems.globalUnification.resistancePressure * .003 - response * .002 + direction.situationPressureDrift));
     situation.status = situation.progress >= 100 ? 'resolved' : situation.pressure >= 80 ? 'critical' : 'developing';
   }
   for (const project of Object.values(systems.cooperationProjects)) {
     if (project.status !== 'active') continue; const organization = systems.organizations[project.organizationId];
     const trustFactor = organization == null ? .5 : (organization.cohesion + organization.legitimacy) / 200;
-    project.progress = round(Math.min(project.requiredProgress, project.progress + (project.contribution + project.partnerContribution) * trustFactor / 100));
+    project.progress = round(Math.min(project.requiredProgress, project.progress + (project.contribution + project.partnerContribution) * trustFactor / 100 * external.cooperationProgressMultiplier));
     if (project.progress < project.requiredProgress) continue; project.status = 'completed';
     systems.globalUnification.externalRecognition = round(clamp(systems.globalUnification.externalRecognition + 6)); systems.globalUnification.commonInstitutionScore = round(clamp(systems.globalUnification.commonInstitutionScore + 5));
     if (project.kind === 'infrastructure' || project.kind === 'space') systems.globalUnification.sharedInfrastructure = round(clamp(systems.globalUnification.sharedInfrastructure + 7));
@@ -326,5 +439,5 @@ function advancePoliticsEventsAndCooperation(state: NationKernelState, systems: 
 }
 
 export function advanceCivilizationSystemsDay(state: NationKernelState): void {
-  const systems = state.civilizationSystems; if (systems == null) return; advanceMaritimeAerospaceAndSpace(systems); advanceLogistics(systems); advanceCampaigns(state, systems); advanceDiplomacy(state, systems); advanceOccupations(state, systems); advanceEconomyAndSociety(state, systems); advanceDevelopmentContent(state, systems); advancePoliticsEventsAndCooperation(state, systems); advanceGlobalUnification(systems);
+  const systems = state.civilizationSystems; if (systems == null) return; advanceMaritimeAerospaceAndSpace(state, systems); advanceLogistics(state, systems); advanceCampaigns(state, systems); advanceDiplomacy(state, systems); advanceOccupations(state, systems); advanceEconomyAndSociety(state, systems); advanceDevelopmentContent(state, systems); advancePoliticsEventsAndCooperation(state, systems); advanceGlobalUnification(state, systems); state.ledger = state.ledger.slice(-externalDirectionRuntime(state).ledgerRetentionDays);
 }
