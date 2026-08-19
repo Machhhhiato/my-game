@@ -1,6 +1,6 @@
 # 文档索引（供协作 AI 阅读）
 
-> **新会话入口**：先阅读 `AI_COLLABORATION_RULES.md`（跨终端提交共识）、`AI_CONTEXT.md`（项目总上下文）、`CURRENT_STATUS.md`（当前状态）、`DECISION_LOG.md`（已冻结决策）和 `IDEAS_POOL.md`（未冻结想法），再按任务阅读具体规格与代码。
+> **🚨 新会话最高优先级入口**：先阅读 `AI_COLLABORATION_RULES.md` 与 `AI_START_HERE_NEXT_SESSION.md`。后者记录 2026-08-19 产品联合审计、M0 前 90 日纵切、暂停范围、30 天路线与验收门槛。然后再读 `AI_CONTEXT.md`（项目总上下文）、`CURRENT_STATUS.md`（当前状态）、`DECISION_LOG.md`（已冻结决策）和 `IDEAS_POOL.md`（未冻结想法），再按任务阅读具体规格与代码。
 
 > **项目执行入口**：继续阅读 `STANDARDIZATION_AND_SCENARIO_SEPARATION.md`（系统与剧本分离的最高实现规则）、`SYSTEM_SKELETON_BLUEPRINT.md`（全系统对象与实施总图）、`PROJECT_MANAGEMENT.md`（协作规则）和 `PROJECT_ROADMAP.md`（阶段路线）。`AI_CONTEXT/` 目录保存更细的实施导航；代码当前实现不自动代表最新主设定，旧方案只作参考。
 

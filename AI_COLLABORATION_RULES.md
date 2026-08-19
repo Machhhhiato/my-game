@@ -61,7 +61,7 @@
 
 1. 先同步 GitHub 最新分支，且不得覆盖未提交本地修改。
 2. 阅读 `AGENTS.md` 和本文件。
-3. 按顺序阅读 `AI_CONTEXT.md`、`CURRENT_STATUS.md`、`DECISION_LOG.md`、`IDEAS_POOL.md`。
+3. 先阅读 `AI_START_HERE_NEXT_SESSION.md`，再按顺序阅读 `AI_CONTEXT.md`、`CURRENT_STATUS.md`、`DECISION_LOG.md`、`IDEAS_POOL.md`。
 4. 再读取与当前任务相关的冻结规格、R 系列记录和代码。
 5. 聊天记录用于补充推导过程；Git 中的文件才是可审计事实来源。
 

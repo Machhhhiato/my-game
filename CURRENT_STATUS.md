@@ -1,5 +1,7 @@
 # Always Game · 当前项目状态
 
+> **🚨 当前 P0 已收束：先阅读 `AI_START_HERE_NEXT_SESSION.md`。** 下一次会话先冻结“M0：余烬前 90 日可玩纵切”的一页产品契约；旧 R37/R38-D 待办暂缓，不再作为直接实施入口。本文中后续旧优先级保留为历史记录，冲突时以该新入口为准。
+>
 > 状态日期：2026-08-19
 > 当前提交以 `git log -1 --oneline` 与 `origin/main` 为准；R37第一轮功能基线为 `f13c98f feat: complete R37 unified nation framework`。
 > 本文件只记录状态和优先级；详细规则见 `AI_CONTEXT.md`，历史决定见 `DECISION_LOG.md`。
