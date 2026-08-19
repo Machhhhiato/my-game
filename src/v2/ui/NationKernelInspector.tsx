@@ -2,9 +2,17 @@ import { useMemo, useState } from 'react';
 import type { ReactElement } from 'react';
 import {
   advanceNationKernelDays,
+  assignProductionFactories,
   availableWorkforce,
+  createIndustrialStrategy,
+  createProductionLine,
+  damageIndustrialFacility,
   quantitiesForStage,
+  retoolProductionLine,
   scopeKey,
+  setIndustrialStrategy,
+  setFormationReplenishmentPriority,
+  setProductionLinePaused,
   startOperation,
 } from '../nationKernel';
 import {
@@ -13,6 +21,8 @@ import {
   createUnifiedNationSave,
 } from '../nationKernel/saveFixtures';
 import { diplomaticConflictOperationDefinitions } from '../nationKernel/diplomaticConflictContent';
+import { strategicAssetPresentation } from '../nationKernel/assetPresentation';
+import { R28_GROUND_CONTENT_PACKAGE } from '../nationKernel/r28GroundContent';
 import { unifiedNationOperationDefinitions } from '../nationKernel/unifiedNationContent';
 import type { NationSaveFixture } from '../nationKernel/saveFixtures';
 import type {
@@ -65,6 +75,9 @@ const capabilityLabels: Record<string, string> = {
   'capability.grid-dispatch': '跨区电网调度能力',
   'capability.safe-water-service': '城市供水标准能力',
   'capability.industrial-standard': '工业互换件能力',
+  'capability.r28b.interchangeable-production': '工业互换生产能力',
+  'capability.r28b.frontier-registry': '前沿人口与权利登记能力',
+  'capability.r28b.frontier-service-responsibility': '前沿公共服务责任',
   'capability.systems-survey': '国家设施普查能力',
   'capability.network-operations': '网络运行能力',
   'capability.freight-routing': '干线货运能力',
@@ -93,6 +106,8 @@ const facilityLabels: Record<string, string> = {
   'facility.central-baseload': '中央基础电站',
   'facility.north-workshops': '北部维修工坊',
   'facility.north-port-handling': '北部港口装卸设施',
+  'facility.r28b.military-assembly-works': '守备装备装配厂',
+  'facility.r28b.frontier-outpost': '前沿据点',
   'facility.coast-clinic': '海岸基层诊疗点',
   'facility.central-dispatch': '中央调度中心',
   'facility.coast-waterworks': '海岸净水厂',
@@ -112,10 +127,16 @@ const networkLabels: Record<string, string> = {
   'network.coastal-freight-corridor': '海岸货运走廊',
   'network.service-registry-relay': '区域服务登记链路',
   'network.coastal-sensor-net': '海岸传感网络',
+  'network.r28b.frontier-supply-link': '前沿补给接续线',
 };
 
 const statusLabels: Record<string, string> = { planned: '等待条件', active: '正在推进', completed: '已经完成', blocked: '暂时受阻', cancelled: '已经取消' };
-const kindLabels: Record<string, string> = { research: '科研', engineering: '工程', policy: '当前政策', military: '军事行动', diplomacy: '外交行动', survey: '调查', emergency: '应急行动' };
+const kindLabels: Record<string, string> = { research: '科研', design: '设计', production: '生产', engineering: '工程', policy: '当前政策', military: '军事行动', diplomacy: '外交行动', survey: '调查', emergency: '应急行动' };
+const operationLabels: Record<string, string> = {
+  'operation.r28b.guard-equipment-line': '守备装备产线',
+  'operation.r28b.border-guard-formation': '边境守备编制',
+  'operation.r28b.frontier-outpost': '前沿据点',
+};
 const stageLabels: Record<string, string> = { survival: '起步共同体', regional: '区域发展', unifiedNation: '统一国家' };
 const labelFor = (id: string, labels: Record<string, string>): string => labels[id] ?? titleFromId(id);
 
@@ -176,6 +197,13 @@ function operationBlockers(state: NationKernelState, operation: NationKernelStat
   for (const id of operation.prerequisites?.capabilityIds ?? []) if (capabilities[id] == null) blockers.push(`需要“${labelFor(id, capabilityLabels)}”`);
   for (const id of operation.prerequisites?.facilityIds ?? []) if (state.facilities[id]?.lifecycle.status !== 'operating') blockers.push(`需要“${labelFor(id, facilityLabels)}”投入使用`);
   for (const id of operation.prerequisites?.networkIds ?? []) if (state.networks[id]?.lifecycle.status !== 'operating') blockers.push(`需要“${labelFor(id, networkLabels)}”投入使用`);
+  for (const id of operation.prerequisites?.productionLineIds ?? []) if (state.productionLines[id]?.status !== 'operating') blockers.push(`需要“${titleFromId(id)}”正在生产`);
+  for (const id of operation.prerequisites?.designIds ?? []) if (state.designs[id]?.status !== 'standardized') blockers.push(`需要“${titleFromId(id)}”完成定型`);
+  for (const id of operation.prerequisites?.completedOperationIds ?? []) if (state.operations[id]?.status !== 'completed') blockers.push(`需要先完成“${labelFor(id, operationLabels)}”`);
+  for (const demand of operation.startStockpileDemands ?? []) {
+    const stockpile = state.stockpiles[demand.stockpileId];
+    if (stockpile == null || stockpile.quantity - stockpile.reserved < demand.amount) blockers.push(`${titleFromId(demand.stockpileId)}库存不足`);
+  }
   for (const demand of operation.startDemands) {
     const current = state.quantities[scopeKey(demand.target)]?.[demand.quantityId]?.current ?? 0;
     if (current < demand.amount) blockers.push(`${labelFor(demand.quantityId, quantityNames)}不足`);
@@ -202,6 +230,7 @@ function reasonText(reasonKey: string): string {
 export function NationKernelInspector({ initialFixture }: { initialFixture?: string }): ReactElement {
   const [fixtureKey, setFixtureKey] = useState<FixtureKey>(() => normalizeFixture(initialFixture));
   const [fixture, setFixture] = useState<NationSaveFixture>(() => FIXTURES[normalizeFixture(initialFixture)].create());
+  const [industrialMessage, setIndustrialMessage] = useState('生产调整会保留在当前开发存档中。');
   const state = fixture.state;
   const player = state.polities[state.playerPolityId];
   const visibleDefinitions = useMemo(() => quantitiesForStage(fixture.stage), [fixture.stage]);
@@ -218,6 +247,10 @@ export function NationKernelInspector({ initialFixture }: { initialFixture?: str
     [state.polities, player.id],
   );
   const strengthSummary = useMemo(() => nationalStrengthSummary(state, player.id), [state, player.id]);
+  const strategicDesigns = useMemo(
+    () => Object.values(state.designs).filter((design) => design.polityId === player.id && design.identity != null),
+    [state.designs, player.id],
+  );
   const operationDefinitions = useMemo<Map<string, OperationPresentation>>(() => {
     const requiredCityIds = ['city.north-core', 'city.north-port', 'city.central', 'city.coast-core', 'city.coast-satellite'];
     if (!requiredCityIds.every((id) => state.cities[id] != null)) return new Map();
@@ -229,6 +262,11 @@ export function NationKernelInspector({ initialFixture }: { initialFixture?: str
       coastCoreCityId: 'city.coast-core',
       coastSatelliteCityId: 'city.coast-satellite',
     }).map((definition) => [definition.id, definition]));
+    for (const definition of R28_GROUND_CONTENT_PACKAGE.operationDefinitions({
+      playerPolity: player.id,
+      industrialCoreCity: 'city.north-core',
+      borderRegion: 'region.north',
+    })) definitions.set(definition.id, definition);
     if (state.fleets['fleet.player-sea'] != null && state.relations['relation.player-neighbor'] != null) for (const definition of diplomaticConflictOperationDefinitions({ polityId: player.id, neighborPolityId: 'polity.neighbor', northPortCityId: 'city.north-port', centralCityId: 'city.central', playerFleetId: 'fleet.player-sea', relationId: 'relation.player-neighbor' })) definitions.set(definition.id, definition);
     return definitions;
   }, [state.cities, state.fleets, state.relations, player.id]);
@@ -249,6 +287,31 @@ export function NationKernelInspector({ initialFixture }: { initialFixture?: str
       for (const operation of Object.values(next.operations)) next = startOperation(next, operation.id);
       return { ...previous, state: next };
     });
+  };
+  const updateIndustry = (transform: (state: NationKernelState) => NationKernelState, success: string, rejected: string): void => {
+    const next = transform(state); setIndustrialMessage(next === state ? rejected : success); if (next !== state) setFixture((previous) => ({ ...previous, state: next }));
+  };
+  const changeFactories = (lineId: string, delta: number): void => {
+    const current = state.productionLines[lineId]; if (current == null) return;
+    updateIndustry((previous) => assignProductionFactories(previous, lineId, (current.assignedFactoryUnits ?? current.capacityRequired) + delta), '军工厂分配已更新。', '没有足够的可用军工厂，或该调整无效。');
+  };
+  const toggleLine = (lineId: string): void => {
+    const line = state.productionLines[lineId]; if (line == null) return;
+    updateIndustry((previous) => setProductionLinePaused(previous, lineId, line.status !== 'paused'), line.status === 'paused' ? '生产栏已恢复。' : '生产栏已暂停，军工厂可重新分配。', '生产栏正在换型，或恢复时没有足够军工厂。');
+  };
+  const switchLineDesign = (lineId: string, designId: string): void => {
+    const heavy = designId === 'design.r29a.mobile-heavy-equipment';
+    updateIndustry((previous) => retoolProductionLine(previous, lineId, { designId, stockpileId: heavy ? 'stockpile.r29a.mobile-heavy-equipment' : 'stockpile.r28b.guard-equipment', productionFamilyId: heavy ? 'production-family.mobile-heavy' : 'production-family.ground-equipment', baseOutputPerFactory: heavy ? 0.16 : 0.38, efficiencyCap: 0.8, efficiencyGainPerDay: heavy ? 0.015 : 0.02, inputAvailability: heavy ? 0.78 : 0.9, maintenanceLoad: heavy ? 0.42 : 0.18 }), '生产栏已进入换型，效率保留和改造时间按当前工业路线结算。', '目标设计、库存或生产栏尚未准备完成。');
+  };
+  const chooseIndustrialStrategy = (policyId: string, routeId: string): void => {
+    const strategy = createIndustrialStrategy(policyId, routeId); if (strategy == null) return;
+    updateIndustry((previous) => setIndustrialStrategy(previous, strategy), '工业政策与科技路线已更新。', '工业策略没有变化。');
+  };
+  const addHeavyProductionColumn = (): void => {
+    updateIndustry((previous) => createProductionLine(previous, { id: `production-line.player.mobile-heavy.${previous.calendar.day}`, polityId: previous.playerPolityId, facilityId: 'facility.r28b.military-assembly-works', designId: 'design.r29a.mobile-heavy-equipment', stockpileId: 'stockpile.r29a.mobile-heavy-equipment', status: 'operating', dailyOutput: 0, efficiency: 0.25, capacityRequired: 0, assignedFactoryUnits: 0, baseOutputPerFactory: 0.16, efficiencyCap: 0.8, efficiencyGainPerDay: 0.015, productionFamilyId: 'production-family.mobile-heavy', rampUp: 1, inputAvailability: 0.78, maintenanceLoad: 0.42 }), '新的雷霆装备生产栏已建立，请分配军工厂。', '必须先完成雷霆设计、库存区和军工设施，且生产栏编号不能重复。');
+  };
+  const setReplenishmentPriority = (formationId: string, priority: 0 | 1 | 2 | 3): void => {
+    updateIndustry((previous) => setFormationReplenishmentPriority(previous, formationId, priority), '编制补充优先级已更新。', '无法更新该编制。');
   };
 
   return (
@@ -318,7 +381,7 @@ export function NationKernelInspector({ initialFixture }: { initialFixture?: str
             <div className="kernel-object-block">
               <h3>地区</h3>
               {Object.values(state.regions).filter((region) => region.polityId === player.id).map((region) => (
-                <p key={region.id}><b>{region.id === 'region.north' ? '北部地区' : region.id === 'region.central' ? '中央地区' : region.id === 'region.coast' ? '海岸地区' : '国内地区'}</b> · 农村人口 {numberText(region.ruralPopulation)} · 公共执行 {region.integration.executionQuality}/100 · 环境压力 {region.environmentPressure}/100</p>
+                <p key={region.id}><b>{region.id === 'region.north' ? '北部地区' : region.id === 'region.central' ? '中央地区' : region.id === 'region.coast' ? '海岸地区' : region.id === 'region.r28b.frontier' ? '前沿地区' : '国内地区'}</b> · 农村人口 {numberText(region.ruralPopulation)} · 公共执行 {region.integration.executionQuality}/100 · 环境压力 {region.environmentPressure}/100{region.territory == null ? null : <><br />控制 {region.territory.control}/100 · 统合 {region.territory.integration}/100 · 开发 {region.territory.development}/100 · 税基 {region.territory.taxBase}/100 · 威胁 {region.territory.threat}/100{region.territory.infrastructure == null ? '' : ` · 基建 ${region.territory.infrastructure}/100`}{region.territory.resourcePotential == null ? '' : ` · 资源潜力 ${region.territory.resourcePotential}/100`}</>}</p>
               ))}
             </div>
             <div className="kernel-object-block">
@@ -341,12 +404,35 @@ export function NationKernelInspector({ initialFixture }: { initialFixture?: str
           <div className="kernel-object-list">
             <h3>设施</h3>
             {Object.values(state.facilities).map((facility) => (
-              <p key={facility.id}><b>{labelFor(facility.id, facilityLabels)}</b> · 状态 {facility.lifecycle.status === 'operating' ? '正在运行' : facility.lifecycle.status} · 维护编制 {numberText(facility.maintenanceStaffRequired)} 人 · 服务 {facility.hostCityId == null ? '国家层面' : labelFor(facility.hostCityId, cityLabels)}</p>
+              <p key={facility.id}><b>{labelFor(facility.id, facilityLabels)}</b> · 状态 {facility.lifecycle.status === 'operating' ? '正在运行' : facility.lifecycle.status} · 维护编制 {numberText(facility.maintenanceStaffRequired)} 人 · 服务 {facility.hostCityId == null ? '国家层面' : labelFor(facility.hostCityId, cityLabels)}{facility.industrialCapacity == null ? '' : ` · 军工厂 ${facility.industrialCapacity.usableFactoryUnits}/${facility.industrialCapacity.factoryUnits}`}</p>
             ))}
             <h3>网络</h3>
             {Object.values(state.networks).map((network) => (
               <p key={network.id}><b>{labelFor(network.id, networkLabels)}</b> · {network.kind === 'power' ? '电力网络' : network.kind === 'rail' ? '货运网络' : network.kind === 'comms' ? '通信网络' : '陆路网络'} · 状态 {network.lifecycle.status === 'operating' ? '正在运行' : network.lifecycle.status} · 容量 {network.capacity} · 冗余 {network.redundancy}</p>
             ))}
+            {Object.values(state.productionLines).length === 0 ? null : <h3>战略产线</h3>}
+            {state.industrialStrategy == null ? null : <p><b>工业路线</b> · {state.industrialStrategy.technologyRouteId.includes('flexible') ? '弹性生产线' : state.industrialStrategy.technologyRouteId.includes('concentrated') ? '集中工业' : '均衡工业'} · 换线效率保留 {numberText(state.industrialStrategy.conversionRetention * 100)}% · 产出修正 {numberText(state.industrialStrategy.factoryOutputModifier * 100)}%</p>}
+            {state.facilities['facility.r28b.military-assembly-works']?.industrialCapacity == null ? null : <div className="kernel-industrial-actions">
+              <button onClick={() => chooseIndustrialStrategy('policy.industry.limited-mobilization', 'technology-route.industry.concentrated')} type="button">有限动员＋集中工业</button>
+              <button onClick={() => chooseIndustrialStrategy('policy.industry.limited-mobilization', 'technology-route.industry.flexible')} type="button">有限动员＋弹性产线</button>
+              <button onClick={() => chooseIndustrialStrategy('policy.industry.war-economy', state.industrialStrategy?.technologyRouteId.includes('flexible') ? 'technology-route.industry.flexible' : 'technology-route.industry.concentrated')} type="button">切换战时经济</button>
+              <button onClick={addHeavyProductionColumn} type="button">新增雷霆生产栏</button>
+              <button onClick={() => updateIndustry((previous) => damageIndustrialFacility(previous, 'facility.r28b.military-assembly-works', 12), '军工设施受损，可用军工厂下降并开始维修。', '军工设施尚未建成。')} type="button">模拟工业受损</button>
+            </div>}
+            {Object.values(state.productionLines).map((line) => {
+              const design = state.designs[line.designId];
+              const presentation = design?.identity == null ? undefined : strategicAssetPresentation(design.identity.presentationId);
+              const assignedFactories = line.assignedFactoryUnits ?? line.capacityRequired;
+              return <div className="kernel-production-column" key={line.id}>
+                <p><b>{presentation?.displayName ?? titleFromId(line.designId)}</b> · {line.status === 'operating' ? '正在生产' : line.status === 'retooling' ? `正在转产（${line.retoolingDaysRemaining ?? 0}日）` : line.status === 'paused' ? '已暂停' : line.status} · 投入军工厂 {assignedFactories} · 生产效率 {numberText(line.efficiency * 100)}%/{numberText(((line.efficiencyCap ?? 1) + (state.industrialStrategy?.efficiencyCapModifier ?? 0)) * 100)}% · 单厂日产 {numberText(line.baseOutputPerFactory ?? line.dailyOutput)} · 输入保障 {numberText((line.inputAvailability ?? 1) * 100)}%</p>
+                <div className="kernel-industrial-actions">
+                  <button onClick={() => changeFactories(line.id, -1)} type="button">−1 军工厂</button><button onClick={() => changeFactories(line.id, 1)} type="button">＋1 军工厂</button>
+                  <button onClick={() => toggleLine(line.id)} type="button">{line.status === 'paused' ? '恢复' : '暂停'}</button>
+                  <button onClick={() => switchLineDesign(line.id, 'design.r28b.guard-equipment')} type="button">换型磐石</button><button onClick={() => switchLineDesign(line.id, 'design.r29a.mobile-heavy-equipment')} type="button">换型雷霆</button>
+                </div>
+              </div>;
+            })}
+            {Object.values(state.productionLines).length === 0 ? null : <p className="kernel-industrial-message">{industrialMessage}</p>}
           </div>
         </article>
 
@@ -370,11 +456,44 @@ export function NationKernelInspector({ initialFixture }: { initialFixture?: str
         <article className="kernel-panel">
           <header><h2>军事与安全态势</h2><span>舰艇保留精确数量，不折算成抽象点数</span></header>
           <div className="kernel-object-list">
+            {strategicDesigns.length >= 2 ? (
+              <div className="kernel-object-block">
+                <h3>设计取舍</h3>
+                <p>高效果不等于全面更优。比较火力、可靠性、适应性、生产成本、维护和最低补给，选择符合当前国家网络与任务的设计。</p>
+                {strategicDesigns.map((design) => {
+                  const presentation = strategicAssetPresentation(design.identity!.presentationId);
+                  return <p key={`comparison-${design.id}`}><b>{presentation?.displayName ?? titleFromId(design.id)}</b> · 效果 {design.performance?.effectiveness ?? '—'} · 可靠性 {design.performance?.reliability ?? '—'} · 适应性 {design.performance?.adaptability ?? '—'} · 成本 {numberText(design.productionCost)} · 维护 {numberText(design.maintenanceLoad)} · 最低补给 {design.constraints?.minimumSupplyDays ?? '—'} 日</p>;
+                })}
+              </div>
+            ) : null}
+            {strategicDesigns.map((design) => {
+              const presentation = strategicAssetPresentation(design.identity!.presentationId);
+              if (presentation == null) return null;
+              return (
+                <div className="kernel-object-block" key={design.id}>
+                  <h3>{presentation.displayName}</h3>
+                  <p>{presentation.roleSummary}</p>
+                  <p><b>可想象威力</b><br />{presentation.impactSummary}</p>
+                  <p><b>主要限制</b><br />{presentation.limitationSummary}</p>
+                  <p><b>文明意义</b><br />{presentation.civilizationMeaning}</p>
+                  <p>效果 {design.performance?.effectiveness ?? '—'}/100 · 可靠性 {design.performance?.reliability ?? '—'}/100 · 适应性 {design.performance?.adaptability ?? '—'}/100 · 生产成本 {numberText(design.productionCost)} · 维护负担 {numberText(design.maintenanceLoad)}</p>
+                </div>
+              );
+            })}
             {Object.values(state.fleets).length === 0 ? <p className="kernel-empty">此阶段没有舰队对象。</p> : Object.values(state.fleets).map((fleet) => (
               <p key={fleet.id}><b>{fleet.polityId === player.id ? '我方海上舰队' : '邻国海上舰队'}</b> · 任务 {fleet.mission === 'route-protection' ? '航线保护' : '边境拒止'} · 战备 {fleet.readiness}/100 · 补给还可维持 {fleet.supplyDays} 日<br />{fleetVessels(fleet)}</p>
             ))}
             {Object.values(state.theatres).map((theatre) => (
               <p key={theatre.id}><b>{theatre.status === 'crisis' ? '边境海域危机' : '安全战区'}</b> · 当前目标 {theatre.objective === 'protect-route' ? '维持航线通行' : theatre.objective} · 平民影响 {theatre.civilianImpact}/100 · 地区执行压力 {theatre.integrationPressure}/100</p>
+            ))}
+            {Object.values(state.formations).map((formation) => (
+              <div className="kernel-production-column" key={formation.id}>
+                <p><b>{formation.id === 'formation.r28b.border-guard' ? '边境守备编制' : titleFromId(formation.id)}</b> · 人员 {numberText(formation.personnel)} · 训练 {formation.training}/100 · 战备 {formation.readiness}/100{formation.equipmentReadiness == null ? '' : ` · 装备满足 ${formation.equipmentReadiness}/100`}{formation.supplyDays == null ? '' : ` · 补给 ${formation.supplyDays} 日`}<br />装备 {formation.equipment.map((item) => `${item.stockpileId === 'stockpile.r28b.guard-equipment' ? '通用守备装备' : titleFromId(item.stockpileId)} ${numberText(item.delivered ?? item.required)}/${item.required}`).join('；')} · 补充优先级 {formation.replenishmentPriority ?? 1} · 当前任务 {formation.mission === 'secure-frontier-approach' ? '保障前沿通道' : formation.mission}</p>
+                <div className="kernel-industrial-actions"><button onClick={() => setReplenishmentPriority(formation.id, 0)} type="button">低补充</button><button onClick={() => setReplenishmentPriority(formation.id, 1)} type="button">普通补充</button><button onClick={() => setReplenishmentPriority(formation.id, 2)} type="button">优先补充</button><button onClick={() => setReplenishmentPriority(formation.id, 3)} type="button">最高补充</button></div>
+              </div>
+            ))}
+            {Object.values(state.stockpiles).filter((stockpile) => stockpile.polityId === player.id).map((stockpile) => (
+              <p key={stockpile.id}><b>{stockpile.id === 'stockpile.r28b.guard-equipment' ? '通用守备装备库存' : titleFromId(stockpile.id)}</b> · 可用 {numberText(stockpile.quantity - stockpile.reserved)} · 在库 {numberText(stockpile.quantity)}{stockpile.capacity == null ? '' : ` / 容量 ${numberText(stockpile.capacity)}`}{stockpile.targetReserve == null ? '' : ` · 目标储备 ${numberText(stockpile.targetReserve)}`}{stockpile.condition == null ? '' : ` · 状况 ${stockpile.condition}/100`}</p>
             ))}
             {Object.values(state.spaceAssets).map((asset) => (
               <p key={asset.id}><code>{asset.id}</code> · {asset.kind} · {asset.lifecycle.status} · 人员 {numberText(asset.personnel)}</p>

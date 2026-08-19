@@ -4,7 +4,7 @@ import type { DevelopmentStage, KernelId, NationKernelState, OperationKind, Oper
  * 内容包不能直接写入某个存档的城市、舰队或对手 ID。
  * 它只声明自己需要哪些“角色”；存档/世界生成器再把角色绑定到实际实体。
  */
-export type ContentRoleEntityKind = 'polity' | 'city' | 'fleet' | 'relation';
+export type ContentRoleEntityKind = 'polity' | 'region' | 'city' | 'fleet' | 'relation';
 export type ContentRoleBindings<TRole extends string = string> = Record<TRole, KernelId>;
 
 export interface ContentRoleRequirement<TRole extends string = string> {
@@ -42,6 +42,7 @@ export interface ContentPackageInstallResult {
 function entityExists(state: NationKernelState, entity: ContentRoleEntityKind, id: KernelId): boolean {
   switch (entity) {
     case 'polity': return state.polities[id] != null;
+    case 'region': return state.regions[id] != null;
     case 'city': return state.cities[id] != null;
     case 'fleet': return state.fleets[id] != null;
     case 'relation': return state.relations[id] != null;

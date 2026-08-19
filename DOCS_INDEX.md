@@ -38,6 +38,15 @@
 | 10 | `CRADLE_CLUSTER_ERA_EXPANSION.md` | 780—1080年：摇篮星团补全 | ✅ 完成 |
 | 11 | `STELLAR_REGION_ERA_EXPANSION.md` | 1080—1400年：区域星区补全 | ✅ 完成 |
 | 12 | `SPIRAL_CORRIDOR_ERA_EXPANSION.md` | 1400—1850年：旋臂走廊补全 | ✅ 完成 |
+| 13 | `R29_B_MILITARY_INDUSTRY_FRAMEWORK.md` | 多军工厂池、装备生产栏、产能爬坡与集中/弹性工业路线 | ✅ 数据骨架与对照模拟完成 |
+| 14 | `R29_C_MILITARY_INDUSTRY_BALANCE.md` | 生产栏操作、工业政策、损耗补充、工厂受损和首轮平衡 | ✅ 六阶段闭环完成 |
+| 15 | `R30_CONFLICT_AND_CAMPAIGN_FRAMEWORK.md` | 战区、战役、损失、平民代价、停火与战后统合原始落地计划 | ✅ 已由R30–R32实现承接 |
+| 16 | `R30_R32_CONFLICT_DIPLOMACY_INTEGRATION.md` | 战役、外交、停火、占领与服务统合试跑 | ✅ 第一轮完成 |
+| 17 | `R33_R36_STATE_FOUNDATIONS.md` | 国家物流、人口家庭、财政经济与国内政治 | ✅ 第一轮完成 |
+| 18 | `PRE_R37_MARITIME_AEROSPACE_SPACE.md` | 全球统一前的海运海军、航空导弹和基础卫星 | ✅ 第一轮完成 |
+| 19 | `R37_GLOBAL_UNIFICATION_NODE.md` | 十二类统一硬门与720日跨板块联合试跑 | ✅ 第一轮大节点完成 |
+| 20 | `UNIFIED_NATION_SECOND_PASS_PLAN.md` | 国家统一阶段数据、平衡、操作和UI第二轮计划 | 📋 下一阶段 |
+| 21 | `R37_PARADOX_BOARD_CONTENT_PASS.md` | 参考群星/钢铁雄心4的信息架构，为21板块填充方向与运行对象的首轮说明 | ✅ 首批内容与界面完成，待日结算接线 |
 | 13 | `GALACTIC_FEDERATION_ERA_EXPANSION.md` | 1850—2250年：银河大统合联邦补全 | ✅ 完成 |
 | 14 | `TERMINUS_WAR_ERA_EXPANSION.md` | 2250—2450年：天灾与终局补全 | ✅ 完成 |
 | 15 | `CAMPAIGN_CHRONICLE.md` | **统合政府编年史与玩家战略框架**：单一主权、玩家操作、国家能力、全阶段主线 | ✅ 完成（最高层约束） |
@@ -64,6 +73,9 @@
 | 34 | `R13_DIPLOMATIC_CONFLICT_VERTICAL_SLICE.md` | **外交冲突纵切片**：国内能力到舰队、情报与外交关系的回归内容包 | ✅ 开发验证已实现，非正式战争系统 |
 | 35 | `R14_CONTENT_PACKAGE_CONTRACT.md` | **中后期内容包契约**：角色绑定、安装校验与 R12/R13 可复用化规则 | ✅ 开发内核已实现，待声明式模板迁移 |
 | 36 | `R15_PLAYABLE_EARLY_FRAMEWORK.md` | **首阶段可试玩框架**：应急保障、研究、工程、政策、自动化与稳定聚居门 | ✅ 开发试玩框架已验证，待用户体验验收 |
+| 37 | `R28_SYSTEM_FOCUS_FIELDS.md` | **统一国家系统关注与字段基线**：八个领域、爽点因果链、字段和平衡边界 | ✅ 当前设计与实现基线 |
+| 38 | `R29_IDLE_OPERATION_UI_RESEARCH.md` | **文字挂机操作信息架构**：渐进解锁、单页单问题、持续行动、目标/阈值/方案与提示规则 | ✅ 设计基线，待分阶段实施 |
+| 39 | `R29_STRATEGIC_ASSET_DATA_FRAMEWORK.md` | **高端战略资产数据框架**：身份、角色、威力、限制、工业来源、服役记录与展示文案 | ✅ 设计基线，待 R29-A 实施 |
 
 ---
 

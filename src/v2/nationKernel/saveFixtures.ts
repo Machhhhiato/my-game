@@ -4,6 +4,7 @@ import { installContentPackage } from './contentPackage';
 import type { ContentRoleBindings, NationContentPackage } from './contentPackage';
 import { DIPLOMATIC_CONFLICT_CONTENT_PACKAGE } from './diplomaticConflictContent';
 import { UNIFIED_NATION_CONTENT_PACKAGE } from './unifiedNationContent';
+import { R28_GROUND_CONTENT_PACKAGE } from './r28GroundContent';
 import type { FacilityState, NationKernelState, OperationState, PolityState } from './types';
 
 export interface NationSaveFixture { id: string; stage: 'survival' | 'unifiedNation' | 'regional'; state: NationKernelState; }
@@ -72,6 +73,11 @@ export function createUnifiedNationSave(): NationSaveFixture {
     coastalServiceCity: 'city.coast-core',
     logisticsSatelliteCity: 'city.coast-satellite',
   });
+  Object.assign(state.operations, installOrThrow(state, R28_GROUND_CONTENT_PACKAGE, {
+    playerPolity: player.id,
+    industrialCoreCity: 'city.north-core',
+    borderRegion: 'region.north',
+  }));
   return { id: 'save.fixture.unified-nation', stage: 'unifiedNation', state };
 }
 

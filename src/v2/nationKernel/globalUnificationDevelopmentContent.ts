@@ -1,0 +1,35 @@
+import type { CivilizationPolicyState, CivilizationTechnologyState, NationalDevelopmentProjectState } from './types';
+
+/** 直接摘取 TIMELINE 240—580 年与 GLOBAL_UNIFICATION_EXPANSION 的首批可玩内容。 */
+export function globalUnificationTechnologies(): Record<string, CivilizationTechnologyState> {
+  const items: CivilizationTechnologyState[] = [
+    { id:'technology.watershed-sensor-ledger', title:'流域传感网与水权账本', domain:'infrastructure', timelineYears:'242—315年', summary:'把水质、流量和取水权写入可审计账本，为跨区配给、污染追责和水权谈判提供共同事实。', failureCost:'地方可能篡改传感数据；居民会把计量网视作中央监控。', prerequisiteIds:[], progress:100, workRequired:100, status:'completed', effects:{regionalCompliance:2,commonInstitution:2,sharedInfrastructure:3} },
+    { id:'technology.regional-microgrid', title:'高可靠电力电子与区域微网', domain:'energy', timelineYears:'351—410年', summary:'让医院、冷链和工业节点在主干网中断时维持运行，并支持跨区并网。', failureCost:'保护失配会引发级联停电；专业维修员成为新瓶颈。', prerequisiteIds:['technology.watershed-sensor-ledger'], progress:0, workRequired:120, status:'available', effects:{sharedInfrastructure:6,logisticsCapacity:8,logisticsRedundancy:5} },
+    { id:'technology.ammonia-soil-recovery', title:'合成氨—土壤修复联产', domain:'agriculture', timelineYears:'286—315年', summary:'把化肥增产与土壤、地下水修复绑定，避免粮食繁荣继续制造水债和失地农户。', failureCost:'氮污染、地下水下降和土地集中可能抵消粮食增产。', prerequisiteIds:['technology.watershed-sensor-ledger'], progress:0, workRequired:105, status:'available', effects:{civilianAvailability:5,healthAccess:3,resistance:-2} },
+    { id:'technology.satellite-debris-avoidance', title:'卫星总线、姿控与碎片规避', domain:'space', timelineYears:'380—410年', summary:'建立标准卫星总线、可靠姿控和碰撞预警，恢复共同气象与通信能力。', failureCost:'姿控失效会产生碎片云，并首先摧毁民用气象服务。', prerequisiteIds:['technology.regional-microgrid'], progress:38, workRequired:130, status:'locked', effects:{satelliteReliability:8,orbitalCoverage:7,recognition:2} },
+    { id:'technology.verifiable-nuclear-storage', title:'可核查核材料封存', domain:'security', timelineYears:'481—530年', summary:'结合辐射传感、加密账本和特种容器，让分阶段核裁军能够被各方现场核查。', failureCost:'封存库泄漏、账本造假或核查员受贿会摧毁整个和平进程。', prerequisiteIds:['technology.regional-microgrid'], progress:0, workRequired:145, status:'locked', effects:{commonInstitution:7,recognition:5,resistance:-3} },
+    { id:'technology.closed-life-support', title:'闭式生命保障与低重力医学', domain:'medicine', timelineYears:'411—480年', summary:'把净水、水培、药物和离心康复整合为可长期维护的月面生活系统。', failureCost:'真菌污染、骨质流失和心理隔离会转化为劳工伤亡与政治问责。', prerequisiteIds:['technology.satellite-debris-avoidance'], progress:0, workRequired:155, status:'locked', effects:{healthAccess:6,recognition:3} },
+    { id:'technology.orbital-refining-logistics', title:'轨道精炼—再入物流', domain:'space', timelineYears:'446—480年', summary:'在轨完成初步精炼并安全再入，使空间金属真正进入地表公共工程。', failureCost:'再入事故与廉价金属会冲击传统矿区就业和地方财政。', prerequisiteIds:['technology.closed-life-support'], progress:0, workRequired:180, status:'locked', effects:{sharedInfrastructure:8,logisticsCapacity:6,civilianAvailability:3} },
+    { id:'technology.superconducting-grid', title:'高温超导输电与聚变维护', domain:'energy', timelineYears:'531—580年', summary:'为洲际互联和太空电梯提供清洁基荷，同时把猝熄、停堆与稀有材料列入维护制度。', failureCost:'超导猝熄和停堆事故可能同时切断电梯、医院与工业网络。', prerequisiteIds:['technology.regional-microgrid','technology.orbital-refining-logistics'], progress:0, workRequired:210, status:'locked', effects:{sharedInfrastructure:10,logisticsCapacity:10,logisticsRedundancy:6} },
+    { id:'technology.elevator-traffic-inspection', title:'电梯交通管理与缆绳巡检', domain:'space', timelineYears:'566—580年', summary:'以激光测量、维护机器人和轨道法管理电梯流量、缆绳疲劳与应急疏散。', failureCost:'缆绳疲劳、恐袭和运力分配争议会把宏伟工程变成政治危机。', prerequisiteIds:['technology.superconducting-grid'], progress:0, workRequired:240, status:'locked', effects:{sharedInfrastructure:12,commonInstitution:5,orbitalCoverage:6} },
+  ]; return Object.fromEntries(items.map(item=>[item.id,item]));
+}
+
+export function globalUnificationPolicies(): Record<string, CivilizationPolicyState> {
+  const items: CivilizationPolicyState[] = [
+    { id:'policy.debt-freeze-ration', title:'旧债冻结与基本粮票', category:'economic', summary:'暂停边缘家庭旧债重估，以最低粮票换取标准货币和税制继续推行。', durationDays:90,remainingDays:0,cooldownDays:180,status:'available',dailyEffects:{civilianAvailability:.015,debt:.015},completionEffects:{legitimacy:2,resistance:-2,factionSatisfaction:{'faction.workers':5,'faction.industry':-3}} },
+    { id:'policy.emergency-power-sunset', title:'紧急权自动失效与预算公开', category:'political', summary:'战时授权到期自动终止，公开征用与军费账目，修复统一谈判中的制度信誉。', durationDays:120,remainingDays:0,cooldownDays:240,status:'available',dailyEffects:{legitimacy:.012,regionalCompliance:.008},completionEffects:{commonInstitution:4,recognition:3,factionSatisfaction:{'faction.regions':6,'faction.security':-3}} },
+    { id:'policy.shared-weather-data', title:'共同气象数据与轨道不可先攻', category:'diplomatic', summary:'开放气象卫星数据，并承诺不首先攻击载人设施和气象卫星。', durationDays:100,remainingDays:0,cooldownDays:200,status:'available',dailyEffects:{recognition:.012},completionEffects:{commonInstitution:3,orbitalCoverage:3} },
+    { id:'policy.mine-worker-transition', title:'矿区—轨道转岗与养老金基金', category:'social', summary:'将空间资源收益锁定为矿工培训、养老金和矿山修复，避免旧工业地区被进步抛弃。', durationDays:180,remainingDays:0,cooldownDays:360,status:'available',dailyEffects:{debt:.025,resistance:-.012},completionEffects:{legitimacy:3,regionalCompliance:4,factionSatisfaction:{'faction.workers':7,'faction.industry':3}} },
+    { id:'policy.random-nuclear-inspection', title:'裂变材料账本与随机核查', category:'security', summary:'由四方轮换监察团抽查封存库、弹头和浓缩设施，以能源和医疗准入换取可核查裁军。', durationDays:120,remainingDays:0,cooldownDays:240,status:'available',dailyEffects:{recognition:.01,commonInstitution:.008},completionEffects:{resistance:-2,factionSatisfaction:{'faction.security':4,'faction.regions':2}} },
+  ]; return Object.fromEntries(items.map(item=>[item.id,item]));
+}
+
+export function globalUnificationProjects(): Record<string, NationalDevelopmentProjectState> {
+  const items: NationalDevelopmentProjectState[] = [
+    { id:'project.regional-microgrid-program',title:'医院冷链与区域微网计划',category:'infrastructure',summary:'优先为医院、粮食冷链和交通节点建设可孤岛运行的微网。',requiredTechnologyIds:['technology.regional-microgrid'],progress:0,workRequired:130,status:'locked',effects:{sharedInfrastructure:7,logisticsRedundancy:5,healthAccess:3} },
+    { id:'project.watershed-restoration',title:'翡翠—沼泽水系修复计划',category:'ecological',summary:'关闭高污染炼焦设施，建设尾矿封存库与湿地缓冲带，并向受影响矿工和农民提供稳定收入。',requiredTechnologyIds:['technology.ammonia-soil-recovery'],progress:0,workRequired:165,status:'locked',effects:{legitimacy:3,resistance:-4,healthAccess:5} },
+    { id:'project.nuclear-material-ledger',title:'四方核材料封存与核查网',category:'security',summary:'建设封存库、材料账本、辐射传感和轮换核查设施。',requiredTechnologyIds:['technology.verifiable-nuclear-storage'],progress:0,workRequired:180,status:'locked',effects:{commonInstitution:8,recognition:6,resistance:-3} },
+    { id:'project.orbital-debris-clearing',title:'共同轨道碎片清理任务',category:'space',summary:'联合追踪并清理威胁气象、通信和载人设施的高风险碎片。',requiredTechnologyIds:['technology.satellite-debris-avoidance'],progress:0,workRequired:145,status:'locked',effects:{orbitalCoverage:6,satelliteReliability:6,recognition:4} },
+  ]; return Object.fromEntries(items.map(item=>[item.id,item]));
+}

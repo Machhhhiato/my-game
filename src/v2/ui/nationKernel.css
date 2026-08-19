@@ -60,6 +60,12 @@
 .kernel-object-list { padding: 0 14px 12px; }
 .kernel-object-list p { margin: 0; padding: 9px 0; color: #c4d2db; border-bottom: 1px solid rgba(41, 66, 87, .52); font-size: 13px; line-height: 1.55; }
 .kernel-object-list p:last-child { border-bottom: 0; }
+.kernel-production-column { padding: 8px 0 10px; border-bottom: 1px solid rgba(41, 66, 87, .52); }
+.kernel-production-column p { border-bottom: 0; }
+.kernel-industrial-actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 0; }
+.kernel-industrial-actions button { border: 1px solid #34536a; padding: 6px 8px; color: #c7d7e2; background: #0b1723; cursor: pointer; font: 600 11px/1.1 inherit; }
+.kernel-industrial-actions button:hover { border-color: #d4a54c; color: #ffe3a1; }
+.kernel-industrial-message { color: #9ed6e9 !important; font-size: 12px !important; }
 .kernel-operation { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(41, 66, 87, .52); }
 .kernel-operation p { flex: 1; border-bottom: 0; }
 .kernel-operation button { flex: 0 0 auto; border: 1px solid #34536a; padding: 7px 9px; color: #c7d7e2; background: #0b1723; cursor: pointer; font: 600 12px/1.1 inherit; }
