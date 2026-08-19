@@ -1,5 +1,7 @@
 # Always Game 后续工作入口
 
+> 提交纪律：开始任何下一任务前先读 `AI_COLLABORATION_RULES.md`；完成后必须在提交 GitHub 前同步相关上下文，并与实现同提交、同推送。
+
 > 本清单只定义优先级与验收方向，不自动授权实施。开始任何任务前，先读取 `CURRENT_STATE.md`、`DECISION_LOG.md` 和相关冻结规格。
 
 ## P0：R16 首阶段试玩验收与框架修订

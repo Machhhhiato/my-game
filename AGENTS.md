@@ -4,13 +4,18 @@
 
 每次进入项目，任何 AI 必须先阅读：
 
-1. `AI_CONTEXT/PROJECT_MEMORY.md`
-2. `AI_CONTEXT/CURRENT_STATE.md`
-3. `AI_CONTEXT/DECISION_LOG.md`
-4. `AI_CONTEXT/WORLD_RULES.md`
-5. `AI_CONTEXT/NEXT_TASK.md`
+1. `AI_COLLABORATION_RULES.md`
+2. `AI_CONTEXT.md`
+3. `CURRENT_STATUS.md`
+4. `DECISION_LOG.md`
+5. `IDEAS_POOL.md`
+6. `AI_CONTEXT/PROJECT_MEMORY.md`
+7. `AI_CONTEXT/CURRENT_STATE.md`
+8. `AI_CONTEXT/DECISION_LOG.md`
+9. `AI_CONTEXT/WORLD_RULES.md`
+10. `AI_CONTEXT/NEXT_TASK.md`
 
-之后再按任务阅读相关的原始来源、冻结规格和实现文件。AI_CONTEXT 是导航与约束摘要；若需要具体事实，必须回查原文件，不能只凭摘要臆测。
+之后再按任务阅读相关的原始来源、冻结规格和实现文件。所有 GitHub 提交必须遵守 `AI_COLLABORATION_RULES.md` 的“功能与相关上下文同提交、同推送”规则。AI_CONTEXT 是导航与约束摘要；若需要具体事实，必须回查原文件，不能只凭摘要臆测。
 
 ## 1. 修改前的检查
 
@@ -61,4 +66,3 @@
 - 任何已完成/待完成/仅规划/旧稿状态必须如实标记。
 - 工程、科技、事件和地图变化必须能以稳定 ID、状态和地理引用追溯；同种子、同状态、同指令应可复现。
 - 完成项必须从主选择区移入可查档案；普通通知只报告会改变玩家下一步的重点事实。
-

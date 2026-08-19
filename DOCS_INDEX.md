@@ -1,6 +1,8 @@
 # 文档索引（供协作 AI 阅读）
 
-> **项目执行入口**：先阅读 `STANDARDIZATION_AND_SCENARIO_SEPARATION.md`（系统与剧本分离的最高实现规则）、`SYSTEM_SKELETON_BLUEPRINT.md`（全系统对象与实施总图）、`PROJECT_MANAGEMENT.md`（协作规则）、`PROJECT_ROADMAP.md`（现状与阶段）和 `DECISION_LOG.md`（已确认/待确认决策）。代码当前实现不自动代表最新主设定；旧方案只作参考。
+> **新会话入口**：先阅读 `AI_COLLABORATION_RULES.md`（跨终端提交共识）、`AI_CONTEXT.md`（项目总上下文）、`CURRENT_STATUS.md`（当前状态）、`DECISION_LOG.md`（已冻结决策）和 `IDEAS_POOL.md`（未冻结想法），再按任务阅读具体规格与代码。
+
+> **项目执行入口**：继续阅读 `STANDARDIZATION_AND_SCENARIO_SEPARATION.md`（系统与剧本分离的最高实现规则）、`SYSTEM_SKELETON_BLUEPRINT.md`（全系统对象与实施总图）、`PROJECT_MANAGEMENT.md`（协作规则）和 `PROJECT_ROADMAP.md`（阶段路线）。`AI_CONTEXT/` 目录保存更细的实施导航；代码当前实现不自动代表最新主设定，旧方案只作参考。
 
 > 这是一个「群星挂机」游戏项目的设定文档清单。以下文件共同描述了一个废土势力从废墟成长为银河大统合联邦的完整世界观、科技树与成长编年史。请按阅读顺序理解，并可在现有内容基础上补全完善。
 

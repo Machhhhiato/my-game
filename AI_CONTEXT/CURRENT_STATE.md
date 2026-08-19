@@ -1,8 +1,15 @@
 # Always Game 当前状态
 
 > 更新口径：依据项目目录内文档与代码结构建立；未进行本轮玩法或视觉验收的项目不得视为“已验收”。
+>
+> 跨终端规则（2026-08-19）：所有 GitHub 提交前必须按 `AI_COLLABORATION_RULES.md` 检查并同步相关顶层上下文与本目录导航，功能和上下文同提交、同推送。
 
 ## 1. 已完成或已冻结的内容
+
+### 跨终端知识架构
+
+- 已建立顶层 `AI_CONTEXT.md`、`CURRENT_STATUS.md`、`DECISION_LOG.md`、`IDEAS_POOL.md` 和 `AI_COLLABORATION_RULES.md`，并由 `AGENTS.md`、`DOCS_INDEX.md` 统一引导读取。
+- Git 保存可审计事实，ChatGPT Project 保存实时讨论，顶层上下文连接两者；具体实施状态继续由本目录导航到来源文件。
 
 ### 世界与内容规则
 
