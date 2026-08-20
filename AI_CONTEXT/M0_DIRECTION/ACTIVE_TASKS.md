@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-B:M0-S002
 overall_current_task: M0-L1-101
 handoff_id: M0-H001
-updated_at: 2026-08-20T20:34:30+08:00
+updated_at: 2026-08-20T21:16:44+08:00
 ---
 
 # M0 当前任务路由
@@ -15,7 +15,7 @@ updated_at: 2026-08-20T20:34:30+08:00
 
 | 层级 | 当前任务 | 状态 | 阻塞项 | 正确回执 |
 |---|---|---|---|---|
-| 第一层 | `M0-L1-101` 试玩起点与终点 | `active` | 无；等待用户逐项确认草案 | `ACTIVE` |
+| 第一层 | `M0-L1-101` 试玩起点与终点 | `active` | 无；开局已确认，等待确认路径与终点 | `ACTIVE` |
 | 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L1-105`、`M0-L4-010` | `BLOCKED_UPSTREAM` |
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
 | 第四层 | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L1-105` | `BLOCKED_UPSTREAM` |
