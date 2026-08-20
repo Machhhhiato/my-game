@@ -1,4 +1,4 @@
-# M0 对话接力协议 v1
+# M0 对话接力协议 v2
 
 ## 1. 目的
 
@@ -32,8 +32,10 @@
 - 未经单独授权在其他分支实施；
 - 把“推荐”“方向已确认”“规格已冻结”“执行已授权”“已实现”“已验证”混为一谈。
 
-唯一落盘例外：为了完成跨设备接力，方向聊天可以修改
-`AI_CONTEXT/M0_DIRECTION/**`，并在 `context/m0-direction` 上提交、推送这些对话文档。该例外不扩大到任何其他路径。
+通常的唯一落盘例外：为了完成跨设备接力，方向聊天可以修改
+`AI_CONTEXT/M0_DIRECTION/**`，并在 `context/m0-direction` 上提交、推送这些对话文档。
+
+一次性项目入口例外：`D-M0-DIR-006` 允许本轮只在 `context/m0-direction` 修改项目根 `AGENTS.md`，加入指向本目录的最短短语路由。该授权不扩大到其他根文件、游戏代码、数据、资产、产品规格或 `main`；入口提交完成后例外结束。
 
 ## 3. 状态词
 
@@ -85,7 +87,8 @@
 ## 6. 活动写入端
 
 - 同一时刻只有一个活动 lane。
-- `ACTIVE.md` 记录 `active_lane`、`active_host`、最后 session 和 turn。
+- `SESSION_ROUTING.md` 记录活动 lane、设备、session、路由轮次和交接目标；`ACTIVE.md` 保存热摘要。
+- 正常活动使用 `routing_state: active`；原设备关闭而新设备尚未认领时使用 `handoff_pending`，此时活动三字段必须为 `null`。
 - Mac 与 Windows 不得同时追加同一个 session。
 - 正常交接时，原 lane 关闭 session、更新接续卡并推送；新 lane 同步后新建 session。
 - 意外换机时，新 lane 可以基于远端头创建 `takeover` session；旧设备回来后必须先同步，旧 session 不再续写。
@@ -145,6 +148,8 @@
 ## 12. 四层任务路由
 
 - `WORKFLOW_BOOTSTRAP.md` 定义一句话启动、读取顺序和失败状态。
+- `NEXT_ACTION.md` 是“下一步去哪个会话”的唯一权威卡。
+- `SESSION_ROUTING.md` 保存 13 个任务对应的稳定会话，以及活动/交接状态。
 - `roles/` 定义四层固定职责；层号不得重排。
 - `ACTIVE_TASKS.md` 是当前任务的唯一动态路由；`TASK_PACKAGES.md` 是任务边界的固定定义。
 - 同一层最多一个 `ready` 或 `active` 任务；当前阶段按任务链串行推进。

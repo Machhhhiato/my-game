@@ -1,9 +1,10 @@
 ---
-workflow_version: 1
+workflow_version: 2
 milestone: M0-personal-playable
-route_owner: M0-DIR-A
-overall_current_task: M0-L4-000
-updated_at: 2026-08-20T17:47:00+08:00
+route_owner: handoff_pending:M0-DIR-B
+overall_current_task: M0-L1-101
+handoff_id: M0-H001
+updated_at: 2026-08-20T18:01:02+08:00
 ---
 
 # M0 当前任务路由
@@ -14,18 +15,17 @@ updated_at: 2026-08-20T17:47:00+08:00
 
 | 层级 | 当前任务 | 状态 | 阻塞项 | 正确回执 |
 |---|---|---|---|---|
-| 第一层 | `M0-L1-101` 试玩起点与终点 | `blocked_workflow` | `M0-L4-000` | `BLOCKED_WORKFLOW` |
+| 第一层 | `M0-L1-101` 试玩起点与终点 | `ready` | 等待 Windows 接管；不是任务依赖 | `READY` |
 | 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L1-105`、`M0-L4-010` | `BLOCKED_UPSTREAM` |
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
-| 第四层 | `M0-L4-000` 四层入口安装 | `ready` | 无 | `READY` |
+| 第四层 | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L1-105` | `BLOCKED_UPSTREAM` |
 
-当前唯一可启动任务是 `M0-L4-000`。它只安装工作流，不修改游戏代码、数据、资产或产品规格。启动语仍不构成执行授权；用户必须在独立第四层会话中明确说“开始 M0-L4-000”。
+当前唯一可启动任务是 `M0-L1-101`。项目内短语入口已安装；`M0-L4-000` 的全局跨项目路由扩展和完整多设备测试已暂缓，不再阻塞产品讨论。`你是第一层` 只恢复角色和任务；用户仍需另说 `开始 M0-L1-101`。
 
 ## 串行顺序
 
 ```text
-M0-L4-000
-→ M0-L1-101
+M0-L1-101
 → M0-L1-102
 → M0-L1-103
 → M0-L1-104
@@ -46,7 +46,7 @@ M0-L4-000
 
 | 状态 | 含义 |
 |---|---|
-| `blocked_workflow` | 四层入口尚未安装或验证 |
+| `blocked_workflow` | 当前仓库缺少项目内四层入口 |
 | `blocked_upstream` | 依赖的上游任务尚未接受 |
 | `ready` | 依赖满足，可以等待用户开始 |
 | `active` | 用户已在对应任务会话明确授权开始 |
@@ -54,10 +54,11 @@ M0-L4-000
 | `accepted` | 交付已被接受，可以推进路由 |
 | `returned` | 因上游缺失或交付不合格退回 |
 | `verified` | 实现和相称验证均已完成 |
+| `deferred` | 当前不需要，记录重启条件后暂缓 |
 
 ## 路由更新门禁
 
-- 只能由 `route_owner` 所在的活动方向 session 修改。
+- 正常活动时只能由 `route_owner` 所在方向 session 修改；`handoff_pending` 时仅允许源 session 完成交接或目标 session 完成认领。
 - 下游聊天不得自行把自己的任务或下一任务改成 `ready`。
 - 任务进入 `accepted` 或 `verified` 必须附输出 ID、提交和验证证据。
 - 上游规格被重新打开时，依赖任务自动退回 `blocked_upstream`。

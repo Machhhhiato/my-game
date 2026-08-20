@@ -2,21 +2,29 @@
 relay_version: 1
 conversation_id: always-game-m0-direction
 mode: direction_discussion
-status: active
+status: handoff_pending
 branch: context/m0-direction
 base_main: a08c40bb3596918347c9719d5c82c5af26707d95
-active_lane: M0-DIR-A
-active_host: mac
+direction_protocol_version: 2
+routing_epoch: 2
+active_lane: null
+active_host: null
+active_session: null
+previous_lane: M0-DIR-A
+previous_host: mac
+next_lane: M0-DIR-B
+next_host: windows
+handoff_id: M0-H001
 last_session: M0-S001
-last_turn: M0-S001-A032
-updated_at: 2026-08-20T17:47:00+08:00
+last_turn: M0-S001-A035
+updated_at: 2026-08-20T18:01:02+08:00
 ---
 
 # 当前接续卡
 
 ## 当前目标
 
-下一阶段终点与任务顺序已经确认并拆成 13 个任务包；当前先完成一次性四层入口安装，让后续会话能从 Git 正确识别自己的任务。
+Mac 方向会话已经完成本轮交接并关闭。下一步由 Windows 第一层方向会话接管，继续 `M0-L1-101`，冻结试玩起点、终点与非目标。
 
 ## 已确认
 
@@ -25,6 +33,7 @@ updated_at: 2026-08-20T17:47:00+08:00
 - `D-M0-DIR-003`：设计内容必须先写清玩家看见什么、做什么、花什么和得到什么；不得用抽象总结或高大上词汇替代具体规则。
 - `D-M0-DIR-004`：四层编号永久固定；用户在新会话只需说“你是第 N 层”，AI 必须从 Git 读取对应职责并先完成只读启动检查。
 - `D-M0-DIR-005`：四层任务由 Git 唯一路由；上游未完成时必须显示准确阻塞，不能由聊天猜任务。
+- `D-M0-DIR-006`：每次交接必须指明唯一下一会话；本次安装项目内短语入口，Windows 第一层成为下一目的地，全局跨项目路由不再阻塞产品讨论。
 - `D-M0-PROD-001`：首先为用户本人这位资深策略玩家量身定制；买断暂缓；用户认可初版后再以 Steam 免费游戏形式首次发布。
 - `D-M0-PROD-002`：核心爽点是通过专业管理形成科技、资源、高级资产和版图领先；正常经营能够积累储备并解决危机，不采用强制极端二选一。
 - `D-M0-PROD-003`：关键科技允许玩家集中突破，普通科研允许系统按领域倾向自动推进，形成操作与看海交替。
@@ -37,14 +46,15 @@ updated_at: 2026-08-20T17:47:00+08:00
 ## 当前仍未冻结
 
 - M0 产品契约尚未冻结；五项第一层规格仍需按任务逐项确认。
-- 方向分支已经具备启动合同、角色卡和任务包；项目入口与 Mac/Windows 全局路由仍待 `M0-L4-000` 安装和实测。
+- 方向分支已经具备项目根短语入口、启动合同、角色卡、下一会话卡、会话映射和任务包；Windows 实机接管尚待回家后完成。
+- 从任意其他项目目录自动找到 Always Game 的全局路由仍待 `M0-L4-000`，但不再阻塞第一层产品讨论。
 - 科研倾向控件、首座远程资源前哨类型、试玩具体数值和危机内容仍待确认。
 - 28 人仍是实现基线，不是已确认的正式平衡值。
 - Steam 首次免费发布已确认；是否永久免费以及任何后续商业模式均暂缓。
 
-## 当前唯一任务
+## 下一唯一任务
 
-`M0-L4-000`：在独立第四层会话中安装四层项目入口和本机路由，并完成 Mac 四个启动语测试；不修改游戏。
+`M0-L1-101`：在 Windows 的 `M0-DIR-B` / `M0-L1-DIRECTION` 会话中，写清试玩起点、30–45 分钟终点和非目标。当前状态为 `ready`，但用户尚未说“开始 M0-L1-101”。
 
 ## 禁止操作
 
@@ -55,4 +65,4 @@ updated_at: 2026-08-20T17:47:00+08:00
 
 ## 下一句建议
 
-新建一次性第四层同步会话，使用 `TASK_PACKAGES.md` 中 `M0-L4-000` 的完整引导语；它返回只读回执后，再明确说“开始 M0-L4-000”。
+在 Windows 拉取 `context/m0-direction`，从真实仓库根目录新建 `AG-M0｜L1-DIRECTION｜101-105｜WIN`，只输入 `你是第一层`。
