@@ -1,16 +1,16 @@
 ---
 routing_version: 1
-routing_epoch: 2
-routing_state: active
-active_lane: M0-DIR-B
-active_host: windows
-active_session: M0-S002
-previous_lane: M0-DIR-A
-previous_host: mac
-previous_session: M0-S001
-next_lane: null
-next_host: null
-handoff_id: M0-H001
+routing_epoch: 3
+routing_state: handoff_pending
+active_lane: null
+active_host: null
+active_session: null
+previous_lane: M0-DIR-B
+previous_host: windows
+previous_session: M0-S002
+next_lane: M0-DIR-A
+next_host: mac
+handoff_id: M0-H002
 ---
 
 # M0 会话路由

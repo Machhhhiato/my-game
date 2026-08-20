@@ -2,29 +2,29 @@
 relay_version: 1
 conversation_id: always-game-m0-direction
 mode: direction_discussion
-status: active
+status: handoff_pending
 branch: context/m0-direction
 base_main: a08c40bb3596918347c9719d5c82c5af26707d95
 direction_protocol_version: 2
-routing_epoch: 2
-active_lane: M0-DIR-B
-active_host: windows
-active_session: M0-S002
-previous_lane: M0-DIR-A
-previous_host: mac
-next_lane: null
-next_host: null
-handoff_id: M0-H001
+routing_epoch: 3
+active_lane: null
+active_host: null
+active_session: null
+previous_lane: M0-DIR-B
+previous_host: windows
+next_lane: M0-DIR-A
+next_host: mac
+handoff_id: M0-H002
 last_session: M0-S002
-last_turn: M0-S002-A010
-updated_at: 2026-08-20T21:51:36+08:00
+last_turn: M0-S002-A014
+updated_at: 2026-08-20T22:14:01+08:00
 ---
 
 # 当前接续卡
 
 ## 当前目标
 
-Windows 已接管第一层方向会话并开始 `M0-L1-101`。当前正在逐项冻结试玩起点、前 90 日路径、终点和非目标。
+Windows 已完成 `M0-L1-101` 的逐项确认和汇编，关闭 `M0-S002` 并发起 `M0-H002`。下一步由 Mac 新会话复核 `SPEC-M0-PLAY-001`；当前没有活动写入端。
 
 ## 已确认
 
@@ -45,21 +45,22 @@ Windows 已接管第一层方向会话并开始 `M0-L1-101`。当前正在逐项
 - `D-M0-PROD-009`：六阶段与 7 次主要命令只作为链路测试骨架；链路跑通不等于 M0 内容完成，联调后必须补充食物收集、废墟探索等正式内容并重新验收。
 - `D-M0-PROD-010`：食物循环、废墟探索循环、维护/零件循环是正式 M0 的三条最低内容线，不能被链路占位替代。
 - `D-M0-PROD-011`：正式内容门以总部三线稳定、首座完整首建、第二座自动稳定、观察期、压力验证和存档一致性为终点；第 90 日是目标线而非突然判负线。
+- `D-M0-PROD-012`：M0 产品非目标已确认；食物、废墟探索、维护/零件三条最低内容线受保护，事件结构与正式玩家文字仍交第二、三层完成。
 - 方向聊天唯一允许的写操作，是维护并推送本目录中的接力文档。
 
 ## 当前仍未冻结
 
 - M0 产品契约尚未冻结；五项第一层规格仍需按任务逐项确认。
-- 方向分支已经具备项目根短语入口、启动合同、角色卡、下一会话卡、会话映射和任务包；Windows 实机接管已完成。
+- 方向分支已经具备项目根短语入口、启动合同、角色卡、下一会话卡、会话映射和任务包；Windows 本场已关闭，等待 Mac 接管。
 - 从任意其他项目目录自动找到 Always Game 的全局路由仍待 `M0-L4-000`，但不再阻塞第一层产品讨论。
-- 科研倾向控件、首座远程资源前哨类型、试玩具体数值和危机内容仍待确认。
-- `M0-L1-101` 的开局人口、人力和供水缓冲已确认；六阶段路径仅获准用于链路测试，正式内容路径和完整性白名单尚未冻结。
+- 科研倾向控件、试玩具体数值和危机内容仍待确认；工业废墟回收已确认为 M0 唯一完整远程前哨类型。
+- `SPEC-M0-PLAY-001` 已在 `cc0969e` 汇编并进入 review；构成决定均已逐项确认，但汇编中的工作假设和展开项仍待 Mac 整体复核，因此 `M0-L1-101` 尚未 accepted。
 - 三条最低内容线与正式终点框架已经确认；其具体来源、消耗、阶段、恢复规则、验收阈值和玩家可见反馈仍待 `M0-L1-102` 至 `M0-L1-105` 冻结。
 - Steam 首次免费发布已确认；是否永久免费以及任何后续商业模式均暂缓。
 
 ## 下一唯一任务
 
-`M0-L1-101`：在 Windows 的 `M0-DIR-B` / `M0-L1-DIRECTION` 会话中，写清试玩起点、30–45 分钟终点和非目标。当前状态为 `active`，等待用户确认或修订第一份草案。
+`M0-L1-101`：在 Mac 的 `M0-DIR-A` / `M0-L1-DIRECTION` 新会话中复核 `specs/spec-m0-play-001.md`。当前状态为 `review`；接受后才把 `M0-L1-102` 切到 ready，且不自动开始。
 
 ## 禁止操作
 
@@ -70,4 +71,4 @@ Windows 已接管第一层方向会话并开始 `M0-L1-101`。当前正在逐项
 
 ## 下一句建议
 
-最后确认 `M0-L1-101` 的产品非目标，并区分“M0 不做”与“第一层暂不写但下游仍要完成”的内容；确认后整理 `SPEC-M0-PLAY-001` 进入 review。
+在 Mac 拉取 `context/m0-direction`，从真实仓库根目录新建 `AG-M0｜L1-DIRECTION｜101-105｜MAC`，只输入 `你是第一层`；先 review `SPEC-M0-PLAY-001`。

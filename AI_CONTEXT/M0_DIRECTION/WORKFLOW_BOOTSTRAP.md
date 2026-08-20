@@ -44,6 +44,7 @@ Codex 在每个新任务开始时建立一次全局到项目的说明链。安�
 
 - 每个层级最多只能有一个 `ready` 或 `active` 任务。
 - 一个任务为 `ready`：返回 `READY`，显示任务 ID，但不自动开始。
+- 一个任务为 `review`：返回 `REVIEW`，显示输出 ID、路径和待确认项；等待用户接受或修订，不得启动下一任务。
 - 当前任务为 `blocked_upstream`：返回 `BLOCKED_UPSTREAM`，写明阻塞任务和恢复动作。
 - 项目根短语入口缺失：返回 `BLOCKED_WORKFLOW`；不得假装全局路由或聊天记忆可以替代项目入口。
 - 同层出现两个可执行任务：返回 `TASK_CONFLICT`，不得自行挑选。
@@ -53,7 +54,7 @@ Codex 在每个新任务开始时建立一次全局到项目的说明链。安�
 ## 固定启动回执
 
 ```text
-状态：READY / BLOCKED_UPSTREAM / BLOCKED_WORKFLOW / TASK_CONFLICT / BLOCKED_CONTRACT / BLOCKED_GIT
+状态：READY / REVIEW / BLOCKED_UPSTREAM / BLOCKED_WORKFLOW / TASK_CONFLICT / BLOCKED_CONTRACT / BLOCKED_GIT
 项目：Always Game
 里程碑：M0 个人完整试玩版
 层级：<第一至第四层｜名称>
@@ -84,7 +85,7 @@ Git 基线：<branch>@<commit>
 ## 当前入口范围
 
 - 项目内入口：已安装在 `context/m0-direction` 的项目根 `AGENTS.md`；必须从真实仓库根目录新建任务。
-- Windows 本次接管：拉取方向分支后，以 `你是第一层` 直接恢复 `M0-L1-101`。
+- Mac 下一次接管：拉取方向分支后，以 `你是第一层` 恢复 `M0-L1-101` 的 review；用户接受汇编后才解锁 `M0-L1-102`。
 - 全局跨项目入口：暂缓；从任意其他项目目录输入短语，不保证能自动找到 Always Game。
 - `M0-L4-000`：保留为将来可选的全局路由扩展与完整多设备测试，不再阻塞第一层产品讨论。
 
