@@ -3,7 +3,7 @@
 | Session | Lane | Host | 开始时间 | 状态 | 最后记录 | 文件 |
 |---|---|---|---|---|---|---|
 | `M0-S001` | `M0-DIR-A` | `mac` | 2026-08-20 11:59 +08:00 | closed | `M0-S001-A035` | `sessions/20260820-1159-mac-m0-s001.md` |
-| `M0-S002` | `M0-DIR-B` | `windows` | 2026-08-20 20:34 +08:00 | active | `M0-S002-A008` | `sessions/20260820-2034-windows-m0-s002.md` |
+| `M0-S002` | `M0-DIR-B` | `windows` | 2026-08-20 20:34 +08:00 | active | `M0-S002-A010` | `sessions/20260820-2034-windows-m0-s002.md` |
 
 ## 规则
 
