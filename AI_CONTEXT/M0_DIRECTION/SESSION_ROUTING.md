@@ -1,15 +1,15 @@
 ---
 routing_version: 1
 routing_epoch: 2
-routing_state: handoff_pending
-active_lane: null
-active_host: null
-active_session: null
+routing_state: active
+active_lane: M0-DIR-B
+active_host: windows
+active_session: M0-S002
 previous_lane: M0-DIR-A
 previous_host: mac
 previous_session: M0-S001
-next_lane: M0-DIR-B
-next_host: windows
+next_lane: null
+next_host: null
 handoff_id: M0-H001
 ---
 

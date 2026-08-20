@@ -1,10 +1,10 @@
 ---
 workflow_version: 2
 milestone: M0-personal-playable
-route_owner: handoff_pending:M0-DIR-B
+route_owner: M0-DIR-B:M0-S002
 overall_current_task: M0-L1-101
 handoff_id: M0-H001
-updated_at: 2026-08-20T18:01:02+08:00
+updated_at: 2026-08-20T20:34:30+08:00
 ---
 
 # M0 当前任务路由
@@ -15,12 +15,12 @@ updated_at: 2026-08-20T18:01:02+08:00
 
 | 层级 | 当前任务 | 状态 | 阻塞项 | 正确回执 |
 |---|---|---|---|---|
-| 第一层 | `M0-L1-101` 试玩起点与终点 | `ready` | 等待 Windows 接管；不是任务依赖 | `READY` |
+| 第一层 | `M0-L1-101` 试玩起点与终点 | `active` | 无；等待用户逐项确认草案 | `ACTIVE` |
 | 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L1-105`、`M0-L4-010` | `BLOCKED_UPSTREAM` |
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
 | 第四层 | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L1-105` | `BLOCKED_UPSTREAM` |
 
-当前唯一可启动任务是 `M0-L1-101`。项目内短语入口已安装；`M0-L4-000` 的全局跨项目路由扩展和完整多设备测试已暂缓，不再阻塞产品讨论。`你是第一层` 只恢复角色和任务；用户仍需另说 `开始 M0-L1-101`。
+当前唯一活动任务是 `M0-L1-101`。项目内短语入口已安装；`M0-L4-000` 的全局跨项目路由扩展和完整多设备测试已暂缓，不再阻塞产品讨论。用户已经明确开始本任务；其他层仍按上游依赖保持阻塞。
 
 ## 串行顺序
 

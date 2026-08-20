@@ -2,29 +2,29 @@
 relay_version: 1
 conversation_id: always-game-m0-direction
 mode: direction_discussion
-status: handoff_pending
+status: active
 branch: context/m0-direction
 base_main: a08c40bb3596918347c9719d5c82c5af26707d95
 direction_protocol_version: 2
 routing_epoch: 2
-active_lane: null
-active_host: null
-active_session: null
+active_lane: M0-DIR-B
+active_host: windows
+active_session: M0-S002
 previous_lane: M0-DIR-A
 previous_host: mac
-next_lane: M0-DIR-B
-next_host: windows
+next_lane: null
+next_host: null
 handoff_id: M0-H001
-last_session: M0-S001
-last_turn: M0-S001-A035
-updated_at: 2026-08-20T18:01:02+08:00
+last_session: M0-S002
+last_turn: M0-S002-A002
+updated_at: 2026-08-20T20:34:30+08:00
 ---
 
 # 当前接续卡
 
 ## 当前目标
 
-Mac 方向会话已经完成本轮交接并关闭。下一步由 Windows 第一层方向会话接管，继续 `M0-L1-101`，冻结试玩起点、终点与非目标。
+Windows 已接管第一层方向会话并开始 `M0-L1-101`。当前正在逐项冻结试玩起点、前 90 日路径、终点和非目标。
 
 ## 已确认
 
@@ -46,15 +46,15 @@ Mac 方向会话已经完成本轮交接并关闭。下一步由 Windows 第一�
 ## 当前仍未冻结
 
 - M0 产品契约尚未冻结；五项第一层规格仍需按任务逐项确认。
-- 方向分支已经具备项目根短语入口、启动合同、角色卡、下一会话卡、会话映射和任务包；Windows 实机接管尚待回家后完成。
+- 方向分支已经具备项目根短语入口、启动合同、角色卡、下一会话卡、会话映射和任务包；Windows 实机接管已完成。
 - 从任意其他项目目录自动找到 Always Game 的全局路由仍待 `M0-L4-000`，但不再阻塞第一层产品讨论。
 - 科研倾向控件、首座远程资源前哨类型、试玩具体数值和危机内容仍待确认。
-- 28 人仍是实现基线，不是已确认的正式平衡值。
+- `M0-L1-101` 首份草案已提出 28 人、6 人可调度和约 10 日供水安全储备；这些仍是提案，不是正式平衡值。
 - Steam 首次免费发布已确认；是否永久免费以及任何后续商业模式均暂缓。
 
 ## 下一唯一任务
 
-`M0-L1-101`：在 Windows 的 `M0-DIR-B` / `M0-L1-DIRECTION` 会话中，写清试玩起点、30–45 分钟终点和非目标。当前状态为 `ready`，但用户尚未说“开始 M0-L1-101”。
+`M0-L1-101`：在 Windows 的 `M0-DIR-B` / `M0-L1-DIRECTION` 会话中，写清试玩起点、30–45 分钟终点和非目标。当前状态为 `active`，等待用户确认或修订第一份草案。
 
 ## 禁止操作
 
@@ -65,4 +65,4 @@ Mac 方向会话已经完成本轮交接并关闭。下一步由 Windows 第一�
 
 ## 下一句建议
 
-在 Windows 拉取 `context/m0-direction`，从真实仓库根目录新建 `AG-M0｜L1-DIRECTION｜101-105｜WIN`，只输入 `你是第一层`。
+先确认或修订“28 人、6 人可调度、约 10 日供水安全储备”的开局口径；随后继续冻结路径与终点。
