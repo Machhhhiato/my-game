@@ -10,9 +10,9 @@ target_host: mac
 target_lane: M0-DIR-A
 target_work_lane: M0-L1-DIRECTION
 target_layer: 1
-target_task: M0-L1-101
+target_task: M0-L1-102
 assigned_session: M0-S003
-action_status: review
+action_status: ready
 required_branch: context/m0-direction
 startup_phrase: 你是第一层
 ---
@@ -26,33 +26,31 @@ startup_phrase: 你是第一层
 - 稳定工作 lane：`M0-L1-DIRECTION`。
 - 建议会话标题：`AG-M0｜L1-DIRECTION｜101-105｜MAC`。
 - 当前 session：`M0-S003`。
-- 当前任务：`M0-L1-101 · 试玩起点、终点与非目标`，状态为 `review`。
-- 待审输出：`SPEC-M0-PLAY-001`，路径 `specs/spec-m0-play-001.md`，review 提交 `cc0969e`。
-- 当前动作：Mac 复核汇编中的已确认项、工作假设和待冻结项；接受或修订后再决定是否解锁 `M0-L1-102`。
+- 已接受任务：`M0-L1-101 · 试玩起点、终点与非目标`，acceptance 提交 `0e2637f`。
+- 当前任务：`M0-L1-102 · 人力、资源、库存底线与压力`，状态为 `ready`。
+- 当前动作：等待用户明确说 `开始 M0-L1-102`；在此之前不展开或实施该任务。
 
 Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。UI 中是否新建聊天不再是前置；Git session、活动 lane 和任务 ID 才是接力身份。
 
-## 当前 review 步骤
+## 当前 ready 步骤
 
-1. 第 3.2 节的开局设施与资源角色已接受；20 日与 15 日继续交后续平衡。
-2. 第 6 节三条最低内容线运行规则已接受；具体数值继续交后续任务。
-3. 当前复核第 7 节观察期应采用固定 10 日，还是按自动运行结果完成。
-4. 用户接受或修订汇编。接受后由 Mac 方向 lane 把 `M0-L1-101` 标成 accepted，并把 `M0-L1-102` 切到 ready。
-5. `M0-L1-102` 不自动开始；仍须用户另说 `开始 M0-L1-102`。
+1. `M0-L1-101` 已在 `0e2637f` accepted，三项整体复核全部完成。
+2. `M0-L1-102` 已切到 `ready`，没有自动开始。
+3. 用户说 `开始 M0-L1-102` 后，本会话再把它切到 `active` 并进入讨论。
 
 ## 当前正确状态至少包含
 
 ```text
-状态：REVIEW
+状态：READY
 层级：第一层｜方向与系统设计
 活动 lane：M0-DIR-A｜Mac｜M0-S003
-当前任务：M0-L1-101｜试玩起点、终点与非目标
-任务状态：review
-待审输出：SPEC-M0-PLAY-001｜specs/spec-m0-play-001.md｜cc0969e
+当前任务：M0-L1-102｜人力、资源、库存底线与压力
+任务状态：ready
+已接受输出：SPEC-M0-PLAY-001｜specs/spec-m0-play-001.md｜0e2637f
 不会做：故事正文、最终玩家文字、游戏代码和 main 修改
-下一步：等待用户接受或修订汇编
+下一步：等待用户明确说“开始 M0-L1-102”
 ```
 
 ## 完成条件
 
-`M0-L1-101` 保持 review，直到用户接受汇编；随后才能把 `M0-L1-102` 切到 ready，并等待单独开始授权。
+用户明确说 `开始 M0-L1-102` 后，才把该任务从 `ready` 切到 `active`。
