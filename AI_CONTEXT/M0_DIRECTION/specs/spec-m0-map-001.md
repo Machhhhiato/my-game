@@ -16,6 +16,7 @@ accepted_at: 2026-08-21T22:53:33+08:00
 accepted_in_session: M0-S003
 acceptance_source: M0-S003-U026
 acceptance_decision: D-M0-PROD-029
+acceptance_commit: 0e1723d
 source_session: M0-S003
 implementation_authorized: false
 overall_spec_frozen: false
