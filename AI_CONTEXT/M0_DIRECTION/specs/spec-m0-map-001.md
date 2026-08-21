@@ -2,8 +2,8 @@
 spec_id: SPEC-M0-MAP-001
 task_id: M0-L1-103
 title: M0 小地图、地形、选址与运输
-status: review
-task_status: review
+status: accepted
+task_status: accepted
 milestone: M0-personal-playable
 source_specs:
   - SPEC-M0-PLAY-001
@@ -12,6 +12,10 @@ started_at: 2026-08-21T16:56:17+08:00
 start_source: M0-S003-U016
 review_ready_at: 2026-08-21T22:40:52+08:00
 review_ready_source: D-M0-PROD-029
+accepted_at: 2026-08-21T22:53:33+08:00
+accepted_in_session: M0-S003
+acceptance_source: M0-S003-U026
+acceptance_decision: D-M0-PROD-029
 source_session: M0-S003
 implementation_authorized: false
 overall_spec_frozen: false
@@ -23,7 +27,7 @@ overall_spec_frozen: false
 
 本规格决定 M0 小地图实际有哪些地点，玩家开始时知道多少，怎样勘测地点和比较选址，地形与道路怎样改变工程成本，以及总部和前哨怎样按批次运输。
 
-本规格不做程序化世界、全球寻路、逐格移动、逐车微操或第二种完整远程前哨，也不授权修改游戏代码。四项组成内容均已接受，整份规格当前等待用户整体复核。
+本规格不做程序化世界、全球寻路、逐格移动、逐车微操或第二种完整远程前哨，也不授权修改游戏代码。四项组成内容和整份汇编均已由用户接受，本文件状态为 `accepted`。
 
 ## 2. 已确认边界
 
@@ -448,7 +452,7 @@ M0 必须保留缓慢但可用的人工装卸和临时堆场。第一台叉车�
 
 M0 不增加逐车管理、道路拥堵、护送或劫掠系统。具体批次载量、装卸速度、每段白昼、车辆乘员、本地安全库存和管线流量交 `M0-L1-105`。本项已由用户在 `M0-S003-U025` 接受，形成 `D-M0-PROD-029`。
 
-## 9. 整体复核入口
+## 9. 整体验收结果
 
 本规格四项组成内容已分别接受：
 
@@ -479,4 +483,4 @@ M0 不增加逐车管理、道路拥堵、护送或劫掠系统。具体批次�
 
 不阻塞本任务的后续内容：无人机制造、供电和具体地图作用交 `M0-L1-104`；勘测工作量、运输载量、装卸速度、道路耗时、管线流量、是否启用离线推进及补算上限交 `M0-L1-105`。37 格是当前已接受范围，后续不能作为普通平衡数字自行改变。
 
-`SPEC-M0-MAP-001` 与 `M0-L1-103` 当前进入整体 `review`，尚未自动接受。只有用户明确整体接受后，第一层才可把 `M0-L1-103` 标为 `accepted` 并将 `M0-L1-104` 切到 `ready`；不能自动开始下一任务。
+用户已在 `M0-S003-U026` 整体接受 `M0-L1-103`。`SPEC-M0-MAP-001` 与任务状态均为 `accepted`；第一层可以把 `M0-L1-104` 切到 `ready`，但仍须用户另说“开始 `M0-L1-104`”后才能进入 `active`。整套 M0 继续保持 `overall_spec_frozen: false`，也未授权实施。
