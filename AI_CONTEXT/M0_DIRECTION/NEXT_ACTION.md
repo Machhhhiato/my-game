@@ -12,7 +12,7 @@ target_work_lane: M0-L1-DIRECTION
 target_layer: 1
 target_task: M0-L1-103
 assigned_session: M0-S003
-action_status: active
+action_status: review
 required_branch: context/m0-direction
 startup_phrase: 你是第一层
 ---
@@ -27,13 +27,13 @@ startup_phrase: 你是第一层
 - 建议会话标题：`AG-M0｜L1-DIRECTION｜101-105｜MAC`。
 - 当前 session：`M0-S003`。
 - 已接受任务：`M0-L1-101`，acceptance 提交 `0e2637f`；`M0-L1-102`，acceptance 提交 `f8ae1e9`。
-- 当前任务：`M0-L1-103 · 小地图、地形、选址与运输`，状态为 `active`。
+- 当前任务：`M0-L1-103 · 小地图、地形、选址与运输`，状态为 `review`。
 - 当前输出：`SPEC-M0-MAP-001`，路径 `specs/spec-m0-map-001.md`。
-- 当前动作：第一项已由 `D-M0-PROD-026` 整体接受；第二项已由 `D-M0-PROD-027` 接受；第三项已由 `D-M0-PROD-028` 接受；第四项按 `M0-S003-U024` 修订为车队、道路、装卸设施三个独立瓶颈，等待最终接受。
+- 当前动作：四项组成内容已全部接受；第四项形成 `D-M0-PROD-029`，当前整体复核 `SPEC-M0-MAP-001`。
 
 Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。UI 中是否新建聊天不再是前置；Git session、活动 lane 和任务 ID 才是接力身份。
 
-## 当前 active 步骤
+## 当前 review 步骤
 
 1. `M0-L1-101` 已在 `0e2637f` accepted。
 2. `SPEC-M0-OPS-001` 与 `M0-L1-102` 已在 `f8ae1e9` accepted。
@@ -42,22 +42,23 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。UI 中是否�
 5. 用户在 `M0-S003-U022` 接受按工程占用格与总部连接判断选址；第二项 accepted，第三项转为 active。
 6. 用户在 `M0-S003-U023` 接受四级情报、一次批准自动推进、暂停不清零和存档不重随；第三项 accepted，第四项转为 active。
 7. 用户在 `M0-S003-U024` 认可第四项整体逻辑，并修正运输升级：卡车改变车队人力、载量和速度；叉车等工业载具改变所在设施装卸能力；路面、路基与桥涵单独限制通行和速度。第四项保持 active，等待修订版最终接受。
+8. 用户在 `M0-S003-U025` 接受修订后的第四项，形成 `D-M0-PROD-029`；`SPEC-M0-MAP-001` 与 `M0-L1-103` 转入整体 review，尚未 accepted。
 
 ## 当前正确状态至少包含
 
 ```text
-状态：ACTIVE
+状态：REVIEW
 层级：第一层｜方向与系统设计
 活动 lane：M0-DIR-A｜Mac｜M0-S003
 当前任务：M0-L1-103｜小地图、地形、选址与运输
-任务状态：active
+任务状态：review
 已接受输出：SPEC-M0-PLAY-001｜specs/spec-m0-play-001.md｜0e2637f
 已接受输出：SPEC-M0-OPS-001｜specs/spec-m0-ops-001.md｜f8ae1e9
 不会做：故事正文、最终玩家文字、游戏代码和 main 修改
 当前输出：SPEC-M0-MAP-001｜specs/spec-m0-map-001.md
-下一步：等待用户接受或修订第四项修订版的车队、道路与装卸设施拆分
+下一步：等待用户整体接受 M0-L1-103，或指出需要重开的具体小节
 ```
 
 ## 完成条件
 
-四项组成内容均获用户接受并完成纸面核对后，`SPEC-M0-MAP-001` 才能转入整体 review；不会自动接受 `M0-L1-103` 或开始 `M0-L1-104`。
+四项组成内容已经全部接受，`SPEC-M0-MAP-001` 现处于整体 review。只有用户明确整体接受后，`M0-L1-103` 才能标为 accepted，并把 `M0-L1-104` 切到 ready；不会自动开始下一任务。
