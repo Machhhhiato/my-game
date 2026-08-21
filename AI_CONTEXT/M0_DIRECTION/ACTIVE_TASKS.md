@@ -1,10 +1,10 @@
 ---
 workflow_version: 2
 milestone: M0-personal-playable
-route_owner: handoff_pending:M0-DIR-A
+route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L1-101
 handoff_id: M0-H002
-updated_at: 2026-08-20T22:14:01+08:00
+updated_at: 2026-08-21T11:55:55+08:00
 ---
 
 # M0 当前任务路由
@@ -15,12 +15,12 @@ updated_at: 2026-08-20T22:14:01+08:00
 
 | 层级 | 当前任务 | 状态 | 阻塞项 | 正确回执 |
 |---|---|---|---|---|
-| 第一层 | `M0-L1-101` 试玩起点与终点 | `review` | 等待 Mac 接管并复核 `SPEC-M0-PLAY-001` | `REVIEW` |
+| 第一层 | `M0-L1-101` 试玩起点与终点 | `review` | 无；由 Mac `M0-S003` 复核 `SPEC-M0-PLAY-001` | `REVIEW` |
 | 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L1-105`、`M0-L4-010` | `BLOCKED_UPSTREAM` |
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
 | 第四层 | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L1-105` | `BLOCKED_UPSTREAM` |
 
-当前唯一待处理任务是 `M0-L1-101` review。项目内短语入口已安装；`M0-L4-000` 的全局跨项目路由扩展和完整多设备测试已暂缓，不再阻塞产品讨论。`M0-L1-102` 仍未解锁；只有用户接受汇编后才能转为 ready，且仍需单独开始。
+当前唯一待处理任务是 `M0-L1-101` review，Mac `M0-S003` 已接管。项目内短语入口已安装；`M0-L4-000` 的全局跨项目路由扩展和完整多设备测试已暂缓，不再阻塞产品讨论。`M0-L1-102` 仍未解锁；只有用户接受汇编后才能转为 ready，且仍需单独开始。
 
 ## 最近交付证据
 

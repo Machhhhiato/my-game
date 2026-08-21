@@ -2,29 +2,29 @@
 relay_version: 1
 conversation_id: always-game-m0-direction
 mode: direction_discussion
-status: handoff_pending
+status: active
 branch: context/m0-direction
 base_main: a08c40bb3596918347c9719d5c82c5af26707d95
 direction_protocol_version: 2
 routing_epoch: 3
-active_lane: null
-active_host: null
-active_session: null
+active_lane: M0-DIR-A
+active_host: mac
+active_session: M0-S003
 previous_lane: M0-DIR-B
 previous_host: windows
-next_lane: M0-DIR-A
-next_host: mac
+next_lane: null
+next_host: null
 handoff_id: M0-H002
-last_session: M0-S002
-last_turn: M0-S002-A014
-updated_at: 2026-08-20T22:14:01+08:00
+last_session: M0-S003
+last_turn: M0-S003-A004
+updated_at: 2026-08-21T11:55:55+08:00
 ---
 
 # 当前接续卡
 
 ## 当前目标
 
-Windows 已完成 `M0-L1-101` 的逐项确认和汇编，关闭 `M0-S002` 并发起 `M0-H002`。下一步由 Mac 新会话复核 `SPEC-M0-PLAY-001`；当前没有活动写入端。
+Mac 已在当前用户聊天中接管 `M0-DIR-A` 并创建 `M0-S003`。当前复核 `SPEC-M0-PLAY-001`；复核通过前不接受 `M0-L1-101`，也不解锁 `M0-L1-102`。
 
 ## 已确认
 
@@ -51,7 +51,7 @@ Windows 已完成 `M0-L1-101` 的逐项确认和汇编，关闭 `M0-S002` 并发
 ## 当前仍未冻结
 
 - M0 产品契约尚未冻结；五项第一层规格仍需按任务逐项确认。
-- 方向分支已经具备项目根短语入口、启动合同、角色卡、下一会话卡、会话映射和任务包；Windows 本场已关闭，等待 Mac 接管。
+- 方向分支已经具备项目根短语入口、启动合同、角色卡、下一会话卡、会话映射和任务包；Windows 本场已关闭，Mac 已接管。
 - 从任意其他项目目录自动找到 Always Game 的全局路由仍待 `M0-L4-000`，但不再阻塞第一层产品讨论。
 - 科研倾向控件、试玩具体数值和危机内容仍待确认；工业废墟回收已确认为 M0 唯一完整远程前哨类型。
 - `SPEC-M0-PLAY-001` 已在 `cc0969e` 汇编并进入 review；构成决定均已逐项确认，但汇编中的工作假设和展开项仍待 Mac 整体复核，因此 `M0-L1-101` 尚未 accepted。
@@ -60,7 +60,7 @@ Windows 已完成 `M0-L1-101` 的逐项确认和汇编，关闭 `M0-S002` 并发
 
 ## 下一唯一任务
 
-`M0-L1-101`：在 Mac 的 `M0-DIR-A` / `M0-L1-DIRECTION` 新会话中复核 `specs/spec-m0-play-001.md`。当前状态为 `review`；接受后才把 `M0-L1-102` 切到 ready，且不自动开始。
+`M0-L1-101`：在 Mac 的 `M0-DIR-A` / `M0-L1-DIRECTION` / `M0-S003` 中复核 `specs/spec-m0-play-001.md`。当前状态为 `review`；接受后才把 `M0-L1-102` 切到 ready，且不自动开始。
 
 ## 禁止操作
 
@@ -71,4 +71,4 @@ Windows 已完成 `M0-L1-101` 的逐项确认和汇编，关闭 `M0-S002` 并发
 
 ## 下一句建议
 
-在 Mac 拉取 `context/m0-direction`，从真实仓库根目录新建 `AG-M0｜L1-DIRECTION｜101-105｜MAC`，只输入 `你是第一层`；先 review `SPEC-M0-PLAY-001`。
+继续在当前用户聊天复核 `SPEC-M0-PLAY-001` 的三处重点：开局工作假设、三条最低内容线的展开规则、暂定 10 日观察期。
