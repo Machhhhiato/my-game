@@ -12,7 +12,7 @@ target_work_lane: M0-L1-DIRECTION
 target_layer: 1
 target_task: M0-L1-102
 assigned_session: M0-S003
-action_status: active
+action_status: review
 required_branch: context/m0-direction
 startup_phrase: 你是第一层
 ---
@@ -27,31 +27,31 @@ startup_phrase: 你是第一层
 - 建议会话标题：`AG-M0｜L1-DIRECTION｜101-105｜MAC`。
 - 当前 session：`M0-S003`。
 - 已接受任务：`M0-L1-101 · 试玩起点、终点与非目标`，acceptance 提交 `0e2637f`。
-- 当前任务：`M0-L1-102 · 人力、资源、库存底线与压力`，状态为 `active`。
+- 当前任务：`M0-L1-102 · 人力、资源、库存底线与压力`，状态为 `review`。
 - 当前输出：`SPEC-M0-OPS-001`，路径 `specs/spec-m0-ops-001.md`。
-- 当前动作：人力、资源流、库存底线与暂停恢复已接受；所有压力已确认为随机运行事故，不设固定节点或事件通关。当前只复核集中突破与稳定并行两条发展路线。
+- 当前动作：四项组成内容已全部接受；集中与稳定由真实调配形成，不做路线卡。当前整体复核 `SPEC-M0-OPS-001`。
 
 Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。UI 中是否新建聊天不再是前置；Git session、活动 lane 和任务 ID 才是接力身份。
 
-## 当前 active 步骤
+## 当前 review 步骤
 
 1. `M0-L1-101` 已在 `0e2637f` accepted，三项整体复核全部完成。
-2. 用户已在 `M0-S003-U007` 明确开始 `M0-L1-102`，任务已切到 `active`。
-3. 人力分组与投入档位、资源种类与流动、库存底线与暂停恢复已经接受；供水事故与通用随机运行事故规则已形成 `D-M0-PROD-021`、`D-M0-PROD-022`。
-4. 四项均接受后汇编 `SPEC-M0-OPS-001`，进入整体 review；不会自动解锁 `M0-L1-103`。
+2. 用户已在 `M0-S003-U007` 明确开始 `M0-L1-102`；四项组成内容现已逐项接受。
+3. 集中突破与稳定发展由劳动力、P0 至 P3、物资供应顺序及未来能源分配自然形成，`D-M0-PROD-023` 禁止路线卡和额外加成。
+4. `SPEC-M0-OPS-001` 与 `M0-L1-102` 已进入整体 review；用户接受前不会解锁 `M0-L1-103`。
 
 ## 当前正确状态至少包含
 
 ```text
-状态：ACTIVE
+状态：REVIEW
 层级：第一层｜方向与系统设计
 活动 lane：M0-DIR-A｜Mac｜M0-S003
 当前任务：M0-L1-102｜人力、资源、库存底线与压力
-任务状态：active
+任务状态：review
 已接受输出：SPEC-M0-PLAY-001｜specs/spec-m0-play-001.md｜0e2637f
 当前输出：SPEC-M0-OPS-001｜specs/spec-m0-ops-001.md
 不会做：故事正文、最终玩家文字、游戏代码和 main 修改
-下一步：等待用户保留或修订集中突破、稳定并行两条发展路线
+下一步：等待用户接受 M0-L1-102，或指出需要重开的具体小节
 ```
 
 ## 完成条件
