@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L1-103
 handoff_id: M0-H002
-updated_at: 2026-08-21T16:56:17+08:00
+updated_at: 2026-08-21T17:03:41+08:00
 ---
 
 # M0 当前任务路由
@@ -28,7 +28,8 @@ updated_at: 2026-08-21T16:56:17+08:00
 - 输出：`SPEC-M0-MAP-001`。
 - 路径：`specs/spec-m0-map-001.md`。
 - 启动来源：`M0-S003-U016`。
-- 当前讨论：小地图形式、地点清单和两处工业废墟的物理差异。
+- 第一项：已由 `M0-S003-U017` 接受，形成 `D-M0-PROD-024`。
+- 当前讨论：地点与连接标签，以及适合、有条件适合、不可用三种选址结果。
 
 ## 最近接受证据
 
