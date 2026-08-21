@@ -2,13 +2,17 @@
 spec_id: SPEC-M0-OPS-001
 task_id: M0-L1-102
 title: M0 人力、资源、库存底线与压力
-status: review
-task_status: review
+status: accepted
+task_status: accepted
 milestone: M0-personal-playable
 source_spec: SPEC-M0-PLAY-001
 started_at: 2026-08-21T14:37:08+08:00
 review_ready_at: 2026-08-21T16:35:25+08:00
 review_ready_source: D-M0-PROD-023
+accepted_at: 2026-08-21T16:48:08+08:00
+accepted_in_session: M0-S003
+acceptance_source: M0-S003-U015
+acceptance_decision: D-M0-PROD-023
 source_session: M0-S003
 implementation_authorized: false
 overall_spec_frozen: false
@@ -20,7 +24,7 @@ overall_spec_frozen: false
 
 本规格决定 28 人怎样在日常生活、科研、勘测、工程和物流间分配；水、食物、普通零件及工程资源怎样流动；库存底线怎样阻止集中工程抽空生命保障；项目为何暂停、怎样恢复；随机运行事故怎样通过同一套资源与状态规则产生自然结果。
 
-本规格不做逐人模拟，不使用隐藏的智能调度，不要求极端二选一，也不授权修改游戏代码。
+本规格不做逐人模拟，不使用隐藏的智能调度，不要求极端二选一，也不授权修改游戏代码。四项组成内容和整份汇编均已由用户接受，本文件状态为 `accepted`。
 
 ## 2. 已确认边界
 
@@ -283,7 +287,7 @@ M0 不把能源和燃料做成第七、第八种库存；当前阶段尚未建�
 
 两组调配样例中的人日只是 M0 第一轮纸面值，不是世界设定常数；实测调整时仍须保证集中、稳定和中间混合配置都能正常完成，不能把样例做成两个职业、阵营或路线选项。
 
-## 10. 整体复核入口
+## 10. 整体验收结果
 
 本规格四项组成内容已分别接受：
 
@@ -292,4 +296,4 @@ M0 不把能源和燃料做成第七、第八种库存；当前阶段尚未建�
 3. 库存底线、P0 至 P3、暂停、人员回流与恢复；
 4. 随机运行事故、供水实例，以及由真实调配形成的集中或稳定倾向。
 
-`SPEC-M0-OPS-001` 与 `M0-L1-102` 当前进入整体 `review`，尚未自动接受。用户整体接受后，第一层才可把 `M0-L1-102` 标为 `accepted` 并将 `M0-L1-103` 切到 `ready`；不能自动开始下一任务。
+用户已在 `M0-S003-U015` 整体接受 `M0-L1-102`。`SPEC-M0-OPS-001` 与任务状态均为 `accepted`；第一层可以把 `M0-L1-103` 切到 `ready`，但仍须用户另说“开始 `M0-L1-103`”后才能进入 `active`。整套 M0 继续保持 `overall_spec_frozen: false`，也未授权实施。
