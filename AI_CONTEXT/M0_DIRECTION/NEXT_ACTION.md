@@ -12,7 +12,7 @@ target_work_lane: M0-L1-DIRECTION
 target_layer: 1
 target_task: M0-L1-103
 assigned_session: M0-S003
-action_status: ready
+action_status: active
 required_branch: context/m0-direction
 startup_phrase: 你是第一层
 ---
@@ -27,33 +27,34 @@ startup_phrase: 你是第一层
 - 建议会话标题：`AG-M0｜L1-DIRECTION｜101-105｜MAC`。
 - 当前 session：`M0-S003`。
 - 已接受任务：`M0-L1-101`，acceptance 提交 `0e2637f`；`M0-L1-102`，acceptance 提交 `f8ae1e9`。
-- 当前任务：`M0-L1-103 · 小地图、地形、选址与运输`，状态为 `ready`。
-- 当前输出：尚未创建；开始后输出 `SPEC-M0-MAP-001`。
-- 当前动作：等待用户明确说 `开始 M0-L1-103`；在此之前不展开或实施该任务。
+- 当前任务：`M0-L1-103 · 小地图、地形、选址与运输`，状态为 `active`。
+- 当前输出：`SPEC-M0-MAP-001`，路径 `specs/spec-m0-map-001.md`。
+- 当前动作：先确认小地图形式、地点数量与两处工业废墟的差异；其余选址和运输规则保持 proposal。
 
 Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。UI 中是否新建聊天不再是前置；Git session、活动 lane 和任务 ID 才是接力身份。
 
-## 当前 ready 步骤
+## 当前 active 步骤
 
 1. `M0-L1-101` 已在 `0e2637f` accepted。
 2. `SPEC-M0-OPS-001` 与 `M0-L1-102` 已在 `f8ae1e9` accepted。
-3. `M0-L1-103` 已切到 `ready`，没有自动开始。
-4. 用户说 `开始 M0-L1-103` 后，本会话再把它切到 `active` 并讨论小地图、地形、选址与运输。
+3. 用户已在 `M0-S003-U016` 明确开始 `M0-L1-103`，任务已切到 `active`。
+4. 当前先讨论人工设计的区域节点图、八类地点，以及两处工业废墟各自的现场与运输困难。
 
 ## 当前正确状态至少包含
 
 ```text
-状态：READY
+状态：ACTIVE
 层级：第一层｜方向与系统设计
 活动 lane：M0-DIR-A｜Mac｜M0-S003
 当前任务：M0-L1-103｜小地图、地形、选址与运输
-任务状态：ready
+任务状态：active
 已接受输出：SPEC-M0-PLAY-001｜specs/spec-m0-play-001.md｜0e2637f
 已接受输出：SPEC-M0-OPS-001｜specs/spec-m0-ops-001.md｜f8ae1e9
 不会做：故事正文、最终玩家文字、游戏代码和 main 修改
-下一步：等待用户明确说“开始 M0-L1-103”
+当前输出：SPEC-M0-MAP-001｜specs/spec-m0-map-001.md
+下一步：等待用户接受或修订第一项地点方案
 ```
 
 ## 完成条件
 
-用户明确说 `开始 M0-L1-103` 后，才把该任务从 `ready` 切到 `active`。
+四项组成内容均获用户接受并完成纸面核对后，`SPEC-M0-MAP-001` 才能转入整体 review；不会自动接受 `M0-L1-103` 或开始 `M0-L1-104`。
