@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L1-106
 handoff_id: M0-H002
-updated_at: 2026-08-24T14:08:12+08:00
+updated_at: 2026-08-24T14:23:52+08:00
 ---
 
 # M0 当前任务路由
@@ -15,20 +15,21 @@ updated_at: 2026-08-24T14:08:12+08:00
 
 | 层级 | 当前任务 | 状态 | 阻塞项 | 正确回执 |
 |---|---|---|---|---|
-| 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `ready` | 无；`M0-L1-105` 已在 `ab02d36` accepted，等待用户明确开始 | `READY` |
+| 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `active` | 无；第一项等待用户判断 | `ACTIVE` |
 | 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L1-106`、`M0-L4-010` | `BLOCKED_UPSTREAM` |
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
 | 第四层 | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L1-106` accepted 且 `overall_spec_frozen` | `BLOCKED_UPSTREAM` |
 
-`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。后续第一层任务 `M0-L1-106` 已满足依赖并切到 ready，但尚未开始，也尚未创建 `SPEC-M0-DESCRIPTION-001`；第二、三、四层继续按既定依赖阻塞。
+`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。用户在 `M0-S003-U040` 明确开始 `M0-L1-106`；`SPEC-M0-DESCRIPTION-001` 已创建并 active，当前只确认第一项，第二、三、四层继续按既定依赖阻塞。
 
-## 当前 ready 证据
+## 当前生产证据
 
 - 任务：`M0-L1-106`。
 - 输入：`SPEC-M0-INTEGRATED-001`；`references/reference-m0-engineering-tech-style-001.md`。
-- 预定输出：`SPEC-M0-DESCRIPTION-001`；路径 `specs/spec-m0-description-001.md`，当前不存在。
+- 当前输出：`SPEC-M0-DESCRIPTION-001`；路径 `specs/spec-m0-description-001.md`，状态 active。
 - 依赖证据：`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted；决定 `D-M0-PROD-036`，来源 `M0-S003-U039`。
-- 当前问题：`Q-M0-032` ready；等待用户明确说`开始 M0-L1-106`。
+- 启动证据：`M0-S003-U040` 明确说`开始 M0-L1-106`。
+- 当前问题：`Q-M0-032` 为 `active_in_M0-L1-106`；第一项“玩家先看到的玩法信息与展开顺序” active，其余七项 pending。
 - 冻结边界：`overall_spec_frozen` 仍为 false；`M0-L4-010`、`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
 - 路由决定：`D-M0-DIR-007`、`D-M0-PROD-036`。
 
@@ -57,7 +58,7 @@ updated_at: 2026-08-24T14:08:12+08:00
 - 接受来源：`M0-S003-U035`；决定 `D-M0-PROD-030` 至 `D-M0-PROD-033`。
 - 规格状态：`SPEC-M0-PROGRESSION-001` 与 `M0-L1-104` 均为 `accepted`；整套 M0 仍不是 `overall_spec_frozen`。
 - 验收时路由：四项组成内容和整份汇编均已接受；当时只把 `M0-L1-105` 切到 ready。该状态已由 `M0-S003-U036` 的明确启动和 `D-M0-DIR-007` 后续修订。
-- 当前承接：`M0-L1-105` 已 accepted，`M0-L1-106` 仅为 ready，等待明确开始。
+- 当前承接：`M0-L1-105` 已 accepted，`M0-L1-106` 已由 `M0-S003-U040` 明确开始并 active。
 
 ## 上一接受证据
 

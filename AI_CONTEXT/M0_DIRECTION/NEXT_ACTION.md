@@ -12,7 +12,7 @@ target_work_lane: M0-L1-DIRECTION
 target_layer: 1
 target_task: M0-L1-106
 assigned_session: M0-S003
-action_status: ready
+action_status: active
 required_branch: context/m0-direction
 startup_phrase: 你是第一层
 ---
@@ -27,9 +27,10 @@ startup_phrase: 你是第一层
 - 建议会话标题：`AG-M0｜L1-DIRECTION｜101-106｜MAC`。
 - 当前 session：`M0-S003`。
 - 已接受任务：`M0-L1-101`，acceptance 提交 `0e2637f`；`M0-L1-102`，acceptance 提交 `f8ae1e9`；`M0-L1-103`，acceptance 提交 `0e1723d`；`M0-L1-104`，acceptance 提交 `d34d6ab`；`M0-L1-105`，acceptance 提交 `ab02d36`。
-- 当前任务：`M0-L1-106 · 工程与科技描述结构、风格与总规格冻结`，状态为 `ready`。
+- 当前任务：`M0-L1-106 · 工程与科技描述结构、风格与总规格冻结`，状态为 `active`。
 - 当前输入：已接受的 `SPEC-M0-INTEGRATED-001`，路径 `specs/spec-m0-integrated-001.md`；以及 `REF-M0-ENGINEERING-TECH-STYLE-001`。
-- 当前动作：等待用户明确说`开始 M0-L1-106`；`SPEC-M0-DESCRIPTION-001` 尚未创建。
+- 当前输出：`SPEC-M0-DESCRIPTION-001` 已创建并 active。
+- 当前动作：只确认第一项“玩家先看到的玩法信息与展开顺序”；等待用户接受或修订字段。
 
 Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。UI 中是否新建聊天不再是前置；Git session、活动 lane 和任务 ID 才是接力身份。
 
@@ -56,25 +57,27 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。UI 中是否�
 19. 用户在 `M0-S003-U037` 接受第一项，形成 `D-M0-PROD-034`；`Q-M0-031` resolved，`T00` accepted，第二项 `T01/T02` 与 `Q-M0-033` 转为 active。
 20. 用户在 `M0-S003-U038` 接受第二项，形成 `D-M0-PROD-035`；同时授权 AI 自行完成后续推演并一次性交付总结，形成 `D-M0-DIR-008`。三条 90 日路线、固定事故、人口变化和存档重载已 `self_checked`；`Q-M0-034` active，等待用户整体判断。
 21. 用户在 `M0-S003-U039` 整体接受 `SPEC-M0-INTEGRATED-001` 与 `M0-L1-105`，形成 `D-M0-PROD-036`；验收提交为 `ab02d36`。`Q-M0-034` resolved，`M0-L1-106` 与 `Q-M0-032` 只切到 ready；整套 M0 尚未冻结。
+22. 用户在 `M0-S003-U040` 明确开始 `M0-L1-106`；创建 `SPEC-M0-DESCRIPTION-001`，任务与 `Q-M0-032` 转为 active，第一项 active、其余七项 pending；整套 M0 仍未冻结。
 
 ## 当前正确状态至少包含
 
 ```text
-状态：READY
+状态：ACTIVE
 层级：第一层｜方向与系统设计
 活动 lane：M0-DIR-A｜Mac｜M0-S003
 当前任务：M0-L1-106｜工程与科技描述结构、风格与总规格冻结
-任务状态：ready
+任务状态：active
 已接受输出：SPEC-M0-PLAY-001｜specs/spec-m0-play-001.md｜0e2637f
 已接受输出：SPEC-M0-OPS-001｜specs/spec-m0-ops-001.md｜f8ae1e9
 不会做：故事正文、最终玩家文字、游戏代码和 main 修改
 已接受输出：SPEC-M0-MAP-001｜specs/spec-m0-map-001.md｜0e1723d
 已接受输出：SPEC-M0-PROGRESSION-001｜specs/spec-m0-progression-001.md｜d34d6ab
 已接受输出：SPEC-M0-INTEGRATED-001｜specs/spec-m0-integrated-001.md｜ab02d36
-当前输出：SPEC-M0-DESCRIPTION-001｜尚未创建
-下一步：用户明确说“开始 M0-L1-106”
+当前输出：SPEC-M0-DESCRIPTION-001｜specs/spec-m0-description-001.md｜active
+当前项：第一项｜玩家先看到的玩法信息与展开顺序｜active
+下一步：用户接受第一项，或直接修订字段与顺序
 ```
 
 ## 完成条件
 
-`M0-L1-105` 已在 `ab02d36` accepted，`M0-L1-106` 当前只为 ready。用户明确开始 106 后，需逐项接受描述结构、技术可信度、文体、强度、长度、动态字段与分层交接，并最终整体接受，才可标记 `overall_spec_frozen`；不能在 106 启动前提前冻结。
+`M0-L1-105` 已在 `ab02d36` accepted，`M0-L1-106` 已 active。需逐项接受描述结构、技术可信度、文体、强度、长度、动态字段与分层交接，并最终整体接受，才可标记 `overall_spec_frozen`；不能在第一项或任一中间项确认后提前冻结。
