@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L1-106
 handoff_id: M0-H002
-updated_at: 2026-08-24T14:23:52+08:00
+updated_at: 2026-08-24T14:44:08+08:00
 ---
 
 # M0 当前任务路由
@@ -15,12 +15,12 @@ updated_at: 2026-08-24T14:23:52+08:00
 
 | 层级 | 当前任务 | 状态 | 阻塞项 | 正确回执 |
 |---|---|---|---|---|
-| 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `active` | 无；第一项等待用户判断 | `ACTIVE` |
+| 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `active` | 无；第一项第一次提案未获接受，正在返工 | `ACTIVE_REWORK` |
 | 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L1-106`、`M0-L4-010` | `BLOCKED_UPSTREAM` |
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
 | 第四层 | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L1-106` accepted 且 `overall_spec_frozen` | `BLOCKED_UPSTREAM` |
 
-`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。用户在 `M0-S003-U040` 明确开始 `M0-L1-106`；`SPEC-M0-DESCRIPTION-001` 已创建并 active，当前只确认第一项，第二、三、四层继续按既定依赖阻塞。
+`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。用户在 `M0-S003-U040` 明确开始 `M0-L1-106`；`U041` 不接受第一版玩家展示方案，`U042` 要求对照《群星》与此前附件原文。`SPEC-M0-DESCRIPTION-001` 继续 active，第二、三、四层继续按既定依赖阻塞。
 
 ## 当前生产证据
 
@@ -29,7 +29,8 @@ updated_at: 2026-08-24T14:23:52+08:00
 - 当前输出：`SPEC-M0-DESCRIPTION-001`；路径 `specs/spec-m0-description-001.md`，状态 active。
 - 依赖证据：`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted；决定 `D-M0-PROD-036`，来源 `M0-S003-U039`。
 - 启动证据：`M0-S003-U040` 明确说`开始 M0-L1-106`。
-- 当前问题：`Q-M0-032` 为 `active_in_M0-L1-106`；第一项“玩家先看到的玩法信息与展开顺序” active，其余七项 pending。
+- 当前问题：`Q-M0-032` 为 `active_in_M0-L1-106`；第一项“玩家先看到的玩法信息与展开顺序” active_rework，其余七项 pending。
+- 返工证据：`M0-S003-U041` 明确指出第一次提案是底层逻辑而非玩家展示内容；`U042` 要求查看《群星》与此前附件中的原文案例。
 - 冻结边界：`overall_spec_frozen` 仍为 false；`M0-L4-010`、`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
 - 路由决定：`D-M0-DIR-007`、`D-M0-PROD-036`。
 
