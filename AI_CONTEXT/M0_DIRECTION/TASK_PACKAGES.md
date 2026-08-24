@@ -101,7 +101,7 @@ ACTIVE_TASKS.md、TASK_PACKAGES.md 和第四层角色卡。
 - 层级：第一层
 - 依赖：`M0-L1-105` 已接受
 - 目标：在机制已经跑通后，统一工程、科研、设备、阶段报告和相关制度文本怎样描述，并完成整套 M0 的最终规格冻结。
-- 输入：`SPEC-M0-INTEGRATED-001`；`references/reference-m0-engineering-tech-style-001.md`。
+- 输入：`SPEC-M0-INTEGRATED-001`；`references/reference-m0-engineering-tech-style-001.md`；`references/reference-m0-tech-description-corpus-001.md`。
 - 输出 ID：`SPEC-M0-DESCRIPTION-001`
 - 输出路径：`specs/spec-m0-description-001.md`
 - 必须输出：玩家先看到的玩法信息字段；技术可信度最低要求；可使用的文体载体；制度荒诞的写法与禁区；轻、中、重及完全严肃内容的适用范围；不同内容类型的长度；动态状态和数值变量；第二、三、四层的交接格式；逐条验收清单。
