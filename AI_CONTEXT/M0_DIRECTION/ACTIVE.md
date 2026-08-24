@@ -16,8 +16,8 @@ next_lane: null
 next_host: null
 handoff_id: M0-H002
 last_session: M0-S003
-last_turn: M0-S003-A082
-updated_at: 2026-08-24T11:20:55+08:00
+last_turn: M0-S003-A083
+updated_at: 2026-08-24T11:24:27+08:00
 ---
 
 # 当前接续卡
@@ -78,7 +78,7 @@ Mac 已在当前用户聊天中接管 `M0-DIR-A` 并创建 `M0-S003`。用户已
 - `SPEC-M0-PLAY-001` 已在 `0e2637f` 完成三项整体复核并 accepted；其固定压力节点已由 `D-M0-PROD-022` 定向修订，accepted 状态不变；整套 M0 仍未 `spec_frozen`。
 - `SPEC-M0-OPS-001` 与 `M0-L1-102` 已在 `f8ae1e9` accepted；其“避难所完全无照明和动力”原因表述已由 `M0-S003-U030` 与修订后的 `D-M0-PROD-019` 窄范围替代，accepted 状态不变；整套 M0 仍未 `spec_frozen`。
 - `SPEC-M0-MAP-001` 与 `M0-L1-103` 已在 `0e1723d` 整体 accepted；其中“无能源阶段”现明确只指外部路线和现场没有照明、动力与夜间工作保障，accepted 状态不变；整套 M0 仍未 `spec_frozen`。
-- `SPEC-M0-PROGRESSION-001` 与 `M0-L1-104` 已整体 accepted；四项组成内容引用 `D-M0-PROD-030` 至 `D-M0-PROD-033`，但整套 M0 仍未 `spec_frozen`。
+- `SPEC-M0-PROGRESSION-001` 与 `M0-L1-104` 已在 `d34d6ab` 整体 accepted；四项组成内容引用 `D-M0-PROD-030` 至 `D-M0-PROD-033`，但整套 M0 仍未 `spec_frozen`。
 - 三条最低内容线、正式终点框架、地图约束、科研资产与前哨复制规则已经确认；完整日序、准确数值和最终规格冻结仍待 `M0-L1-105`。
 - Steam 首次免费发布已确认；是否永久免费以及任何后续商业模式均暂缓。
 

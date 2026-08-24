@@ -26,7 +26,7 @@ startup_phrase: 你是第一层
 - 稳定工作 lane：`M0-L1-DIRECTION`。
 - 建议会话标题：`AG-M0｜L1-DIRECTION｜101-105｜MAC`。
 - 当前 session：`M0-S003`。
-- 已接受任务：`M0-L1-101`，acceptance 提交 `0e2637f`；`M0-L1-102`，acceptance 提交 `f8ae1e9`；`M0-L1-103`，acceptance 提交 `0e1723d`；`M0-L1-104` 已由 `M0-S003-U035` 整体接受。
+- 已接受任务：`M0-L1-101`，acceptance 提交 `0e2637f`；`M0-L1-102`，acceptance 提交 `f8ae1e9`；`M0-L1-103`，acceptance 提交 `0e1723d`；`M0-L1-104`，acceptance 提交 `d34d6ab`。
 - 当前任务：`M0-L1-105 · 前 90 日纸面试玩与规格冻结`，状态为 `ready`。
 - 当前输出：尚未创建；明确开始后输出 `SPEC-M0-INTEGRATED-001`。
 - 当前动作：等待用户明确说“开始 M0-L1-105”。
@@ -65,7 +65,7 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。UI 中是否�
 已接受输出：SPEC-M0-OPS-001｜specs/spec-m0-ops-001.md｜f8ae1e9
 不会做：故事正文、最终玩家文字、游戏代码和 main 修改
 已接受输出：SPEC-M0-MAP-001｜specs/spec-m0-map-001.md｜0e1723d
-已接受输出：SPEC-M0-PROGRESSION-001｜specs/spec-m0-progression-001.md
+已接受输出：SPEC-M0-PROGRESSION-001｜specs/spec-m0-progression-001.md｜d34d6ab
 当前输出：尚未创建；开始后为 SPEC-M0-INTEGRATED-001
 下一步：等待用户明确回复“开始 M0-L1-105”
 ```
