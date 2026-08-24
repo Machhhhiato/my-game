@@ -437,7 +437,7 @@
 - 尚未冻结：第三项至第八项仍待逐项接受；当前视觉还必须随整体 UI 重做；数值与状态引用、文体对应关系、轻中重与完全严肃内容的比例、各类长度、重度边界、反转手法去重和逐条验收办法均未完成。
 - 版权边界：《群星》与小说主体都使用忠实转述；环日部分只保留相邻聊天已核对的五个极短原文锚点，不搬运完整章节，也不把该聊天的 13 项误称为连载全书绝对全集。
 - 输出：`SPEC-M0-DESCRIPTION-001`，路径 `specs/spec-m0-description-001.md`，当前 active。
-- 来源：`M0-S003-U036`、`M0-S003-U039` 至 `U050`、`M0-S003-A101` 至 `A131`、`D-M0-DIR-007`、`D-M0-DIR-009`、`D-M0-PROD-036` 至 `D-M0-PROD-038`、`references/reference-m0-engineering-tech-style-001.md`、`references/reference-m0-tech-description-corpus-001.md`。
+- 来源：`M0-S003-U036`、`M0-S003-U039` 至 `U050`、`M0-S003-A101` 至 `A132`、`D-M0-DIR-007`、`D-M0-DIR-009`、`D-M0-PROD-036` 至 `D-M0-PROD-038`、`references/reference-m0-engineering-tech-style-001.md`、`references/reference-m0-tech-description-corpus-001.md`。
 
 ## Q-M0-033 · 第 1 日六种库存和总部日常流量采用什么数值
 
@@ -501,4 +501,4 @@
 - 底层边界：存档保存真实工作量、已完成量、投入、暂停原因与实体状态，不保存会过期的预计时间、百分比或界面句子。
 - 状态边界：当前为 active_review，尚未形成产品决定。范例数字与当前示意不属于验收范围。
 - 输出：`SPEC-M0-DESCRIPTION-001` 第三项。
-- 来源：`M0-S003-U049` 至 `U050`、`M0-S003-A128` 至 `A131`、`D-M0-PROD-037`、`D-M0-PROD-038`、`SPEC-M0-DESCRIPTION-001` 第 7 节。
+- 来源：`M0-S003-U049` 至 `U050`、`M0-S003-A128` 至 `A132`、`D-M0-PROD-037`、`D-M0-PROD-038`、`SPEC-M0-DESCRIPTION-001` 第 7 节。
