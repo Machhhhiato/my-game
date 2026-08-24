@@ -29,7 +29,7 @@ startup_phrase: 你是第一层
 - 已接受任务：`M0-L1-101`，acceptance 提交 `0e2637f`；`M0-L1-102`，acceptance 提交 `f8ae1e9`；`M0-L1-103`，acceptance 提交 `0e1723d`；`M0-L1-104`，acceptance 提交 `d34d6ab`。
 - 当前任务：`M0-L1-105 · 前 90 日纸面试玩与机制整合验收`，状态为 `active`。
 - 当前输出：`SPEC-M0-INTEGRATED-001`，路径 `specs/spec-m0-integrated-001.md`。
-- 当前动作：第一项 `T00` 已接受；确认第二项 `T01/T02` 第 1 日账面、设施状态和总部日常流量。
+- 当前动作：`T00` 与 `T01/T02` 已接受；后续推演已完成 `self_checked`，等待用户整体判断 `M0-L1-105`。
 
 Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。UI 中是否新建聊天不再是前置；Git session、活动 lane 和任务 ID 才是接力身份。
 
@@ -54,6 +54,7 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。UI 中是否�
 17. 用户在 `M0-S003-U035` 整体接受 `SPEC-M0-PROGRESSION-001` 与 `M0-L1-104`；`Q-M0-030` resolved，`M0-L1-105` 只切到 ready，等待明确开始。
 18. 用户在 `M0-S003-U036` 明确开始 `M0-L1-105`，并要求在 105 后增加工程与科技描述风格环节；创建 `SPEC-M0-INTEGRATED-001`，105 转为 active，新增 `M0-L1-106` 与 `D-M0-DIR-007`，最终冻结移到 106。
 19. 用户在 `M0-S003-U037` 接受第一项，形成 `D-M0-PROD-034`；`Q-M0-031` resolved，`T00` accepted，第二项 `T01/T02` 与 `Q-M0-033` 转为 active。
+20. 用户在 `M0-S003-U038` 接受第二项，形成 `D-M0-PROD-035`；同时授权 AI 自行完成后续推演并一次性交付总结，形成 `D-M0-DIR-008`。三条 90 日路线、固定事故、人口变化和存档重载已 `self_checked`；`Q-M0-034` active，等待用户整体判断。
 
 ## 当前正确状态至少包含
 
@@ -69,7 +70,7 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。UI 中是否�
 已接受输出：SPEC-M0-MAP-001｜specs/spec-m0-map-001.md｜0e1723d
 已接受输出：SPEC-M0-PROGRESSION-001｜specs/spec-m0-progression-001.md｜d34d6ab
 当前输出：SPEC-M0-INTEGRATED-001｜specs/spec-m0-integrated-001.md
-下一步：确认 T01/T02 的第 1 日六种库存、设施状态和总部日常流量
+下一步：整体接受 M0-L1-105，或指出要重开的系统规则
 ```
 
 ## 完成条件
