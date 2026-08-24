@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L1-106
 handoff_id: M0-H002
-updated_at: 2026-08-24T17:42:17+08:00
+updated_at: 2026-08-24T17:52:59+08:00
 ---
 
 # M0 当前任务路由
@@ -15,12 +15,12 @@ updated_at: 2026-08-24T17:42:17+08:00
 
 | 层级 | 当前任务 | 状态 | 阻塞项 | 正确回执 |
 |---|---|---|---|---|
-| 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `active` | 无；第一项 accepted，第二项暂停改稿并先确认 28 项现有语料 | `ACTIVE_REWORK` |
+| 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `active` | 无；第一项 accepted，第二项两行成品等待复核 | `ACTIVE_REVIEW` |
 | 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L1-106`、`M0-L4-010` | `BLOCKED_UPSTREAM` |
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
 | 第四层 | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L1-106` accepted 且 `overall_spec_frozen` | `BLOCKED_UPSTREAM` |
 
-`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 第一项已 accepted；用户在 `M0-S003-U045` 至 `U047` 连续否决第二项的解释稿与正文方向，并要求先收集真实样本。`REF-M0-TECH-DESCRIPTION-CORPUS-001` 已形成 15 项《群星》加相邻聊天 13 项环日文明现有语料，第二项保持 active_rework。`SPEC-M0-DESCRIPTION-001` 继续 active，第二、三、四层继续按既定依赖阻塞。
+`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 第一项已 accepted；用户在 `M0-S003-U048` 确认 15 加 13 项语料范围，并要求科研正文第一行使用群星式科技内容、第二行使用环日式评价。第二项转为 active_review，当前只等待单条两行成品复核。`SPEC-M0-DESCRIPTION-001` 继续 active，第二、三、四层继续按既定依赖阻塞。
 
 ## 当前生产证据
 
@@ -29,10 +29,10 @@ updated_at: 2026-08-24T17:42:17+08:00
 - 当前输出：`SPEC-M0-DESCRIPTION-001`；路径 `specs/spec-m0-description-001.md`，状态 active。
 - 依赖证据：`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted；决定 `D-M0-PROD-036`，来源 `M0-S003-U039`。
 - 启动证据：`M0-S003-U040` 明确说`开始 M0-L1-106`。
-- 当前问题：`Q-M0-032` 为 `active_in_M0-L1-106`；第一项“玩家先看到的玩法信息与展开顺序” accepted，第二项“技术内容最低必须写到哪里” active_rework，其余六项 pending。
+- 当前问题：`Q-M0-032` 为 `active_in_M0-L1-106`；第一项“玩家先看到的玩法信息与展开顺序” accepted，第二项“技术内容最低必须写到哪里” active_review，其余六项 pending。
 - 接受证据：`M0-S003-U044` 接受第一项的信息结构；`D-M0-PROD-037` 明确视觉示意未获接受，后续必须随整体 UI 重做。
 - 返工证据：`M0-S003-U045` 指出玩法元语言不是正文；`U046` 指出技术段太长且制度口吻自我揭露；`U047` 判断整体方向仍不对，并要求先收集真实描述样本。
-- 当前研究：15 个《群星》描述样本按三领域各 5 项收录；相邻聊天目前定位的全部 13 项环日蓝图按直接、间接和不确定归属标注。当前不把任何比较观察当成接受规则。
+- 当前提案：《恢复精密制造》第一行只说明统一精度标准让复杂零件能够稳定复制；第二行由生产恢复委员会评价，精密制造把工人的经验从工人身上剥离。两行组合是用户要求，具体成品尚未接受。
 - 冻结边界：`overall_spec_frozen` 仍为 false；`M0-L4-010`、`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
 - 路由决定：`D-M0-DIR-007`、`D-M0-PROD-036`、`D-M0-PROD-037`。
 

@@ -1,11 +1,13 @@
 ---
 reference_id: REF-M0-TECH-DESCRIPTION-CORPUS-001
 title: 群星与环日文明科技描述现有语料
-status: source_corpus
+status: scope_confirmed
 source_session: M0-S003
 source_turn: M0-S003-U047
 target_task: M0-L1-106
 checked_at: 2026-08-24T17:42:17+08:00
+scope_confirmed_at: 2026-08-24T17:52:59+08:00
+scope_confirmed_source: M0-S003-U048
 copyright_boundary: faithful_paraphrase_and_short_anchors_only
 ---
 
@@ -13,7 +15,7 @@ copyright_boundary: faithful_paraphrase_and_short_anchors_only
 
 ## 1. 范围与边界
 
-本页收录 15 个《群星》科技卡描述样本，以及相邻聊天目前已定位的 13 项环日文明蓝图。13 项是相邻聊天现有资料的完整集合，分布于 9 处章节；它们不等于对仍在连载小说全部章节完成穷举。
+本页收录 15 个《群星》科技卡描述样本，以及相邻聊天目前已定位的 13 项环日文明蓝图。13 项是相邻聊天现有资料的完整集合，分布于 9 处章节；它们不等于对仍在连载小说全部章节完成穷举。用户在 `M0-S003-U048` 明确确认这 15 加 13 项符合本轮需要的收集范围。
 
 为避免把受版权保护文本批量搬运并误标成原文，本页使用两种记录方式：
 
@@ -252,4 +254,4 @@ copyright_boundary: faithful_paraphrase_and_short_anchors_only
 5. 叙述者是否知道自己在讽刺，还是完全把一切当成正常事实？
 6. 最后一句是解释、总结、留下画面，还是突然改变前文含义？
 
-只有完成这一步比较并由用户指出喜欢与不喜欢的样本后，才能回到“恢复精密制造”重新写正文，再从成品反推 `M0-L1-106` 第二项标准。
+用户已经在 `M0-S003-U048` 直接给出下一条组合要求：科研描述第一行写《群星》式科技内容，第二行写环日式世界内评价。因此不再要求用户先逐项选择喜欢与不喜欢的样本；下一步按这一明确组合制作单条范例，再由用户判断成品。
