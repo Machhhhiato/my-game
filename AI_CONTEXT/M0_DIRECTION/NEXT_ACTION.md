@@ -12,7 +12,7 @@ target_work_lane: M0-L1-DIRECTION
 target_layer: 1
 target_task: M0-L1-104
 assigned_session: M0-S003
-action_status: active
+action_status: review
 required_branch: context/m0-direction
 startup_phrase: 你是第一层
 ---
@@ -27,9 +27,9 @@ startup_phrase: 你是第一层
 - 建议会话标题：`AG-M0｜L1-DIRECTION｜101-105｜MAC`。
 - 当前 session：`M0-S003`。
 - 已接受任务：`M0-L1-101`，acceptance 提交 `0e2637f`；`M0-L1-102`，acceptance 提交 `f8ae1e9`；`M0-L1-103`，acceptance 提交 `0e1723d`。
-- 当前任务：`M0-L1-104 · 科研、高级资产与前哨复制`，状态为 `active`。
+- 当前任务：`M0-L1-104 · 科研、高级资产与前哨复制`，状态为 `review`。
 - 当前输出：`SPEC-M0-PROGRESSION-001`，路径 `specs/spec-m0-progression-001.md`。
-- 当前动作：第四项 active，确认第二座同类前哨怎样使用标准工程包自动复制、暂停、恢复和由玩家接管。
+- 当前动作：整体复核 `SPEC-M0-PROGRESSION-001`；四项组成内容均已接受。
 
 Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。UI 中是否新建聊天不再是前置；Git session、活动 lane 和任务 ID 才是接力身份。
 
@@ -50,21 +50,22 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。UI 中是否�
 13. 用户在 `M0-S003-U030` 修正第二项前提：避难所有封闭内部供电和兼容设备接口，但没有对外工业供能能力；撤回专用人力充电台，并把科技发展改为档案复原与超出基础水平后的发现、尝试、落地、改进。旧运营与地图规格中的“避难所完全无电”原因文字已窄范围修订，accepted 状态不变；第二项仍为提案，等待整体接受。
 14. 用户在 `M0-S003-U031` 接受修订后的第二项，形成 `D-M0-PROD-031`；`Q-M0-015`、`Q-M0-027` resolved，第三项第一座前哨完整首建、稳定验收与标准工程包转为 active。
 15. 用户在 `M0-S003-U032` 至 `U033` 接受第三项核心链路，并补充首次阶段报告、逐段物资与设备需求、实体设备改善对应环节和前后耗时直观显示，形成 `D-M0-PROD-032`；第三项 accepted，第四项转为 active。
+16. 用户在 `M0-S003-U034` 接受第四项，形成 `D-M0-PROD-033`；`Q-M0-029` resolved，`SPEC-M0-PROGRESSION-001` 与 `M0-L1-104` 转入整体 review，`M0-L1-105` 继续 blocked_upstream。
 
 ## 当前正确状态至少包含
 
 ```text
-状态：ACTIVE
+状态：REVIEW
 层级：第一层｜方向与系统设计
 活动 lane：M0-DIR-A｜Mac｜M0-S003
 当前任务：M0-L1-104｜科研、高级资产与前哨复制
-任务状态：active
+任务状态：review
 已接受输出：SPEC-M0-PLAY-001｜specs/spec-m0-play-001.md｜0e2637f
 已接受输出：SPEC-M0-OPS-001｜specs/spec-m0-ops-001.md｜f8ae1e9
 不会做：故事正文、最终玩家文字、游戏代码和 main 修改
 已接受输出：SPEC-M0-MAP-001｜specs/spec-m0-map-001.md｜0e1723d
 当前输出：SPEC-M0-PROGRESSION-001｜specs/spec-m0-progression-001.md
-下一步：等待用户接受或修订第四项工程包适用判断、自动执行、暂停恢复和人工接管提案
+下一步：等待用户整体接受 M0-L1-104，或指出需要重新打开的具体小节
 ```
 
 ## 完成条件
