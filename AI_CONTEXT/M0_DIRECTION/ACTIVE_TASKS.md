@@ -2,9 +2,9 @@
 workflow_version: 2
 milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
-overall_current_task: M0-L1-105
+overall_current_task: M0-L1-106
 handoff_id: M0-H002
-updated_at: 2026-08-24T13:02:58+08:00
+updated_at: 2026-08-24T14:08:12+08:00
 ---
 
 # M0 当前任务路由
@@ -15,32 +15,30 @@ updated_at: 2026-08-24T13:02:58+08:00
 
 | 层级 | 当前任务 | 状态 | 阻塞项 | 正确回执 |
 |---|---|---|---|---|
-| 第一层 | `M0-L1-105` 前 90 日纸面试玩与机制整合验收 | `active` | 无；用户已在 `M0-S003-U036` 明确开始 | `ACTIVE` |
+| 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `ready` | 无；`M0-L1-105` 已在 `ab02d36` accepted，等待用户明确开始 | `READY` |
 | 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L1-106`、`M0-L4-010` | `BLOCKED_UPSTREAM` |
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
 | 第四层 | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L1-106` accepted 且 `overall_spec_frozen` | `BLOCKED_UPSTREAM` |
 
-`M0-L1-105` 已由用户明确开始，`SPEC-M0-INTEGRATED-001` 处于 active。`T00` 与 `T01/T02` 已接受；后续三条 90 日路线、固定事故、人口减少和保存重载已经完成 `self_checked`，当前等待用户整体判断。后续第一层任务 `M0-L1-106` 为 `blocked_upstream`，只在 105 accepted 后切到 ready；第二、三、四层继续按新依赖阻塞。
+`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。后续第一层任务 `M0-L1-106` 已满足依赖并切到 ready，但尚未开始，也尚未创建 `SPEC-M0-DESCRIPTION-001`；第二、三、四层继续按既定依赖阻塞。
 
-## 当前启动证据
+## 当前 ready 证据
 
-- 任务：`M0-L1-105`。
-- 输出：`SPEC-M0-INTEGRATED-001`。
-- 路径：`specs/spec-m0-integrated-001.md`。
-- 启动来源：`M0-S003-U036`。
-- 已接受第一项：`T00` 时间换算与纸面账本格式；决定 `D-M0-PROD-034`，来源 `M0-S003-U037`。
-- 已接受第二项：`T01/T02` 第 1 日状态、设施事实和总部日常流量；决定 `D-M0-PROD-035`，来源 `M0-S003-U038`。
-- 自检项：T03 首轮工单、集中发展、稳定发展、第 90 日未完成、固定事故、人口变化和三处保存重载；授权 `D-M0-DIR-008`，结果见规格第 5–9 节。
-- 当前项：`Q-M0-034`，等待用户整体接受 `SPEC-M0-INTEGRATED-001` 与 `M0-L1-105`，或指出需要重开的系统规则。
-- 后续新增：`M0-L1-106 · 工程与科技描述结构、风格与总规格冻结`，输出 `SPEC-M0-DESCRIPTION-001`；当前不创建该规格。
-- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-008`。
+- 任务：`M0-L1-106`。
+- 输入：`SPEC-M0-INTEGRATED-001`；`references/reference-m0-engineering-tech-style-001.md`。
+- 预定输出：`SPEC-M0-DESCRIPTION-001`；路径 `specs/spec-m0-description-001.md`，当前不存在。
+- 依赖证据：`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted；决定 `D-M0-PROD-036`，来源 `M0-S003-U039`。
+- 当前问题：`Q-M0-032` ready；等待用户明确说`开始 M0-L1-106`。
+- 冻结边界：`overall_spec_frozen` 仍为 false；`M0-L4-010`、`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
+- 路由决定：`D-M0-DIR-007`、`D-M0-PROD-036`。
 
 ## 最近接受证据
 
-- 任务：`M0-L1-105` 第二项。
-- 输出：`SPEC-M0-INTEGRATED-001` 第 5 节。
-- 接受来源：`M0-S003-U038`；决定 `D-M0-PROD-035`。
-- 验证：第 1 日六种库存、主线锁定、设施事实与水、食物、维护/零件、总部物流流量均已接受；后续纸面推演只由 AI `self_checked`，未形成整体验收。
+- 任务：`M0-L1-105` 整体。
+- 输出：`SPEC-M0-INTEGRATED-001`；路径 `specs/spec-m0-integrated-001.md`。
+- acceptance 提交：`ab02d36`。
+- 接受来源：`M0-S003-U039`；决定 `D-M0-PROD-036`。
+- 验证：三条 90 日路线、固定事故、人口变化与三个保存点都有纸面证据；链路门和正式内容门的纸面结果已由用户接受，但不冒充实现测试或真实运行验证。
 
 ## 上一任务接受证据
 
@@ -59,7 +57,7 @@ updated_at: 2026-08-24T13:02:58+08:00
 - 接受来源：`M0-S003-U035`；决定 `D-M0-PROD-030` 至 `D-M0-PROD-033`。
 - 规格状态：`SPEC-M0-PROGRESSION-001` 与 `M0-L1-104` 均为 `accepted`；整套 M0 仍不是 `overall_spec_frozen`。
 - 验收时路由：四项组成内容和整份汇编均已接受；当时只把 `M0-L1-105` 切到 ready。该状态已由 `M0-S003-U036` 的明确启动和 `D-M0-DIR-007` 后续修订。
-- 当前承接：`M0-L1-105` 已 active，下一步确认 `T01/T02` 第 1 日账面和日常流量。
+- 当前承接：`M0-L1-105` 已 accepted，`M0-L1-106` 仅为 ready，等待明确开始。
 
 ## 上一接受证据
 
