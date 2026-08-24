@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L1-106
 handoff_id: M0-H002
-updated_at: 2026-08-24T22:48:06+08:00
+updated_at: 2026-08-25T03:53:05+08:00
 ---
 
 # M0 当前任务路由
@@ -15,12 +15,12 @@ updated_at: 2026-08-24T22:48:06+08:00
 
 | 层级 | 当前任务 | 状态 | 阻塞项 | 正确回执 |
 |---|---|---|---|---|
-| 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `active` | 无；前六项 accepted，第七项 active | `ACTIVE` |
+| 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `active` | 无；前七项 accepted，第八项 active | `ACTIVE` |
 | 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L1-106`、`M0-L4-010` | `BLOCKED_UPSTREAM` |
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
 | 第四层 | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L1-106` accepted 且 `overall_spec_frozen` | `BLOCKED_UPSTREAM` |
 
-`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 第一项至第六项已 accepted；第六项采用 `5:4:1`，并新增旧时代、先驱科技来源及责任归属。第七项长度与重复内容缩写 active。`D-M0-DIR-011` 要求下游全文读取 revision 5 中的既有语料、原始校准文本、生成参考、反例与接受状态。`SPEC-M0-DESCRIPTION-001` 继续 active，第二、三、四层继续按既定依赖阻塞。
+`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 第一项至第七项已 accepted；第七项确认世界文案与内部数据分离。第八项动态字段、分层交接、逐条验收与最终冻结 active。`D-M0-DIR-011` 要求下游全文读取 revision 6 中的既有语料、初稿、用户修正、反例与接受状态。`SPEC-M0-DESCRIPTION-001` 继续 active，第二、三、四层继续按既定依赖阻塞。
 
 ## 当前生产证据
 
@@ -29,7 +29,7 @@ updated_at: 2026-08-24T22:48:06+08:00
 - 当前输出：`SPEC-M0-DESCRIPTION-001`；路径 `specs/spec-m0-description-001.md`，状态 active。
 - 依赖证据：`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted；决定 `D-M0-PROD-036`，来源 `M0-S003-U039`。
 - 启动证据：`M0-S003-U040` 明确说`开始 M0-L1-106`。
-- 当前问题：`Q-M0-032` 为 `active_in_M0-L1-106`；第一项至第六项 accepted；第七项与 `Q-M0-041` active，第八项 pending。
+- 当前问题：`Q-M0-032` 为 `active_in_M0-L1-106`；第一项至第七项 accepted；第八项与 `Q-M0-042` active。
 - 接受证据：`M0-S003-U044` 接受第一项的信息结构；`D-M0-PROD-037` 明确视觉示意未获接受，后续必须随整体 UI 重做。
 - 返工证据：`M0-S003-U045` 指出玩法元语言不是正文；`U046` 指出技术段太长且制度口吻自我揭露；`U047` 判断整体方向仍不对，并要求先收集真实描述样本。
 - 接受内容：《恢复精密制造》第一行只说明统一精度标准让复杂零件能够稳定复制；第二行由生产恢复委员会评价，精密制造把工人的经验从工人身上剥离。下游完整源包为 `references/reference-m0-tech-description-corpus-001.md`，摘要不能替代。
@@ -37,9 +37,10 @@ updated_at: 2026-08-24T22:48:06+08:00
 - 第四项接受：当前情况留在对象原页面，完整经过进入统一日志，状态变化时只通知一次；普通进度、自动科研、重复建设和日常维护不通知，只有无法自动决定的真实选择才让对应项目等待玩家，不自动暂停整个游戏。决定为 `D-M0-PROD-040`。
 - 第五项接受：说话者必须真心认为流程正常；一条只使用一个主要荒诞来源。换机构名不算去重，遮住科技名、机构名和受影响者后仍可套用，或只能概括成`上面得利、下面遭殃`的句子直接重写。决定为 `D-M0-PROD-041`；新增统计口径、旧手续等示例力度未获接受。
 - 第六项接受：`D-M0-PROD-044` 冻结完全严肃 50%、中度 40%、重度最多 10%，只统计首次独立正文；`D-M0-PROD-045` 冻结旧时代考古、先驱研究及`来源决定历史、实施决定责任`。`Q-M0-040` resolved。
-- 源包证据：`SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 5 逐字保留 `A171` 的提案与 `U070` 的修订，并原样保留 revision 4 的全部校准材料和既有 15+13 语料。
+- 第七项接受：`D-M0-PROD-046` 保留四类科技来源，并冻结旧时代与先驱来源在发现记录建立、世界文案禁用机制数据、首建节点一至两句、重复工程完成一句和事故事实时间线。`Q-M0-041` resolved。
+- 源包证据：`SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6 逐字保留第七项初案、完整参考、`U073` 修正与 `A177` 接受稿，并原样保留 revision 1—5 的全部材料。
 - 冻结边界：`overall_spec_frozen` 仍为 false；`M0-L4-010`、`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
-- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-011`、`D-M0-PROD-036` 至 `D-M0-PROD-045`。
+- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-011`、`D-M0-PROD-036` 至 `D-M0-PROD-046`。
 
 ## 最近接受证据
 
