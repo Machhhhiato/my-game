@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L1-105
 handoff_id: M0-H002
-updated_at: 2026-08-24T11:20:55+08:00
+updated_at: 2026-08-24T11:38:15+08:00
 ---
 
 # M0 当前任务路由
@@ -15,12 +15,23 @@ updated_at: 2026-08-24T11:20:55+08:00
 
 | 层级 | 当前任务 | 状态 | 阻塞项 | 正确回执 |
 |---|---|---|---|---|
-| 第一层 | `M0-L1-105` 前 90 日纸面试玩与规格冻结 | `ready` | 无；`M0-L1-101` 至 `M0-L1-104` 均已接受，等待用户明确开始 | `READY` |
-| 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L1-105`、`M0-L4-010` | `BLOCKED_UPSTREAM` |
+| 第一层 | `M0-L1-105` 前 90 日纸面试玩与机制整合验收 | `active` | 无；用户已在 `M0-S003-U036` 明确开始 | `ACTIVE` |
+| 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L1-106`、`M0-L4-010` | `BLOCKED_UPSTREAM` |
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
-| 第四层 | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L1-105` | `BLOCKED_UPSTREAM` |
+| 第四层 | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L1-106` accepted 且 `overall_spec_frozen` | `BLOCKED_UPSTREAM` |
 
-当前没有 active 生产任务。`M0-L1-105` 已为 `ready`，继续由 Mac `M0-S003` 等待用户明确开始；开始前不创建 `SPEC-M0-INTEGRATED-001`。第二、三、四层继续按上游依赖阻塞。
+`M0-L1-105` 已由用户明确开始，`SPEC-M0-INTEGRATED-001` 已创建并处于 active。第一项是确认纸面试玩的时间换算与账本格式。后续第一层任务 `M0-L1-106` 为 `blocked_upstream`，只在 105 accepted 后切到 ready；第二、三、四层继续按新依赖阻塞。
+
+## 当前启动证据
+
+- 任务：`M0-L1-105`。
+- 输出：`SPEC-M0-INTEGRATED-001`。
+- 路径：`specs/spec-m0-integrated-001.md`。
+- 启动来源：`M0-S003-U036`。
+- 当前项：`T00` 时间换算与纸面账本格式。
+- 当前提案：固定纸面参考速度为 20 秒/游戏日；90 次日结算纯推进约 30 分钟，必读报告与 5–8 次必要操作无论是否暂停都另计约 5–10 分钟，总计约 35–40 分钟；只有额外思考、主动离开、挂机和离线时间不计。
+- 后续新增：`M0-L1-106 · 工程与科技描述结构、风格与总规格冻结`，输出 `SPEC-M0-DESCRIPTION-001`；当前不创建该规格。
+- 路由决定：`D-M0-DIR-007`。
 
 ## 最近接受证据
 
@@ -37,9 +48,9 @@ updated_at: 2026-08-24T11:20:55+08:00
 - 下层交接：第一层只冻结阶段报告字段与系统事实；`M0-L2-201` 以后写事件结构和负责人处境，`M0-L3-301` 再写正式姓名、正文、按钮和提示。两层仍按上游依赖阻塞。
 - 第四项：accepted；`D-M0-PROD-033`，工程包适用判断、一次批准、真实复制、暂停恢复、玩家接管、报告降噪和版本存档已经确认。
 - 接受来源：`M0-S003-U035`；决定 `D-M0-PROD-030` 至 `D-M0-PROD-033`。
-- 规格状态：`SPEC-M0-PROGRESSION-001` 与 `M0-L1-104` 均为 `accepted`；整套 M0 仍不是 `spec_frozen`。
-- 验证：四项组成内容和整份汇编均已接受；`M0-L1-105` 只切到 ready，第二、三、四层仍未解锁。
-- 下一步：等待用户明确说“开始 M0-L1-105”。
+- 规格状态：`SPEC-M0-PROGRESSION-001` 与 `M0-L1-104` 均为 `accepted`；整套 M0 仍不是 `overall_spec_frozen`。
+- 验收时路由：四项组成内容和整份汇编均已接受；当时只把 `M0-L1-105` 切到 ready。该状态已由 `M0-S003-U036` 的明确启动和 `D-M0-DIR-007` 后续修订。
+- 当前承接：`M0-L1-105` 已 active，下一步确认 `T00` 时间换算与纸面账本格式。
 
 ## 上一接受证据
 
@@ -49,7 +60,7 @@ updated_at: 2026-08-24T11:20:55+08:00
 - review 提交：`c080fd0`。
 - acceptance 提交：`0e1723d`。
 - 接受来源：`M0-S003-U026`；决定 `D-M0-PROD-024` 至 `D-M0-PROD-029`。
-- 验证：四项组成内容和整份汇编均已接受；整套 M0 仍不是 `spec_frozen`。
+- 验证：四项组成内容和整份汇编均已接受；整套 M0 仍不是 `overall_spec_frozen`。
 
 ## 更早接受证据
 
@@ -59,7 +70,7 @@ updated_at: 2026-08-24T11:20:55+08:00
 - review 提交：`0323418`。
 - acceptance 提交：`f8ae1e9`。
 - 接受来源：`M0-S003-U015`；决定 `D-M0-PROD-016` 至 `D-M0-PROD-023`。
-- 验证：四项组成内容和整份汇编均已接受；整套 M0 仍不是 `spec_frozen`。
+- 验证：四项组成内容和整份汇编均已接受；整套 M0 仍不是 `overall_spec_frozen`。
 
 ## 最早接受证据
 
@@ -69,7 +80,7 @@ updated_at: 2026-08-24T11:20:55+08:00
 - review 提交：`cc0969e`。
 - acceptance 提交：`0e2637f`。
 - 接受来源：`M0-S003-U006`；决定 `D-M0-PROD-013` 至 `D-M0-PROD-015`。
-- 验证：三项 Mac 整体复核全部通过，`SPEC-M0-PLAY-001` 与 `M0-L1-101` 已 accepted；整套 M0 仍不是 `spec_frozen`。
+- 验证：三项 Mac 整体复核全部通过，`SPEC-M0-PLAY-001` 与 `M0-L1-101` 已 accepted；整套 M0 仍不是 `overall_spec_frozen`。
 
 ## 串行顺序
 
@@ -79,6 +90,7 @@ M0-L1-101
 → M0-L1-103
 → M0-L1-104
 → M0-L1-105
+→ M0-L1-106
 → M0-L4-010
 → M0-L2-201
 → M0-L3-301

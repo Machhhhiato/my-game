@@ -18,6 +18,9 @@ accepted_in_session: M0-S003
 acceptance_source: M0-S003-U035
 acceptance_decision: D-M0-PROD-033
 acceptance_commit: d34d6ab
+workflow_amended_at: 2026-08-24T11:38:15+08:00
+workflow_amendment_source: M0-S003-U036
+workflow_amendment_decision: D-M0-DIR-007
 source_session: M0-S003
 implementation_authorized: false
 overall_spec_frozen: false
@@ -487,4 +490,4 @@ M0 首座是白昼运行的人工或无动力回收前哨。它拆下、分选�
 
 具体科研工作量、建造物资、各阶段白昼、设备减免、无人机补能、批次产量、补给周期和前 90 日完整节奏继续交 `M0-L1-105` 纸面试玩。
 
-用户已在 `M0-S003-U035` 整体接受 `M0-L1-104`。`SPEC-M0-PROGRESSION-001` 与任务状态均为 `accepted`；第一层可以把 `M0-L1-105` 切到 `ready`，但仍须用户另说“开始 `M0-L1-105`”后才能进入 `active`。整套 M0 继续保持 `overall_spec_frozen: false`，也未授权实施。
+用户已在 `M0-S003-U035` 整体接受 `M0-L1-104`。`SPEC-M0-PROGRESSION-001` 与任务状态均为 `accepted`。用户随后在 `M0-S003-U036` 明确开始 `M0-L1-105`；`D-M0-DIR-007` 又在 105 后增加 `M0-L1-106`，所以最终 `overall_spec_frozen` 只在 106 整体接受后进行。整套 M0 当前仍保持 `overall_spec_frozen: false`，也未授权实施。
