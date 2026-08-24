@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L1-106
 handoff_id: M0-H002
-updated_at: 2026-08-24T19:55:57+08:00
+updated_at: 2026-08-24T20:04:20+08:00
 ---
 
 # M0 当前任务路由
@@ -15,12 +15,12 @@ updated_at: 2026-08-24T19:55:57+08:00
 
 | 层级 | 当前任务 | 状态 | 阻塞项 | 正确回执 |
 |---|---|---|---|---|
-| 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `active` | 无；第一、二项 accepted，第三项等待用户复核 | `ACTIVE_REVIEW` |
+| 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `active` | 无；前三项 accepted，第四项 active | `ACTIVE` |
 | 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L1-106`、`M0-L4-010` | `BLOCKED_UPSTREAM` |
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
 | 第四层 | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L1-106` accepted 且 `overall_spec_frozen` | `BLOCKED_UPSTREAM` |
 
-`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 第一项与第二项已 accepted；用户否决第三项第一版复杂展示，修订版 active_review：科技二态、工程二态，只显示必要进度、已投入物资和占用人力。`D-M0-DIR-009` 继续要求下游全文读取权威源包并回传来源回执。`SPEC-M0-DESCRIPTION-001` 继续 active，第二、三、四层继续按既定依赖阻塞。
+`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 第一项至第三项已 accepted；第三项二态展示形成 `D-M0-PROD-039`，第四项转为 active。`D-M0-DIR-009` 继续要求下游全文读取权威源包并回传来源回执。`SPEC-M0-DESCRIPTION-001` 继续 active，第二、三、四层继续按既定依赖阻塞。
 
 ## 当前生产证据
 
@@ -29,13 +29,13 @@ updated_at: 2026-08-24T19:55:57+08:00
 - 当前输出：`SPEC-M0-DESCRIPTION-001`；路径 `specs/spec-m0-description-001.md`，状态 active。
 - 依赖证据：`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted；决定 `D-M0-PROD-036`，来源 `M0-S003-U039`。
 - 启动证据：`M0-S003-U040` 明确说`开始 M0-L1-106`。
-- 当前问题：`Q-M0-032` 为 `active_in_M0-L1-106`；第一项“玩家先看到的玩法信息与展开顺序”、第二项“技术内容最低必须写到哪里” accepted；第三项“数字、预计效果和当前状态怎样引用” active_review，其余五项 pending。
+- 当前问题：`Q-M0-032` 为 `active_in_M0-L1-106`；第一项至第三项 accepted；第四项“不同内容使用什么载体、什么时候主动提示” active，其余四项 pending。
 - 接受证据：`M0-S003-U044` 接受第一项的信息结构；`D-M0-PROD-037` 明确视觉示意未获接受，后续必须随整体 UI 重做。
 - 返工证据：`M0-S003-U045` 指出玩法元语言不是正文；`U046` 指出技术段太长且制度口吻自我揭露；`U047` 判断整体方向仍不对，并要求先收集真实描述样本。
 - 接受内容：《恢复精密制造》第一行只说明统一精度标准让复杂零件能够稳定复制；第二行由生产恢复委员会评价，精密制造把工人的经验从工人身上剥离。下游完整源包为 `references/reference-m0-tech-description-corpus-001.md`，摘要不能替代。
-- 第三项修订：科技只有未研发/已研发，未完成时可显示进度；工程只有在建/已建成，在建时只显示进度、已投入物资和占用人力。部署预计、完成后预计、产能前后对比与完成快照全部从玩家展示撤回，复杂过程只留底层模型。
+- 第三项接受：科技只有未研发/已研发，未完成时可显示进度；工程只有在建/已建成，在建时只显示进度、已投入物资和占用人力。部署预计、完成后预计、产能前后对比与完成快照全部从玩家展示撤回，复杂过程只留底层模型。
 - 冻结边界：`overall_spec_frozen` 仍为 false；`M0-L4-010`、`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
-- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009`、`D-M0-PROD-036` 至 `D-M0-PROD-038`。
+- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009`、`D-M0-PROD-036` 至 `D-M0-PROD-039`。
 
 ## 最近接受证据
 
