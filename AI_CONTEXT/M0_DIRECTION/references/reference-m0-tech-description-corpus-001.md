@@ -12,9 +12,9 @@ style_confirmed_at: 2026-08-24T18:00:32+08:00
 style_confirmed_source: M0-S003-U049
 latest_player_display_guidance_at: 2026-08-24T19:55:57+08:00
 latest_player_display_guidance_source: M0-S003-U051
-latest_style_guidance_at: 2026-08-24T20:53:39+08:00
-latest_style_guidance_source: M0-S003-U056
-source_bundle_revision: 2
+latest_style_guidance_at: 2026-08-24T21:17:13+08:00
+latest_style_guidance_source: M0-S003-U057
+source_bundle_revision: 3
 downstream_full_read_required: true
 summary_substitution_forbidden: true
 copyright_boundary: faithful_paraphrase_and_short_anchors_only
@@ -373,6 +373,62 @@ copyright_boundary: faithful_paraphrase_and_short_anchors_only
 | 第五项三个草稿问题、制度动作区分与直接退稿规则 | accepted；由 `D-M0-PROD-041` 确认 |
 | `D-M0-PROD-038` 的《恢复精密制造》两行成品 | 继续 accepted，不受本轮修正影响 |
 | 第五项新增的统计口径、部门交接、统一漏水和旧手续示例 | 规则说明仍可追溯，但力度未获接受；禁止作为下游语气或质量标杆 |
-| 第六项严肃、轻度、中度、重度怎样定义与分配 | 当前 active_review，尚未接受 |
+| 第六项完全严肃、中度、重度怎样定义与分配 | 中度与重度判断已确认；轻度和旧配比撤回，当前复核同科技重写范例 |
 
 下游回执必须引用包含本节的新版源包提交，并继续写明 `read_scope: full_file`、`summary_not_authoritative: true` 与 `result: FULL_READ`。源包被截断、只读了本节或只拿到任务摘要时，仍返回 `BLOCKED_SOURCE`。
+
+## 7. 第六项局部接受、完整重读与固定句式撤回
+
+本节是源包 revision 3 的新增正文，必须与前面的用户判断、15 项《群星》语料、13 项环日语料、已接受范例和第五项完整规则一起下传。不能只传本节形成新的风格摘要。
+
+### 7.1 必须逐字保留的最新用户判断
+
+> 我认可重度和中度的判断，同时笑话应该从中度起步。但是你写的内容，不是很方便理解，从同样的科技，再来一条，同样想表达的内容。而且不是固定的句式，“”。-某个地方，太片面了，罚你再读一遍环日文名的原文。
+
+### 7.2 本轮完整读取回执
+
+```text
+source_read_receipt
+source: AI_CONTEXT/M0_DIRECTION/references/reference-m0-tech-description-corpus-001.md
+fixed_commit_before_revision: 00903665d6e76a832f9f10ffc1fa423077aecaf0
+read_scope: lines 1-378, full_file_before_revision
+result: FULL_READ
+
+source_read_receipt
+source: /Users/xujiangyue/.codex/attachments/139185ba-42b2-4b33-b3ec-bdb6a3150dda/pasted-text.txt
+read_scope: lines 1-597, full_file
+result: FULL_READ
+```
+
+第二份附件是相邻研究聊天保存的完整讨论与条目还原，不等于小说全文。附件中标为还原或转述的内容仍是还原或转述，只有明确标出的短锚点属于短引文。
+
+### 7.3 重读后确认的实际叙述方式
+
+现有 13 项并不遵循统一的`“一句话”——某机构`格式。它们分别会把落点放进：
+
+- 科技或产品名称；
+- 事件经过与最后一句普通事实；
+- 操作手册里的安全提醒；
+- 调查消失、采购通过或政治决策；
+- 某个被加引号的词；
+- 销售现场的哄笑和鼓掌；
+- 宏大宣言后紧接的现实目标；
+- 完全严肃的文明史说明。
+
+因此，引语署名只是一种偶尔可用的载体，不能成为第二行的默认模板。第二行可以是事件叙述、命名、操作说明、调查结论、制度决定、人物反应、历史收尾或引语；应由科技本身决定形式。
+
+### 7.4 当前已确认、已撤回与待复核
+
+- 已确认：中度和重度按真实后果判断；笑话从中度起步；由 `D-M0-PROD-042` 记录。
+- 已撤回：轻度目标类型；原`完全严肃 30% / 轻度 20% / 中度 35% / 重度 15%`配比；第一次`战斗神经抑制`的固定引语署名写法。
+- 未决定：完全严肃、中度、重度的新配比。
+- 待复核示意：
+
+```text
+战斗神经抑制
+神经抑制器接管疼痛、疲劳与自我保护反射，使士兵在重伤后仍能维持战斗动作。
+
+首批列装后，军方取消了伤员撤离程序。受伤的士兵已经能够继续战斗；等他们不能继续战斗时，也就没有撤离的必要了。
+```
+
+该示意表达的仍是同一重度后果，但改用事件与制度决定直接展示因果，不使用引语署名。它当前只是 `active_review` 范例，不自动成为正式科技、世界事实或下游成品。
