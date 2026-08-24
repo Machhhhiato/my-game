@@ -10,6 +10,8 @@ scope_confirmed_at: 2026-08-24T17:52:59+08:00
 scope_confirmed_source: M0-S003-U048
 style_confirmed_at: 2026-08-24T18:00:32+08:00
 style_confirmed_source: M0-S003-U049
+latest_player_display_guidance_at: 2026-08-24T19:55:57+08:00
+latest_player_display_guidance_source: M0-S003-U051
 downstream_full_read_required: true
 summary_substitution_forbidden: true
 copyright_boundary: faithful_paraphrase_and_short_anchors_only
@@ -54,6 +56,12 @@ copyright_boundary: faithful_paraphrase_and_short_anchors_only
 > “精密制造最伟大的进步，是终于能把工人的经验从工人身上剥离出来。”——生产恢复委员会
 
 这段成品与上面的用户判断必须和下方 28 项语料一起完整传递。摘要只能帮助定位，不能取代任何一项正文。
+
+### 0.3 必须保留的玩家展示修正
+
+> 这个过程太复杂了，实际上对于玩家来说，科技只有研发成功和没有研发两个状态，研发成功之后根本不在乎他的底层是什么东西，这个只能作为数据模型和工程模型。同理，工程也只有在建和建好两个状态，根本不需要考虑中间的情况，只用展示进度和扣件人理就行，不需要什么部署预计，瞎折腾
+
+这条原话要求下游不要把底层科研与工程状态重新写成玩家必须阅读的文字。当前解释以 `SPEC-M0-DESCRIPTION-001` 第 7 节为准：科技二态，工程二态；动态进度、已投入物资和占用人力放在系统显示，不插入两行科技正文。
 
 ## 1. 范围与边界
 

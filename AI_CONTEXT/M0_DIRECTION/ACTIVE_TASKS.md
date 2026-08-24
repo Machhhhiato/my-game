@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L1-106
 handoff_id: M0-H002
-updated_at: 2026-08-24T18:13:51+08:00
+updated_at: 2026-08-24T19:55:57+08:00
 ---
 
 # M0 当前任务路由
@@ -20,7 +20,7 @@ updated_at: 2026-08-24T18:13:51+08:00
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
 | 第四层 | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L1-106` accepted 且 `overall_spec_frozen` | `BLOCKED_UPSTREAM` |
 
-`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 第一项与第二项已 accepted；第三项已提交 active_review，当前提案把固定解锁、带条件预计、真实当前状态和完成结果快照分开。`D-M0-DIR-009` 继续要求下游全文读取权威源包并回传来源回执。`SPEC-M0-DESCRIPTION-001` 继续 active，第二、三、四层继续按既定依赖阻塞。
+`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 第一项与第二项已 accepted；用户否决第三项第一版复杂展示，修订版 active_review：科技二态、工程二态，只显示必要进度、已投入物资和占用人力。`D-M0-DIR-009` 继续要求下游全文读取权威源包并回传来源回执。`SPEC-M0-DESCRIPTION-001` 继续 active，第二、三、四层继续按既定依赖阻塞。
 
 ## 当前生产证据
 
@@ -33,7 +33,7 @@ updated_at: 2026-08-24T18:13:51+08:00
 - 接受证据：`M0-S003-U044` 接受第一项的信息结构；`D-M0-PROD-037` 明确视觉示意未获接受，后续必须随整体 UI 重做。
 - 返工证据：`M0-S003-U045` 指出玩法元语言不是正文；`U046` 指出技术段太长且制度口吻自我揭露；`U047` 判断整体方向仍不对，并要求先收集真实描述样本。
 - 接受内容：《恢复精密制造》第一行只说明统一精度标准让复杂零件能够稳定复制；第二行由生产恢复委员会评价，精密制造把工人的经验从工人身上剥离。下游完整源包为 `references/reference-m0-tech-description-corpus-001.md`，摘要不能替代。
-- 第三项提案：科研卡只写固定解锁；选中科技后的侧栏显示研究进度与带生效条件的预计；工程和设施页显示真实当前状态；完成报告保存一次实际结果快照。预计值随当前投入重算，正文不插入动态数字。
+- 第三项修订：科技只有未研发/已研发，未完成时可显示进度；工程只有在建/已建成，在建时只显示进度、已投入物资和占用人力。部署预计、完成后预计、产能前后对比与完成快照全部从玩家展示撤回，复杂过程只留底层模型。
 - 冻结边界：`overall_spec_frozen` 仍为 false；`M0-L4-010`、`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
 - 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009`、`D-M0-PROD-036` 至 `D-M0-PROD-038`。
 
