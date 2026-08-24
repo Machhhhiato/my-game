@@ -10,9 +10,9 @@ target_host: mac
 target_lane: M0-DIR-A
 target_work_lane: M0-L1-DIRECTION
 target_layer: 1
-target_task: M0-L1-104
+target_task: M0-L1-105
 assigned_session: M0-S003
-action_status: review
+action_status: ready
 required_branch: context/m0-direction
 startup_phrase: 你是第一层
 ---
@@ -26,10 +26,10 @@ startup_phrase: 你是第一层
 - 稳定工作 lane：`M0-L1-DIRECTION`。
 - 建议会话标题：`AG-M0｜L1-DIRECTION｜101-105｜MAC`。
 - 当前 session：`M0-S003`。
-- 已接受任务：`M0-L1-101`，acceptance 提交 `0e2637f`；`M0-L1-102`，acceptance 提交 `f8ae1e9`；`M0-L1-103`，acceptance 提交 `0e1723d`。
-- 当前任务：`M0-L1-104 · 科研、高级资产与前哨复制`，状态为 `review`。
-- 当前输出：`SPEC-M0-PROGRESSION-001`，路径 `specs/spec-m0-progression-001.md`。
-- 当前动作：整体复核 `SPEC-M0-PROGRESSION-001`；四项组成内容均已接受。
+- 已接受任务：`M0-L1-101`，acceptance 提交 `0e2637f`；`M0-L1-102`，acceptance 提交 `f8ae1e9`；`M0-L1-103`，acceptance 提交 `0e1723d`；`M0-L1-104` 已由 `M0-S003-U035` 整体接受。
+- 当前任务：`M0-L1-105 · 前 90 日纸面试玩与规格冻结`，状态为 `ready`。
+- 当前输出：尚未创建；明确开始后输出 `SPEC-M0-INTEGRATED-001`。
+- 当前动作：等待用户明确说“开始 M0-L1-105”。
 
 Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。UI 中是否新建聊天不再是前置；Git session、活动 lane 和任务 ID 才是接力身份。
 
@@ -51,23 +51,25 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。UI 中是否�
 14. 用户在 `M0-S003-U031` 接受修订后的第二项，形成 `D-M0-PROD-031`；`Q-M0-015`、`Q-M0-027` resolved，第三项第一座前哨完整首建、稳定验收与标准工程包转为 active。
 15. 用户在 `M0-S003-U032` 至 `U033` 接受第三项核心链路，并补充首次阶段报告、逐段物资与设备需求、实体设备改善对应环节和前后耗时直观显示，形成 `D-M0-PROD-032`；第三项 accepted，第四项转为 active。
 16. 用户在 `M0-S003-U034` 接受第四项，形成 `D-M0-PROD-033`；`Q-M0-029` resolved，`SPEC-M0-PROGRESSION-001` 与 `M0-L1-104` 转入整体 review，`M0-L1-105` 继续 blocked_upstream。
+17. 用户在 `M0-S003-U035` 整体接受 `SPEC-M0-PROGRESSION-001` 与 `M0-L1-104`；`Q-M0-030` resolved，`M0-L1-105` 只切到 ready，等待明确开始。
 
 ## 当前正确状态至少包含
 
 ```text
-状态：REVIEW
+状态：READY
 层级：第一层｜方向与系统设计
 活动 lane：M0-DIR-A｜Mac｜M0-S003
-当前任务：M0-L1-104｜科研、高级资产与前哨复制
-任务状态：review
+当前任务：M0-L1-105｜前 90 日纸面试玩与规格冻结
+任务状态：ready
 已接受输出：SPEC-M0-PLAY-001｜specs/spec-m0-play-001.md｜0e2637f
 已接受输出：SPEC-M0-OPS-001｜specs/spec-m0-ops-001.md｜f8ae1e9
 不会做：故事正文、最终玩家文字、游戏代码和 main 修改
 已接受输出：SPEC-M0-MAP-001｜specs/spec-m0-map-001.md｜0e1723d
-当前输出：SPEC-M0-PROGRESSION-001｜specs/spec-m0-progression-001.md
-下一步：等待用户整体接受 M0-L1-104，或指出需要重新打开的具体小节
+已接受输出：SPEC-M0-PROGRESSION-001｜specs/spec-m0-progression-001.md
+当前输出：尚未创建；开始后为 SPEC-M0-INTEGRATED-001
+下一步：等待用户明确回复“开始 M0-L1-105”
 ```
 
 ## 完成条件
 
-重点突破与领域自动科研、精密制造和无人机、第一座完整首建与标准工程包、第二座自动复制四项均获用户接受并完成纸面核对后，`SPEC-M0-PROGRESSION-001` 才能转入整体 review；不会自动接受 `M0-L1-104` 或开始 `M0-L1-105`。
+`M0-L1-105` 只有在用户明确开始后才能创建 `SPEC-M0-INTEGRATED-001` 并进入 active；完成第 1–90 日顺序、5–8 次关键操作、内容门、链路门、事故核对和开放问题清零后，仍须用户明确标记 `spec_frozen`。

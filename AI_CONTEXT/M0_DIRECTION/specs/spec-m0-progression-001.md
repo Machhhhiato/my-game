@@ -2,8 +2,8 @@
 spec_id: SPEC-M0-PROGRESSION-001
 task_id: M0-L1-104
 title: M0 科研、高级资产与前哨复制
-status: review
-task_status: review
+status: accepted
+task_status: accepted
 milestone: M0-personal-playable
 source_specs:
   - SPEC-M0-PLAY-001
@@ -13,6 +13,10 @@ started_at: 2026-08-21T23:07:01+08:00
 start_source: M0-S003-U027
 review_ready_at: 2026-08-24T11:12:27+08:00
 review_ready_source: D-M0-PROD-033
+accepted_at: 2026-08-24T11:20:55+08:00
+accepted_in_session: M0-S003
+acceptance_source: M0-S003-U035
+acceptance_decision: D-M0-PROD-033
 source_session: M0-S003
 implementation_authorized: false
 overall_spec_frozen: false
@@ -480,4 +484,6 @@ M0 首座是白昼运行的人工或无动力回收前哨。它拆下、分选�
 - 科技改善必须由实体设备真实部署到对应阶段，玩家直接看到前后耗时与原因；
 - 项目、人员、设备、货物、暂停、报告和工程包版本全部进入存档，重载不能重复扣料或改写工序。
 
-具体科研工作量、建造物资、各阶段白昼、设备减免、无人机补能、批次产量、补给周期和前 90 日完整节奏继续交 `M0-L1-105` 纸面试玩。本规格与任务当前为 `review`，尚未整体 accepted；不自动解锁或开始下一任务，也不授权修改游戏代码。
+具体科研工作量、建造物资、各阶段白昼、设备减免、无人机补能、批次产量、补给周期和前 90 日完整节奏继续交 `M0-L1-105` 纸面试玩。
+
+用户已在 `M0-S003-U035` 整体接受 `M0-L1-104`。`SPEC-M0-PROGRESSION-001` 与任务状态均为 `accepted`；第一层可以把 `M0-L1-105` 切到 `ready`，但仍须用户另说“开始 `M0-L1-105`”后才能进入 `active`。整套 M0 继续保持 `overall_spec_frozen: false`，也未授权实施。
