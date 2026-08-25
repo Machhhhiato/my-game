@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L1-106
 handoff_id: M0-H002
-updated_at: 2026-08-25T10:08:35+08:00
+updated_at: 2026-08-25T10:20:28+08:00
 ---
 
 # M0 当前任务路由
@@ -21,7 +21,7 @@ updated_at: 2026-08-25T10:08:35+08:00
 | 第四层（能力） | `M0-L4-005` GitHub Skills/MCP 能力审计 | `blocked_upstream` | `M0-L1-106` accepted 且 `overall_spec_frozen` | `BLOCKED_UPSTREAM` |
 | 第四层（代码） | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L4-005` accepted | `BLOCKED_UPSTREAM` |
 
-`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 第一项至第七项已 accepted；第八项 active，其中 `D-M0-DIR-012` 与 `D-M0-DIR-013` 已确认第一层直接统筹、Mac 单机优先和各层模型运行默认。其余动态字段、交接单、缺失阻塞、逐条验收、统计口径与最终冻结仍待确认。`D-M0-DIR-014` 已在冻结后、代码审计前新增 `M0-L4-005` 外部工具能力审计；该任务只读，不能自行安装。`D-M0-DIR-011` 要求下游全文读取 revision 6。`SPEC-M0-DESCRIPTION-001` 继续 active，第二、三、四层继续按既定依赖阻塞；本轮没有创建下层任务。
+`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 第一项至第七项已 accepted；第八项 active，其中 `D-M0-DIR-012` 至 `D-M0-DIR-014` 已确认第一层统筹、Mac 单机优先、模型默认与冻结后能力审计路线。`M0-S003-A191` 已把第一部分修订为“一条内容只用一张内部工作单”，当前为 `proposal_active_review`，等待用户接受；后续缺失退回、逐条验收、统计口径与最终冻结仍待确认。`D-M0-DIR-011` 继续要求下游全文读取 revision 6。第二、三、四层继续按依赖阻塞；本轮没有创建下层任务。
 
 ## 当前生产证据
 
@@ -30,7 +30,7 @@ updated_at: 2026-08-25T10:08:35+08:00
 - 当前输出：`SPEC-M0-DESCRIPTION-001`；路径 `specs/spec-m0-description-001.md`，状态 active。
 - 依赖证据：`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted；决定 `D-M0-PROD-036`，来源 `M0-S003-U039`。
 - 启动证据：`M0-S003-U040` 明确说`开始 M0-L1-106`。
-- 当前问题：`Q-M0-032` 为 `active_in_M0-L1-106`；第一项至第七项 accepted；第八项与 `Q-M0-042` active。统筹方式已局部接受，不能冒充第八项整体 accepted。
+- 当前问题：`Q-M0-032` 为 `active_in_M0-L1-106`；第一项至第七项 accepted；第八项与 `Q-M0-042` active。第八项第一部分的修订工作单正在等待用户判断，不能冒充局部或整体 accepted。
 - 接受证据：`M0-S003-U044` 接受第一项的信息结构；`D-M0-PROD-037` 明确视觉示意未获接受，后续必须随整体 UI 重做。
 - 返工证据：`M0-S003-U045` 指出玩法元语言不是正文；`U046` 指出技术段太长且制度口吻自我揭露；`U047` 判断整体方向仍不对，并要求先收集真实描述样本。
 - 接受内容：《恢复精密制造》第一行只说明统一精度标准让复杂零件能够稳定复制；第二行由生产恢复委员会评价，精密制造把工人的经验从工人身上剥离。下游完整源包为 `references/reference-m0-tech-description-corpus-001.md`，摘要不能替代。
