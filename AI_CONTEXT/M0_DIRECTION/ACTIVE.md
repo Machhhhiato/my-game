@@ -18,15 +18,15 @@ next_lane: null
 next_host: null
 handoff_id: M0-H002
 last_session: M0-S003
-last_turn: M0-S003-A219
-updated_at: 2026-08-25T13:36:30+08:00
+last_turn: M0-S003-A222
+updated_at: 2026-08-25T13:49:13+08:00
 ---
 
 # 当前接续卡
 
 ## 当前目标
 
-用户已在 `M0-S003-U086` 整体接受 `M0-L1-106` 并冻结 M0 规格。`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` accepted，`overall_spec_frozen: true`，`implementation_authorized: false`。R3 已完成 `M0-L4-005`，交付 `AUDIT-M0-TOOLS-001`；任务当前为 review，等待用户验收。结论是当前不接入任何新工具，只保留 `tauri-agent-tools` 作为未来另行授权的受控试用候选。
+用户已在 `M0-S003-U086` 整体接受 `M0-L1-106` 并冻结 M0 规格。`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` accepted，`overall_spec_frozen: true`，`implementation_authorized: false`。R3 已完成 `M0-L4-005`，交付 `AUDIT-M0-TOOLS-001`；任务当前为 review，等待用户验收。结论是当前不接入任何新工具，只保留 `tauri-agent-tools` 作为未来另行授权的受控试用候选。用户又确认后续采用白天设计、夜间约六小时执行、次日验收的总体节奏；详细规则已形成 `PLAN-M0-DAY-NIGHT-001`，当前为 review。
 
 ## 已确认
 
@@ -49,6 +49,7 @@ updated_at: 2026-08-25T13:36:30+08:00
 - `D-M0-DIR-020`：正式下层任务使用独立 Codex 任务线程；当前任务作为逻辑主线程负责派发、等待、验收、退回和收回，Git 文档是跨线程权威上下文。
 - `D-M0-DIR-021`：用户整体接受 `M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001`，M0 规格正式冻结；只把 `M0-L4-005` 切到 ready，不产生工具安装或代码写入授权。
 - `D-M0-DIR-022`：两个 `gpt-5.3-codex-spark` 审计任务均因整批网页证据超过上下文而失败；R3 以 `gpt-5.6-terra`、固定候选和限量证据完成 `AUDIT-M0-TOOLS-001`。实际执行层的 5.3 默认不因此改动。
+- `D-M0-DIR-023`：白天负责方案、范围、验收与夜间执行单；夜间只做已授权、边界明确、约六小时内可安全停下的一项大结果；次日先验收。详细停止状态、上下文防护与交接格式见 `PLAN-M0-DAY-NIGHT-001`，当前等待用户接受。
 - `D-M0-PROD-001`：首先为用户本人这位资深策略玩家量身定制；买断暂缓；用户认可初版后再以 Steam 免费游戏形式首次发布。
 - `D-M0-PROD-002`：核心爽点是通过专业管理形成科技、资源、高级资产和版图领先；正常经营能够积累储备并解决危机，不采用强制极端二选一。
 - `D-M0-PROD-003`：关键科技允许玩家集中突破，普通科研允许系统按领域倾向自动推进，形成操作与看海交替。
@@ -116,6 +117,8 @@ updated_at: 2026-08-25T13:36:30+08:00
 
 `M0-L4-005 · GitHub Skills/MCP 能力审计`：当前为 review。R3（thread `01a03741-b9b7-7302-84d0-5b57447051b9`，host `local`）已经只读交付 `AUDIT_M0_TOOLS_001.md`；等待用户接受，不安装工具、不改配置、不修改代码。
 
+并行元计划：`PLAN-M0-DAY-NIGHT-001` 当前为 review。它只规定未来怎样安排白天设计、夜间执行和次日验收，不改变产品任务依赖，也不产生实施授权。
+
 ## 禁止操作
 
 - 不修改游戏代码、数据、资产或产品规格。
@@ -125,4 +128,4 @@ updated_at: 2026-08-25T13:36:30+08:00
 
 ## 下一句建议
 
-先恢复 GitHub 登录并推送本地审计登记，再由用户验收 `AUDIT-M0-TOOLS-001`；不自动接受，也不自动开始 `M0-L4-010`。
+用户可先独立验收 `PLAN-M0-DAY-NIGHT-001`；产品路线仍需恢复 GitHub 登录、推送本地登记并验收 `AUDIT-M0-TOOLS-001`。两项都不自动接受，也不自动开始 `M0-L4-010`。
