@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L1-106
 handoff_id: M0-H002
-updated_at: 2026-08-25T11:32:06+08:00
+updated_at: 2026-08-25T11:45:11+08:00
 ---
 
 # M0 当前任务路由
@@ -21,7 +21,7 @@ updated_at: 2026-08-25T11:32:06+08:00
 | 第四层（能力） | `M0-L4-005` GitHub Skills/MCP 能力审计 | `blocked_upstream` | `M0-L1-106` accepted 且 `overall_spec_frozen` | `BLOCKED_UPSTREAM` |
 | 第四层（代码） | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L4-005` accepted | `BLOCKED_UPSTREAM` |
 
-`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 八项均已逐项 accepted；`D-M0-DIR-019` 完成第五部分与第八项，`M0-S003-A203` 已交付八项完整复核。`D-M0-DIR-020` 接受独立 Codex 任务线程统筹：当前任务是逻辑主线程，Git 是跨线程权威上下文。当前仍只等待用户明确回复最终冻结短语；第二、三、四层继续按依赖阻塞，本轮没有创建下层线程。
+`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 八项均已逐项 accepted；`D-M0-DIR-019` 完成第五部分与第八项，`M0-S003-A206` 已交付八项完整复核。`D-M0-DIR-020` 接受独立 Codex 任务线程统筹：当前任务是逻辑主线程，Git 是跨线程权威上下文。当前仍只等待用户明确回复最终冻结短语；第二、三、四层继续按依赖阻塞，本轮没有创建下层线程。
 
 ## 当前生产证据
 
