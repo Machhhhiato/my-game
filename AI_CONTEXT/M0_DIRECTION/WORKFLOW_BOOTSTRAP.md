@@ -1,6 +1,6 @@
 ---
 workflow_id: always-game-m0-four-layer
-workflow_version: 4
+workflow_version: 5
 milestone: M0-personal-playable
 direction_branch: context/m0-direction
 active_tasks: AI_CONTEXT/M0_DIRECTION/ACTIVE_TASKS.md
@@ -32,6 +32,7 @@ session_routing: AI_CONTEXT/M0_DIRECTION/SESSION_ROUTING.md
 - 第一层统筹不等于下层已经启动，也不等于代码写入授权。实现任务仍须用户逐项单独授权。
 - 当前工作机只有 Mac；Windows 历史记录继续保留，但不进入当前启动、派发或接力计划。
 - 各层默认模型只看 `SESSION_ROUTING.md` 的当前运行表；创建任务时重新核对可用模型，模型名称变化不改变四层职责。
+- 下层任务默认使用完成任务所需的最低合理思考深度：机械任务 `low`，内容组织和有边界的实现 `medium`。提高到 `high` 必须记录具体原因；`xhigh`、`max`、`ultra` 必须先获用户明确确认。
 
 ## 启动时的读取顺序
 
@@ -69,7 +70,7 @@ Codex 在每个新任务开始时建立一次全局到项目的说明链。安�
 项目：Always Game
 里程碑：M0 个人完整试玩版
 层级：<第一至第四层｜名称>
-协议：M0 四层工作流 v3
+协议：M0 四层工作流 v5
 Git 基线：<branch>@<commit>
 任务目的地：<stable lane｜host｜建议标题>
 当前任务：<task_id｜名称>

@@ -5,8 +5,8 @@ mode: direction_discussion
 status: active
 branch: context/m0-direction
 base_main: a08c40bb3596918347c9719d5c82c5af26707d95
-direction_protocol_version: 4
-routing_epoch: 9
+direction_protocol_version: 5
+routing_epoch: 10
 active_lane: M0-DIR-A
 active_host: mac
 preferred_host: mac
@@ -18,15 +18,15 @@ next_lane: null
 next_host: null
 handoff_id: M0-H002
 last_session: M0-S003
-last_turn: M0-S003-A251
-updated_at: 2026-08-25T15:45:00+08:00
+last_turn: M0-S003-A264
+updated_at: 2026-08-25T16:53:36+08:00
 ---
 
 # 当前接续卡
 
 ## 当前目标
 
-GitHub 登录和推送已经恢复，真实仓库已登记为本地 `always game` 项目。第一层已创建、收回并复核 `M0-L4-010`；用户接受 `AUDIT-M0-TECH-001` 及修订后的实施基线：M0 是唯一后续主线，只保留能够证明服务 M0 的底座，其余旧 R38 内容拟删除，不兼容旧存档。当前唯一下一任务为只读的 `M0-L4-011`，先形成逐文件保留、改造、删除与无法判断清单；尚未授权修改或删除代码。`overall_spec_frozen: true`，`implementation_authorized: false`。
+GitHub 登录和推送已经恢复，真实仓库已登记为本地 `always game` 项目。用户已接受 `M0-L4-011` 与 `AUDIT-M0-CODE-BOUNDARY-001`：353 个相关文件全部归类，保留 64、改造后保留 6、拟删除 97、无法判断 186；未分类为 0。186 项按相关实现批次的前置检查处理，不再单独开大审计。当前唯一下一任务为 `M0-L2-201`，状态 ready；尚未创建物理任务，也未授权修改或删除代码。`overall_spec_frozen: true`，`implementation_authorized: false`。
 
 ## 已确认
 
@@ -55,6 +55,8 @@ GitHub 登录和推送已经恢复，真实仓库已登记为本地 `always game
 - `D-M0-DIR-026`：用户接受 `AUDIT-M0-TOOLS-001`；当前不接入任何工具，一个候选保留未来受控试用，六项观察、四项淘汰。`M0-L4-010` ready，但须先完成 GitHub 同步并在正确项目创建新任务。
 - `D-M0-DIR-027`：第一层必须在创建独立 Codex 任务后继续取得正式 thread ID、登记跟踪、读取完成结果并向用户汇总；任务结束只改变侧边栏状态，不视为自动回传已经完成。
 - `D-M0-DIR-028`：`M0-L4-010` 与 `AUDIT-M0-TECH-001` accepted。M0 成为唯一后续主线；旧存档不兼容；旧 R38 只保留有明确 M0 消费者的底座，其余内容进入可恢复删除计划。删除前新增只读 `M0-L4-011`。
+- `D-M0-DIR-029`：下层任务默认使用最低合理思考深度；机械任务 `low`，内容组织和有边界的实现 `medium`。升到 `high` 必须有具体原因；`xhigh`、`max`、`ultra` 必须先获用户明确确认。
+- `D-M0-DIR-030`：用户接受 `M0-L4-011` 与代码边界审计；186 个无法判断项在相关实现批次开始前逐组检查，不另建大审计；`M0-L2-201` ready，实施授权仍为 false。
 - `D-M0-PROD-001`：首先为用户本人这位资深策略玩家量身定制；买断暂缓；用户认可初版后再以 Steam 免费游戏形式首次发布。
 - `D-M0-PROD-002`：核心爽点是通过专业管理形成科技、资源、高级资产和版图领先；正常经营能够积累储备并解决危机，不采用强制极端二选一。
 - `D-M0-PROD-003`：关键科技允许玩家集中突破，普通科研允许系统按领域倾向自动推进，形成操作与看海交替。

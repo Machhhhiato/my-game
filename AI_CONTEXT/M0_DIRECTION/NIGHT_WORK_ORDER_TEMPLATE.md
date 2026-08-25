@@ -2,8 +2,10 @@
 template_id: NIGHT-WORK-ORDER-M0-001
 template_status: accepted
 acceptance_source: M0-S003-U089
+latest_revision_source: M0-S003-U104
 project_label: always game
 real_repo: /Users/xujiangyue/AGENT Project/always game
+reasoning_budget_policy: minimum_sufficient
 ---
 
 # 夜间执行单模板
@@ -18,6 +20,14 @@ real_repo: /Users/xujiangyue/AGENT Project/always game
 - 明确非目标：
 - 预期产物：
 - 用户授权消息编号：
+
+## 模型与额度
+
+- 任务模型：
+- 初始思考深度：机械任务填 `low`；有边界的实现通常填 `medium`：
+- 最高自动升级档：默认不得高于 `high`：
+- 升级条件：必须是复杂架构、难复现根因、冲突证据或较低档的明确质量失败：
+- 禁止自动使用：`xhigh` / `max` / `ultra`；如需使用，填写用户确认消息编号：
 
 ## 项目与起点
 
@@ -77,6 +87,7 @@ real_repo: /Users/xujiangyue/AGENT Project/always game
 - 测试通过数、失败数与未运行项：
 - 本地提交和远端推送状态：
 - 已知问题与阻塞：
+- 实际思考深度、是否升级及原因：
 - 需要用户决定的唯一下一步：
 
 夜间任务不得自行把正式任务标成 accepted 或 verified，也不得自动开始下一个正式任务。

@@ -1,20 +1,20 @@
 ---
 card_version: 2
 handoff_id: M0-H002
-routing_epoch: 9
+routing_epoch: 10
 routing_state: active
 source_host: windows
 source_lane: M0-DIR-B
 source_session: M0-S002
 target_host: mac
 target_lane: M0-DIR-A
-target_work_lane: M0-L4-AUDIT
-target_layer: 4
-target_task: M0-L4-011
+target_work_lane: M0-L2-CONTENT
+target_layer: 2
+target_task: M0-L2-201
 assigned_session: null
-action_status: ready_sync_pending
+action_status: ready
 required_branch: context/m0-direction
-startup_phrase: 你是第四层
+startup_phrase: 你是第二层
 ---
 
 # 唯一下一动作卡
@@ -23,16 +23,19 @@ startup_phrase: 你是第四层
 
 - 设备：Mac。
 - 逻辑方向 lane：`M0-DIR-A`。
-- 稳定工作 lane：`M0-L4-AUDIT`。
-- 计划任务标题：`AG-M0｜L4-AUDIT｜011｜MAC`；尚未创建，不得编造 thread ID。
-- 逻辑主线程 session：`M0-S003`；当前没有活动下层审计任务。
-- 已接受任务：`M0-L1-101` 至 `M0-L1-106`、`M0-L4-005`、`M0-L4-010`；代码审计及实施基线接受来源为 `M0-S003-U101` 至 `U102`。
-- 当前任务：`M0-L4-011 · 可复用底座与旧代码删除边界审计`，状态为 `ready_sync_pending`。
-- 当前输入：冻结的 M0 规格、accepted 的 `AUDIT-M0-TECH-001`、真实代码、测试与构建基线。
-- 预期输出：`AUDIT-M0-CODE-BOUNDARY-001`；尚未生成。
-- 当前动作：提交并推送本次 accepted 记录；成功后在本地 `always game` 项目创建新的只读边界审计任务并由第一层登记跟踪。
+- 稳定工作 lane：`M0-L2-CONTENT`。
+- 计划任务标题：`AG-M0｜L2-CONTENT｜201｜MAC`；尚未创建物理任务。
+- 逻辑主线程 session：`M0-S003`；第一层已完成并收回全部前置审计。
+- 已接受任务：`M0-L1-101` 至 `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011`。
+- 当前任务：`M0-L2-201 · 主线、任务与临时事件结构`，状态为 `ready`。
+- 当前输入：六份冻结 M0 规格、accepted 的 `AUDIT-M0-TECH-001` 与 `AUDIT-M0-CODE-BOUNDARY-001`、完整科技描述源语料和第二层角色卡。
+- 当前动作：等待第一层创建第二层内容任务；本次接受与推送不等于已经启动第二层。
 
 用户在 `M0-S003-U087` 至 `U089` 追加、修正并整体接受后续制作节奏：白天先确定方案、范围和验收；晚上给明确的代码任务按约六小时估算，条件允许时可以运行八小时或更久；次日先验收。`day-night-execution-plan.md` 当前 accepted，正式协议为 v4。它不改变本卡的当前产品任务，也不构成实施授权。
+
+用户在 `M0-S003-U104` 增加额度规则，形成 `D-M0-DIR-029`：下发任务使用最低合理思考深度；机械任务默认 `low`，内容组织与有边界的实现默认 `medium`，升到 `high` 必须记录具体原因，`xhigh`、`max`、`ultra` 需用户明确确认。正式协议升为 v5。
+
+用户在 `M0-S003-U105` 接受 `M0-L4-011`，决定 186 个无法判断项按相关实现批次前置检查，并授权提交推送本次审计记录；形成 `D-M0-DIR-030`。这不授权修改或删除游戏代码。
 
 以后创建 Always Game 下层任务时，必须归入侧边栏 `always game` 项目并使用真实 Git 目录；如果本机入口无法同时满足两项，停止并报告，不再退回 `xujiangyue` 项目。本轮不迁移既有任务，也不创建新任务。
 
@@ -113,11 +116,11 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 层级：第一层｜方向与系统设计
 活动 lane：M0-DIR-A｜Mac｜M0-S003
 已接受任务：M0-L1-106｜SPEC-M0-DESCRIPTION-001｜overall_spec_frozen true
-当前任务：M0-L4-011｜可复用底座与旧代码删除边界审计
-任务状态：ready_sync_pending
+当前任务：M0-L2-201｜主线、任务与临时事件结构
+任务状态：ready｜尚未创建物理任务
 已接受输出：SPEC-M0-PLAY-001｜specs/spec-m0-play-001.md｜0e2637f
 已接受输出：SPEC-M0-OPS-001｜specs/spec-m0-ops-001.md｜f8ae1e9
-不会做：故事正文、最终玩家文字、游戏代码和 main 修改
+不会做：最终玩家文字、游戏代码、main 修改和任何删除
 已接受输出：SPEC-M0-MAP-001｜specs/spec-m0-map-001.md｜0e1723d
 已接受输出：SPEC-M0-PROGRESSION-001｜specs/spec-m0-progression-001.md｜d34d6ab
 已接受输出：SPEC-M0-INTEGRATED-001｜specs/spec-m0-integrated-001.md｜ab02d36

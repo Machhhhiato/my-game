@@ -15,6 +15,7 @@ stage_target: second-industrial-ruins-outpost-stable-auto-operation
 - 同一时间只允许一个生产任务；只读比较可并行，但不能借多任务越过串行依赖或同时改同一份权威文件。
 - 第一层统筹不替代第二层的事件结构、第三层的最终文字或第四层的审计与实现，也不构成第四层写入授权。
 - 各层当前模型运行默认集中记录在 `SESSION_ROUTING.md`，创建任务时重新核对，不把模型名写死为游戏规格。
+- 下层任务使用最低合理思考深度：机械任务默认 `low`，内容组织和有边界的实现默认 `medium`；升到 `high` 必须记录具体原因，`xhigh`、`max`、`ultra` 需用户明确确认。不得用更高思考深度替代清楚的任务边界或验收条件。
 
 ## M0-L4-000 · 四层入口安装
 
@@ -158,9 +159,9 @@ ACTIVE_TASKS.md、TASK_PACKAGES.md 和第四层角色卡。
 ## M0-L2-201 · 主线、任务与临时事件结构
 
 - 层级：第二层
-- 依赖：`M0-L1-106` 已冻结；`M0-L4-010` 已接受
+- 依赖：`M0-L1-106` 已冻结；`M0-L4-010` 与 `M0-L4-011` 已接受
 - 目标：把水务、科研突破、无人机勘测、首座前哨和第二座复制变成连续内容。
-- 输入：`SPEC-M0-INTEGRATED-001`、`SPEC-M0-DESCRIPTION-001`、`AUDIT-M0-TECH-001`，以及必须全文读取的 `references/reference-m0-tech-description-corpus-001.md`。
+- 输入：`SPEC-M0-INTEGRATED-001`、`SPEC-M0-DESCRIPTION-001`、`AUDIT-M0-TECH-001`、`AUDIT-M0-CODE-BOUNDARY-001`，以及必须全文读取的 `references/reference-m0-tech-description-corpus-001.md`。
 - 输出 ID：`CONTENT-M0-001`
 - 必须输出：`source_read_receipt`；稳定事件 ID；触发条件；玩家已知信息；任务阶段；资源和人力后果；中断恢复；少量临时事件；说话者或机构；文本载体；强度等级；技术事实到制度结果的因果链；反转机制；第三层文字槽位。
 - 完成条件：`source_read_receipt` 列出完整读取的源文件与固定提交；所有内容只引用已存在的系统状态；运行事故不得指定解法，任何已有系统组合都按真实效果参与；事故不绑定主线节点或观察期；没有暗藏新机制。
@@ -184,6 +185,7 @@ ACTIVE_TASKS.md、TASK_PACKAGES.md 和第四层角色卡。
 - `PLAN-M0-DAY-NIGHT-001` 已由 `M0-S003-U089` 接受；每个实现批次必须使用 `NIGHT_WORK_ORDER_TEMPLATE.md` 填写独立执行单。
 - Codex 项目必须是侧边栏 `always game`，真实仓库必须是 `/Users/xujiangyue/AGENT Project/always game`；任一不符返回 `BLOCKED_ROUTING`，不得改用 `xujiangyue` 项目。
 - 每个正式任务仍需用户逐项授权；夜间批次只能落在所属正式任务内，不得自动进入下一任务。
+- 每张执行单必须填写初始思考深度、最高自动升级档和升级条件；默认 `medium`，机械子阶段优先 `low`，没有明确质量失败或复杂根因不得升 `high`。
 - 约六小时是初始工作量估算，不是硬上限。仍在同一授权目标内且额度、上下文与环境足够时，可运行八小时或更久；预计结束前约一小时转入测试、差异检查和交接。
 - 每完成可独立验证的阶段就留下检查点；连续约两小时没有检查点时优先收束。出现上下文压力时写完 Git 交接并创建新的接替任务，不在旧任务反复重试。
 - 本地提交、push、merge、deploy、安装、登录、权限、服务和数据迁移分别遵守执行单授权；没有明确填写即不允许。
