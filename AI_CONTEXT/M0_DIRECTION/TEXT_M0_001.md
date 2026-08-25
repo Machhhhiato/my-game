@@ -1,7 +1,7 @@
 ---
 output_id: TEXT-M0-001
 task_id: M0-L3-301
-status: active_rework
+status: accepted_with_blocked_fields
 source_thread: 01a03845-90a7-7c73-95e6-f48796358313
 source_model: gpt-5.6-sol
 reasoning_effort: medium
@@ -9,20 +9,31 @@ source_commit: c90d0920e26c3345630188dc697f78c3a2f4f278
 source_read_receipt: FULL_READ
 reviewed_by: M0-L1-DIRECTION
 reviewed_at: 2026-08-25T18:00:39+08:00
-user_acceptance: partial
+user_acceptance: m0_scope
 accepted_sections:
+  - M0TXT-MAIN-001-WATER-START
+  - M0TXT-MAIN-001-WATER-DONE
   - M0TXT-MAIN-002-PRECISION-RESEARCH
-returned_sections:
+  - M0TXT-MAIN-003-WORKSHOP-START
+  - M0TXT-MAIN-003-WORKSHOP-DONE
+  - M0TXT-MAIN-004-DRONE-DEPLOYED
+  - TEXT-M0-STORY-001
+  - M0E-MAIN-006-NO-PLAYER-TEXT
+  - M0TXT-MAIN-007-SECOND-START
+  - M0TXT-MAIN-007-SECOND-DONE
+  - M0E-INCIDENT-001-PIPE
+  - M0TXT-COMMON-ACTIONS-AND-STATES
+superseded_sections:
   - M0E-MAIN-005-FIRST-OUTPOST
   - M0E-MAIN-006-FIRST-STABLE
-  - M0E-MAIN-007-SECOND-COPY
-rework_reason: full_project_story_required
+  - M0TXT-MAIN-008-DAY90-CONTINUE
+static_reconcile: accepted
 implementation_authorized: false
 ---
 
 # TEXT-M0-001 · 玩家可见文字包
 
-这是 `M0-L3-301` 的完整修订版。第三层只读交付，第一层退回一次后复核进入 `review`；本文件不构成第四层接入授权。
+这是 `M0-L3-301` 的静态文字底稿。首座工厂正文由 `TEXT_M0_STORY_001.md` 取代；其余静态文字经 `M0-L3-301-R5` 收口。所有 `BLOCKED_FIELD` 继续等待真实字段，本文件不构成第四层接入授权。
 
 ## source_read_receipt
 
@@ -239,105 +250,11 @@ selected_section_read:
 
 ### M0E-MAIN-005-FIRST-OUTPOST
 
-> 退回状态：用户在 `M0-S003-U113` 撤回第二批短提示方案。以下短稿仅保留第三层原始交付证据，不得实现；首座前哨必须先由第二层补成从开工到验收的完整多章工程故事，再由第三层重写。决定：`D-M0-PROD-052`。
-
-#### `M0TXT-MAIN-005-ARRIVAL`
-
-- 对应内容 ID：`M0E-MAIN-005-FIRST-OUTPOST`
-- 使用位置：首建到场记录
-- 动态变量及来源：无
-- 长度上限：直接效果 18 字；正式正文 40 字
-- 直接效果：`首建队已经到场。`
-- 正式正文：`首建队已经抵达选定地点。`
-- 重复日志：`not_applicable`
-- 强度：完全严肃
-- 风格自检：只写到场事实；无新地点名称、现场物或预计耗时。
-
-#### `M0TXT-MAIN-005-CLEARING`
-
-- 对应内容 ID：`M0E-MAIN-005-FIRST-OUTPOST`
-- 使用位置：清理完成记录
-- 动态变量及来源：无
-- 长度上限：直接效果 18 字；正式正文 28 字
-- 直接效果：`施工范围已经清理。`
-- 正式正文：`施工范围清理完成。`
-- 重复日志：`not_applicable`
-- 强度：完全严肃
-- 风格自检：删除未冻结的旧基础显露结果；不写工程阶段编号。
-
-#### `M0TXT-MAIN-005-PROCESS`
-
-- 对应内容 ID：`M0E-MAIN-005-FIRST-OUTPOST`
-- 使用位置：工艺研究完成记录
-- 动态变量及来源：无
-- 长度上限：直接效果 20 字；正式正文 28 字
-- 直接效果：`现场工艺研究完成。`
-- 正式正文：`现场工艺研究完成。`
-- 重复日志：`not_applicable`
-- 强度：完全严肃
-- 风格自检：删除可建造性推断；不写工程包、差异工时或内部适配数据。
-
-#### `M0TXT-MAIN-005-CONSTRUCTION`
-
-- 对应内容 ID：`M0E-MAIN-005-FIRST-OUTPOST`
-- 使用位置：实体建设完成记录
-- 动态变量及来源：无
-- 长度上限：直接效果 20 字；正式正文 28 字
-- 直接效果：`前哨实体建设完成。`
-- 正式正文：`前哨实体建设完成。`
-- 重复日志：`not_applicable`
-- 强度：完全严肃
-- 风格自检：删除未冻结的主体、管线和配套设备描述。
-
-#### `M0TXT-MAIN-005-DRY-TEST`
-
-- 对应内容 ID：`M0E-MAIN-005-FIRST-OUTPOST`
-- 使用位置：空流程测试完成记录
-- 动态变量及来源：无
-- 长度上限：直接效果 22 字；正式正文 32 字
-- 直接效果：`空流程测试已经完成。`
-- 正式正文：`前哨设备已经完成空流程测试。`
-- 重复日志：`not_applicable`
-- 强度：完全严肃
-- 风格自检：删除“连续运行未被中断”；不把测试写成额外玩家状态。
-
-#### `M0TXT-MAIN-005-TRIAL`
-
-- 对应内容 ID：`M0E-MAIN-005-FIRST-OUTPOST`
-- 使用位置：试产开始记录
-- 动态变量及来源：无
-- 长度上限：直接效果 18 字；正式正文 28 字
-- 直接效果：`前哨已经开始试产。`
-- 正式正文：`前哨已经开始试产。`
-- 重复日志：`not_applicable`
-- 强度：完全严肃
-- 风格自检：删除首批产出与后续检验解释；未新增产物或合格率。
-
-#### `M0TXT-MAIN-005-ACCEPTANCE`
-
-- 对应内容 ID：`M0E-MAIN-005-FIRST-OUTPOST`
-- 使用位置：首建生产验收完成记录
-- 动态变量及来源：无
-- 长度上限：直接效果 20 字；正式正文 32 字
-- 直接效果：`首座前哨通过验收。`
-- 正式正文：`首座前哨通过生产验收。`
-- 重复日志：`not_applicable`
-- 强度：完全严肃
-- 风格自检：删除试产、回运等过程复述；没有奖励、快照或工程包版本。
+原七条短提示已经删除，不得实现。首建玩家正文统一使用 `TEXT_M0_STORY_001.md`；底层工程阶段仍可用于进度计算，但不再各自弹出一条重复说明。
 
 ### M0E-MAIN-006-FIRST-STABLE
 
-#### `M0TXT-MAIN-006-FIRST-STABLE`
-
-- 对应内容 ID：`M0E-MAIN-006-FIRST-STABLE`
-- 使用位置：首次稳定供给记录、通知
-- 动态变量及来源：无
-- 长度上限：直接效果 24 字；正式正文 65 字
-- 直接效果：`首座前哨已经稳定供给。`
-- 正式正文：`首批有效产出已经完成回运，首座前哨已经形成稳定供给。`
-- 重复日志：`首座前哨完成有效回运。`
-- 强度：完全严肃
-- 风格自检：只使用稳定有效批与实际回运事实；不添加确认机构、效率或版本。
+不生成独立通知、正文或历史日志，也不提供玩家验收按钮。真实条件满足后由系统自动完成状态变化；首建故事结尾和资产状态已经承担玩家反馈。
 
 ### M0E-MAIN-007-SECOND-COPY
 
@@ -346,9 +263,9 @@ selected_section_read:
 - 对应内容 ID：`M0E-MAIN-007-SECOND-COPY`
 - 使用位置：第二处建设开始记录
 - 动态变量及来源：无
-- 长度上限：直接效果 18 字；正式正文 32 字
-- 直接效果：`第二座前哨开始建设。`
-- 正式正文：`第二座前哨建设已经开始。`
+- 长度上限：直接效果 24 字；正式正文 24 字
+- 直接效果：`第二工程构件回收整备厂开始建设。`
+- 正式正文：`第二工程构件回收整备厂开始建设。`
 - 重复日志：`not_applicable`
 - 强度：完全严肃
 - 风格自检：删除“按现有批准继续推进”等机制自述；不复述复制链。
@@ -358,26 +275,16 @@ selected_section_read:
 - 对应内容 ID：`M0E-MAIN-007-SECOND-COPY`
 - 使用位置：重复工程完成日志、完成通知
 - 动态变量及来源：无
-- 长度上限：直接效果 18 字；正式正文 18 字
-- 直接效果：`第二座前哨建成。`
-- 正式正文：`第二座前哨建成。`
-- 重复日志：`第二座前哨建成。`
+- 长度上限：直接效果 24 字；正式正文 24 字
+- 直接效果：`第二工程构件回收整备厂建成。`
+- 正式正文：`第二工程构件回收整备厂建成。`
+- 重复日志：`第二工程构件回收整备厂建成。`
 - 强度：完全严肃；不参与 `5:4:1`
 - 风格自检：严格一句建成事实；无版本、差异、耗时或账本解释。
 
 ### M0E-MAIN-008-OBSERVATION
 
-#### `M0TXT-MAIN-008-DAY90-CONTINUE`
-
-- 对应内容 ID：`M0E-MAIN-008-OBSERVATION`
-- 使用位置：第90日记录
-- 动态变量及来源：无；第90日后继续运行来自冻结规格
-- 长度上限：直接效果 18 字；正式正文 48 字
-- 直接效果：`第90日已经过去。`
-- 正式正文：`第90日已经过去，总部的生产与建设仍在继续。`
-- 重复日志：`not_applicable`
-- 强度：完全严肃
-- 风格自检：只写玩家可观察的世界事实；没有“观察条件”“世界继续运行”或系统判定自述。
+第90日本身不生成独立通知。只有下方真实总结字段齐全时才允许显示观察总结；不能用“第90日已经过去”代替内容。
 
 #### `M0TXT-MAIN-008-COMPLETE`
 
@@ -548,9 +455,8 @@ selected_section_read:
 | `M0TXT-ACTION-RESEARCH-FOCUS` | `M0E-MAIN-002-PRECISION-RESEARCH` | 科研操作 | 无 | 10字 | `设为重点目标` | `not_applicable` | `not_applicable` | 严肃；不新增科研状态 |
 | `M0TXT-ACTION-WORKSHOP-APPROVE` | `M0E-MAIN-003-PRECISION-WORKSHOP` | 工程批准 | 无 | 10字 | `批准修复工坊` | `not_applicable` | `not_applicable` | 严肃；不写预计 |
 | `M0TXT-ACTION-DRONE-APPROVE` | `M0E-MAIN-004-DRONE-SURVEY` | 无人机项目批准 | 无 | 12字 | `批准制造与部署` | `not_applicable` | `not_applicable` | 严肃；不保证一次勘明 |
-| `M0TXT-ACTION-OUTPOST-APPROVE` | `M0E-MAIN-005-FIRST-OUTPOST` | 首建批准 | 无 | 10字 | `批准建设前哨` | `not_applicable` | `not_applicable` | 严肃；地点由既有选择提供 |
-| `M0TXT-ACTION-OUTPOST-ACCEPT` | `M0E-MAIN-006-FIRST-STABLE` | 验收操作 | 无 | 10字 | `验收首座前哨` | `not_applicable` | `not_applicable` | 严肃；不新增验收状态 |
-| `M0TXT-ACTION-SECOND-APPROVE` | `M0E-MAIN-007-SECOND-COPY` | 第二处批准 | 无 | 12字 | `批准第二处建设` | `not_applicable` | `not_applicable` | 严肃；不复述工程包 |
+| `M0TXT-ACTION-OUTPOST-APPROVE` | `M0E-MAIN-005-FIRST-OUTPOST` | 首建批准 | 无 | 6字 | `批准建设` | `not_applicable` | `not_applicable` | 严肃；资产名称由页面标题提供 |
+| `M0TXT-ACTION-SECOND-APPROVE` | `M0E-MAIN-007-SECOND-COPY` | 第二处批准 | 无 | 6字 | `批准建设` | `not_applicable` | `not_applicable` | 严肃；资产名称由页面标题提供 |
 | `M0TXT-ACTION-PEOPLE` | 工程与科研共用 | 人力操作 | 无 | 10字 | `调整投入人力` | `not_applicable` | `not_applicable` | 严肃；实际人数由界面字段显示 |
 | `M0TXT-ACTION-RESERVE` | 工程共用 | 物资操作 | 无 | 10字 | `调整物资预留` | `not_applicable` | `not_applicable` | 严肃；不写库存账本 |
 | `M0TXT-STATE-UNRESEARCHED` | `M0E-MAIN-002-PRECISION-RESEARCH` | 科技状态 | 无 | 4字 | `未研发` | `not_applicable` | `not_applicable` | 冻结二态之一 |

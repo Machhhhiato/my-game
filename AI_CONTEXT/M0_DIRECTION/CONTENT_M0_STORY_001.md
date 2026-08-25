@@ -1,7 +1,7 @@
 ---
 output_id: CONTENT-M0-STORY-001
 task_id: M0-L2-201-R1
-status: accepted
+status: superseded_by_user_revision
 source_thread: 01a0386f-71e3-7cd1-9b03-85724a9fc464
 source_model: gpt-5.6-terra
 reasoning_effort: medium
@@ -11,11 +11,14 @@ reviewed_by: M0-L1-DIRECTION
 reviewed_at: 2026-08-25T18:47:29+08:00
 user_acceptance: full
 acceptance_decision: D-M0-PROD-054
-player_copy_status: not_written
+player_copy_status: superseded
 implementation_authorized: false
+superseded_by: TEXT-M0-STORY-001
 ---
 
 # CONTENT-M0-STORY-001 · 首座前哨工程故事事实包
+
+> 本文件仅保留为 `M0-L2-201-R1` 的历史交付证据。后续正文复核确认，以部件、旧标记和检查出处为中心的故事无法建立完整工厂空间，也偏离了用户要求的“完整工厂搭建过程”。其当前内容权威已由 `TEXT-M0-STORY-001` 及 `D-M0-PROD-055` 取代，不得继续作为第三层写作事实包。
 
 本文件冻结 `M0-L2-201-R1` 经第一层退回一次、第二层重做、第一层复核和用户三项验收后的版本。它只规定第三层可以使用的故事事实、章节因果和文字边界，不是最终玩家正文，也不授权修改游戏。
 

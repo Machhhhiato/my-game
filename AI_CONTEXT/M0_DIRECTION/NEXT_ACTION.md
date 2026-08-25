@@ -1,20 +1,20 @@
 ---
 card_version: 2
 handoff_id: M0-H002
-routing_epoch: 12
+routing_epoch: 13
 routing_state: active
-source_host: windows
-source_lane: M0-DIR-B
-source_session: M0-S002
+source_host: mac
+source_lane: M0-DIR-A
+source_session: M0-S003
 target_host: mac
 target_lane: M0-DIR-A
-target_work_lane: M0-L3-TEXT
-target_layer: 3
-target_task: M0-L3-301-R1
-assigned_session: null
-action_status: blocked_task_creation
+target_work_lane: M0-DIR-A
+target_layer: 1
+target_task: M0-L3-301
+assigned_session: M0-S003
+action_status: accepted_pending_push
 required_branch: context/m0-direction
-startup_phrase: 你是第三层
+startup_phrase: 你是第一层
 ---
 
 # 唯一下一动作卡
@@ -23,20 +23,20 @@ startup_phrase: 你是第三层
 
 - 设备：Mac。
 - 逻辑方向 lane：`M0-DIR-A`。
-- 稳定工作 lane：`M0-L3-TEXT`。
-- 待创建任务：`AG-M0｜L3-TEXT｜301-R1｜MAC`；accepted 输入已同步，但 Codex 应用当前无法返回 Always Game 项目并创建任务。
+- 稳定工作 lane：`M0-DIR-A`；第三层会话 `01a03908-d738-76a3-83ad-a6892e53e6c8` 只在第一层再次派发文字任务时复用。
+- 当前任务：`M0-L3-301`；M0 静态文字与首座故事范围已接受，本地提交已获授权，等待推送授权。
 - 逻辑主线程 session：`M0-S003`；第一层已完成并收回全部前置审计。
 - 已接受任务：`M0-L1-101` 至 `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011`、`M0-L2-201`。
 - 已接受输出：`CONTENT-M0-001`，路径 `CONTENT_M0_001.md`，决定 `D-M0-PROD-050`。
-- 已接受任务：`M0-L2-201-R1 · 首座前哨工程故事补包`；输出 `CONTENT-M0-STORY-001`，路径 `CONTENT_M0_STORY_001.md`，决定 `D-M0-PROD-054`。
-- 当前任务：`M0-L3-301-R1 · 首座前哨多章正文重写`，状态为 `blocked_task_creation`。
-- 当前输入：accepted 的 `CONTENT-M0-STORY-001`、`SPEC-M0-DESCRIPTION-001` 第 14 节、`TEXT-M0-001` 中已接受的《恢复精密制造》、六份冻结规格、完整 revision 6 科技描述源语料和第三层角色卡。
-- 预期输出：最终项目标题、开工序章和七章正文、章节回看短索引、第二座正常复制短记录；不改已接受科技文字。
+- 已取代输入：`CONTENT-M0-STORY-001` 只保留历史证据；其零件和旧标记主线已被用户后续退回，不再下传。
+- 有限接受输出：`TEXT-M0-STORY-001`，状态 `accepted_for_m0_process_prototype`；决定 `D-M0-PROD-055`。
+- 新增制作规则：独立故事先做内部场景设定卡，最终正文以故事为主，文风与结构不得照抄；决定 `D-M0-DIR-033`，规则位于 `SPEC-M0-DESCRIPTION-001` 第 15 节。
+- 已接受收口：`M0-L3-301-R5` 删除首建短提示、首次稳定重复文字、手动验收按钮和无事实的第90日通知；第二座固定为`第二工程构件回收整备厂`，决定 `D-M0-PROD-056`。
 - 已接受分项：第一批《恢复精密制造》完整科技卡文字，决定 `D-M0-PROD-051`。
 - 已退回分项：第二批短标题与短正文方案。首次前哨必须改为从开工到验收的完整多章工程故事，决定 `D-M0-PROD-052`。
 - 已接受结构：用户接受序章加七章、章节标题与正文分工、默认自动解锁和重复工程分流，决定 `D-M0-PROD-053`；`Q-M0-049` resolved。
-- 当前授权：用户接受 `M0-L2-201-R1`，允许提交推送记录并开始 `M0-L3-301-R1`，决定 `D-M0-DIR-032`。
-- 当前动作：accepted 故事包已在 `09723c8` 推送并核对远端一致；需要 Codex 应用重新识别 Always Game 项目后重试创建。不得改投其他项目、项目外任务或虚构 thread ID。第三层只写最终文字，不进入第四层。
+- 当前授权：允许维护 M0 方向记录并创建本地 Git 提交；没有推送或游戏实现授权。
+- 当前动作：本轮差异已检查并纳入本地提交；等待用户决定是否允许推送。远端核对完成后才可准备 `M0-L4-401`，实施仍须用户单独授权。
 - 字段边界：所有 `BLOCKED_FIELD` 动态文字留待字段语义确认和第四层真实实现，不随当前文字批次默认通过。
 - 后续边界：M0 的食物循环仍属于正式最低内容；M0 整体验收后的扩展阶段继续增加食物等生活、生产与资源内容。
 
@@ -126,52 +126,21 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 活动 lane：M0-DIR-A｜Mac｜M0-S003
 已接受任务：M0-L1-106｜SPEC-M0-DESCRIPTION-001｜overall_spec_frozen true
 当前任务：M0-L3-301｜玩家可见文字包
-任务状态：active｜thread 01a03845-90a7-7c73-95e6-f48796358313
-已接受输出：SPEC-M0-PLAY-001｜specs/spec-m0-play-001.md｜0e2637f
-已接受输出：SPEC-M0-OPS-001｜specs/spec-m0-ops-001.md｜f8ae1e9
-不会做：最终玩家文字、游戏代码、main 修改和任何删除
-已接受输出：SPEC-M0-MAP-001｜specs/spec-m0-map-001.md｜0e1723d
-已接受输出：SPEC-M0-PROGRESSION-001｜specs/spec-m0-progression-001.md｜d34d6ab
-已接受输出：SPEC-M0-INTEGRATED-001｜specs/spec-m0-integrated-001.md｜ab02d36
-已接受输出：SPEC-M0-DESCRIPTION-001｜specs/spec-m0-description-001.md｜accepted
-已接受：第一项｜信息结构 accepted｜当前视觉示意 rejected，必须随整体 UI 重做
-已接受：第二项｜第一行群星式科技内容｜第二行环日式评价
-已接受：第三项｜科技未研发/已研发｜工程在建/已建成｜复杂过程只留底层
-已接受：第四项｜当前回原页面｜经过进日志｜状态变化通知一次｜真实选择才等待
-已接受：第五项｜三个草稿问题｜具体制度动作去重｜轻度示例力度 rejected
-已接受：第六项｜完全严肃50%｜中度40%｜重度最多10%｜只统计首次独立正文
-已撤回：把解锁、条件、阻断和备用方案解释写进科技正文
-未接受旧稿：两句可信技术｜伤亡计入人力损耗｜设备按零故障验收
-下游硬门：SOURCE-BUNDLE-M0-TECH-PROSE-001 必须全文读取｜摘要不得替代｜必须 source_read_receipt
-已撤回第三项第一版：部署预计｜完成后预计｜当前与额定产能对比｜完成快照
-未接受范围：通知外观｜位置｜声音｜颜色｜最终 UI
-已确认：中度与重度看真实后果｜笑话从中度起步｜句式不固定
-已确认因果门：科技效果→必然结果→旁人必须处理｜正文只露一个侧面｜一个侧面不等于一句话
-已确认来源：自主研究｜避难所档案｜旧时代考古｜先驱文明研究｜来源决定历史、实施决定责任
-源包：revision 6｜追加A175初稿、A176全部参考、U073逐句修正与A177最终稿｜保留revision 1—5全部原文、校准、反例和既有15+13语料
-已撤回：轻度目标｜严肃30/轻度20/中度35/重度15｜两次战斗神经抑制示意作为质量标杆
-已接受：第七项｜文案描述世界，数据解释系统｜四类来源不变，旧时代与先驱来源只在首次发现说明｜重复工程只写建成｜事故只写事实状态
-已撤回第七项初稿：固定字数区间｜重复只写差异｜工程包版本与差异耗时进入正文｜库存兜底和账本说明
-已接受：第八项｜单张工作单｜责任层阻塞｜分级验收｜独立正文统计｜两步冻结门
-已接受统筹：Mac 单机优先｜第一层直接创建、驱动、检查、退回和收回其他层任务｜不增加第五层｜模型创建时重新核对
-已接受未来路由：冻结后先 M0-L4-005 GitHub Skills/MCP 能力审计｜再 M0-L4-010 代码审计｜审计不等于安装
-初查：REF-M0-GITHUB-TOOLS-AUDIT-001｜当前不安装任何候选｜实际阶段开始时重新检查
-已接受：第八项第一部分｜一条内容只用一张内部工作单｜批次级 source_read_receipt
-已接受：第八项第二部分｜缺什么停在负责层｜只阻塞依赖项｜禁止假默认值
-已接受：第八项第三部分｜AI检查全部｜用户逐条确认高风险成品｜普通重复内容抽查
-已接受：第八项第四部分｜按玩家独立阅读计数｜完整发现记录与科技正文分别统计
-已接受线程统筹：当前任务是逻辑主线程｜下层使用独立 Codex 任务线程｜Git 是权威上下文
-复核：M0-S003-A208｜八项最终结论、撤回项、暂缓项、revision 6 与下一路线均已交付
-当前冻结：M0-L1-106 accepted｜SPEC-M0-DESCRIPTION-001 accepted｜overall_spec_frozen true
-已接受输出：AUDIT-M0-TOOLS-001｜AUDIT_M0_TOOLS_001.md｜accepted
-预期输出：AUDIT-M0-TECH-001｜尚未生成
-未启动：M0-L4-010｜M0-L2-201｜M0-L3-301
-完成任务：AG-M0｜L4-AUDIT｜005-010｜MAC R3｜01a03741-b9b7-7302-84d0-5b57447051b9｜local
-下一步：恢复 GitHub 登录并推送 accepted 记录；远端核对后在 always game 项目创建 M0-L4-010
+任务状态：accepted_pending_push
+第三层复用会话：01a03908-d738-76a3-83ad-a6892e53e6c8
+有限接受输出：TEXT-M0-STORY-001｜第一工程构件回收整备厂
+接受范围：M0 草稿与故事制作流程
+不冻结：第一人称｜七章结构｜当前文风｜重复句式
+旧事实包：CONTENT-M0-STORY-001｜superseded，仅保留历史
+新规则：独立故事先做内部场景设定卡｜玩家正文以故事为主｜文风不照抄
+工厂规则：按真实产品与工艺分类｜M0 样例不代表未来工业上限
+已知债务：含糊动作词｜口头禅重复｜部分段落偏说明
+动态字段：继续 BLOCKED_FIELD，不随故事有限接受通过
+实施状态：implementation_authorized false
+本轮状态：方向记录已纳入本地提交，尚未推送
+下一步：用户决定是否允许推送；同步后再单独审批 M0-L4-401
 ```
 
 ## 完成条件
 
-`M0-L1-106`、`SPEC-M0-DESCRIPTION-001` 与 `AUDIT-M0-TOOLS-001` 已 accepted，`overall_spec_frozen: true`。冻结记录已推送；能力审计、昼夜协议和 accepted 记录因 GitHub 登录失效仍待推送。当前完成条件是恢复 GitHub 登录、推送并核对远端，然后在 `always game` 项目创建 `M0-L4-010` 只读审计任务。能力审计不产生工具安装或实施授权。
-
-工作协议已经由 `M0-S003-U089` 接受并写入正式协议与未来实现任务包；能力审计已经由 `M0-S003-U091` 接受。当前唯一阻塞是 GitHub 同步和随后正确创建 `M0-L4-010`。
+本轮完成条件是：`TEXT-M0-STORY-001` 明确标注有限接受；`TEXT-M0-001` 完成静态清理；旧事实包不再冒充当前权威；场景设定前置、故事优先、文风不复制和工厂分类命名进入规格、决定与路由；差异检查通过。本地提交已获授权，推送与第四层没有授权。
