@@ -12,8 +12,8 @@ source_references:
   - REF-M0-TECH-DESCRIPTION-CORPUS-001
 started_at: 2026-08-24T14:19:57+08:00
 start_source: M0-S003-U040
-amended_at: 2026-08-25T10:49:37+08:00
-amended_source: M0-S003-U082
+amended_at: 2026-08-25T11:04:21+08:00
+amended_source: M0-S003-U083
 source_session: M0-S003
 implementation_authorized: false
 overall_spec_frozen: false
@@ -749,23 +749,31 @@ overall_spec_frozen: false
 
 `5:4:1` 继续是长线比例，不要求机械地每十条正好五、四、一；重度最多 10%，没有自然成立的重度内容时回到完全严肃。该边界沿用 `D-M0-PROD-044`。
 
-本节为 `proposal_active_review`，等待用户回复`接受第八项第四部分`。接受范围不包含 12.6 最终冻结。
+用户在 `M0-S003-U083` 明确回复`接受第八项第四部分`。本节 accepted，形成 `D-M0-DIR-018`；接受范围不包含 12.6 最终冻结。
 
-### 12.6 最终冻结提案
+### 12.6 第八项第五部分：结束第八项与最终冻结
 
-1. 用户回复`接受第八项`，只代表第八项完成。
-2. 第一层交付八项的一页完整汇总，核对撤回项、未解决项和 revision 6 完整性。
-3. 用户再明确回复`接受 M0-L1-106，冻结 M0 规格`，才允许同时设置：
+1. 用户回复`接受第八项第五部分`后，由于第一至第五部分均已逐项接受，第八项整体随之 accepted，不再要求重复回复一次`接受第八项`。
+2. 第一层随后交付八项的一页完整复核，只保留结论、撤回项、未解决或明确暂缓项、revision 6 完整性和下一阶段路由，不重新写成长篇总结。
+3. 只有用户读完复核并明确回复`接受 M0-L1-106，冻结 M0 规格`，才允许同时设置：
 
 ```text
 M0-L1-106: accepted
+SPEC-M0-DESCRIPTION-001: accepted
 overall_spec_frozen: true
 implementation_authorized: false
 M0-L4-005: ready
 M0-L4-010: blocked_upstream
+M0-L2-201: blocked_upstream
+M0-L3-301: blocked_upstream
 ```
 
-冻结后先做第四层 GitHub Skills/MCP 只读能力审计，再做现有代码只读审计，然后依次进入第二层、第三层和第四层接入；冻结不会自动授权安装工具或写入代码。本节仍待用户接受。
+4. 冻结记录提交并推送后，第一层按已接受的统筹方式自动创建并启动 `M0-L4-005` GitHub Skills/MCP 只读能力审计，不需要用户再说一次`开始`。审计只调查，不安装、不配置、不申请权限。
+5. `M0-L4-005` 没有完成并收回前，`M0-L4-010` 继续阻塞；代码审计完成前，第二层继续阻塞。后续仍按依赖串行推进。
+
+冻结只表示当前 M0 方向规格成为下游依据，不表示数值永不调整、最终 UI 已接受、工具获准安装或代码获准修改。以后若发现真实代码与规格冲突，必须登记变更并由第一层带回用户决定，不能静默改规格或强行实现。
+
+本节为 `proposal_active_review`，等待用户回复`接受第八项第五部分`。接受后先交付完整复核，不立刻把 `overall_spec_frozen` 改为 true。
 
 ### 12.7 已接受的统筹方式
 
@@ -793,8 +801,8 @@ M0-L4-010: blocked_upstream
 ### 12.9 当前状态与剩余确认
 
 - 第一项至第七项：accepted。
-- 第八项：active；12.1 至 12.4、12.7 与 12.8 accepted。
-- 12.5：`proposal_active_review`；12.6 尚待后续讨论。
+- 第八项：active；12.1 至 12.5、12.7 与 12.8 accepted。
+- 12.6：`proposal_active_review`；接受后第八项整体 accepted，但仍需单独的最终冻结确认。
 - `Q-M0-042`：active。
 - `SOURCE-BUNDLE-M0-TECH-PROSE-001`：revision 6，不因本轮工作流决定升级。
 - `M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001`：active。

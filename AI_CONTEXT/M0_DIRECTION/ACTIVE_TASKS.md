@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L1-106
 handoff_id: M0-H002
-updated_at: 2026-08-25T10:49:37+08:00
+updated_at: 2026-08-25T11:04:21+08:00
 ---
 
 # M0 当前任务路由
@@ -21,7 +21,7 @@ updated_at: 2026-08-25T10:49:37+08:00
 | 第四层（能力） | `M0-L4-005` GitHub Skills/MCP 能力审计 | `blocked_upstream` | `M0-L1-106` accepted 且 `overall_spec_frozen` | `BLOCKED_UPSTREAM` |
 | 第四层（代码） | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L4-005` accepted | `BLOCKED_UPSTREAM` |
 
-`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 第一项至第七项已 accepted；第八项 active，其中 `D-M0-DIR-012` 至 `D-M0-DIR-017` 已确认第一层统筹、Mac 单机、模型默认、冻结后能力审计、单张内部工作单、缺失退回和分级验收。`M0-S003-A197` 已提出第四部分 `5:4:1` 独立正文统计，当前为 `proposal_active_review`；最终冻结仍待确认。第二、三、四层继续按依赖阻塞；本轮没有创建下层任务。
+`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 第一项至第七项已 accepted；第八项 active，其中 `D-M0-DIR-012` 至 `D-M0-DIR-018` 已确认第一层统筹、Mac 单机、模型默认、冻结后能力审计、单张内部工作单、缺失退回、分级验收和独立正文统计。`M0-S003-A199` 已提出第五部分结束第八项与最终冻结步骤，当前为 `proposal_active_review`。第二、三、四层继续按依赖阻塞；本轮没有创建下层任务。
 
 ## 当前生产证据
 
@@ -30,7 +30,7 @@ updated_at: 2026-08-25T10:49:37+08:00
 - 当前输出：`SPEC-M0-DESCRIPTION-001`；路径 `specs/spec-m0-description-001.md`，状态 active。
 - 依赖证据：`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted；决定 `D-M0-PROD-036`，来源 `M0-S003-U039`。
 - 启动证据：`M0-S003-U040` 明确说`开始 M0-L1-106`。
-- 当前问题：`Q-M0-032` 为 `active_in_M0-L1-106`；第一项至第七项和第八项第一至第三部分 accepted；第八项第四部分与 `Q-M0-042` active_review。不能冒充第八项整体 accepted。
+- 当前问题：`Q-M0-032` 为 `active_in_M0-L1-106`；第一项至第七项和第八项第一至第四部分 accepted；第八项第五部分与 `Q-M0-042` active_review。不能冒充第八项整体 accepted 或 M0 已冻结。
 - 接受证据：`M0-S003-U044` 接受第一项的信息结构；`D-M0-PROD-037` 明确视觉示意未获接受，后续必须随整体 UI 重做。
 - 返工证据：`M0-S003-U045` 指出玩法元语言不是正文；`U046` 指出技术段太长且制度口吻自我揭露；`U047` 判断整体方向仍不对，并要求先收集真实描述样本。
 - 接受内容：《恢复精密制造》第一行只说明统一精度标准让复杂零件能够稳定复制；第二行由生产恢复委员会评价，精密制造把工人的经验从工人身上剥离。下游完整源包为 `references/reference-m0-tech-description-corpus-001.md`，摘要不能替代。
@@ -41,7 +41,7 @@ updated_at: 2026-08-25T10:49:37+08:00
 - 第七项接受：`D-M0-PROD-046` 保留四类科技来源，并冻结旧时代与先驱来源在发现记录建立、世界文案禁用机制数据、首建节点一至两句、重复工程完成一句和事故事实时间线。`Q-M0-041` resolved。
 - 源包证据：`SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6 逐字保留第七项初案、完整参考、`U073` 修正与 `A177` 接受稿，并原样保留 revision 1—5 的全部材料。
 - 冻结边界：`overall_spec_frozen` 仍为 false；`M0-L4-005`、`M0-L4-010`、`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
-- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-017`、`D-M0-PROD-036` 至 `D-M0-PROD-046`。
+- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-018`、`D-M0-PROD-036` 至 `D-M0-PROD-046`。
 
 ## 最近接受证据
 
