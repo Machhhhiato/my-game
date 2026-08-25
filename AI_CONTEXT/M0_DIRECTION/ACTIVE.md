@@ -6,7 +6,7 @@ status: active
 branch: context/m0-direction
 base_main: a08c40bb3596918347c9719d5c82c5af26707d95
 direction_protocol_version: 4
-routing_epoch: 7
+routing_epoch: 8
 active_lane: M0-DIR-A
 active_host: mac
 preferred_host: mac
@@ -18,15 +18,15 @@ next_lane: null
 next_host: null
 handoff_id: M0-H002
 last_session: M0-S003
-last_turn: M0-S003-A230
-updated_at: 2026-08-25T14:16:57+08:00
+last_turn: M0-S003-A233
+updated_at: 2026-08-25T14:20:18+08:00
 ---
 
 # 当前接续卡
 
 ## 当前目标
 
-用户已在 `M0-S003-U086` 整体接受 `M0-L1-106` 并冻结 M0 规格。`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` accepted，`overall_spec_frozen: true`，`implementation_authorized: false`。R3 已完成 `M0-L4-005`，交付 `AUDIT-M0-TOOLS-001`；任务当前为 review，等待用户验收。结论是当前不接入任何新工具，只保留 `tauri-agent-tools` 作为未来另行授权的受控试用候选。用户在 `M0-S003-U089` 接受昼夜制作计划；`PLAN-M0-DAY-NIGHT-001` accepted，约六小时只是估算，条件允许时可运行八小时或更久，所有新任务必须归入 `always game` 项目并使用真实 Git 目录。
+用户已在 `M0-S003-U086` 整体接受 `M0-L1-106` 并冻结 M0 规格。用户在 `M0-S003-U089` 接受昼夜制作计划，并在 `M0-S003-U091` 接受 `AUDIT-M0-TOOLS-001`。`M0-L4-005` accepted；当前不接入任何新工具，只保留 `tauri-agent-tools` 作为未来另行授权的受控试用候选。`M0-L4-010` 的产品依赖已经满足并切到 ready，但 GitHub token 仍无效；accepted 记录推送成功前不创建新任务。`overall_spec_frozen: true`，`implementation_authorized: false`。
 
 ## 已确认
 
@@ -49,9 +49,10 @@ updated_at: 2026-08-25T14:16:57+08:00
 - `D-M0-DIR-020`：正式下层任务使用独立 Codex 任务线程；当前任务作为逻辑主线程负责派发、等待、验收、退回和收回，Git 文档是跨线程权威上下文。
 - `D-M0-DIR-021`：用户整体接受 `M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001`，M0 规格正式冻结；只把 `M0-L4-005` 切到 ready，不产生工具安装或代码写入授权。
 - `D-M0-DIR-022`：两个 `gpt-5.3-codex-spark` 审计任务均因整批网页证据超过上下文而失败；R3 以 `gpt-5.6-terra`、固定候选和限量证据完成 `AUDIT-M0-TOOLS-001`。实际执行层的 5.3 默认不因此改动。
-- `D-M0-DIR-023`：白天负责方案、范围、验收与夜间执行单；夜间只做一个已授权、边界明确的大结果。约六小时只是估算，条件允许时可运行八小时或更久；次日先验收。详细停止状态、上下文防护与交接格式见 `PLAN-M0-DAY-NIGHT-001`，当前等待用户接受。
+- `D-M0-DIR-023`：白天负责方案、范围、验收与夜间执行单；夜间只做一个已授权、边界明确的大结果。约六小时只是估算，条件允许时可运行八小时或更久；次日先验收。详细规则已经由 `D-M0-DIR-025` 整体接受。
 - `D-M0-DIR-024`：Always Game 后续任务必须归入侧边栏的 `always game` 项目，并锁定真实 Git 目录；创建失败时不得再静默退回通用 `xujiangyue` 项目。既有 R1、R2、R3 保留为历史证据。
 - `D-M0-DIR-025`：用户整体接受 `PLAN-M0-DAY-NIGHT-001`；正式协议升为 v4，新增夜间执行单模板，并把弹性时长、项目归属、上下文控制和次日验收写入 `M0-L4-401` 至 `404` 的共同规则。
+- `D-M0-DIR-026`：用户接受 `AUDIT-M0-TOOLS-001`；当前不接入任何工具，一个候选保留未来受控试用，六项观察、四项淘汰。`M0-L4-010` ready，但须先完成 GitHub 同步并在正确项目创建新任务。
 - `D-M0-PROD-001`：首先为用户本人这位资深策略玩家量身定制；买断暂缓；用户认可初版后再以 Steam 免费游戏形式首次发布。
 - `D-M0-PROD-002`：核心爽点是通过专业管理形成科技、资源、高级资产和版图领先；正常经营能够积累储备并解决危机，不采用强制极端二选一。
 - `D-M0-PROD-003`：关键科技允许玩家集中突破，普通科研允许系统按领域倾向自动推进，形成操作与看海交替。
@@ -117,7 +118,7 @@ updated_at: 2026-08-25T14:16:57+08:00
 
 ## 下一唯一任务
 
-`M0-L4-005 · GitHub Skills/MCP 能力审计`：当前为 review。R3（thread `01a03741-b9b7-7302-84d0-5b57447051b9`，host `local`）已经只读交付 `AUDIT_M0_TOOLS_001.md`；等待用户接受，不安装工具、不改配置、不修改代码。
+`M0-L4-010 · 现有代码只读审计`：产品依赖已满足，当前为 ready。先恢复 GitHub 认证并推送本地 accepted 记录；随后在侧边栏 `always game` 项目、真实 Git 目录创建新的第四层任务。只读审计不修改代码、配置或数据。
 
 已接受元计划：`PLAN-M0-DAY-NIGHT-001` accepted。它规定未来怎样安排白天设计、夜间执行和次日验收，但不改变产品任务依赖，也不产生实施授权。
 
@@ -130,4 +131,4 @@ updated_at: 2026-08-25T14:16:57+08:00
 
 ## 下一句建议
 
-昼夜制作计划已接受。产品路线仍需恢复 GitHub 登录、推送本地登记并验收 `AUDIT-M0-TOOLS-001`；不自动接受审计，也不自动开始 `M0-L4-010`。
+`AUDIT-M0-TOOLS-001` 已接受。下一步只恢复 GitHub 登录并推送本地记录；远端核对成功后，第一层才创建 `M0-L4-010` 新任务，不在错误项目下复用 R3。

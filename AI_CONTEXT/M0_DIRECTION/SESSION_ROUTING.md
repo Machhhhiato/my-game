@@ -82,9 +82,9 @@ handoff_id: M0-H002
 |---|---|---|---|---|---|
 | `AG-M0｜L4-AUDIT｜005-010｜MAC` | `01a0373a-75c9-71a3-8cb3-3e0213ca1322` | `local` | `gpt-5.3-codex-spark` / `high` | `systemError` | 完成启动核验后，在外部证据收集阶段因上下文窗口耗尽失败；只读，无文件修改 |
 | `AG-M0｜L4-AUDIT｜005-010｜MAC R2` | `01a0373c-b12c-7c70-ba06-9c329180be59` | `local` | `gpt-5.3-codex-spark` / `high` | `systemError` | 精简本地输入后仍在整批外部证据阶段耗尽上下文；只读，无文件修改 |
-| `AG-M0｜L4-AUDIT｜005-010｜MAC R3` | `01a03741-b9b7-7302-84d0-5b57447051b9` | `local` | `gpt-5.6-terra` / `high` | `completed / idle` | 已交付 `AUDIT-M0-TOOLS-001`，等待用户验收 |
+| `AG-M0｜L4-AUDIT｜005-010｜MAC R3` | `01a03741-b9b7-7302-84d0-5b57447051b9` | `local` | `gpt-5.6-terra` / `high` | `completed / idle` | 已交付 accepted 的 `AUDIT-M0-TOOLS-001`；旧错误项目中的历史证据，不再追加任务 |
 
-当前没有运行中的审计任务；R3 是等待验收的稳定实例。两个失败任务保留为审计证据，不再追加工作。用户接受 `AUDIT-M0-TOOLS-001` 前，不在任何线程开始 `M0-L4-010`。R3 的 `gpt-5.6-terra` 是证据密集审计的故障替代，不修改实际执行层的 5.3 默认。
+当前没有运行中的审计任务。`AUDIT-M0-TOOLS-001` 已由 `M0-S003-U091` 接受；R1、R2、R3 都保留为旧错误项目下的审计证据，不再追加工作。`M0-L4-010` ready，但 GitHub accepted 记录尚未推送；推送前不创建新任务。新任务必须位于侧边栏 `always game` 项目。R3 的 `gpt-5.6-terra` 是证据密集审计的故障替代，不修改实际执行层的 5.3 默认。
 
 从 `M0-S003-U089` 起，昼夜分工正式生效：白天由第一层完成方案、范围、验收与夜间执行单；夜间任务只执行一个已授权的大结果，通常按约六小时估算，但额度、上下文和环境允许时可以运行八小时或更久，并按新的预计结束时间预留收尾验证时间；次日由第一层收回证据并交给用户验收。详细规则见 accepted 的 `day-night-execution-plan.md` 和 `NIGHT_WORK_ORDER_TEMPLATE.md`。研究型审计与代码实现不得塞进同一夜间任务；上下文接近上限时必须先写检查点，再建立新任务继续。
 
@@ -98,5 +98,5 @@ OpenAI 官方用例把长期目标与专属项目协作者列为 Codex 工作流
 - `handoff_pending` 时 `active_lane`、`active_host`、`active_session` 必须为 `null`，不能提前虚构接管完成。
 - 第一层可以在依赖满足后创建、驱动、读取、等待、退回和收回第二至第四层任务；下层必须完整读取自己的角色卡和任务卡，并把产物、证据与阻塞交回第一层。
 - 第一层统筹不允许越过串行依赖，不替代第二、三层的职责，也不是第四层写入授权。`M0-L4-401` 至 `404` 每个实现任务仍须用户单独授权。
-- `M0-L1-106` 已 accepted 且 `overall_spec_frozen: true`；`M0-L4-005` 当前 review，由 R3 交付审计。`M0-L4-010`、`M0-L2-201` 与 `M0-L3-301` 继续按 `ACTIVE_TASKS.md` 阻塞。
+- `M0-L1-106`、`M0-L4-005` 已 accepted 且 `overall_spec_frozen: true`；`M0-L4-010` ready_sync_blocked，等待 GitHub 同步和正确项目创建。`M0-L2-201` 与 `M0-L3-301` 继续按 `ACTIVE_TASKS.md` 阻塞。
 - 当前任务和状态只以 `ACTIVE_TASKS.md` 为准；当前唯一下一动作只以 `NEXT_ACTION.md` 为准。

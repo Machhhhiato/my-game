@@ -1,7 +1,7 @@
 ---
 output_id: AUDIT-M0-TOOLS-001
 task_id: M0-L4-005
-status: review
+status: accepted
 created_at: 2026-08-25T12:57:29+08:00
 source_thread: 01a03741-b9b7-7302-84d0-5b57447051b9
 source_model: gpt-5.6-terra
@@ -9,7 +9,9 @@ source_thinking: high
 scope: read_only_fixed_candidates
 overall_spec_frozen: true
 implementation_authorized: false
-user_acceptance: pending
+user_acceptance: accepted
+acceptance_source: M0-S003-U091
+accepted_at: 2026-08-25T14:20:18+08:00
 ---
 
 # AUDIT-M0-TOOLS-001
@@ -18,7 +20,7 @@ user_acceptance: pending
 
 当前不接入任何新工具。只保留一个未来可另行授权的受控试用候选：`tauri-agent-tools`。其余候选继续观察或淘汰。
 
-本次只读审计没有安装、配置或修改项目。`M0-L4-005` 进入 `review`，不自动接受，也不解锁 `M0-L4-010`。
+本次只读审计没有安装、配置或修改项目。用户在 `M0-S003-U091` 接受审计结论；`M0-L4-005` accepted，`M0-L4-010` 的产品依赖已经满足，但仍须完成 GitHub 同步和正确项目路由后才能创建任务。
 
 ## 推荐受控试用
 
@@ -111,7 +113,7 @@ user_acceptance: pending
 
 ## 验收边界
 
-- 当前状态：`review`。
-- 用户接受前，`M0-L4-005` 不得标记 accepted。
-- 用户接受前，`M0-L4-010`、第二层和第三层继续 blocked_upstream。
+- 当前状态：`accepted`；接受来源 `M0-S003-U091`。
+- `M0-L4-010` 已解除产品依赖，当前等待 GitHub 同步后由第一层在 `always game` 项目创建新的只读任务。
+- 第二层和第三层仍等待 `M0-L4-010` 完成并接受。
 - 接受本审计也不等于授权安装任何工具；任何试用、安装、配置、桥接、权限或服务仍需用户单独明确授权。

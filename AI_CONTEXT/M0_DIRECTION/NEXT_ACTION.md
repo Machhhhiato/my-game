@@ -1,7 +1,7 @@
 ---
 card_version: 2
 handoff_id: M0-H002
-routing_epoch: 7
+routing_epoch: 8
 routing_state: active
 source_host: windows
 source_lane: M0-DIR-B
@@ -10,9 +10,9 @@ target_host: mac
 target_lane: M0-DIR-A
 target_work_lane: M0-L4-AUDIT
 target_layer: 4
-target_task: M0-L4-005
-assigned_session: 01a03741-b9b7-7302-84d0-5b57447051b9
-action_status: review
+target_task: M0-L4-010
+assigned_session: null
+action_status: ready_sync_blocked
 required_branch: context/m0-direction
 startup_phrase: 你是第四层
 ---
@@ -24,13 +24,13 @@ startup_phrase: 你是第四层
 - 设备：Mac。
 - 逻辑方向 lane：`M0-DIR-A`。
 - 稳定工作 lane：`M0-L4-AUDIT`。
-- 活动任务标题：`AG-M0｜L4-AUDIT｜005-010｜MAC R3`。
-- 逻辑主线程 session：`M0-S003`；活动审计 thread 为 `01a03741-b9b7-7302-84d0-5b57447051b9`，host 为 `local`。
-- 已接受任务：`M0-L1-101` 至 `M0-L1-106`；`M0-L1-106` 的冻结来源为 `M0-S003-U086`。
-- 当前任务：`M0-L4-005 · GitHub Skills/MCP 能力审计`，状态为 `review`。
-- 当前输入：冻结的 M0 规格、真实技术栈、当前内置能力与 `REF-M0-GITHUB-TOOLS-AUDIT-001`。
-- 当前输出：`AUDIT-M0-TOOLS-001`；路径 `AUDIT_M0_TOOLS_001.md`；等待用户接受。
-- 当前动作：先恢复 GitHub 登录并推送审计登记；同时可由用户验收审计结论。不得自动进入 `M0-L4-010`。
+- 计划任务标题：`AG-M0｜L4-AUDIT｜010｜MAC`；尚未创建，不得编造 thread ID。
+- 逻辑主线程 session：`M0-S003`；当前没有活动下层审计任务。
+- 已接受任务：`M0-L1-101` 至 `M0-L1-106`、`M0-L4-005`；能力审计接受来源为 `M0-S003-U091`。
+- 当前任务：`M0-L4-010 · 现有代码只读审计`，状态为 `ready_sync_blocked`。
+- 当前输入：冻结的 M0 规格、accepted 的 `AUDIT-M0-TOOLS-001`、真实代码和测试基线。
+- 预期输出：`AUDIT-M0-TECH-001`；尚未生成。
+- 当前动作：恢复 GitHub 登录，推送并核对本地 accepted 记录；成功后在侧边栏 `always game` 项目、真实 Git 目录创建新的只读审计任务。
 
 用户在 `M0-S003-U087` 至 `U089` 追加、修正并整体接受后续制作节奏：白天先确定方案、范围和验收；晚上给明确的代码任务按约六小时估算，条件允许时可以运行八小时或更久；次日先验收。`day-night-execution-plan.md` 当前 accepted，正式协议为 v4。它不改变本卡的当前产品任务，也不构成实施授权。
 
@@ -99,6 +99,7 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 55. 冻结提交 `ff064af` 已推送。首个审计任务 `01a0373a-75c9-71a3-8cb3-3e0213ca1322` 因上下文窗口耗尽失败；主线程创建精简上下文的接替任务 `01a0373c-b12c-7c70-ba06-9c329180be59`，`M0-L4-005` 切到 active，形成 `D-M0-DIR-022`。
 56. R2 仍在整批外部证据阶段耗尽上下文；主线程停止继续尝试 5.3 单任务整批审计，创建限量证据的 R3 `01a03741-b9b7-7302-84d0-5b57447051b9`，临时使用 `gpt-5.6-terra` / `high`。R3 active，实际执行层 5.3 默认不变。
 57. R3 完成 `AUDIT-M0-TOOLS-001`：当前不接入任何新工具，只保留 `tauri-agent-tools` 作为未来另行授权的受控试用候选；任务切到 review。GitHub token 已失效，设备登录接口又返回 `unexpected EOF`，因此冻结提交已在远端，但审计登记仍只在本地等待推送。
+58. 用户在 `M0-S003-U091` 接受 `M0-L4-005`，形成 `D-M0-DIR-026`；`AUDIT-M0-TOOLS-001` accepted，`M0-L4-010` ready。GitHub token 仍无效，故新任务尚未创建。
 
 ## 当前正确状态至少包含
 
@@ -107,8 +108,8 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 层级：第一层｜方向与系统设计
 活动 lane：M0-DIR-A｜Mac｜M0-S003
 已接受任务：M0-L1-106｜SPEC-M0-DESCRIPTION-001｜overall_spec_frozen true
-当前任务：M0-L4-005｜GitHub Skills/MCP 能力审计
-任务状态：review
+当前任务：M0-L4-010｜现有代码只读审计
+任务状态：ready_sync_blocked
 已接受输出：SPEC-M0-PLAY-001｜specs/spec-m0-play-001.md｜0e2637f
 已接受输出：SPEC-M0-OPS-001｜specs/spec-m0-ops-001.md｜f8ae1e9
 不会做：故事正文、最终玩家文字、游戏代码和 main 修改
@@ -145,14 +146,15 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 已接受线程统筹：当前任务是逻辑主线程｜下层使用独立 Codex 任务线程｜Git 是权威上下文
 复核：M0-S003-A208｜八项最终结论、撤回项、暂缓项、revision 6 与下一路线均已交付
 当前冻结：M0-L1-106 accepted｜SPEC-M0-DESCRIPTION-001 accepted｜overall_spec_frozen true
-当前输出：AUDIT-M0-TOOLS-001｜AUDIT_M0_TOOLS_001.md｜review
+已接受输出：AUDIT-M0-TOOLS-001｜AUDIT_M0_TOOLS_001.md｜accepted
+预期输出：AUDIT-M0-TECH-001｜尚未生成
 未启动：M0-L4-010｜M0-L2-201｜M0-L3-301
 完成任务：AG-M0｜L4-AUDIT｜005-010｜MAC R3｜01a03741-b9b7-7302-84d0-5b57447051b9｜local
-下一步：恢复 GitHub 登录并推送审计登记；用户接受前不得开始 M0-L4-010
+下一步：恢复 GitHub 登录并推送 accepted 记录；远端核对后在 always game 项目创建 M0-L4-010
 ```
 
 ## 完成条件
 
-`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` 已 accepted，`overall_spec_frozen: true`；冻结记录已推送。`AUDIT-M0-TOOLS-001` 已交付并进入 review，线程登记与审计文件因 GitHub 登录失效仍待推送。当前完成条件是恢复 GitHub 登录、推送本地记录并由用户接受审计。能力审计不产生工具安装或实施授权；未接受前不得开始 `M0-L4-010`。
+`M0-L1-106`、`SPEC-M0-DESCRIPTION-001` 与 `AUDIT-M0-TOOLS-001` 已 accepted，`overall_spec_frozen: true`。冻结记录已推送；能力审计、昼夜协议和 accepted 记录因 GitHub 登录失效仍待推送。当前完成条件是恢复 GitHub 登录、推送并核对远端，然后在 `always game` 项目创建 `M0-L4-010` 只读审计任务。能力审计不产生工具安装或实施授权。
 
-工作协议已经由 `M0-S003-U089` 接受并写入正式协议与未来实现任务包。这不替代 `M0-L4-005` 的验收；当前仍等待用户是否接受 `AUDIT-M0-TOOLS-001`。
+工作协议已经由 `M0-S003-U089` 接受并写入正式协议与未来实现任务包；能力审计已经由 `M0-S003-U091` 接受。当前唯一阻塞是 GitHub 同步和随后正确创建 `M0-L4-010`。
