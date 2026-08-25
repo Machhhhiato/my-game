@@ -199,7 +199,7 @@ ACTIVE_TASKS.md、TASK_PACKAGES.md 和第四层角色卡。
 ### M0-L3-301-R1 · 首座前哨多章正文重写
 
 - 层级：第三层返工批次；复用 `M0-L3-TEXT` 稳定工作 lane。
-- 状态：`ready_sync_pending`。
+- 状态：`blocked_task_creation`；accepted 输入已同步，等待 Codex 应用恢复 Always Game 项目任务创建。
 - 依赖：`CONTENT-M0-STORY-001` 经第一层与用户接受。
 - 目标：把已接受的序章与七章故事事实写成玩家可见的项目标题、章节标题和完整正文。
 - 输入：accepted 的 `CONTENT-M0-STORY-001`、本规格第 14 节、`TEXT-M0-001` 中已接受的科技文字及 revision 6 源语料全文。

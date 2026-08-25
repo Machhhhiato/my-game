@@ -19,14 +19,14 @@ next_host: null
 handoff_id: M0-H002
 last_session: M0-S003
 last_turn: M0-S003-A298
-updated_at: 2026-08-25T18:47:29+08:00
+updated_at: 2026-08-25T19:08:44+08:00
 ---
 
 # 当前接续卡
 
 ## 当前目标
 
-`M0-L2-201-R1` 与 `CONTENT-M0-STORY-001` 已由用户完整接受。第二层首稿因仍是流程说明被第一层退回，同一任务重做为“发现—误读—修正—验证—回报”的完整工程故事后通过。用户已授权提交推送 accepted 故事包并开始 `M0-L3-301-R1`；当前先同步并核对远端。动态字段继续 `BLOCKED_FIELD`，没有启动第四层。`overall_spec_frozen: true`，`implementation_authorized: false`。
+`M0-L2-201-R1` 与 `CONTENT-M0-STORY-001` 已由用户完整接受，并在提交 `09723c8` 推送且与 GitHub 远端一致。用户已授权开始 `M0-L3-301-R1`，但 Codex 应用项目列表当前为空，正确历史项目 ID 的 worktree 与 local 创建均失败；第三层物理任务尚未生成。动态字段继续 `BLOCKED_FIELD`，没有启动第四层。`overall_spec_frozen: true`，`implementation_authorized: false`。
 
 第一批《恢复精密制造》完整科技卡文字已由用户逐条接受，形成 `D-M0-PROD-051`。`M0-L3-301` 整体仍为 review；当前进入第二批首座前哨与第二座复制文字。
 
@@ -38,7 +38,7 @@ updated_at: 2026-08-25T18:47:29+08:00
 
 同步提交 `ad466fa` 已推送并完成远端核对。第二层任务 `AG-M0｜L2-CONTENT｜201-R1｜MAC`：thread `01a0386f-71e3-7cd1-9b03-85724a9fc464`，`gpt-5.6-terra` / `medium`，状态 completed；accepted 产物已固化为 `CONTENT_M0_STORY_001.md`。
 
-用户在 `M0-S003-U116` 至 `U119` 完成三项验收并整体接受 `M0-L2-201-R1`，形成 `D-M0-PROD-054`；随后授权同步并开始第三层返工批次，形成 `D-M0-DIR-032`。`M0-L3-301-R1` 当前为 `ready_sync_pending`。
+用户在 `M0-S003-U116` 至 `U119` 完成三项验收并整体接受 `M0-L2-201-R1`，形成 `D-M0-PROD-054`；随后授权同步并开始第三层返工批次，形成 `D-M0-DIR-032`。同步已完成，`M0-L3-301-R1` 当前为 `blocked_task_creation`。
 
 ## 已确认
 
@@ -144,7 +144,7 @@ updated_at: 2026-08-25T18:47:29+08:00
 
 ## 下一唯一任务
 
-`M0-L3-301-R1 · 首座前哨多章正文重写`：先提交推送 accepted 的 `CONTENT-M0-STORY-001` 与路由记录，远端一致后在侧边栏 `always game` 项目、真实 Git 目录创建独立第三层任务。第三层只写最终玩家文字，不修改代码、配置或数据。
+`M0-L3-301-R1 · 首座前哨多章正文重写`：accepted 输入已同步；等待 Codex 应用重新识别侧边栏 `always game` 项目后，从 `context/m0-direction@09723c8` 创建独立第三层任务。第三层只写最终玩家文字，不修改代码、配置或数据。
 
 已接受元计划：`PLAN-M0-DAY-NIGHT-001` accepted。它规定未来怎样安排白天设计、夜间执行和次日验收，但不改变产品任务依赖，也不产生实施授权。
 
@@ -157,4 +157,4 @@ updated_at: 2026-08-25T18:47:29+08:00
 
 ## 下一句建议
 
-先同步 accepted 的故事事实包；远端核对成功后创建 `M0-L3-301-R1`。第三层完成后由第一层收回并分批给用户验收，不自动进入第四层。
+让 Codex 应用重新识别 `always game` 项目后，回复`继续`，第一层从 `09723c8` 重试创建 `M0-L3-301-R1`。不得改投其他项目。第三层完成后由第一层收回并分批给用户验收，不自动进入第四层。

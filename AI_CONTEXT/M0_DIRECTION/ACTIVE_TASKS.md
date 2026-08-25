@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L3-301-R1
 handoff_id: M0-H002
-updated_at: 2026-08-25T18:47:29+08:00
+updated_at: 2026-08-25T19:08:44+08:00
 ---
 
 # M0 当前任务路由
@@ -17,7 +17,7 @@ updated_at: 2026-08-25T18:47:29+08:00
 |---|---|---|---|---|
 | 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `accepted` | 无 | `ACCEPTED` |
 | 第二层 | `M0-L2-201-R1` 首座前哨工程故事补包 | `accepted` | 无 | `ACCEPTED` |
-| 第三层 | `M0-L3-301-R1` 首座前哨多章正文重写 | `ready_sync_pending` | 等待 accepted 故事包推送并核对远端 | `READY_SYNC_PENDING` |
+| 第三层 | `M0-L3-301-R1` 首座前哨多章正文重写 | `blocked_task_creation` | Codex 应用项目列表为空，正确历史项目 ID 创建工作树与本地任务均失败 | `BLOCKED_TASK_CREATION` |
 | 第四层（能力） | `M0-L4-005` GitHub Skills/MCP 能力审计 | `accepted` | 无 | `ACCEPTED` |
 | 第四层（代码） | `M0-L4-010` 现有代码只读审计 | `accepted` | 无 | `ACCEPTED` |
 | 第四层（边界） | `M0-L4-011` 可复用底座与旧代码删除边界审计 | `accepted` | 无 | `ACCEPTED` |
@@ -51,6 +51,8 @@ updated_at: 2026-08-25T18:47:29+08:00
 - 同步与创建：提交 `ad466fa4c0146fe29fdd13c6a8da1562c2dd3cc1` 已推送并与远端一致；`M0-L2-201-R1` 物理任务为 `01a0386f-71e3-7cd1-9b03-85724a9fc464`，host `local`，工作树 `/Users/xujiangyue/.codex/worktrees/5aa0/always game`，`gpt-5.6-terra` / `medium`，状态 completed / idle。
 - 第二层验收：首稿因仍是流程说明被第一层退回；同一任务重做后，用户在 `M0-S003-U116` 至 `U119` 接受故事主线、七章结构和重复工程分流，形成 `D-M0-PROD-054`。`CONTENT-M0-STORY-001` accepted。
 - 第三层授权：用户在 `M0-S003-U119` 允许提交推送 accepted 故事事实包并开始 `M0-L3-301-R1`，形成 `D-M0-DIR-032`。当前先同步并核对远端，再创建独立第三层任务。
+- 同步完成：提交 `09723c8f4f4aac9ec25c0eec991da9a3dd0f360c` 已推送并与 GitHub 远端一致。
+- 创建阻塞：`codex_app__list_projects` 返回空列表；从历史成功任务确认的 Always Game 项目 ID `829d805c-6795-48ac-ac3f-65762942d563` 先后以 worktree 和 local 环境创建均返回应用错误。无 `M0-L3-301-R1` 任务生成，禁止登记虚假 thread ID 或改投其他项目。
 - 接受证据：`M0-S003-U044` 接受第一项的信息结构；`D-M0-PROD-037` 明确视觉示意未获接受，后续必须随整体 UI 重做。
 - 返工证据：`M0-S003-U045` 指出玩法元语言不是正文；`U046` 指出技术段太长且制度口吻自我揭露；`U047` 判断整体方向仍不对，并要求先收集真实描述样本。
 - 接受内容：《恢复精密制造》第一行只说明统一精度标准让复杂零件能够稳定复制；第二行由生产恢复委员会评价，精密制造把工人的经验从工人身上剥离。下游完整源包为 `references/reference-m0-tech-description-corpus-001.md`，摘要不能替代。
@@ -61,7 +63,7 @@ updated_at: 2026-08-25T18:47:29+08:00
 - 第七项接受：`D-M0-PROD-046` 保留四类科技来源，并冻结旧时代与先驱来源在发现记录建立、世界文案禁用机制数据、首建节点一至两句、重复工程完成一句和事故事实时间线。`Q-M0-041` resolved。
 - 第八项接受：`D-M0-DIR-015` 至 `D-M0-DIR-019` 冻结单张工作单、责任层缺失阻塞、分级验收、独立正文统计和两步冻结门；`D-M0-DIR-020` 冻结独立任务线程与逻辑主线程统筹。
 - 源包证据：`SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6 逐字保留第七项初案、完整参考、`U073` 修正与 `A177` 接受稿，并原样保留 revision 1—5 的全部材料。
-- 冻结边界：`overall_spec_frozen: true`，`implementation_authorized: false`；`M0-L2-201-R1` 与 `CONTENT-M0-STORY-001` accepted；`M0-L3-301-R1` ready_sync_pending。
+- 冻结边界：`overall_spec_frozen: true`，`implementation_authorized: false`；`M0-L2-201-R1` 与 `CONTENT-M0-STORY-001` accepted；`M0-L3-301-R1` blocked_task_creation。
 - 失败任务 1：`AG-M0｜L4-AUDIT｜005-010｜MAC`；thread `01a0373a-75c9-71a3-8cb3-3e0213ca1322`；host `local`；`gpt-5.3-codex-spark` / `high`；状态 `systemError`；原因是上下文窗口耗尽；未写文件。
 - 失败任务 2：`AG-M0｜L4-AUDIT｜005-010｜MAC R2`；thread `01a0373c-b12c-7c70-ba06-9c329180be59`；host `local`；`gpt-5.3-codex-spark` / `high`；状态 `systemError`；原因仍是外部证据超过上下文；未写文件。
 - 完成接替任务：`AG-M0｜L4-AUDIT｜005-010｜MAC R3`；thread `01a03741-b9b7-7302-84d0-5b57447051b9`；host `local`；`gpt-5.6-terra` / `high`；状态 `completed / idle`。已交付 accepted 的 `AUDIT-M0-TOOLS-001`；该替代只用于证据密集的能力审计，实际执行层的 5.3 默认不变。

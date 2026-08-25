@@ -12,7 +12,7 @@ target_work_lane: M0-L3-TEXT
 target_layer: 3
 target_task: M0-L3-301-R1
 assigned_session: null
-action_status: ready_sync_pending
+action_status: blocked_task_creation
 required_branch: context/m0-direction
 startup_phrase: 你是第三层
 ---
@@ -24,19 +24,19 @@ startup_phrase: 你是第三层
 - 设备：Mac。
 - 逻辑方向 lane：`M0-DIR-A`。
 - 稳定工作 lane：`M0-L3-TEXT`。
-- 待创建任务：`AG-M0｜L3-TEXT｜301-R1｜MAC`；远端核对成功后登记正式 thread、host 与工作树。
+- 待创建任务：`AG-M0｜L3-TEXT｜301-R1｜MAC`；accepted 输入已同步，但 Codex 应用当前无法返回 Always Game 项目并创建任务。
 - 逻辑主线程 session：`M0-S003`；第一层已完成并收回全部前置审计。
 - 已接受任务：`M0-L1-101` 至 `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011`、`M0-L2-201`。
 - 已接受输出：`CONTENT-M0-001`，路径 `CONTENT_M0_001.md`，决定 `D-M0-PROD-050`。
 - 已接受任务：`M0-L2-201-R1 · 首座前哨工程故事补包`；输出 `CONTENT-M0-STORY-001`，路径 `CONTENT_M0_STORY_001.md`，决定 `D-M0-PROD-054`。
-- 当前任务：`M0-L3-301-R1 · 首座前哨多章正文重写`，状态为 `ready_sync_pending`。
+- 当前任务：`M0-L3-301-R1 · 首座前哨多章正文重写`，状态为 `blocked_task_creation`。
 - 当前输入：accepted 的 `CONTENT-M0-STORY-001`、`SPEC-M0-DESCRIPTION-001` 第 14 节、`TEXT-M0-001` 中已接受的《恢复精密制造》、六份冻结规格、完整 revision 6 科技描述源语料和第三层角色卡。
 - 预期输出：最终项目标题、开工序章和七章正文、章节回看短索引、第二座正常复制短记录；不改已接受科技文字。
 - 已接受分项：第一批《恢复精密制造》完整科技卡文字，决定 `D-M0-PROD-051`。
 - 已退回分项：第二批短标题与短正文方案。首次前哨必须改为从开工到验收的完整多章工程故事，决定 `D-M0-PROD-052`。
 - 已接受结构：用户接受序章加七章、章节标题与正文分工、默认自动解锁和重复工程分流，决定 `D-M0-PROD-053`；`Q-M0-049` resolved。
 - 当前授权：用户接受 `M0-L2-201-R1`，允许提交推送记录并开始 `M0-L3-301-R1`，决定 `D-M0-DIR-032`。
-- 当前动作：第一层先提交推送 accepted 故事包并核对远端，再创建独立第三层任务；用户不需要手工搬运结果。第三层只写最终文字，不进入第四层。
+- 当前动作：accepted 故事包已在 `09723c8` 推送并核对远端一致；需要 Codex 应用重新识别 Always Game 项目后重试创建。不得改投其他项目、项目外任务或虚构 thread ID。第三层只写最终文字，不进入第四层。
 - 字段边界：所有 `BLOCKED_FIELD` 动态文字留待字段语义确认和第四层真实实现，不随当前文字批次默认通过。
 - 后续边界：M0 的食物循环仍属于正式最低内容；M0 整体验收后的扩展阶段继续增加食物等生活、生产与资源内容。
 
