@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L2-201-R1
 handoff_id: M0-H002
-updated_at: 2026-08-25T18:16:53+08:00
+updated_at: 2026-08-25T18:21:02+08:00
 ---
 
 # M0 当前任务路由
@@ -16,7 +16,7 @@ updated_at: 2026-08-25T18:16:53+08:00
 | 层级 | 当前任务 | 状态 | 阻塞项 | 正确回执 |
 |---|---|---|---|---|
 | 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `accepted` | 无 | `ACCEPTED` |
-| 第二层 | `M0-L2-201-R1` 首座前哨工程故事补包 | `ready_sync_pending` | 等待接受记录提交推送 | `READY_SYNC_PENDING` |
+| 第二层 | `M0-L2-201-R1` 首座前哨工程故事补包 | `active` | 无 | `ACTIVE` |
 | 第三层 | `M0-L3-301-R1` 首座前哨多章正文重写 | `blocked_upstream` | 等待故事补包 accepted | `BLOCKED_UPSTREAM` |
 | 第四层（能力） | `M0-L4-005` GitHub Skills/MCP 能力审计 | `accepted` | 无 | `ACCEPTED` |
 | 第四层（代码） | `M0-L4-010` 现有代码只读审计 | `accepted` | 无 | `ACCEPTED` |
@@ -48,6 +48,7 @@ updated_at: 2026-08-25T18:16:53+08:00
 - 第二批退回：用户在 `M0-S003-U113` 明确要求把首次工程改为从开工到验收的完整多章故事，形成 `D-M0-PROD-052`。当前短提示仅保留为被退回证据；第一层先确认结构，再由第二层补故事事实、第三层重写。
 - 故事结构接受：用户在 `M0-S003-U114` 接受序章加七章、标题与正文分工、默认自动解锁和重复工程分流，形成 `D-M0-PROD-053`；`M0-L2-201-R1` ready，尚未创建或恢复物理任务。
 - 启动授权：用户在 `M0-S003-U115` 允许提交推送工程故事结构并开始 `M0-L2-201-R1`，形成 `D-M0-DIR-031`；当前必须先完成同步与远端核对，再创建独立第二层任务。
+- 同步与创建：提交 `ad466fa4c0146fe29fdd13c6a8da1562c2dd3cc1` 已推送并与远端一致；`M0-L2-201-R1` 物理任务为 `01a0386f-71e3-7cd1-9b03-85724a9fc464`，host `local`，工作树 `/Users/xujiangyue/.codex/worktrees/5aa0/always game`，`gpt-5.6-terra` / `medium`，状态 active。
 - 接受证据：`M0-S003-U044` 接受第一项的信息结构；`D-M0-PROD-037` 明确视觉示意未获接受，后续必须随整体 UI 重做。
 - 返工证据：`M0-S003-U045` 指出玩法元语言不是正文；`U046` 指出技术段太长且制度口吻自我揭露；`U047` 判断整体方向仍不对，并要求先收集真实描述样本。
 - 接受内容：《恢复精密制造》第一行只说明统一精度标准让复杂零件能够稳定复制；第二行由生产恢复委员会评价，精密制造把工人的经验从工人身上剥离。下游完整源包为 `references/reference-m0-tech-description-corpus-001.md`，摘要不能替代。

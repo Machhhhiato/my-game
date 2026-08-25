@@ -11,8 +11,8 @@ target_lane: M0-DIR-A
 target_work_lane: M0-L2-CONTENT
 target_layer: 2
 target_task: M0-L2-201-R1
-assigned_session: null
-action_status: ready_sync_pending
+assigned_session: 01a0386f-71e3-7cd1-9b03-85724a9fc464
+action_status: active
 required_branch: context/m0-direction
 startup_phrase: 你是第二层
 ---
@@ -24,18 +24,18 @@ startup_phrase: 你是第二层
 - 设备：Mac。
 - 逻辑方向 lane：`M0-DIR-A`。
 - 稳定工作 lane：`M0-L2-CONTENT`。
-- 当前没有活动下层任务；原第二层 thread `01a0382b-4e62-77e0-904c-a35b9e7be8f5` 已 idle，是否恢复由用户明确开始后决定。
+- 活动任务：`AG-M0｜L2-CONTENT｜201-R1｜MAC`；thread `01a0386f-71e3-7cd1-9b03-85724a9fc464`，host `local`，工作树 `/Users/xujiangyue/.codex/worktrees/5aa0/always game`，`gpt-5.6-terra` / `medium`。
 - 逻辑主线程 session：`M0-S003`；第一层已完成并收回全部前置审计。
 - 已接受任务：`M0-L1-101` 至 `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011`、`M0-L2-201`。
 - 已接受输出：`CONTENT-M0-001`，路径 `CONTENT_M0_001.md`，决定 `D-M0-PROD-050`。
-- 当前任务：`M0-L2-201-R1 · 首座前哨工程故事补包`，状态为 `ready_sync_pending`。
+- 当前任务：`M0-L2-201-R1 · 首座前哨工程故事补包`，状态为 `active`。
 - 当前输入：accepted 的 `CONTENT-M0-001`、`SPEC-M0-DESCRIPTION-001` 第 14 节、六份冻结规格、两个 accepted 代码审计、完整科技描述源语料和第二层角色卡。
 - 预期输出：`CONTENT-M0-STORY-001`。已有 `TEXT-M0-001` 第一批科技文字 accepted，第二批工程短稿 returned，仅作为返工证据。
 - 已接受分项：第一批《恢复精密制造》完整科技卡文字，决定 `D-M0-PROD-051`。
 - 已退回分项：第二批短标题与短正文方案。首次前哨必须改为从开工到验收的完整多章工程故事，决定 `D-M0-PROD-052`。
 - 已接受结构：用户接受序章加七章、章节标题与正文分工、默认自动解锁和重复工程分流，决定 `D-M0-PROD-053`；`Q-M0-049` resolved。
 - 当前授权：用户允许提交推送工程故事结构并开始 `M0-L2-201-R1`，决定 `D-M0-DIR-031`。
-- 当前动作：检查并提交推送本地记录；远端提交一致后从该提交创建独立第二层任务。第二层只交付 `CONTENT-M0-STORY-001`，不写最终正文，不进入第三层或第四层。
+- 当前动作：第一层等待、读取并复核第二层完整 `CONTENT-M0-STORY-001`；用户不需要手工搬运结果。第二层不写最终正文，不进入第三层或第四层。
 - 字段边界：所有 `BLOCKED_FIELD` 动态文字留待字段语义确认和第四层真实实现，不随当前文字批次默认通过。
 - 后续边界：M0 的食物循环仍属于正式最低内容；M0 整体验收后的扩展阶段继续增加食物等生活、生产与资源内容。
 

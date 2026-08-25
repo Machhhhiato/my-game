@@ -18,8 +18,8 @@ next_lane: null
 next_host: null
 handoff_id: M0-H002
 last_session: M0-S003
-last_turn: M0-S003-A292
-updated_at: 2026-08-25T18:16:53+08:00
+last_turn: M0-S003-A294
+updated_at: 2026-08-25T18:21:02+08:00
 ---
 
 # 当前接续卡
@@ -35,6 +35,8 @@ updated_at: 2026-08-25T18:16:53+08:00
 用户已经接受序章加七章、章节标题与正文分工、默认自动解锁和重复工程分流规则，形成 `D-M0-PROD-053`。`Q-M0-049` resolved；当前唯一下一任务为 `M0-L2-201-R1`，状态 ready，尚未启动。
 
 用户已授权提交推送工程故事结构并开始 `M0-L2-201-R1`，形成 `D-M0-DIR-031`。当前状态为 `ready_sync_pending`；必须先从同步提交创建第二层任务，再登记正式 thread ID。
+
+同步提交 `ad466fa` 已推送并完成远端核对。第二层任务 `AG-M0｜L2-CONTENT｜201-R1｜MAC` 已创建：thread `01a0386f-71e3-7cd1-9b03-85724a9fc464`，`gpt-5.6-terra` / `medium`，状态 active；第一层负责等待和收回结果。
 
 ## 已确认
 

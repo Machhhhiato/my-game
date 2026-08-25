@@ -89,9 +89,10 @@ handoff_id: M0-H002
 | `AG-M0｜L4-AUDIT｜010｜MAC` | `01a037ea-d006-7690-ae23-1a93a824429e` | `local` | 应用默认模型 / `high` | `completed / idle` | 正确本地 `always game` 项目的只读工作树任务；已交付 accepted 的 `AUDIT-M0-TECH-001` |
 | `AG-M0｜L4-AUDIT｜011｜MAC` | `01a03800-3d9f-7c70-b1dc-70a30bc8bf01` | `local` | `gpt-5.3-codex-spark` → `gpt-5.6-terra` / `high` | `completed / idle` | Spark 在最终收口前耗尽额度；同一只读任务由 Terra 完成修订版，输出进入 review |
 | `AG-M0｜L2-CONTENT｜201｜MAC` | `01a0382b-4e62-77e0-904c-a35b9e7be8f5` | `local` | `gpt-5.6-terra` / `medium` | `completed / idle` | 正确本地项目的只读工作树任务；首次交付被退回，修订版 `CONTENT-M0-001` 已 accepted |
+| `AG-M0｜L2-CONTENT｜201-R1｜MAC` | `01a0386f-71e3-7cd1-9b03-85724a9fc464` | `local` | `gpt-5.6-terra` / `medium` | `active` | 从 `context/m0-direction@ad466fa` 创建；只读交付 `CONTENT-M0-STORY-001` |
 | `AG-M0｜L3-TEXT｜301｜MAC` | `01a03845-90a7-7c73-95e6-f48796358313` | `local` | `gpt-5.6-sol` / `medium` | `completed / idle` | 首次交付被第一层退回；完整修订版已固化为 `TEXT_M0_001.md` 并进入用户 review |
 
-当前没有运行中的下层任务。`M0-L3-301` / `01a03845-90a7-7c73-95e6-f48796358313` 已完成只读交付；第一批科技文字 accepted，第二批工程短稿 returned。`M0-L2-201-R1` 已在任务卡中 ready，等待用户明确开始后再恢复第二层或创建接替任务。
+当前活动下层任务为 `M0-L2-201-R1` / `01a0386f-71e3-7cd1-9b03-85724a9fc464`。它从 `context/m0-direction@ad466fa` 创建，使用 `gpt-5.6-terra` / `medium`，只读仓库并向第一层交付故事事实包。
 
 从 `M0-S003-U089` 起，昼夜分工正式生效：白天由第一层完成方案、范围、验收与夜间执行单；夜间任务只执行一个已授权的大结果，通常按约六小时估算，但额度、上下文和环境允许时可以运行八小时或更久，并按新的预计结束时间预留收尾验证时间；次日由第一层收回证据并交给用户验收。详细规则见 accepted 的 `day-night-execution-plan.md` 和 `NIGHT_WORK_ORDER_TEMPLATE.md`。研究型审计与代码实现不得塞进同一夜间任务；上下文接近上限时必须先写检查点，再建立新任务继续。
 
@@ -105,5 +106,5 @@ OpenAI 官方用例把长期目标与专属项目协作者列为 Codex 工作流
 - `handoff_pending` 时 `active_lane`、`active_host`、`active_session` 必须为 `null`，不能提前虚构接管完成。
 - 第一层可以在依赖满足后创建、驱动、读取、等待、退回和收回第二至第四层任务；下层必须完整读取自己的角色卡和任务卡，并把产物、证据与阻塞交回第一层。
 - 第一层统筹不允许越过串行依赖，不替代第二、三层的职责，也不是第四层写入授权。`M0-L4-401` 至 `404` 每个实现任务仍须用户单独授权。
-- `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011`、`M0-L2-201` 已 accepted 且 `overall_spec_frozen: true`；当前窄修订批次 `M0-L2-201-R1` ready，`M0-L3-301-R1` blocked_upstream。
+- `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011`、`M0-L2-201` 已 accepted 且 `overall_spec_frozen: true`；当前窄修订批次 `M0-L2-201-R1` active，`M0-L3-301-R1` blocked_upstream。
 - 当前任务和状态只以 `ACTIVE_TASKS.md` 为准；当前唯一下一动作只以 `NEXT_ACTION.md` 为准。
