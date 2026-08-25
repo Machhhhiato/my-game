@@ -1,10 +1,10 @@
 ---
-workflow_version: 6
+workflow_version: 7
 milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
-overall_current_task: M0-L4-010
+overall_current_task: M0-L4-011
 handoff_id: M0-H002
-updated_at: 2026-08-25T14:20:18+08:00
+updated_at: 2026-08-25T15:45:00+08:00
 ---
 
 # M0 当前任务路由
@@ -16,24 +16,26 @@ updated_at: 2026-08-25T14:20:18+08:00
 | 层级 | 当前任务 | 状态 | 阻塞项 | 正确回执 |
 |---|---|---|---|---|
 | 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `accepted` | 无 | `ACCEPTED` |
-| 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L1-106`、`M0-L4-010` | `BLOCKED_UPSTREAM` |
+| 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L4-011` | `BLOCKED_UPSTREAM` |
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
 | 第四层（能力） | `M0-L4-005` GitHub Skills/MCP 能力审计 | `accepted` | 无 | `ACCEPTED` |
-| 第四层（代码） | `M0-L4-010` 现有代码只读审计 | `ready` | 产品依赖已满足；等待 accepted 记录推送并在 `always game` 项目创建新任务 | `READY` |
+| 第四层（代码） | `M0-L4-010` 现有代码只读审计 | `accepted` | 无 | `ACCEPTED` |
+| 第四层（边界） | `M0-L4-011` 可复用底座与旧代码删除边界审计 | `ready` | 等待本次 accepted 记录推送后创建只读任务 | `READY` |
 
 用户在 `M0-S003-U086` 明确接受 `M0-L1-106` 并冻结 M0 规格，形成 `D-M0-DIR-021`。冻结提交为 `ff064af236614b9d4cb7630690decd551dc0229d`。两个 `gpt-5.3-codex-spark` 审计任务先后耗尽上下文；R3 使用 `gpt-5.6-terra`、固定候选和限量证据完成只读审计，形成 `D-M0-DIR-022`。输出已经交回主线程，等待用户验收。
 
 用户在 `M0-S003-U089` 接受 `PLAN-M0-DAY-NIGHT-001`，形成 `D-M0-DIR-025`。该协议只约束未来任务怎样创建、执行、检查和交接；当时 `M0-L4-005` 仍为 review，实施授权为 false。
 
-用户在 `M0-S003-U091` 接受 `AUDIT-M0-TOOLS-001`，形成 `D-M0-DIR-026`。`M0-L4-005` accepted，`M0-L4-010` ready；GitHub 同步与正确项目创建是启动前置，不改变其产品依赖已经满足的事实。
+用户在 `M0-S003-U091` 接受 `AUDIT-M0-TOOLS-001`，形成 `D-M0-DIR-026`。GitHub 登录随后恢复，accepted 记录已推送。用户把真实仓库登记为本地 `always game` 项目后，第一层创建并收回 `M0-L4-010`。用户在 `M0-S003-U101` 至 `U102` 接受审计后的实施基线：M0 成为唯一主线，只保留可证明服务 M0 的底座，其余旧 R38 内容拟删除，不兼容旧存档。`M0-L4-010` 与 `AUDIT-M0-TECH-001` accepted；`M0-L4-011` ready。
 
 ## 当前生产证据
 
-- 任务：`M0-L4-010`；模式 `audit`；状态 ready，尚未创建物理任务。
-- 输入：冻结的六份 M0 规格、accepted 的 `AUDIT-M0-TOOLS-001`、真实 Git 仓库、现有代码与测试基线。
-- 预期输出：`AUDIT-M0-TECH-001`；当前尚未生成。
-- 依赖证据：`M0-L1-106`、`SPEC-M0-DESCRIPTION-001` 与 `AUDIT-M0-TOOLS-001` accepted；`overall_spec_frozen: true`；决定 `D-M0-DIR-021`、`D-M0-DIR-026`。
-- 派发边界：先恢复 GitHub 认证并推送本地 accepted 记录；再在侧边栏 `always game` 项目、真实 Git 目录创建新的第四层只读审计任务。不得复用错误项目下的 R3。
+- 已完成任务：`M0-L4-010`；输出 `AUDIT-M0-TECH-001` accepted；物理任务 `01a037ea-d006-7690-ae23-1a93a824429e`；全程只读。
+- 当前任务：`M0-L4-011`；模式 `audit`；状态 ready，尚未创建物理任务。
+- 输入：冻结的六份 M0 规格、accepted 的 `AUDIT-M0-TECH-001`、真实 Git 仓库、现有代码、测试与构建基线。
+- 预期输出：`AUDIT-M0-CODE-BOUNDARY-001`；逐文件列出保留、改造、拟删除和无法判断，并提供依赖、顺序、验证与回退。
+- 依赖证据：`M0-L4-010` accepted；用户接受 M0 唯一主线、旧存档不兼容和旧 R38 拟删除基线；`overall_spec_frozen: true`；`implementation_authorized: false`。
+- 派发边界：先推送本次路由与 accepted 记录；再在本地 `always game` 项目创建新的第四层只读任务。不得修改或删除代码。
 - 接受证据：`M0-S003-U044` 接受第一项的信息结构；`D-M0-PROD-037` 明确视觉示意未获接受，后续必须随整体 UI 重做。
 - 返工证据：`M0-S003-U045` 指出玩法元语言不是正文；`U046` 指出技术段太长且制度口吻自我揭露；`U047` 判断整体方向仍不对，并要求先收集真实描述样本。
 - 接受内容：《恢复精密制造》第一行只说明统一精度标准让复杂零件能够稳定复制；第二行由生产恢复委员会评价，精密制造把工人的经验从工人身上剥离。下游完整源包为 `references/reference-m0-tech-description-corpus-001.md`，摘要不能替代。
@@ -44,7 +46,7 @@ updated_at: 2026-08-25T14:20:18+08:00
 - 第七项接受：`D-M0-PROD-046` 保留四类科技来源，并冻结旧时代与先驱来源在发现记录建立、世界文案禁用机制数据、首建节点一至两句、重复工程完成一句和事故事实时间线。`Q-M0-041` resolved。
 - 第八项接受：`D-M0-DIR-015` 至 `D-M0-DIR-019` 冻结单张工作单、责任层缺失阻塞、分级验收、独立正文统计和两步冻结门；`D-M0-DIR-020` 冻结独立任务线程与逻辑主线程统筹。
 - 源包证据：`SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6 逐字保留第七项初案、完整参考、`U073` 修正与 `A177` 接受稿，并原样保留 revision 1—5 的全部材料。
-- 冻结边界：`overall_spec_frozen: true`，`implementation_authorized: false`；`M0-L4-005` accepted，`M0-L4-010` ready，`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
+- 冻结边界：`overall_spec_frozen: true`，`implementation_authorized: false`；`M0-L4-005` 与 `M0-L4-010` accepted，`M0-L4-011` ready，`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
 - 失败任务 1：`AG-M0｜L4-AUDIT｜005-010｜MAC`；thread `01a0373a-75c9-71a3-8cb3-3e0213ca1322`；host `local`；`gpt-5.3-codex-spark` / `high`；状态 `systemError`；原因是上下文窗口耗尽；未写文件。
 - 失败任务 2：`AG-M0｜L4-AUDIT｜005-010｜MAC R2`；thread `01a0373c-b12c-7c70-ba06-9c329180be59`；host `local`；`gpt-5.3-codex-spark` / `high`；状态 `systemError`；原因仍是外部证据超过上下文；未写文件。
 - 完成接替任务：`AG-M0｜L4-AUDIT｜005-010｜MAC R3`；thread `01a03741-b9b7-7302-84d0-5b57447051b9`；host `local`；`gpt-5.6-terra` / `high`；状态 `completed / idle`。已交付 accepted 的 `AUDIT-M0-TOOLS-001`；该替代只用于证据密集的能力审计，实际执行层的 5.3 默认不变。
@@ -75,7 +77,7 @@ updated_at: 2026-08-25T14:20:18+08:00
 - 接受来源：`M0-S003-U035`；决定 `D-M0-PROD-030` 至 `D-M0-PROD-033`。
 - 验收当时状态：`SPEC-M0-PROGRESSION-001` 与 `M0-L1-104` 均为 `accepted`，当时整套 M0 尚未冻结；当前已由 `D-M0-DIR-021` 整体冻结。
 - 验收时路由：四项组成内容和整份汇编均已接受；当时只把 `M0-L1-105` 切到 ready。该状态已由 `M0-S003-U036` 的明确启动和 `D-M0-DIR-007` 后续修订。
-- 当前承接：`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` 已由 `M0-S003-U086` 整体接受并冻结；`M0-L4-005` 已由 `M0-S003-U091` 接受，当前 `M0-L4-010` ready_sync_blocked。
+- 当前承接：`M0-L1-106`、`M0-L4-005` 与 `M0-L4-010` 已接受；当前 `M0-L4-011` ready_sync_pending，等待本次记录推送后创建只读任务。
 
 ## 上一接受证据
 

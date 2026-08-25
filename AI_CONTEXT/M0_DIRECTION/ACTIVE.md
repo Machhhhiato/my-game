@@ -6,7 +6,7 @@ status: active
 branch: context/m0-direction
 base_main: a08c40bb3596918347c9719d5c82c5af26707d95
 direction_protocol_version: 4
-routing_epoch: 8
+routing_epoch: 9
 active_lane: M0-DIR-A
 active_host: mac
 preferred_host: mac
@@ -18,15 +18,15 @@ next_lane: null
 next_host: null
 handoff_id: M0-H002
 last_session: M0-S003
-last_turn: M0-S003-A233
-updated_at: 2026-08-25T14:20:18+08:00
+last_turn: M0-S003-A251
+updated_at: 2026-08-25T15:45:00+08:00
 ---
 
 # 当前接续卡
 
 ## 当前目标
 
-用户已在 `M0-S003-U086` 整体接受 `M0-L1-106` 并冻结 M0 规格。用户在 `M0-S003-U089` 接受昼夜制作计划，并在 `M0-S003-U091` 接受 `AUDIT-M0-TOOLS-001`。`M0-L4-005` accepted；当前不接入任何新工具，只保留 `tauri-agent-tools` 作为未来另行授权的受控试用候选。`M0-L4-010` 的产品依赖已经满足并切到 ready，但 GitHub token 仍无效；accepted 记录推送成功前不创建新任务。`overall_spec_frozen: true`，`implementation_authorized: false`。
+GitHub 登录和推送已经恢复，真实仓库已登记为本地 `always game` 项目。第一层已创建、收回并复核 `M0-L4-010`；用户接受 `AUDIT-M0-TECH-001` 及修订后的实施基线：M0 是唯一后续主线，只保留能够证明服务 M0 的底座，其余旧 R38 内容拟删除，不兼容旧存档。当前唯一下一任务为只读的 `M0-L4-011`，先形成逐文件保留、改造、删除与无法判断清单；尚未授权修改或删除代码。`overall_spec_frozen: true`，`implementation_authorized: false`。
 
 ## 已确认
 
@@ -53,6 +53,8 @@ updated_at: 2026-08-25T14:20:18+08:00
 - `D-M0-DIR-024`：Always Game 后续任务必须归入侧边栏的 `always game` 项目，并锁定真实 Git 目录；创建失败时不得再静默退回通用 `xujiangyue` 项目。既有 R1、R2、R3 保留为历史证据。
 - `D-M0-DIR-025`：用户整体接受 `PLAN-M0-DAY-NIGHT-001`；正式协议升为 v4，新增夜间执行单模板，并把弹性时长、项目归属、上下文控制和次日验收写入 `M0-L4-401` 至 `404` 的共同规则。
 - `D-M0-DIR-026`：用户接受 `AUDIT-M0-TOOLS-001`；当前不接入任何工具，一个候选保留未来受控试用，六项观察、四项淘汰。`M0-L4-010` ready，但须先完成 GitHub 同步并在正确项目创建新任务。
+- `D-M0-DIR-027`：第一层必须在创建独立 Codex 任务后继续取得正式 thread ID、登记跟踪、读取完成结果并向用户汇总；任务结束只改变侧边栏状态，不视为自动回传已经完成。
+- `D-M0-DIR-028`：`M0-L4-010` 与 `AUDIT-M0-TECH-001` accepted。M0 成为唯一后续主线；旧存档不兼容；旧 R38 只保留有明确 M0 消费者的底座，其余内容进入可恢复删除计划。删除前新增只读 `M0-L4-011`。
 - `D-M0-PROD-001`：首先为用户本人这位资深策略玩家量身定制；买断暂缓；用户认可初版后再以 Steam 免费游戏形式首次发布。
 - `D-M0-PROD-002`：核心爽点是通过专业管理形成科技、资源、高级资产和版图领先；正常经营能够积累储备并解决危机，不采用强制极端二选一。
 - `D-M0-PROD-003`：关键科技允许玩家集中突破，普通科研允许系统按领域倾向自动推进，形成操作与看海交替。

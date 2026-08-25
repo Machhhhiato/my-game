@@ -1,7 +1,7 @@
 ---
 card_version: 2
 handoff_id: M0-H002
-routing_epoch: 8
+routing_epoch: 9
 routing_state: active
 source_host: windows
 source_lane: M0-DIR-B
@@ -10,9 +10,9 @@ target_host: mac
 target_lane: M0-DIR-A
 target_work_lane: M0-L4-AUDIT
 target_layer: 4
-target_task: M0-L4-010
+target_task: M0-L4-011
 assigned_session: null
-action_status: ready_sync_blocked
+action_status: ready_sync_pending
 required_branch: context/m0-direction
 startup_phrase: 你是第四层
 ---
@@ -24,13 +24,13 @@ startup_phrase: 你是第四层
 - 设备：Mac。
 - 逻辑方向 lane：`M0-DIR-A`。
 - 稳定工作 lane：`M0-L4-AUDIT`。
-- 计划任务标题：`AG-M0｜L4-AUDIT｜010｜MAC`；尚未创建，不得编造 thread ID。
+- 计划任务标题：`AG-M0｜L4-AUDIT｜011｜MAC`；尚未创建，不得编造 thread ID。
 - 逻辑主线程 session：`M0-S003`；当前没有活动下层审计任务。
-- 已接受任务：`M0-L1-101` 至 `M0-L1-106`、`M0-L4-005`；能力审计接受来源为 `M0-S003-U091`。
-- 当前任务：`M0-L4-010 · 现有代码只读审计`，状态为 `ready_sync_blocked`。
-- 当前输入：冻结的 M0 规格、accepted 的 `AUDIT-M0-TOOLS-001`、真实代码和测试基线。
-- 预期输出：`AUDIT-M0-TECH-001`；尚未生成。
-- 当前动作：恢复 GitHub 登录，推送并核对本地 accepted 记录；成功后在侧边栏 `always game` 项目、真实 Git 目录创建新的只读审计任务。
+- 已接受任务：`M0-L1-101` 至 `M0-L1-106`、`M0-L4-005`、`M0-L4-010`；代码审计及实施基线接受来源为 `M0-S003-U101` 至 `U102`。
+- 当前任务：`M0-L4-011 · 可复用底座与旧代码删除边界审计`，状态为 `ready_sync_pending`。
+- 当前输入：冻结的 M0 规格、accepted 的 `AUDIT-M0-TECH-001`、真实代码、测试与构建基线。
+- 预期输出：`AUDIT-M0-CODE-BOUNDARY-001`；尚未生成。
+- 当前动作：提交并推送本次 accepted 记录；成功后在本地 `always game` 项目创建新的只读边界审计任务并由第一层登记跟踪。
 
 用户在 `M0-S003-U087` 至 `U089` 追加、修正并整体接受后续制作节奏：白天先确定方案、范围和验收；晚上给明确的代码任务按约六小时估算，条件允许时可以运行八小时或更久；次日先验收。`day-night-execution-plan.md` 当前 accepted，正式协议为 v4。它不改变本卡的当前产品任务，也不构成实施授权。
 
@@ -100,6 +100,11 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 56. R2 仍在整批外部证据阶段耗尽上下文；主线程停止继续尝试 5.3 单任务整批审计，创建限量证据的 R3 `01a03741-b9b7-7302-84d0-5b57447051b9`，临时使用 `gpt-5.6-terra` / `high`。R3 active，实际执行层 5.3 默认不变。
 57. R3 完成 `AUDIT-M0-TOOLS-001`：当前不接入任何新工具，只保留 `tauri-agent-tools` 作为未来另行授权的受控试用候选；任务切到 review。GitHub token 已失效，设备登录接口又返回 `unexpected EOF`，因此冻结提交已在远端，但审计登记仍只在本地等待推送。
 58. 用户在 `M0-S003-U091` 接受 `M0-L4-005`，形成 `D-M0-DIR-026`；`AUDIT-M0-TOOLS-001` accepted，`M0-L4-010` ready。GitHub token 仍无效，故新任务尚未创建。
+59. GitHub CLI 经本机临时代理重新授权成功，七个本地 accepted 提交推送到 `context/m0-direction@3b0639e`；系统和项目代理配置未改动。
+60. 用户把真实仓库登记为本地 `always game` 项目。第一层创建 `M0-L4-010` 只读任务 `01a037ea-d006-7690-ae23-1a93a824429e`，任务完成后由第一层查询并收回结果。
+61. 用户指出第一层没有自动接收下层结果。形成 `D-M0-DIR-027`：独立任务不自动把最终答案插入主线程，第一层必须主动取得正式 ID、登记、等待或恢复查询、读取、复核并汇报。
+62. 用户在 `M0-S003-U101` 补充旧代码策略，并在 `U102` 接受修订基线，形成 `D-M0-DIR-028`。`M0-L4-010` 与 `AUDIT-M0-TECH-001` accepted；M0 是唯一后续主线，旧存档不兼容，旧 R38 只保留明确服务 M0 的底座，其余进入可恢复删除计划。
+63. 新增只读 `M0-L4-011`，先形成逐文件保留、改造、拟删除与无法判断清单。当前没有代码修改或删除授权。
 
 ## 当前正确状态至少包含
 
@@ -108,8 +113,8 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 层级：第一层｜方向与系统设计
 活动 lane：M0-DIR-A｜Mac｜M0-S003
 已接受任务：M0-L1-106｜SPEC-M0-DESCRIPTION-001｜overall_spec_frozen true
-当前任务：M0-L4-010｜现有代码只读审计
-任务状态：ready_sync_blocked
+当前任务：M0-L4-011｜可复用底座与旧代码删除边界审计
+任务状态：ready_sync_pending
 已接受输出：SPEC-M0-PLAY-001｜specs/spec-m0-play-001.md｜0e2637f
 已接受输出：SPEC-M0-OPS-001｜specs/spec-m0-ops-001.md｜f8ae1e9
 不会做：故事正文、最终玩家文字、游戏代码和 main 修改

@@ -150,7 +150,7 @@
 
 - `WORKFLOW_BOOTSTRAP.md` 定义一句话启动、读取顺序和失败状态。
 - `NEXT_ACTION.md` 是“下一步做什么、由哪条任务线负责”的唯一权威卡。
-- `SESSION_ROUTING.md` 保存 15 个任务对应的稳定任务线、模型运行默认以及活动/交接状态。
+- `SESSION_ROUTING.md` 保存 16 个任务对应的稳定任务线、模型运行默认以及活动/交接状态。
 - `roles/` 定义四层固定职责；层号不得重排。
 - `ACTIVE_TASKS.md` 是当前任务的唯一动态路由；`TASK_PACKAGES.md` 是任务边界的固定定义。
 - 同一层最多一个 `ready` 或 `active` 任务；当前阶段按任务链串行推进。
