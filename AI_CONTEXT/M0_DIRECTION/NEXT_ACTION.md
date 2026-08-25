@@ -8,13 +8,13 @@ source_lane: M0-DIR-B
 source_session: M0-S002
 target_host: mac
 target_lane: M0-DIR-A
-target_work_lane: M0-L3-TEXT
-target_layer: 3
-target_task: M0-L3-301
-assigned_session: 01a03845-90a7-7c73-95e6-f48796358313
-action_status: active
+target_work_lane: M0-L2-CONTENT
+target_layer: 2
+target_task: M0-L2-201-R1
+assigned_session: null
+action_status: ready_sync_pending
 required_branch: context/m0-direction
-startup_phrase: 你是第三层
+startup_phrase: 你是第二层
 ---
 
 # 唯一下一动作卡
@@ -23,14 +23,20 @@ startup_phrase: 你是第三层
 
 - 设备：Mac。
 - 逻辑方向 lane：`M0-DIR-A`。
-- 稳定工作 lane：`M0-L3-TEXT`。
-- 活动任务标题：`AG-M0｜L3-TEXT｜301｜MAC`；thread `01a03845-90a7-7c73-95e6-f48796358313`，host `local`，`gpt-5.6-sol` / `medium`。
+- 稳定工作 lane：`M0-L2-CONTENT`。
+- 当前没有活动下层任务；原第二层 thread `01a0382b-4e62-77e0-904c-a35b9e7be8f5` 已 idle，是否恢复由用户明确开始后决定。
 - 逻辑主线程 session：`M0-S003`；第一层已完成并收回全部前置审计。
 - 已接受任务：`M0-L1-101` 至 `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011`、`M0-L2-201`。
 - 已接受输出：`CONTENT-M0-001`，路径 `CONTENT_M0_001.md`，决定 `D-M0-PROD-050`。
-- 当前任务：`M0-L3-301 · 玩家可见文字包`，状态为 `active`。
-- 当前输入：accepted 的 `CONTENT-M0-001`、`SPEC-M0-DESCRIPTION-001`、`AUDIT-M0-TECH-001`、完整科技描述源语料和第三层角色卡。
-- 当前动作：第一层等待、读取并复核第三层完整 `TEXT-M0-001`；用户不需要手工搬运结果。
+- 当前任务：`M0-L2-201-R1 · 首座前哨工程故事补包`，状态为 `ready_sync_pending`。
+- 当前输入：accepted 的 `CONTENT-M0-001`、`SPEC-M0-DESCRIPTION-001` 第 14 节、六份冻结规格、两个 accepted 代码审计、完整科技描述源语料和第二层角色卡。
+- 预期输出：`CONTENT-M0-STORY-001`。已有 `TEXT-M0-001` 第一批科技文字 accepted，第二批工程短稿 returned，仅作为返工证据。
+- 已接受分项：第一批《恢复精密制造》完整科技卡文字，决定 `D-M0-PROD-051`。
+- 已退回分项：第二批短标题与短正文方案。首次前哨必须改为从开工到验收的完整多章工程故事，决定 `D-M0-PROD-052`。
+- 已接受结构：用户接受序章加七章、章节标题与正文分工、默认自动解锁和重复工程分流，决定 `D-M0-PROD-053`；`Q-M0-049` resolved。
+- 当前授权：用户允许提交推送工程故事结构并开始 `M0-L2-201-R1`，决定 `D-M0-DIR-031`。
+- 当前动作：检查并提交推送本地记录；远端提交一致后从该提交创建独立第二层任务。第二层只交付 `CONTENT-M0-STORY-001`，不写最终正文，不进入第三层或第四层。
+- 字段边界：所有 `BLOCKED_FIELD` 动态文字留待字段语义确认和第四层真实实现，不随当前文字批次默认通过。
 - 后续边界：M0 的食物循环仍属于正式最低内容；M0 整体验收后的扩展阶段继续增加食物等生活、生产与资源内容。
 
 用户在 `M0-S003-U087` 至 `U089` 追加、修正并整体接受后续制作节奏：白天先确定方案、范围和验收；晚上给明确的代码任务按约六小时估算，条件允许时可以运行八小时或更久；次日先验收。`day-night-execution-plan.md` 当前 accepted，正式协议为 v4。它不改变本卡的当前产品任务，也不构成实施授权。
