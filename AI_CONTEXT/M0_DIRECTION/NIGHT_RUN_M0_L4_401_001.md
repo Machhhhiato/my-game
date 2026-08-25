@@ -3,7 +3,8 @@ night_run_id: NIGHT-M0-L4-401-001
 formal_task: M0-L4-401
 night_run_status: completed_waiting_user_acceptance
 input_commit: 2820297d55cbad46d4b525f74520da2271e022eb
-output_commit: pending_first_layer_commit
+output_commit: 2a871c08cf035877cab60301f63f6c558ad32cf5
+handoff_sync_commit: this_commit
 branch: context/m0-direction
 reasoning_effort: medium
 highest_reasoning_effort: medium
@@ -75,12 +76,13 @@ AI_CONTEXT/M0_DIRECTION 下相关路由与审计记录
 | 浏览器渲染 | 通过；初始人口、四档调度、六库存、底线、队列和流水均可见，无应用控制台错误。 |
 | 浏览器交互 | 通过；标准第 1 日为水 280、食物 562、普通零件 45、水务 3/24；供水加速后人力仍为 28/28，下一日水务增至 9/24；安全线低于硬底线被拒绝。 |
 | 真实时间推进 | 通过；点击开始后约 20 秒只推进 1 日，并可恢复暂停。 |
+| 实现提交与首次远端核对 | 通过；实现提交 `2a871c08cf035877cab60301f63f6c558ad32cf5` 已推送，`git ls-remote` 返回同一提交。 |
 
 ## 回退锚点
 
 - 输入锚点：`2820297d55cbad46d4b525f74520da2271e022eb`。
-- 预期实现提交消息：`feat(m0): build core simulation foundation`。
-- 输出提交与远端核对由第一层 Git 收口后补记。
+- 实现提交：`2a871c08cf035877cab60301f63f6c558ad32cf5`，消息 `feat(m0): build core simulation foundation`。
+- 该提交已经通过本机 `7897` 代理推送，首次远端核对返回相同提交；最终接力文档由本记录所在后续同步提交收口。
 
 ## 已知边界
 
@@ -91,4 +93,4 @@ AI_CONTEXT/M0_DIRECTION 下相关路由与审计记录
 
 ## 唯一下一步
 
-第一层完成提交、代理推送和远端核对后，交给用户进行 M0-L4-401 功能试玩与接受判断；未得到该判断前不把任务标为 accepted，也不进入 M0-L4-402。
+实现提交、代理推送和首次远端核对均已完成。当前只交给用户进行 M0-L4-401 功能试玩与接受判断；未得到该判断前不把任务标为 accepted，也不进入 M0-L4-402。

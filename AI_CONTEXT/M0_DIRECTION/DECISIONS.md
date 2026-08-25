@@ -1210,5 +1210,6 @@
 - 执行：一次新任务创建失败后按约定不再重试，复用 Terra / medium 第四层线程。第一层否决首版，要求修正 T02、人力、锁定库存、优先级、TEST_ONLY、安全线和存档；R1 返回后第一层继续修正状态污染、缺件幽灵维护、人员待命、玩家文案和默认入口可读性。
 - 输出：`BUILD-M0-CORE-001`；新建 `src/m0/**` 与 `scripts/m0-core-sim.ts`，定向修改 `src/main.tsx` 和 `package.json`。旧模块、旧资源与旧存档没有删除或修改。
 - 验证：`npm run typecheck`、`npm run test:m0`、`npm run build`、`git diff --check`、真实本地 HTTP、浏览器日结算和约 20 秒时间推进全部通过。
+- 同步证据：实现提交 `2a871c08cf035877cab60301f63f6c558ad32cf5` 已通过本机 `7897` 代理推送，首次远端核对返回同一提交；最终接力记录在后续同步提交中收口。
 - 状态边界：这是第一层实现验收，不是用户内容或玩法接受；`M0-L4-401` 为 `implemented_waiting_user_acceptance`，不得标为 accepted/verified，不自动进入 `M0-L4-402`。
 - UI 边界：当前界面只验证机制底座；布局、颜色、字体、图标和交互样式未冻结。

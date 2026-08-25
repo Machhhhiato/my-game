@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L4-401
 handoff_id: M0-H002
-updated_at: 2026-08-26T00:01:00+08:00
+updated_at: 2026-08-26T00:04:16+08:00
 ---
 
 # M0 当前任务路由
@@ -19,7 +19,7 @@ updated_at: 2026-08-26T00:01:00+08:00
 | 第二层 | `M0-L2-201-R1` 首座前哨工程故事补包 | `accepted` | 无 | `ACCEPTED` |
 | 第三层 | `M0-L3-301` 玩家可见文字包 | `accepted` | 动态字段继续阻塞到具有真实来源的相关实现批次 | `ACCEPTED` |
 | 第四层（能力） | `M0-L4-005` GitHub Skills/MCP 能力审计 | `accepted` | 无 | `ACCEPTED` |
-| 第四层（代码） | `M0-L4-401` 基础运行、资源、人力与存档 | `implemented_waiting_user_acceptance` | 实现、第一层审查、测试、构建和本地入口检查完成；等待提交推送收口与用户试玩判断 | `REVIEW` |
+| 第四层（代码） | `M0-L4-401` 基础运行、资源、人力与存档 | `implemented_waiting_user_acceptance` | 实现提交 `2a871c0` 已推送并完成远端核对；等待用户试玩判断 | `REVIEW` |
 | 第四层（边界） | `M0-L4-011` 可复用底座与旧代码删除边界审计 | `accepted` | 无 | `ACCEPTED` |
 
 用户在 `M0-S003-U086` 明确接受 `M0-L1-106` 并冻结 M0 规格，形成 `D-M0-DIR-021`。冻结提交为 `ff064af236614b9d4cb7630690decd551dc0229d`。两个 `gpt-5.3-codex-spark` 审计任务先后耗尽上下文；R3 使用 `gpt-5.6-terra`、固定候选和限量证据完成只读审计，形成 `D-M0-DIR-022`。输出已经交回主线程，等待用户验收。
@@ -72,6 +72,7 @@ updated_at: 2026-08-26T00:01:00+08:00
 - 第八项接受：`D-M0-DIR-015` 至 `D-M0-DIR-019` 冻结单张工作单、责任层缺失阻塞、分级验收、独立正文统计和两步冻结门；`D-M0-DIR-020` 冻结独立任务线程与逻辑主线程统筹。
 - 源包证据：`SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6 逐字保留第七项初案、完整参考、`U073` 修正与 `A177` 接受稿，并原样保留 revision 1—5 的全部材料。
 - 冻结边界：`overall_spec_frozen: true`，`implementation_authorized: true`；`CONTENT-M0-STORY-001` 已被用户后续修订取代；`TEXT-M0-STORY-001` 仅为 `accepted_for_m0_process_prototype`；`M0-L3-301` accepted；`M0-L4-401` 为 `implemented_waiting_user_acceptance`。
+- 实现证据：`BUILD-M0-CORE-001` 已落在提交 `2a871c08cf035877cab60301f63f6c558ad32cf5`，通过代理推送后远端分支返回同一提交；最终接力记录由后续同步提交补齐。
 - 失败任务 1：`AG-M0｜L4-AUDIT｜005-010｜MAC`；thread `01a0373a-75c9-71a3-8cb3-3e0213ca1322`；host `local`；`gpt-5.3-codex-spark` / `high`；状态 `systemError`；原因是上下文窗口耗尽；未写文件。
 - 失败任务 2：`AG-M0｜L4-AUDIT｜005-010｜MAC R2`；thread `01a0373c-b12c-7c70-ba06-9c329180be59`；host `local`；`gpt-5.3-codex-spark` / `high`；状态 `systemError`；原因仍是外部证据超过上下文；未写文件。
 - 完成接替任务：`AG-M0｜L4-AUDIT｜005-010｜MAC R3`；thread `01a03741-b9b7-7302-84d0-5b57447051b9`；host `local`；`gpt-5.6-terra` / `high`；状态 `completed / idle`。已交付 accepted 的 `AUDIT-M0-TOOLS-001`；该替代只用于证据密集的能力审计，实际执行层的 5.3 默认不变。
