@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L4-005
 handoff_id: M0-H002
-updated_at: 2026-08-25T12:39:21+08:00
+updated_at: 2026-08-25T12:55:28+08:00
 ---
 
 # M0 当前任务路由
@@ -18,10 +18,10 @@ updated_at: 2026-08-25T12:39:21+08:00
 | 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `accepted` | 无 | `ACCEPTED` |
 | 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L1-106`、`M0-L4-010` | `BLOCKED_UPSTREAM` |
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
-| 第四层（能力） | `M0-L4-005` GitHub Skills/MCP 能力审计 | `ready` | 无；等待主线程创建独立任务线程 | `READY` |
+| 第四层（能力） | `M0-L4-005` GitHub Skills/MCP 能力审计 | `active` | 无；接替任务正在只读执行 | `IN_PROGRESS` |
 | 第四层（代码） | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L4-005` accepted | `BLOCKED_UPSTREAM` |
 
-用户在 `M0-S003-U086` 明确接受 `M0-L1-106` 并冻结 M0 规格，形成 `D-M0-DIR-021`。`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` accepted，`overall_spec_frozen: true`；`M0-L4-005` ready。冻结记录推送后，逻辑主线程创建 `AG-M0｜L4-AUDIT｜005-010｜MAC` 并自动派发只读能力审计；在真实线程创建前不编造 thread ID 或 host ID。
+用户在 `M0-S003-U086` 明确接受 `M0-L1-106` 并冻结 M0 规格，形成 `D-M0-DIR-021`。冻结提交为 `ff064af236614b9d4cb7630690decd551dc0229d`。两个 `gpt-5.3-codex-spark` 审计任务先后在整批外部证据阶段耗尽上下文；R3 使用 `gpt-5.6-terra`、固定候选和限量证据继续只读审计，形成 `D-M0-DIR-022`。
 
 ## 当前生产证据
 
@@ -29,7 +29,7 @@ updated_at: 2026-08-25T12:39:21+08:00
 - 输入：冻结的 M0 规格、项目真实技术栈、当前内置能力、`references/reference-m0-github-tools-audit-001.md` 和候选任务开始时的最新 GitHub 证据。
 - 当前输出：`AUDIT-M0-TOOLS-001`，尚未创建。
 - 依赖证据：`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` accepted；`overall_spec_frozen: true`；决定 `D-M0-DIR-021`，来源 `M0-S003-U086`。
-- 派发边界：冻结记录先推送，再创建独立任务线程；审计可自动开始，但不安装工具、不改配置、不修改代码。
+- 派发边界：冻结记录已推送；审计任务已创建并进入 active，但不安装工具、不改配置、不修改代码。
 - 接受证据：`M0-S003-U044` 接受第一项的信息结构；`D-M0-PROD-037` 明确视觉示意未获接受，后续必须随整体 UI 重做。
 - 返工证据：`M0-S003-U045` 指出玩法元语言不是正文；`U046` 指出技术段太长且制度口吻自我揭露；`U047` 判断整体方向仍不对，并要求先收集真实描述样本。
 - 接受内容：《恢复精密制造》第一行只说明统一精度标准让复杂零件能够稳定复制；第二行由生产恢复委员会评价，精密制造把工人的经验从工人身上剥离。下游完整源包为 `references/reference-m0-tech-description-corpus-001.md`，摘要不能替代。
@@ -40,9 +40,11 @@ updated_at: 2026-08-25T12:39:21+08:00
 - 第七项接受：`D-M0-PROD-046` 保留四类科技来源，并冻结旧时代与先驱来源在发现记录建立、世界文案禁用机制数据、首建节点一至两句、重复工程完成一句和事故事实时间线。`Q-M0-041` resolved。
 - 第八项接受：`D-M0-DIR-015` 至 `D-M0-DIR-019` 冻结单张工作单、责任层缺失阻塞、分级验收、独立正文统计和两步冻结门；`D-M0-DIR-020` 冻结独立任务线程与逻辑主线程统筹。
 - 源包证据：`SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6 逐字保留第七项初案、完整参考、`U073` 修正与 `A177` 接受稿，并原样保留 revision 1—5 的全部材料。
-- 冻结边界：`overall_spec_frozen: true`，`implementation_authorized: false`；`M0-L4-005` ready，`M0-L4-010`、`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
-- 线程状态：首个线程标题为 `AG-M0｜L4-AUDIT｜005-010｜MAC`；创建前没有 thread ID 或 host ID。
-- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-021`、`D-M0-PROD-036` 至 `D-M0-PROD-046`。
+- 冻结边界：`overall_spec_frozen: true`，`implementation_authorized: false`；`M0-L4-005` active，`M0-L4-010`、`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
+- 失败任务 1：`AG-M0｜L4-AUDIT｜005-010｜MAC`；thread `01a0373a-75c9-71a3-8cb3-3e0213ca1322`；host `local`；`gpt-5.3-codex-spark` / `high`；状态 `systemError`；原因是上下文窗口耗尽；未写文件。
+- 失败任务 2：`AG-M0｜L4-AUDIT｜005-010｜MAC R2`；thread `01a0373c-b12c-7c70-ba06-9c329180be59`；host `local`；`gpt-5.3-codex-spark` / `high`；状态 `systemError`；原因仍是外部证据超过上下文；未写文件。
+- 活动接替任务：`AG-M0｜L4-AUDIT｜005-010｜MAC R3`；thread `01a03741-b9b7-7302-84d0-5b57447051b9`；host `local`；`gpt-5.6-terra` / `high`；状态 `active`。该替代只用于证据密集的能力审计，实际执行层的 5.3 默认不变。
+- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-022`、`D-M0-PROD-036` 至 `D-M0-PROD-046`。
 
 ## 最近接受证据
 
@@ -69,7 +71,7 @@ updated_at: 2026-08-25T12:39:21+08:00
 - 接受来源：`M0-S003-U035`；决定 `D-M0-PROD-030` 至 `D-M0-PROD-033`。
 - 验收当时状态：`SPEC-M0-PROGRESSION-001` 与 `M0-L1-104` 均为 `accepted`，当时整套 M0 尚未冻结；当前已由 `D-M0-DIR-021` 整体冻结。
 - 验收时路由：四项组成内容和整份汇编均已接受；当时只把 `M0-L1-105` 切到 ready。该状态已由 `M0-S003-U036` 的明确启动和 `D-M0-DIR-007` 后续修订。
-- 当前承接：`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` 已由 `M0-S003-U086` 整体接受并冻结；当前 `M0-L4-005` ready。
+- 当前承接：`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` 已由 `M0-S003-U086` 整体接受并冻结；当前 `M0-L4-005` active。
 
 ## 上一接受证据
 

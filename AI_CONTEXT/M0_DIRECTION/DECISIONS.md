@@ -892,3 +892,17 @@
 - 接受结果：`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` accepted，`overall_spec_frozen: true`。
 - 路由结果：`M0-L4-005` 从 `blocked_upstream` 切到 ready；主线程在冻结记录推送后创建 `AG-M0｜L4-AUDIT｜005-010｜MAC` 并自动派发只读能力审计。
 - 未授权内容：`implementation_authorized: false`；冻结不接受最终 UI，不锁死试玩数值，也不授权安装 Skill、CLI、插件、MCP，或修改游戏代码、配置、权限与服务。
+
+## D-M0-DIR-022 · M0-L4-005 接替审计任务创建并启动
+
+- 日期：2026-08-25
+- 状态：`thread_replacement_active`
+- 来源：`M0-S003-U086`、`M0-S003-A209` 至 `A215`；用户已要求下层任务使用独立线程，并由当前逻辑主线程统筹。
+- 冻结前置：冻结提交 `ff064af236614b9d4cb7630690decd551dc0229d` 已推送至 `context/m0-direction`，之后才创建审计任务。
+- 平台边界：第一次尝试把本地任务建在 ChatGPT project 下被平台拒绝，因为该目标需要云任务；项目坚持本机运行，改用本地 `/Users/xujiangyue` project，并在提示中锁定真实仓库 `/Users/xujiangyue/AGENT Project/always game`。
+- 失败任务：`AG-M0｜L4-AUDIT｜005-010｜MAC`，thread `01a0373a-75c9-71a3-8cb3-3e0213ca1322`，host `local`，`gpt-5.3-codex-spark` / `high`。它完成真实仓库、分支、冻结提交、任务卡和审计基线核验后，在外部证据收集阶段因上下文窗口耗尽而失败；全程只读，没有文件修改。
+- 第二次失败：R2 `01a0373c-b12c-7c70-ba06-9c329180be59` 已精简本地读取范围，但仍在整批外部证据阶段耗尽 5.3 上下文；全程只读，没有文件修改。
+- 当前接替：`AG-M0｜L4-AUDIT｜005-010｜MAC R3`，thread `01a03741-b9b7-7302-84d0-5b57447051b9`，host `local`，`gpt-5.6-terra` / `high`。输入固定为 11 个候选并限制每项证据量，继续执行 `M0-L4-005`。
+- 模型边界：两次 5.3 失败证明它不适合单任务承载整批外部研究。本次只把证据密集的能力审计临时切换到 `gpt-5.6-terra`；以后实际第四层代码执行仍默认 `gpt-5.3-codex-spark`，除非再次出现明确故障并记录替代。
+- 当前路由：`M0-L4-005: active`；`M0-L4-010`、`M0-L2-201` 与 `M0-L3-301` 继续 blocked_upstream。R3 返回 `AUDIT-M0-TOOLS-001` 后先由主线程核验并交用户接受，不自动进入下一任务。
+- 授权边界：三个任务都不得安装、配置、授权、启动服务、修改文件、提交或推送；`implementation_authorized: false` 不变。
