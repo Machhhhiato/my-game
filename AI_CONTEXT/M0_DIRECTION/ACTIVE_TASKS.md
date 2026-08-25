@@ -1,10 +1,10 @@
 ---
-workflow_version: 2
+workflow_version: 3
 milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L1-106
 handoff_id: M0-H002
-updated_at: 2026-08-25T03:53:05+08:00
+updated_at: 2026-08-25T09:17:28+08:00
 ---
 
 # M0 当前任务路由
@@ -20,7 +20,7 @@ updated_at: 2026-08-25T03:53:05+08:00
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
 | 第四层 | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L1-106` accepted 且 `overall_spec_frozen` | `BLOCKED_UPSTREAM` |
 
-`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 第一项至第七项已 accepted；第七项确认世界文案与内部数据分离。第八项动态字段、分层交接、逐条验收与最终冻结 active。`D-M0-DIR-011` 要求下游全文读取 revision 6 中的既有语料、初稿、用户修正、反例与接受状态。`SPEC-M0-DESCRIPTION-001` 继续 active，第二、三、四层继续按既定依赖阻塞。
+`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 第一项至第七项已 accepted；第八项 active，其中 `D-M0-DIR-012` 与 `D-M0-DIR-013` 已确认第一层直接统筹、Mac 单机优先和各层模型运行默认。其余动态字段、交接单、缺失阻塞、逐条验收、统计口径与最终冻结仍待确认。`D-M0-DIR-011` 要求下游全文读取 revision 6。`SPEC-M0-DESCRIPTION-001` 继续 active，第二、三、四层继续按既定依赖阻塞；本轮没有创建下层任务。
 
 ## 当前生产证据
 
@@ -29,7 +29,7 @@ updated_at: 2026-08-25T03:53:05+08:00
 - 当前输出：`SPEC-M0-DESCRIPTION-001`；路径 `specs/spec-m0-description-001.md`，状态 active。
 - 依赖证据：`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted；决定 `D-M0-PROD-036`，来源 `M0-S003-U039`。
 - 启动证据：`M0-S003-U040` 明确说`开始 M0-L1-106`。
-- 当前问题：`Q-M0-032` 为 `active_in_M0-L1-106`；第一项至第七项 accepted；第八项与 `Q-M0-042` active。
+- 当前问题：`Q-M0-032` 为 `active_in_M0-L1-106`；第一项至第七项 accepted；第八项与 `Q-M0-042` active。统筹方式已局部接受，不能冒充第八项整体 accepted。
 - 接受证据：`M0-S003-U044` 接受第一项的信息结构；`D-M0-PROD-037` 明确视觉示意未获接受，后续必须随整体 UI 重做。
 - 返工证据：`M0-S003-U045` 指出玩法元语言不是正文；`U046` 指出技术段太长且制度口吻自我揭露；`U047` 判断整体方向仍不对，并要求先收集真实描述样本。
 - 接受内容：《恢复精密制造》第一行只说明统一精度标准让复杂零件能够稳定复制；第二行由生产恢复委员会评价，精密制造把工人的经验从工人身上剥离。下游完整源包为 `references/reference-m0-tech-description-corpus-001.md`，摘要不能替代。
@@ -40,7 +40,7 @@ updated_at: 2026-08-25T03:53:05+08:00
 - 第七项接受：`D-M0-PROD-046` 保留四类科技来源，并冻结旧时代与先驱来源在发现记录建立、世界文案禁用机制数据、首建节点一至两句、重复工程完成一句和事故事实时间线。`Q-M0-041` resolved。
 - 源包证据：`SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6 逐字保留第七项初案、完整参考、`U073` 修正与 `A177` 接受稿，并原样保留 revision 1—5 的全部材料。
 - 冻结边界：`overall_spec_frozen` 仍为 false；`M0-L4-010`、`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
-- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-011`、`D-M0-PROD-036` 至 `D-M0-PROD-046`。
+- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-013`、`D-M0-PROD-036` 至 `D-M0-PROD-046`。
 
 ## 最近接受证据
 
@@ -118,7 +118,7 @@ M0-L1-101
 → 返回第一层，由用户判断 M0 是否通过
 ```
 
-不同时开启两个生产任务。某项完成后，任务会话只回传证据；第一层方向 lane 更新本文件，才算正式切换。
+不同时开启两个生产任务。第一层是唯一总控入口，可以在依赖满足后创建、驱动、检查、退回和收回第二至第四层任务；各任务只回传产物、证据和阻塞，由第一层更新本文件才算正式切换。统筹不允许跨越依赖，也不构成第四层写入授权。
 
 ## 状态含义
 
@@ -126,8 +126,8 @@ M0-L1-101
 |---|---|
 | `blocked_workflow` | 当前仓库缺少项目内四层入口 |
 | `blocked_upstream` | 依赖的上游任务尚未接受 |
-| `ready` | 依赖满足，可以等待用户开始 |
-| `active` | 用户已在对应任务会话明确授权开始 |
+| `ready` | 依赖满足；第一层方向任务等待用户开始，下层任务等待第一层派发 |
+| `active` | 第一层方向任务已由用户开始，或下层任务已由第一层按依赖派发；涉及写入时还必须具备用户针对该任务的可追溯授权 |
 | `review` | 已交付，等待责任层或用户验收 |
 | `accepted` | 交付已被接受，可以推进路由 |
 | `returned` | 因上游缺失或交付不合格退回 |
@@ -137,7 +137,7 @@ M0-L1-101
 ## 路由更新门禁
 
 - 正常活动时只能由 `route_owner` 所在方向 session 修改；`handoff_pending` 时仅允许源 session 完成交接或目标 session 完成认领。
-- 下游聊天不得自行把自己的任务或下一任务改成 `ready`。
+- 下游任务不得自行把自己的任务或下一任务改成 `ready`；必须把结果交回第一层。
 - 任务进入 `accepted` 或 `verified` 必须附输出 ID、提交和验证证据。
 - 上游规格被重新打开时，依赖任务自动退回 `blocked_upstream`。
 - 同一层出现两个 `ready` 或 `active` 任务属于 `TASK_CONFLICT`。
