@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L4-005
 handoff_id: M0-H002
-updated_at: 2026-08-25T13:36:30+08:00
+updated_at: 2026-08-25T14:09:54+08:00
 ---
 
 # M0 当前任务路由
@@ -22,6 +22,8 @@ updated_at: 2026-08-25T13:36:30+08:00
 | 第四层（代码） | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L4-005` accepted | `BLOCKED_UPSTREAM` |
 
 用户在 `M0-S003-U086` 明确接受 `M0-L1-106` 并冻结 M0 规格，形成 `D-M0-DIR-021`。冻结提交为 `ff064af236614b9d4cb7630690decd551dc0229d`。两个 `gpt-5.3-codex-spark` 审计任务先后耗尽上下文；R3 使用 `gpt-5.6-terra`、固定候选和限量证据完成只读审计，形成 `D-M0-DIR-022`。输出已经交回主线程，等待用户验收。
+
+用户在 `M0-S003-U089` 接受 `PLAN-M0-DAY-NIGHT-001`，形成 `D-M0-DIR-025`。协议只约束未来任务怎样创建、执行、检查和交接，不改变当前产品任务：`M0-L4-005` 仍为 review，实施授权仍为 false。
 
 ## 当前生产证据
 
@@ -44,7 +46,7 @@ updated_at: 2026-08-25T13:36:30+08:00
 - 失败任务 1：`AG-M0｜L4-AUDIT｜005-010｜MAC`；thread `01a0373a-75c9-71a3-8cb3-3e0213ca1322`；host `local`；`gpt-5.3-codex-spark` / `high`；状态 `systemError`；原因是上下文窗口耗尽；未写文件。
 - 失败任务 2：`AG-M0｜L4-AUDIT｜005-010｜MAC R2`；thread `01a0373c-b12c-7c70-ba06-9c329180be59`；host `local`；`gpt-5.3-codex-spark` / `high`；状态 `systemError`；原因仍是外部证据超过上下文；未写文件。
 - 完成接替任务：`AG-M0｜L4-AUDIT｜005-010｜MAC R3`；thread `01a03741-b9b7-7302-84d0-5b57447051b9`；host `local`；`gpt-5.6-terra` / `high`；状态 `completed / idle`。已交付 `AUDIT-M0-TOOLS-001`；该替代只用于证据密集的能力审计，实际执行层的 5.3 默认不变。
-- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-022`、`D-M0-PROD-036` 至 `D-M0-PROD-046`。
+- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-025`、`D-M0-PROD-036` 至 `D-M0-PROD-046`。
 
 ## 最近接受证据
 

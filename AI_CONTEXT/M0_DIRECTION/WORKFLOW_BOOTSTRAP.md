@@ -1,6 +1,6 @@
 ---
 workflow_id: always-game-m0-four-layer
-workflow_version: 3
+workflow_version: 4
 milestone: M0-personal-playable
 direction_branch: context/m0-direction
 active_tasks: AI_CONTEXT/M0_DIRECTION/ACTIVE_TASKS.md
@@ -44,8 +44,9 @@ session_routing: AI_CONTEXT/M0_DIRECTION/SESSION_ROUTING.md
 7. 阅读所选层级的角色文件。
 8. 阅读 `PLAIN_LANGUAGE_RULES.md`。
 9. 阅读 `TASK_PACKAGES.md` 中对应任务卡。
-10. 检查全部依赖、输入版本、允许路径和禁止事项。
-11. 返回启动回执。第一层方向任务等待用户明确开始；第二至第四层由第一层派发时，以该派发和已满足依赖作为启动指令。第四层 `implement` 任务还必须同时具备用户对该任务的单独写入授权。启动语本身不授权执行产品任务。
+10. 第四层 `implement` 任务还必须读取 accepted 的 `day-night-execution-plan.md` 和本批已经填写的 `NIGHT WORK ORDER`。
+11. 检查全部依赖、输入版本、项目归属、允许路径和禁止事项。
+12. 返回启动回执。第一层方向任务等待用户明确开始；第二至第四层由第一层派发时，以该派发和已满足依赖作为启动指令。第四层 `implement` 任务还必须同时具备用户对该任务的单独写入授权。启动语本身不授权执行产品任务。
 
 Codex 在每个新任务开始时建立一次全局到项目的说明链。安装或修改入口后，必须新建任务测试，不能用已经打开的旧任务证明新入口生效。全局入口还必须先检查 `AGENTS.override.md` 是否存在，因为它会覆盖同级 `AGENTS.md`。
 
@@ -94,7 +95,7 @@ Git 基线：<branch>@<commit>
 
 ## 当前入口范围
 
-- 项目内入口：已安装在 `context/m0-direction` 的项目根 `AGENTS.md`；必须从真实仓库根目录新建任务。
+- 项目内入口：已安装在 `context/m0-direction` 的项目根 `AGENTS.md`；必须在侧边栏 `always game` 项目中、从真实仓库根目录新建任务。不能满足时返回 `BLOCKED_ROUTING`，不得退回 `xujiangyue` 项目。
 - Mac 默认入口：以 `你是第一层` 恢复当前任务；具体任务和状态只从 `NEXT_ACTION.md` 与 `ACTIVE_TASKS.md` 读取，不在本文件写死旧任务编号。
 - 全局跨项目入口：暂缓；从任意其他项目目录输入短语，不保证能自动找到 Always Game。
 - `M0-L4-000`：只保留为将来可选的全局跨项目路由扩展，不再包含 Windows 适配要求，也不阻塞第一层产品讨论。

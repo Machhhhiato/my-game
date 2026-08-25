@@ -1,9 +1,11 @@
 ---
 plan_id: PLAN-M0-DAY-NIGHT-001
-status: review
+status: accepted
 source: M0-S003-U087..U088
 user_requirement: confirmed
-detailed_rules: pending_user_acceptance
+detailed_rules: accepted
+acceptance_source: M0-S003-U089
+accepted_at: 2026-08-25T14:09:54+08:00
 default_night_window_hours: 6
 night_window_policy: estimate_not_limit
 extension_allowed_within_authorized_scope: true
@@ -126,6 +128,6 @@ implementation_authorized: false
 
 ## 本轮边界
 
-用户已经确认采用“白天设计、夜间执行、次日验收”的工作方式，并修正为“约六小时只是估算，额度与任务条件允许时可以运行八小时或更久”。本文件的具体时间分配、停止状态和交接格式当前为 `review`，等待用户接受后再写入正式协议与未来任务包。
+用户已经确认采用“白天设计、夜间执行、次日验收”的工作方式，并修正为“约六小时只是估算，额度与任务条件允许时可以运行八小时或更久”。用户在 `M0-S003-U089` 接受本文件的具体时间分配、停止状态、项目归属与交接格式；这些规则从此作为后续工作的默认协议。
 
 本计划不接受 `AUDIT-M0-TOOLS-001`，不启动 `M0-L4-010`，也不产生任何游戏代码、工具安装或系统配置授权。
