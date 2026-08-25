@@ -1,10 +1,10 @@
 ---
-workflow_version: 4
+workflow_version: 5
 milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
-overall_current_task: M0-L1-106
+overall_current_task: M0-L4-005
 handoff_id: M0-H002
-updated_at: 2026-08-25T11:53:33+08:00
+updated_at: 2026-08-25T12:39:21+08:00
 ---
 
 # M0 当前任务路由
@@ -15,22 +15,21 @@ updated_at: 2026-08-25T11:53:33+08:00
 
 | 层级 | 当前任务 | 状态 | 阻塞项 | 正确回执 |
 |---|---|---|---|---|
-| 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `active` | 无；八项 accepted，等待最终冻结确认 | `ACTIVE` |
+| 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `accepted` | 无 | `ACCEPTED` |
 | 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L1-106`、`M0-L4-010` | `BLOCKED_UPSTREAM` |
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
-| 第四层（能力） | `M0-L4-005` GitHub Skills/MCP 能力审计 | `blocked_upstream` | `M0-L1-106` accepted 且 `overall_spec_frozen` | `BLOCKED_UPSTREAM` |
+| 第四层（能力） | `M0-L4-005` GitHub Skills/MCP 能力审计 | `ready` | 无；等待主线程创建独立任务线程 | `READY` |
 | 第四层（代码） | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L4-005` accepted | `BLOCKED_UPSTREAM` |
 
-`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 八项均已逐项 accepted；`D-M0-DIR-019` 完成第五部分与第八项，`M0-S003-A208` 已交付八项完整复核。`D-M0-DIR-020` 接受独立 Codex 任务线程统筹：当前任务是逻辑主线程，Git 是跨线程权威上下文。当前仍只等待用户明确回复最终冻结短语；第二、三、四层继续按依赖阻塞，本轮没有创建下层线程。
+用户在 `M0-S003-U086` 明确接受 `M0-L1-106` 并冻结 M0 规格，形成 `D-M0-DIR-021`。`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` accepted，`overall_spec_frozen: true`；`M0-L4-005` ready。冻结记录推送后，逻辑主线程创建 `AG-M0｜L4-AUDIT｜005-010｜MAC` 并自动派发只读能力审计；在真实线程创建前不编造 thread ID 或 host ID。
 
 ## 当前生产证据
 
-- 任务：`M0-L1-106`。
-- 输入：`SPEC-M0-INTEGRATED-001`；`references/reference-m0-engineering-tech-style-001.md`；`references/reference-m0-tech-description-corpus-001.md`。
-- 当前输出：`SPEC-M0-DESCRIPTION-001`；路径 `specs/spec-m0-description-001.md`，状态 active。
-- 依赖证据：`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted；决定 `D-M0-PROD-036`，来源 `M0-S003-U039`。
-- 启动证据：`M0-S003-U040` 明确说`开始 M0-L1-106`。
-- 当前问题：`Q-M0-032` 的八项内容均已解决，`Q-M0-042` 已由 `D-M0-DIR-019` 与 `D-M0-DIR-020` 解决；任务和输出仍 active，等待用户最终冻结确认。不能冒充 M0 已冻结。
+- 任务：`M0-L4-005`；模式 `audit`。
+- 输入：冻结的 M0 规格、项目真实技术栈、当前内置能力、`references/reference-m0-github-tools-audit-001.md` 和候选任务开始时的最新 GitHub 证据。
+- 当前输出：`AUDIT-M0-TOOLS-001`，尚未创建。
+- 依赖证据：`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` accepted；`overall_spec_frozen: true`；决定 `D-M0-DIR-021`，来源 `M0-S003-U086`。
+- 派发边界：冻结记录先推送，再创建独立任务线程；审计可自动开始，但不安装工具、不改配置、不修改代码。
 - 接受证据：`M0-S003-U044` 接受第一项的信息结构；`D-M0-PROD-037` 明确视觉示意未获接受，后续必须随整体 UI 重做。
 - 返工证据：`M0-S003-U045` 指出玩法元语言不是正文；`U046` 指出技术段太长且制度口吻自我揭露；`U047` 判断整体方向仍不对，并要求先收集真实描述样本。
 - 接受内容：《恢复精密制造》第一行只说明统一精度标准让复杂零件能够稳定复制；第二行由生产恢复委员会评价，精密制造把工人的经验从工人身上剥离。下游完整源包为 `references/reference-m0-tech-description-corpus-001.md`，摘要不能替代。
@@ -41,9 +40,9 @@ updated_at: 2026-08-25T11:53:33+08:00
 - 第七项接受：`D-M0-PROD-046` 保留四类科技来源，并冻结旧时代与先驱来源在发现记录建立、世界文案禁用机制数据、首建节点一至两句、重复工程完成一句和事故事实时间线。`Q-M0-041` resolved。
 - 第八项接受：`D-M0-DIR-015` 至 `D-M0-DIR-019` 冻结单张工作单、责任层缺失阻塞、分级验收、独立正文统计和两步冻结门；`D-M0-DIR-020` 冻结独立任务线程与逻辑主线程统筹。
 - 源包证据：`SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6 逐字保留第七项初案、完整参考、`U073` 修正与 `A177` 接受稿，并原样保留 revision 1—5 的全部材料。
-- 冻结边界：`overall_spec_frozen` 仍为 false；`M0-L4-005`、`M0-L4-010`、`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
-- 线程状态：未来首个线程标题为 `AG-M0｜L4-AUDIT｜005-010｜MAC`；冻结前未创建，故当前没有 thread ID 或 host ID。
-- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-020`、`D-M0-PROD-036` 至 `D-M0-PROD-046`。
+- 冻结边界：`overall_spec_frozen: true`，`implementation_authorized: false`；`M0-L4-005` ready，`M0-L4-010`、`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
+- 线程状态：首个线程标题为 `AG-M0｜L4-AUDIT｜005-010｜MAC`；创建前没有 thread ID 或 host ID。
+- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-021`、`D-M0-PROD-036` 至 `D-M0-PROD-046`。
 
 ## 最近接受证据
 
@@ -68,9 +67,9 @@ updated_at: 2026-08-25T11:53:33+08:00
 - 下层交接：第一层只冻结阶段报告字段与系统事实；`M0-L2-201` 以后写事件结构和负责人处境，`M0-L3-301` 再写正式姓名、正文、按钮和提示。两层仍按上游依赖阻塞。
 - 第四项：accepted；`D-M0-PROD-033`，工程包适用判断、一次批准、真实复制、暂停恢复、玩家接管、报告降噪和版本存档已经确认。
 - 接受来源：`M0-S003-U035`；决定 `D-M0-PROD-030` 至 `D-M0-PROD-033`。
-- 规格状态：`SPEC-M0-PROGRESSION-001` 与 `M0-L1-104` 均为 `accepted`；整套 M0 仍不是 `overall_spec_frozen`。
+- 验收当时状态：`SPEC-M0-PROGRESSION-001` 与 `M0-L1-104` 均为 `accepted`，当时整套 M0 尚未冻结；当前已由 `D-M0-DIR-021` 整体冻结。
 - 验收时路由：四项组成内容和整份汇编均已接受；当时只把 `M0-L1-105` 切到 ready。该状态已由 `M0-S003-U036` 的明确启动和 `D-M0-DIR-007` 后续修订。
-- 当前承接：`M0-L1-105` 已 accepted，`M0-L1-106` 已由 `M0-S003-U040` 明确开始并 active。
+- 当前承接：`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` 已由 `M0-S003-U086` 整体接受并冻结；当前 `M0-L4-005` ready。
 
 ## 上一接受证据
 
@@ -80,7 +79,7 @@ updated_at: 2026-08-25T11:53:33+08:00
 - review 提交：`c080fd0`。
 - acceptance 提交：`0e1723d`。
 - 接受来源：`M0-S003-U026`；决定 `D-M0-PROD-024` 至 `D-M0-PROD-029`。
-- 验证：四项组成内容和整份汇编均已接受；整套 M0 仍不是 `overall_spec_frozen`。
+- 验收当时验证：四项组成内容和整份汇编均已接受，当时整套 M0 尚未冻结；当前已由 `D-M0-DIR-021` 整体冻结。
 
 ## 更早接受证据
 
@@ -90,7 +89,7 @@ updated_at: 2026-08-25T11:53:33+08:00
 - review 提交：`0323418`。
 - acceptance 提交：`f8ae1e9`。
 - 接受来源：`M0-S003-U015`；决定 `D-M0-PROD-016` 至 `D-M0-PROD-023`。
-- 验证：四项组成内容和整份汇编均已接受；整套 M0 仍不是 `overall_spec_frozen`。
+- 验收当时验证：四项组成内容和整份汇编均已接受，当时整套 M0 尚未冻结；当前已由 `D-M0-DIR-021` 整体冻结。
 
 ## 最早接受证据
 
@@ -100,7 +99,7 @@ updated_at: 2026-08-25T11:53:33+08:00
 - review 提交：`cc0969e`。
 - acceptance 提交：`0e2637f`。
 - 接受来源：`M0-S003-U006`；决定 `D-M0-PROD-013` 至 `D-M0-PROD-015`。
-- 验证：三项 Mac 整体复核全部通过，`SPEC-M0-PLAY-001` 与 `M0-L1-101` 已 accepted；整套 M0 仍不是 `overall_spec_frozen`。
+- 验收当时验证：三项 Mac 整体复核全部通过，`SPEC-M0-PLAY-001` 与 `M0-L1-101` accepted；当时整套 M0 尚未冻结，当前已由 `D-M0-DIR-021` 整体冻结。
 
 ## 串行顺序
 

@@ -21,7 +21,9 @@ amendment_decision: D-M0-PROD-019
 amendment_scope: shelter_internal_power_boundary
 source_session: M0-S003
 implementation_authorized: false
-overall_spec_frozen: false
+overall_spec_frozen: true
+overall_freeze_source: M0-S003-U086
+overall_frozen_at: 2026-08-25T12:34:05+08:00
 ---
 
 # SPEC-M0-OPS-001 · M0 人力、资源、库存底线与压力

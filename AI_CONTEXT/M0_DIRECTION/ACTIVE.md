@@ -6,7 +6,7 @@ status: active
 branch: context/m0-direction
 base_main: a08c40bb3596918347c9719d5c82c5af26707d95
 direction_protocol_version: 3
-routing_epoch: 5
+routing_epoch: 6
 active_lane: M0-DIR-A
 active_host: mac
 preferred_host: mac
@@ -18,15 +18,15 @@ next_lane: null
 next_host: null
 handoff_id: M0-H002
 last_session: M0-S003
-last_turn: M0-S003-A208
-updated_at: 2026-08-25T11:53:33+08:00
+last_turn: M0-S003-A210
+updated_at: 2026-08-25T12:39:21+08:00
 ---
 
 # 当前接续卡
 
 ## 当前目标
 
-Mac 已在当前用户聊天中接管 `M0-DIR-A` 并创建 `M0-S003`。`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` 仍为 active；八项均已逐项 accepted，八项完整复核已经交付。现在只等待用户明确回复最终冻结短语；此前 `overall_spec_frozen: false`，下层线程均未创建。当前任务已确认为逻辑主线程，未来正式下层任务使用独立 Codex 任务线程并以 Git 作为权威上下文。
+用户已在 `M0-S003-U086` 整体接受 `M0-L1-106` 并冻结 M0 规格。`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` accepted，`overall_spec_frozen: true`，`implementation_authorized: false`。`M0-L4-005` 已解除上游阻塞并进入 ready；冻结记录推送后，由当前逻辑主线程创建独立 Codex 任务线程执行只读能力审计。
 
 ## 已确认
 
@@ -47,6 +47,7 @@ Mac 已在当前用户聊天中接管 `M0-DIR-A` 并创建 `M0-S003`。`M0-L1-10
 - `D-M0-DIR-018`：第八项第四部分按玩家独立阅读统计 `5:4:1`；完整发现记录与科技正文分别计数，同一正文重复展示只算一次，科技卡两段正文合计一条并按整块强度归类。
 - `D-M0-DIR-019`：第八项第五部分 accepted，因五部分均已接受而完成第八项；八项完整复核已经交付，但最终冻结仍须用户单独明确确认。
 - `D-M0-DIR-020`：正式下层任务使用独立 Codex 任务线程；当前任务作为逻辑主线程负责派发、等待、验收、退回和收回，Git 文档是跨线程权威上下文。
+- `D-M0-DIR-021`：用户整体接受 `M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001`，M0 规格正式冻结；只把 `M0-L4-005` 切到 ready，不产生工具安装或代码写入授权。
 - `D-M0-PROD-001`：首先为用户本人这位资深策略玩家量身定制；买断暂缓；用户认可初版后再以 Steam 免费游戏形式首次发布。
 - `D-M0-PROD-002`：核心爽点是通过专业管理形成科技、资源、高级资产和版图领先；正常经营能够积累储备并解决危机，不采用强制极端二选一。
 - `D-M0-PROD-003`：关键科技允许玩家集中突破，普通科研允许系统按领域倾向自动推进，形成操作与看海交替。
@@ -97,19 +98,14 @@ Mac 已在当前用户聊天中接管 `M0-DIR-A` 并创建 `M0-S003`。`M0-L1-10
 - `D-M0-PROD-046`：文案描述世界，数据解释系统；四类科技来源仍有效，旧时代与先驱来源只在首次发现说明；玩家文字不用格子、版本、差异耗时和账本兜底，重复工程只写建成，事故只写事实状态。
 - 方向聊天唯一允许的写操作，是维护并推送本目录中的接力文档。
 
-## 当前仍未冻结
+## 当前冻结结果
 
-- M0 产品契约尚未冻结；`M0-L1-106` 八项均已逐项 accepted，八项完整复核已交付。只有用户明确回复`接受 M0-L1-106，冻结 M0 规格`，才能标记 `overall_spec_frozen` 并创建第一个下层线程。
+- `M0-L1-101` 至 `M0-L1-106` 及六份对应规格均已 accepted；`overall_spec_frozen: true`。
+- 冻结确立 M0 下游依据，不锁死真实试玩后的数值调整，也不接受当前科研卡视觉、最终 UI 或后续商业模式。
+- `implementation_authorized: false`；未授权安装 Skill、CLI、插件、MCP，未授权修改游戏代码、配置、系统权限或常驻服务。
 - 方向分支已经具备项目根短语入口、启动合同、角色卡、下一动作卡、任务线映射和任务包；Mac 是唯一当前工作机，Windows 历史 session 只读保留，不再规划换机接力。
 - 从任意其他项目目录自动找到 Always Game 的全局路由仍待 `M0-L4-000`，但不再阻塞第一层产品讨论。
 - T03 首轮工作量、产量和具体日数已经作为纸面基准接受，未来试玩可以做有记录的平衡调整；实体投入、位置分账、事故自然结束、人口重算和第 90 日不判负等机制不能被平衡调整抹掉。
-- `SPEC-M0-PLAY-001` 已在 `0e2637f` 完成三项整体复核并 accepted；其固定压力节点已由 `D-M0-PROD-022` 定向修订，accepted 状态不变；整套 M0 仍未 `overall_spec_frozen`。
-- `SPEC-M0-OPS-001` 与 `M0-L1-102` 已在 `f8ae1e9` accepted；其“避难所完全无照明和动力”原因表述已由 `M0-S003-U030` 与修订后的 `D-M0-PROD-019` 窄范围替代，accepted 状态不变；整套 M0 仍未 `overall_spec_frozen`。
-- `SPEC-M0-MAP-001` 与 `M0-L1-103` 已在 `0e1723d` 整体 accepted；其中“无能源阶段”现明确只指外部路线和现场没有照明、动力与夜间工作保障，accepted 状态不变；整套 M0 仍未 `overall_spec_frozen`。
-- `SPEC-M0-PROGRESSION-001` 与 `M0-L1-104` 已在 `d34d6ab` 整体 accepted；四项组成内容引用 `D-M0-PROD-030` 至 `D-M0-PROD-033`，但整套 M0 仍未 `overall_spec_frozen`。
-- `SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` 整体 accepted；纸面链路与内容方向已经接受，但实现验证和总规格冻结仍未完成。
-- 三条最低内容线、正式终点框架、地图约束、科研资产、前哨复制和完整日序已经由 L105 整体接受；精细平衡以后随实际试玩调整，描述结构与最终规格冻结待 `M0-L1-106`。
-- 附件已经提炼为 `REF-M0-ENGINEERING-TECH-STYLE-001`，只保留通用规则，不复制小说段落或专有名词；比例与长度边界已经在第六、七项接受。第八项的工作单、责任层阻塞、验收、统计和线程统筹均已接受；只剩整份 M0 规格的最终冻结确认。
 - `REF-M0-TECH-DESCRIPTION-CORPUS-001` 已同时成为 `SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6：新增第七项初稿、参考、用户逐句修正、最终接受稿及身份边界，并原样保留 revision 1—5 的全部语料。第二、第三层必须从头到尾全文读取并回传 `source_read_receipt`；摘要不得替代，缺失时返回 `BLOCKED_SOURCE`。
 - 当前科研卡示意只用于核对信息层级；它的视觉样式明确未获接受，整体 UI 定向后必须重做并单独验收。
 - `REF-M0-GITHUB-TOOLS-AUDIT-001` 记录 2026-08-25 初查：当前不安装任何候选；Tauri 专用 CLI、Playwright CLI 与未来 UI Skill 只进入受控试用或观察名单，存在安全、超时、占位实现、弃用或技术栈冲突的工具已记录淘汰。真正执行 `M0-L4-005` 时必须重新检查。
@@ -117,7 +113,7 @@ Mac 已在当前用户聊天中接管 `M0-DIR-A` 并创建 `M0-S003`。`M0-L1-10
 
 ## 下一唯一任务
 
-`M0-L1-106 · 工程与科技描述结构、风格与总规格冻结`：位于 Mac 的 `M0-DIR-A` / `M0-L1-DIRECTION` / `M0-S003`，当前状态为 `active`。输出 `SPEC-M0-DESCRIPTION-001` 八项均已逐项 accepted，完整复核已交付。当前唯一动作是等待用户明确回复`接受 M0-L1-106，冻结 M0 规格`；冻结前不创建下层线程。
+`M0-L4-005 · GitHub Skills/MCP 能力审计`：当前为 ready。冻结记录推送后，由逻辑主线程创建 `AG-M0｜L4-AUDIT｜005-010｜MAC` 并自动派发；任务只读，不安装工具、不改配置、不修改代码。
 
 ## 禁止操作
 
@@ -128,4 +124,4 @@ Mac 已在当前用户聊天中接管 `M0-DIR-A` 并创建 `M0-S003`。`M0-L1-10
 
 ## 下一句建议
 
-等待用户读完八项复核并明确回复`接受 M0-L1-106，冻结 M0 规格`。收到后才写入冻结状态、推送 GitHub，并创建 `AG-M0｜L4-AUDIT｜005-010｜MAC` 执行 `M0-L4-005` 只读能力审计；不授权安装或实现。
+推送冻结记录，然后创建 `AG-M0｜L4-AUDIT｜005-010｜MAC`，使用 `gpt-5.3-codex-spark` / `high` 执行 `M0-L4-005` 只读能力审计；创建后回写真实 thread ID、host ID 与运行状态。

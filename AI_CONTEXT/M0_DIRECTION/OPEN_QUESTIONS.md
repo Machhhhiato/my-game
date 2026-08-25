@@ -434,16 +434,16 @@
 
 ## Q-M0-032 · 工程与科技描述怎样兼顾可信技术、制度荒诞与玩法清晰
 
-- 状态：`resolved_items_waiting_final_freeze`
+- 状态：`resolved_and_frozen_by_D-M0-DIR-021`
 - 决定者：用户
 - 启动证据：`M0-L1-105` 已由 `D-M0-PROD-036` accepted；用户在 `M0-S003-U040` 明确说`开始 M0-L1-106`。
 - 已确认范围：用户要求在 105 后增加独立环节，统一后续工程与科技描述风格；第一层只冻结结构和标准，第二层组织人物与事件，第三层写最终文字，第四层接入真实变量。
 - 来源摘要：技术本身必须可信，荒诞主要由验收、统计、成本、程序、宣传或伦理等制度解释产生；可使用说明书、安全通告、审计、研发日志、采购、专利、条例、新闻稿与复盘等不同载体，不建立统一的虚构文明档案口吻。
 - 当前结果：第一项至第七项由 `D-M0-PROD-037` 至 `D-M0-PROD-046` accepted；第八项由 `D-M0-DIR-015` 至 `D-M0-DIR-019` accepted，单张工作单、字段责任、缺失阻塞、分级验收、`5:4:1` 统计和两步冻结门均已确认。`D-M0-DIR-020` 又确认当前任务为逻辑主线程，正式下层任务使用独立 Codex 任务线程。`D-M0-DIR-011` 要求下游全文读取 revision 6 的既有语料、原始校准文本、生成参考、反例和接受状态，经验摘要不得替代正文。
-- 尚未冻结：八项完整复核已由 `M0-S003-A208` 交付；只等待用户明确回复`接受 M0-L1-106，冻结 M0 规格`。当前视觉仍必须随整体 UI 重做；`overall_spec_frozen` 继续为 false，下层线程尚未创建。
+- 冻结结果：八项完整复核已由 `M0-S003-A208` 交付；用户在 `M0-S003-U086` 明确整体接受，形成 `D-M0-DIR-021`。当前视觉仍必须随整体 UI 重做；`overall_spec_frozen: true`，`implementation_authorized: false`。
 - 版权边界：《群星》与小说主体都使用忠实转述；环日部分只保留相邻聊天已核对的五个极短原文锚点，不搬运完整章节，也不把该聊天的 13 项误称为连载全书绝对全集。
-- 输出：`SPEC-M0-DESCRIPTION-001`，路径 `specs/spec-m0-description-001.md`，当前 active。
-- 来源：`M0-S003-U036`、`M0-S003-U039` 至 `U085`、`M0-S003-A101` 至 `A208`、`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-020`、`D-M0-PROD-036` 至 `D-M0-PROD-046`、`references/reference-m0-engineering-tech-style-001.md`、`references/reference-m0-tech-description-corpus-001.md` revision 6、`references/reference-m0-github-tools-audit-001.md`。
+- 输出：`SPEC-M0-DESCRIPTION-001`，路径 `specs/spec-m0-description-001.md`，当前 accepted。
+- 来源：`M0-S003-U036`、`M0-S003-U039` 至 `U086`、`M0-S003-A101` 至 `A209`、`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-021`、`D-M0-PROD-036` 至 `D-M0-PROD-046`、`references/reference-m0-engineering-tech-style-001.md`、`references/reference-m0-tech-description-corpus-001.md` revision 6、`references/reference-m0-github-tools-audit-001.md`。
 
 ## Q-M0-033 · 第 1 日六种库存和总部日常流量采用什么数值
 
@@ -579,7 +579,7 @@
 
 ## Q-M0-042 · 动态变量、分层交接、逐条验收与最终冻结
 
-- 状态：`resolved_by_D-M0-DIR-019_and_D-M0-DIR-020_waiting_freeze_execution`
+- 状态：`resolved_and_freeze_executed_by_D-M0-DIR-021`
 - 决定者：用户
 - 已接受输入：第一项至第七项的信息结构、二态展示、载体分工、写作因果、`5:4:1`、来源归属、文案与数据边界全部保持不变；revision 6 源包仍须全文读取。
 - 已接受统筹方式：第一层是唯一总控入口，按串行依赖创建、驱动、检查、退回和收回第二至第四层任务；不增加第五层。Mac 是当前唯一工作机；此前`5.2`模型名更正为`gpt-5.3-codex-spark`，各层模型作为创建任务时重新核对的运行默认。形成 `D-M0-DIR-012` 与 `D-M0-DIR-013`。
@@ -592,8 +592,8 @@
 - 已接受第四部分：`M0-S003-U083` 接受 `A197` 的独立阅读统计、完整发现记录与科技正文分别计数、同文重复不另计规则，形成 `D-M0-DIR-018`。
 - 已接受第五部分：`M0-S003-U084` 接受 `A199` 的结束第八项与两步冻结门，形成 `D-M0-DIR-019`；五部分均已接受，第八项整体 accepted。`A208` 已完成八项完整复核。
 - 已接受线程统筹：`M0-S003-U084` 要求下层以线程方式启动、当前任务作为主线程，形成 `D-M0-DIR-020`。当前任务是逻辑主线程；第二至第四层正式任务使用独立 Codex 任务线程，Git 是权威上下文。最终冻结前没有创建线程。
-- 当前冻结门：只有用户明确回复`接受 M0-L1-106，冻结 M0 规格`，才冻结并创建 `AG-M0｜L4-AUDIT｜005-010｜MAC` 执行 `M0-L4-005` 只读能力审计。
+- 冻结执行：用户在 `M0-S003-U086` 明确回复最终冻结短语，形成 `D-M0-DIR-021`；`M0-L1-106` 与规格 accepted，`overall_spec_frozen: true`。冻结记录推送后创建 `AG-M0｜L4-AUDIT｜005-010｜MAC` 执行 `M0-L4-005` 只读能力审计。
 - 硬边界：第二、第三层不得用文案创造新玩法、库存、地点、技术效果、事故结果、社会制度或人物伤亡；第四层不得把内部字段重新显示为玩家小作文。来源缺失、因果不成立、变量不存在或内容身份不明时必须阻塞，不能猜测补齐。
-- 完成结果：本项已 resolved；`SPEC-M0-DESCRIPTION-001` 已完成整体复核。仍需用户明确整体接受，才能把 `M0-L1-106` 标为 accepted 并设置 `overall_spec_frozen: true`。冻结记录推送后由主线程创建并派发 `M0-L4-005`；在此之前第四、二、三层继续 blocked_upstream。
+- 完成结果：本项 resolved 且冻结门已执行；`SPEC-M0-DESCRIPTION-001` 与 `M0-L1-106` accepted，`M0-L4-005` ready。主线程创建并派发审计后，`M0-L4-010`、第二层和第三层仍按依赖阻塞。
 - 输出：`SPEC-M0-DESCRIPTION-001` 第八项与总验收清单。
-- 来源：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-020`、`D-M0-PROD-037` 至 `D-M0-PROD-046`、`M0-S003-U075` 至 `U085`、`M0-S003-A180` 至 `A208`、`SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6、`SPEC-M0-DESCRIPTION-001` 第 4 至第 13 节。
+- 来源：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-021`、`D-M0-PROD-037` 至 `D-M0-PROD-046`、`M0-S003-U075` 至 `U086`、`M0-S003-A180` 至 `A209`、`SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6、`SPEC-M0-DESCRIPTION-001` 第 4 至第 13 节。

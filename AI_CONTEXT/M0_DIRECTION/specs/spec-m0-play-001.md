@@ -17,7 +17,9 @@ workflow_amended_at: 2026-08-24T11:38:15+08:00
 workflow_amendment_source: M0-S003-U036
 workflow_amendment_decision: D-M0-DIR-007
 implementation_authorized: false
-overall_spec_frozen: false
+overall_spec_frozen: true
+overall_freeze_source: M0-S003-U086
+overall_frozen_at: 2026-08-25T12:34:05+08:00
 ---
 
 # SPEC-M0-PLAY-001 · M0 试玩起点、终点与非目标

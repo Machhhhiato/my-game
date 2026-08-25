@@ -1,6 +1,6 @@
 ---
 routing_version: 4
-routing_epoch: 5
+routing_epoch: 6
 routing_state: active
 active_lane: M0-DIR-A
 active_host: mac
@@ -74,7 +74,9 @@ handoff_id: M0-H002
 - 新线程提示只写角色、任务、仓库路径、分支、必须读取的 Git 文档和验收条件。完整上下文以 Git 为准，不依赖复制当前长聊天。
 - 同一稳定 lane 复用同一线程：`M0-L4-005` accepted 后在 `AG-M0｜L4-AUDIT｜005-010｜MAC` 继续 `M0-L4-010`；跨职责任务不混用线程。
 - 线程 ID、host ID、模型、推理强度和当前任务在实际创建后回写本文件或 `ACTIVE_TASKS.md`。没有创建时不得编造 ID。
-- 所有线程使用本机环境，不创建 ChatGPT 云任务。串行依赖不变；当前最终冻结前仍不创建下层线程。
+- 所有线程使用本机环境，不创建 ChatGPT 云任务。串行依赖不变；`M0-S003-U086` 已满足最终冻结门，当前只允许创建 `M0-L4-AUDIT` 线程。
+
+当前待创建线程：`AG-M0｜L4-AUDIT｜005-010｜MAC`；任务 `M0-L4-005`；模型默认 `gpt-5.3-codex-spark`；推理强度 `high`。thread ID 与 host ID 必须等创建成功后再登记。
 
 OpenAI 官方用例把长期目标与专属项目协作者列为 Codex 工作流：<https://learn.chatgpt.com/use-cases>。该资料支持使用长期独立任务承载不同职责；本项目的具体主线程与 Git 门禁由 `D-M0-DIR-020` 进一步限定。
 
@@ -84,5 +86,5 @@ OpenAI 官方用例把长期目标与专属项目协作者列为 Codex 工作流
 - `handoff_pending` 时 `active_lane`、`active_host`、`active_session` 必须为 `null`，不能提前虚构接管完成。
 - 第一层可以在依赖满足后创建、驱动、读取、等待、退回和收回第二至第四层任务；下层必须完整读取自己的角色卡和任务卡，并把产物、证据与阻塞交回第一层。
 - 第一层统筹不允许越过串行依赖，不替代第二、三层的职责，也不是第四层写入授权。`M0-L4-401` 至 `404` 每个实现任务仍须用户单独授权。
-- 本轮新增未来的 `M0-L4-005` 能力审计阶段，但没有创建 `M0-L4-005`、`M0-L4-010`、`M0-L2-201` 或 `M0-L3-301`；它们继续按 `ACTIVE_TASKS.md` 阻塞。
+- `M0-L1-106` 已 accepted 且 `overall_spec_frozen: true`；`M0-L4-005` 当前 ready，等待创建独立线程。`M0-L4-010`、`M0-L2-201` 与 `M0-L3-301` 继续按 `ACTIVE_TASKS.md` 阻塞。
 - 当前任务和状态只以 `ACTIVE_TASKS.md` 为准；当前唯一下一动作只以 `NEXT_ACTION.md` 为准。

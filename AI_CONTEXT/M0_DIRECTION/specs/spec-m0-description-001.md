@@ -2,10 +2,10 @@
 spec_id: SPEC-M0-DESCRIPTION-001
 task_id: M0-L1-106
 title: M0 工程与科技描述结构、风格与总规格冻结
-status: active
-task_status: active
+status: accepted
+task_status: accepted
 item_8_status: accepted
-final_review_status: ready_for_user_freeze
+final_review_status: accepted
 milestone: M0-personal-playable
 source_specs:
   - SPEC-M0-INTEGRATED-001
@@ -14,11 +14,15 @@ source_references:
   - REF-M0-TECH-DESCRIPTION-CORPUS-001
 started_at: 2026-08-24T14:19:57+08:00
 start_source: M0-S003-U040
-amended_at: 2026-08-25T11:32:06+08:00
-amended_source: M0-S003-U084
+amended_at: 2026-08-25T12:34:05+08:00
+amended_source: M0-S003-U086
+accepted_at: 2026-08-25T12:34:05+08:00
+accepted_source: M0-S003-U086
 source_session: M0-S003
 implementation_authorized: false
-overall_spec_frozen: false
+overall_spec_frozen: true
+overall_freeze_source: M0-S003-U086
+overall_frozen_at: 2026-08-25T12:34:05+08:00
 ---
 
 # SPEC-M0-DESCRIPTION-001 · M0 工程与科技描述结构、风格与总规格冻结
@@ -52,7 +56,7 @@ overall_spec_frozen: false
 | 7 | 不同内容多长、重复内容怎样缩短 | accepted | 文案只写世界事实；来源在发现记录建立；首建一至两句，重复完成一句，事故按状态写事实 |
 | 8 | 动态变量、分层交接、逐条验收与最终冻结 | accepted | 单张工作单、责任层阻塞、分级验收、独立正文统计、线程统筹与最终冻结门 |
 
-八项均已逐项 accepted，但整份任务仍须用户读完第 13 节复核并明确回复最终冻结短语；此前 `overall_spec_frozen` 继续为 false。
+八项均已逐项 accepted；用户已在 `M0-S003-U086` 读完第 13 节复核并整体接受，当前 `overall_spec_frozen: true`。
 
 ## 4. 第一项第一次提案：不作为玩家展示方案
 
@@ -812,13 +816,13 @@ M0-L3-301: blocked_upstream
 
 - 第一项至第七项：accepted。
 - 第八项：accepted；12.1 至 12.8 全部接受，决定为 `D-M0-DIR-012` 至 `D-M0-DIR-020`。
-- 第 13 节完整复核：完成，等待用户最终冻结确认。
-- `Q-M0-042`：resolved，仍须执行已接受的最终冻结门。
+- 第 13 节完整复核：完成并由用户整体接受。
+- `Q-M0-042`：resolved，最终冻结门已由 `D-M0-DIR-021` 执行。
 - `SOURCE-BUNDLE-M0-TECH-PROSE-001`：revision 6，不因本轮工作流决定升级。
-- `M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001`：active。
-- `overall_spec_frozen: false`。
+- `M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001`：accepted。
+- `overall_spec_frozen: true`。
 - `implementation_authorized: false`。
-- `M0-L4-005`、`M0-L4-010`、`M0-L2-201`、`M0-L3-301`：继续 `blocked_upstream`。
+- `M0-L4-005`：ready，由逻辑主线程创建独立任务线程；`M0-L4-010`、`M0-L2-201`、`M0-L3-301` 继续 `blocked_upstream`。
 
 ## 13. 八项完整复核
 
@@ -854,8 +858,9 @@ M0-L3-301: blocked_upstream
 - 已核对为 `SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6，共 1296 行，受 Git 跟踪；文件声明保留 revision 1—5、15 项《群星》语料、13 项环日文明现有语料、用户原话、生成参考、正反例与最终接受稿。
 - 第二层和第三层每批开始时必须提交 revision 6 全文读取回执；摘要、只读最终规则、只读 revision 5 或跳过被否决初稿均返回 `BLOCKED_SOURCE`。
 
-### 13.5 当前冻结门与下一线程
+### 13.5 冻结结果与下一线程
 
-- 当前状态仍为 `M0-L1-106: active`、`SPEC-M0-DESCRIPTION-001: active`、`overall_spec_frozen: false`、`implementation_authorized: false`。
-- 没有影响 M0 冻结的未解决设计问题；剩余动作只有用户最终确认。
-- 用户明确回复`接受 M0-L1-106，冻结 M0 规格`后，主线程才提交冻结记录，并创建第一个下层 Codex 任务线程 `AG-M0｜L4-AUDIT｜005-010｜MAC` 执行 `M0-L4-005` 只读能力审计。
+- 用户在 `M0-S003-U086` 明确回复`接受 M0-L1-106，冻结 M0 规格`，形成 `D-M0-DIR-021`。
+- 当前状态为 `M0-L1-106: accepted`、`SPEC-M0-DESCRIPTION-001: accepted`、`overall_spec_frozen: true`、`implementation_authorized: false`。
+- 冻结只确立下游依据；最终 UI、数值调整、工具安装和代码修改的边界不变。
+- 下一步由主线程创建第一个下层 Codex 任务线程 `AG-M0｜L4-AUDIT｜005-010｜MAC`，只执行 `M0-L4-005` 能力审计。

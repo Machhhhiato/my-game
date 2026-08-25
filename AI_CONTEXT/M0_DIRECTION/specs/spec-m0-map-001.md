@@ -24,7 +24,9 @@ amendment_decision: D-M0-PROD-019
 amendment_scope: external_night_work_wording
 source_session: M0-S003
 implementation_authorized: false
-overall_spec_frozen: false
+overall_spec_frozen: true
+overall_freeze_source: M0-S003-U086
+overall_frozen_at: 2026-08-25T12:34:05+08:00
 ---
 
 # SPEC-M0-MAP-001 · M0 小地图、地形、选址与运输

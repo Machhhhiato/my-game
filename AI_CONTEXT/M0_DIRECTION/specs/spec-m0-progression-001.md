@@ -29,7 +29,9 @@ description_amendment_source: M0-S003-U074
 description_amendment_decision: D-M0-PROD-046
 source_session: M0-S003
 implementation_authorized: false
-overall_spec_frozen: false
+overall_spec_frozen: true
+overall_freeze_source: M0-S003-U086
+overall_frozen_at: 2026-08-25T12:34:05+08:00
 ---
 
 # SPEC-M0-PROGRESSION-001 · M0 科研、高级资产与前哨复制

@@ -19,7 +19,9 @@ accepted_source: M0-S003-U039
 acceptance_decision: D-M0-PROD-036
 source_session: M0-S003
 implementation_authorized: false
-overall_spec_frozen: false
+overall_spec_frozen: true
+overall_freeze_source: M0-S003-U086
+overall_frozen_at: 2026-08-25T12:34:05+08:00
 ---
 
 # SPEC-M0-INTEGRATED-001 · M0 前 90 日纸面试玩与机制整合验收

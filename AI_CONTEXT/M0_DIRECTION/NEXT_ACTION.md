@@ -1,20 +1,20 @@
 ---
 card_version: 2
 handoff_id: M0-H002
-routing_epoch: 5
+routing_epoch: 6
 routing_state: active
 source_host: windows
 source_lane: M0-DIR-B
 source_session: M0-S002
 target_host: mac
 target_lane: M0-DIR-A
-target_work_lane: M0-L1-DIRECTION
-target_layer: 1
-target_task: M0-L1-106
-assigned_session: M0-S003
-action_status: active
+target_work_lane: M0-L4-AUDIT
+target_layer: 4
+target_task: M0-L4-005
+assigned_session: null
+action_status: ready
 required_branch: context/m0-direction
-startup_phrase: 你是第一层
+startup_phrase: 你是第四层
 ---
 
 # 唯一下一动作卡
@@ -23,14 +23,14 @@ startup_phrase: 你是第一层
 
 - 设备：Mac。
 - 逻辑方向 lane：`M0-DIR-A`。
-- 稳定工作 lane：`M0-L1-DIRECTION`。
-- 建议会话标题：`AG-M0｜L1-DIRECTION｜101-106｜MAC`。
-- 当前 session：`M0-S003`。
-- 已接受任务：`M0-L1-101`，acceptance 提交 `0e2637f`；`M0-L1-102`，acceptance 提交 `f8ae1e9`；`M0-L1-103`，acceptance 提交 `0e1723d`；`M0-L1-104`，acceptance 提交 `d34d6ab`；`M0-L1-105`，acceptance 提交 `ab02d36`。
-- 当前任务：`M0-L1-106 · 工程与科技描述结构、风格与总规格冻结`，状态为 `active`。
-- 当前输入：已接受的 `SPEC-M0-INTEGRATED-001`，路径 `specs/spec-m0-integrated-001.md`；以及 `REF-M0-ENGINEERING-TECH-STYLE-001`、`REF-M0-TECH-DESCRIPTION-CORPUS-001`。
-- 当前输出：`SPEC-M0-DESCRIPTION-001` 已创建并 active。
-- 当前动作：第八项第五部分已由 `M0-S003-U084` 接受，第八项整体完成；`A208` 已交付八项完整复核。当前只等待用户明确回复`接受 M0-L1-106，冻结 M0 规格`，此前不设置 `overall_spec_frozen: true`，也不创建下层线程。
+- 稳定工作 lane：`M0-L4-AUDIT`。
+- 建议会话标题：`AG-M0｜L4-AUDIT｜005-010｜MAC`。
+- 逻辑主线程 session：`M0-S003`；审计线程尚未创建。
+- 已接受任务：`M0-L1-101` 至 `M0-L1-106`；`M0-L1-106` 的冻结来源为 `M0-S003-U086`。
+- 当前任务：`M0-L4-005 · GitHub Skills/MCP 能力审计`，状态为 `ready`。
+- 当前输入：冻结的 M0 规格、真实技术栈、当前内置能力与 `REF-M0-GITHUB-TOOLS-AUDIT-001`。
+- 当前输出：`AUDIT-M0-TOOLS-001`，尚未创建。
+- 当前动作：先推送 `D-M0-DIR-021` 与冻结状态，再由主线程创建独立 Codex 任务线程并自动派发只读审计。
 
 Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是唯一优先工作机；Windows 历史会话只保留证据，不再作为当前或计划中的接力目的地。第一层是唯一用户统筹入口，是否创建下层任务由依赖和任务卡决定，不需要用户手工复制提示词。
 
@@ -89,6 +89,7 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 51. 用户在 `M0-S003-U082` 明确回复`接受第八项第三部分`，形成 `D-M0-DIR-017`。`A197` 随后提出第四部分统计规则：按玩家独立阅读计数；科技正文与独立发现记录分别统计，同一正文展开或重复展示只算一次，短来源提示不另计。第四部分等待用户接受。
 52. 用户在 `M0-S003-U083` 明确回复`接受第八项第四部分`，形成 `D-M0-DIR-018`。`A199` 随后提出第五部分：接受第五部分即完成第八项，第一层再交付八项完整复核；只有用户明确回复`接受 M0-L1-106，冻结 M0 规格`才冻结并把 `M0-L4-005` 切到 ready。第五部分等待用户接受。
 53. 用户在 `M0-S003-U084` 明确回复`接受第八项第五部分`并要求下层使用线程模式、当前任务作为主线程；`U085` 要求继续。形成 `D-M0-DIR-019` 与 `D-M0-DIR-020`：第八项整体 accepted；`A208` 完成八项复核；正式下层任务使用独立 Codex 任务线程并以 Git 为权威上下文。最终冻结前未创建任何下层线程。
+54. 用户在 `M0-S003-U086` 明确回复`接受 M0-L1-106，冻结 M0 规格`，形成 `D-M0-DIR-021`。`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` accepted，`overall_spec_frozen: true`；`M0-L4-005` ready，冻结记录推送后由主线程创建独立审计线程。
 
 ## 当前正确状态至少包含
 
@@ -96,15 +97,16 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 状态：ACTIVE
 层级：第一层｜方向与系统设计
 活动 lane：M0-DIR-A｜Mac｜M0-S003
-当前任务：M0-L1-106｜工程与科技描述结构、风格与总规格冻结
-任务状态：active
+已接受任务：M0-L1-106｜SPEC-M0-DESCRIPTION-001｜overall_spec_frozen true
+当前任务：M0-L4-005｜GitHub Skills/MCP 能力审计
+任务状态：ready
 已接受输出：SPEC-M0-PLAY-001｜specs/spec-m0-play-001.md｜0e2637f
 已接受输出：SPEC-M0-OPS-001｜specs/spec-m0-ops-001.md｜f8ae1e9
 不会做：故事正文、最终玩家文字、游戏代码和 main 修改
 已接受输出：SPEC-M0-MAP-001｜specs/spec-m0-map-001.md｜0e1723d
 已接受输出：SPEC-M0-PROGRESSION-001｜specs/spec-m0-progression-001.md｜d34d6ab
 已接受输出：SPEC-M0-INTEGRATED-001｜specs/spec-m0-integrated-001.md｜ab02d36
-当前输出：SPEC-M0-DESCRIPTION-001｜specs/spec-m0-description-001.md｜active
+已接受输出：SPEC-M0-DESCRIPTION-001｜specs/spec-m0-description-001.md｜accepted
 已接受：第一项｜信息结构 accepted｜当前视觉示意 rejected，必须随整体 UI 重做
 已接受：第二项｜第一行群星式科技内容｜第二行环日式评价
 已接受：第三项｜科技未研发/已研发｜工程在建/已建成｜复杂过程只留底层
@@ -133,11 +135,12 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 已接受：第八项第四部分｜按玩家独立阅读计数｜完整发现记录与科技正文分别统计
 已接受线程统筹：当前任务是逻辑主线程｜下层使用独立 Codex 任务线程｜Git 是权威上下文
 复核：M0-S003-A208｜八项最终结论、撤回项、暂缓项、revision 6 与下一路线均已交付
-当前冻结：M0-L1-106 active｜SPEC-M0-DESCRIPTION-001 active｜overall_spec_frozen false
-未启动：M0-L4-005｜M0-L4-010｜M0-L2-201｜M0-L3-301｜本轮没有创建下层线程
-下一步：等待用户回复 接受 M0-L1-106，冻结 M0 规格
+当前冻结：M0-L1-106 accepted｜SPEC-M0-DESCRIPTION-001 accepted｜overall_spec_frozen true
+当前输出：AUDIT-M0-TOOLS-001｜尚未创建
+未启动：M0-L4-010｜M0-L2-201｜M0-L3-301
+下一步：创建 AG-M0｜L4-AUDIT｜005-010｜MAC 并派发 M0-L4-005
 ```
 
 ## 完成条件
 
-`M0-L1-105` 已在 `ab02d36` accepted，`M0-L1-106` 已 active。八项均已逐项 accepted，当前视觉仍待整体 UI 重做；revision 6 全文源包门禁立即约束未来第二、第三层。只有用户明确回复最终冻结短语，才可把任务与输出标为 accepted 并设置 `overall_spec_frozen: true`；冻结记录推送后，由逻辑主线程创建 `AG-M0｜L4-AUDIT｜005-010｜MAC` 并派发 `M0-L4-005`。能力审计不产生工具安装或实施授权。
+`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` 已 accepted，`overall_spec_frozen: true`。当前完成条件是冻结记录成功推送，并由逻辑主线程创建 `AG-M0｜L4-AUDIT｜005-010｜MAC`、派发 `M0-L4-005`、取得真实 thread ID 与 host ID。能力审计不产生工具安装或实施授权。
