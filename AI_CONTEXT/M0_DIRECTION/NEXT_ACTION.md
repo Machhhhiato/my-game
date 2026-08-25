@@ -2,7 +2,7 @@
 card_version: 2
 handoff_id: M0-H002
 routing_epoch: 12
-routing_state: ready_sync_pending
+routing_state: active
 source_host: windows
 source_lane: M0-DIR-B
 source_session: M0-S002
@@ -11,8 +11,8 @@ target_lane: M0-DIR-A
 target_work_lane: M0-L3-TEXT
 target_layer: 3
 target_task: M0-L3-301
-assigned_session: null
-action_status: ready_sync_pending
+assigned_session: 01a03845-90a7-7c73-95e6-f48796358313
+action_status: active
 required_branch: context/m0-direction
 startup_phrase: 你是第三层
 ---
@@ -24,13 +24,13 @@ startup_phrase: 你是第三层
 - 设备：Mac。
 - 逻辑方向 lane：`M0-DIR-A`。
 - 稳定工作 lane：`M0-L3-TEXT`。
-- 计划任务标题：`AG-M0｜L3-TEXT｜301｜MAC`；accepted 记录推送后创建。
+- 活动任务标题：`AG-M0｜L3-TEXT｜301｜MAC`；thread `01a03845-90a7-7c73-95e6-f48796358313`，host `local`，`gpt-5.6-sol` / `medium`。
 - 逻辑主线程 session：`M0-S003`；第一层已完成并收回全部前置审计。
 - 已接受任务：`M0-L1-101` 至 `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011`、`M0-L2-201`。
 - 已接受输出：`CONTENT-M0-001`，路径 `CONTENT_M0_001.md`，决定 `D-M0-PROD-050`。
-- 当前任务：`M0-L3-301 · 玩家可见文字包`，状态为 `ready_sync_pending`。
+- 当前任务：`M0-L3-301 · 玩家可见文字包`，状态为 `active`。
 - 当前输入：accepted 的 `CONTENT-M0-001`、`SPEC-M0-DESCRIPTION-001`、`AUDIT-M0-TECH-001`、完整科技描述源语料和第三层角色卡。
-- 当前动作：提交推送 accepted 记录，从该提交创建第三层独立任务；第一层继续主动收回并复核 `TEXT-M0-001`。
+- 当前动作：第一层等待、读取并复核第三层完整 `TEXT-M0-001`；用户不需要手工搬运结果。
 - 后续边界：M0 的食物循环仍属于正式最低内容；M0 整体验收后的扩展阶段继续增加食物等生活、生产与资源内容。
 
 用户在 `M0-S003-U087` 至 `U089` 追加、修正并整体接受后续制作节奏：白天先确定方案、范围和验收；晚上给明确的代码任务按约六小时估算，条件允许时可以运行八小时或更久；次日先验收。`day-night-execution-plan.md` 当前 accepted，正式协议为 v4。它不改变本卡的当前产品任务，也不构成实施授权。
@@ -119,7 +119,7 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 活动 lane：M0-DIR-A｜Mac｜M0-S003
 已接受任务：M0-L1-106｜SPEC-M0-DESCRIPTION-001｜overall_spec_frozen true
 当前任务：M0-L3-301｜玩家可见文字包
-任务状态：ready_sync_pending｜accepted 记录推送后创建
+任务状态：active｜thread 01a03845-90a7-7c73-95e6-f48796358313
 已接受输出：SPEC-M0-PLAY-001｜specs/spec-m0-play-001.md｜0e2637f
 已接受输出：SPEC-M0-OPS-001｜specs/spec-m0-ops-001.md｜f8ae1e9
 不会做：最终玩家文字、游戏代码、main 修改和任何删除
