@@ -12,8 +12,8 @@ source_references:
   - REF-M0-TECH-DESCRIPTION-CORPUS-001
 started_at: 2026-08-24T14:19:57+08:00
 start_source: M0-S003-U040
-amended_at: 2026-08-25T09:17:28+08:00
-amended_source: M0-S003-U077
+amended_at: 2026-08-25T10:03:32+08:00
+amended_source: M0-S003-U078
 source_session: M0-S003
 implementation_authorized: false
 overall_spec_frozen: false
@@ -728,10 +728,11 @@ AI 对全部内容检查事实来源、动态内容是否真实存在、是否�
 M0-L1-106: accepted
 overall_spec_frozen: true
 implementation_authorized: false
-M0-L4-010: ready
+M0-L4-005: ready
+M0-L4-010: blocked_upstream
 ```
 
-冻结后仍先做第四层只读代码审计，再依次进入第二层、第三层和第四层接入；冻结不会自动授权代码写入。本节仍待用户接受。
+冻结后先做第四层 GitHub Skills/MCP 只读能力审计，再做现有代码只读审计，然后依次进入第二层、第三层和第四层接入；冻结不会自动授权安装工具或写入代码。本节仍待用户接受。
 
 ### 12.7 已接受的统筹方式
 
@@ -746,7 +747,17 @@ M0-L4-010: ready
 
 形成 `D-M0-DIR-012` 与 `D-M0-DIR-013`。这是第八项的局部接受，不是第八项整体接受。
 
-### 12.8 当前状态与剩余确认
+### 12.8 已确认的冻结后能力审计阶段
+
+用户在 `M0-S003-U078` 要求增加 GitHub Skills/MCP 审计阶段，并强调必须同时查看更新时间、评论及评论时间，避免过时工具反而限制操作。形成 `D-M0-DIR-014`：
+
+- 冻结后的顺序改为 `M0-L4-005 GitHub Skills/MCP 能力审计 → M0-L4-010 现有代码只读审计`；后面的第二、第三层和实施顺序不变。
+- `M0-L4-005` 只做只读调查和受控试用方案，不安装、不配置、不接桥、不申请系统权限；一个都不装是有效结果。
+- 仓库整体更新时间、单个 Skill/MCP 最后实质提交、正式版本、外部用户反馈、维护者回复身份和回复日期必须分开记录；搜索结果、星标、零 issue 和机器人回复不能证明可靠。
+- 初查基线为 `REF-M0-GITHUB-TOOLS-AUDIT-001`，实际任务开始时仍须重新检查；当前没有安装任何候选。
+- 本阶段新增不接受第八项，也不提前冻结 M0；当前下层任务仍全部阻塞。
+
+### 12.9 当前状态与剩余确认
 
 - 第一项至第七项：accepted。
 - 第八项：active；只有 12.7 的统筹方式 accepted。
@@ -756,4 +767,4 @@ M0-L4-010: ready
 - `M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001`：active。
 - `overall_spec_frozen: false`。
 - `implementation_authorized: false`。
-- `M0-L4-010`、`M0-L2-201`、`M0-L3-301`：继续 `blocked_upstream`。
+- `M0-L4-005`、`M0-L4-010`、`M0-L2-201`、`M0-L3-301`：继续 `blocked_upstream`。

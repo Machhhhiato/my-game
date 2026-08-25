@@ -58,12 +58,13 @@ Codex 在每个新任务开始时建立一次全局到项目的说明链。安�
 - 项目根短语入口缺失：返回 `BLOCKED_WORKFLOW`；不得假装全局路由或聊天记忆可以替代项目入口。
 - 同层出现两个可执行任务：返回 `TASK_CONFLICT`，不得自行挑选。
 - 任务卡、角色卡或写入白名单缺失：返回 `BLOCKED_CONTRACT`，不得补默认规则。
+- 外部工具审计准备交付时仍缺少单项提交、版本、人工反馈日期、权限或回滚证据：返回 `BLOCKED_EVIDENCE`；不得先接受或安装、以后再补审计。
 - Git 落后、分叉或当前目录错误：返回 `BLOCKED_GIT`，不得强制覆盖。
 
 ## 固定启动回执
 
 ```text
-状态：READY / REVIEW / BLOCKED_UPSTREAM / BLOCKED_WORKFLOW / TASK_CONFLICT / BLOCKED_CONTRACT / BLOCKED_GIT
+状态：READY / REVIEW / BLOCKED_UPSTREAM / BLOCKED_WORKFLOW / TASK_CONFLICT / BLOCKED_CONTRACT / BLOCKED_EVIDENCE / BLOCKED_GIT
 项目：Always Game
 里程碑：M0 个人完整试玩版
 层级：<第一至第四层｜名称>

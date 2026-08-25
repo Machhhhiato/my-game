@@ -74,6 +74,7 @@ AI_CONTEXT/M0_DIRECTION/START_HERE.md 恢复 M0 方向讨论。
 - `SESSION_ROUTING.md`：任务到稳定任务线的映射、模型运行默认以及活动/交接状态。
 - `ACTIVE_TASKS.md`：四层当前任务和阻塞关系的唯一动态路由。
 - `TASK_PACKAGES.md`：任务边界、输入输出、完成条件和禁区。
+- `references/reference-m0-github-tools-audit-001.md`：截至 2026-08-25 的外部 Skill/MCP 初查快照；只用于未来 `M0-L4-005` 的起点，任务开始时必须重新检查，不能视为安装许可。
 - 根目录冻结规格、根决策日志、代码与验证：仍是 `main` 上的项目事实来源。
 
 方向分支中的决定只有在规格冻结并由第一层派发的执行任务正式写入项目权威文件后，才能成为实施输入；第一层统筹本身不构成写入授权。

@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L1-106
 handoff_id: M0-H002
-updated_at: 2026-08-25T09:17:28+08:00
+updated_at: 2026-08-25T10:08:35+08:00
 ---
 
 # M0 当前任务路由
@@ -18,9 +18,10 @@ updated_at: 2026-08-25T09:17:28+08:00
 | 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `active` | 无；前七项 accepted，第八项 active | `ACTIVE` |
 | 第二层 | `M0-L2-201` 结构化内容包 | `blocked_upstream` | `M0-L1-106`、`M0-L4-010` | `BLOCKED_UPSTREAM` |
 | 第三层 | `M0-L3-301` 玩家文字包 | `blocked_upstream` | `M0-L2-201` | `BLOCKED_UPSTREAM` |
-| 第四层 | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L1-106` accepted 且 `overall_spec_frozen` | `BLOCKED_UPSTREAM` |
+| 第四层（能力） | `M0-L4-005` GitHub Skills/MCP 能力审计 | `blocked_upstream` | `M0-L1-106` accepted 且 `overall_spec_frozen` | `BLOCKED_UPSTREAM` |
+| 第四层（代码） | `M0-L4-010` 现有代码只读审计 | `blocked_upstream` | `M0-L4-005` accepted | `BLOCKED_UPSTREAM` |
 
-`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 第一项至第七项已 accepted；第八项 active，其中 `D-M0-DIR-012` 与 `D-M0-DIR-013` 已确认第一层直接统筹、Mac 单机优先和各层模型运行默认。其余动态字段、交接单、缺失阻塞、逐条验收、统计口径与最终冻结仍待确认。`D-M0-DIR-011` 要求下游全文读取 revision 6。`SPEC-M0-DESCRIPTION-001` 继续 active，第二、三、四层继续按既定依赖阻塞；本轮没有创建下层任务。
+`SPEC-M0-INTEGRATED-001` 与 `M0-L1-105` 已在 `ab02d36` accepted。`M0-L1-106` 第一项至第七项已 accepted；第八项 active，其中 `D-M0-DIR-012` 与 `D-M0-DIR-013` 已确认第一层直接统筹、Mac 单机优先和各层模型运行默认。其余动态字段、交接单、缺失阻塞、逐条验收、统计口径与最终冻结仍待确认。`D-M0-DIR-014` 已在冻结后、代码审计前新增 `M0-L4-005` 外部工具能力审计；该任务只读，不能自行安装。`D-M0-DIR-011` 要求下游全文读取 revision 6。`SPEC-M0-DESCRIPTION-001` 继续 active，第二、三、四层继续按既定依赖阻塞；本轮没有创建下层任务。
 
 ## 当前生产证据
 
@@ -39,8 +40,8 @@ updated_at: 2026-08-25T09:17:28+08:00
 - 第六项接受：`D-M0-PROD-044` 冻结完全严肃 50%、中度 40%、重度最多 10%，只统计首次独立正文；`D-M0-PROD-045` 冻结旧时代考古、先驱研究及`来源决定历史、实施决定责任`。`Q-M0-040` resolved。
 - 第七项接受：`D-M0-PROD-046` 保留四类科技来源，并冻结旧时代与先驱来源在发现记录建立、世界文案禁用机制数据、首建节点一至两句、重复工程完成一句和事故事实时间线。`Q-M0-041` resolved。
 - 源包证据：`SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6 逐字保留第七项初案、完整参考、`U073` 修正与 `A177` 接受稿，并原样保留 revision 1—5 的全部材料。
-- 冻结边界：`overall_spec_frozen` 仍为 false；`M0-L4-010`、`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
-- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-013`、`D-M0-PROD-036` 至 `D-M0-PROD-046`。
+- 冻结边界：`overall_spec_frozen` 仍为 false；`M0-L4-005`、`M0-L4-010`、`M0-L2-201`、`M0-L3-301` 继续 blocked_upstream。
+- 路由决定：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-014`、`D-M0-PROD-036` 至 `D-M0-PROD-046`。
 
 ## 最近接受证据
 
@@ -108,6 +109,7 @@ M0-L1-101
 → M0-L1-104
 → M0-L1-105
 → M0-L1-106
+→ M0-L4-005
 → M0-L4-010
 → M0-L2-201
 → M0-L3-301
