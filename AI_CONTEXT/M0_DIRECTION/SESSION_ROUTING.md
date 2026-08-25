@@ -1,6 +1,6 @@
 ---
 routing_version: 5
-routing_epoch: 10
+routing_epoch: 12
 routing_state: active
 active_lane: M0-DIR-A
 active_host: mac
@@ -88,8 +88,9 @@ handoff_id: M0-H002
 | `AG-M0｜L4-AUDIT｜005-010｜MAC R3` | `01a03741-b9b7-7302-84d0-5b57447051b9` | `local` | `gpt-5.6-terra` / `high` | `completed / idle` | 已交付 accepted 的 `AUDIT-M0-TOOLS-001`；旧错误项目中的历史证据，不再追加任务 |
 | `AG-M0｜L4-AUDIT｜010｜MAC` | `01a037ea-d006-7690-ae23-1a93a824429e` | `local` | 应用默认模型 / `high` | `completed / idle` | 正确本地 `always game` 项目的只读工作树任务；已交付 accepted 的 `AUDIT-M0-TECH-001` |
 | `AG-M0｜L4-AUDIT｜011｜MAC` | `01a03800-3d9f-7c70-b1dc-70a30bc8bf01` | `local` | `gpt-5.3-codex-spark` → `gpt-5.6-terra` / `high` | `completed / idle` | Spark 在最终收口前耗尽额度；同一只读任务由 Terra 完成修订版，输出进入 review |
+| `AG-M0｜L2-CONTENT｜201｜MAC` | `01a0382b-4e62-77e0-904c-a35b9e7be8f5` | `local` | `gpt-5.6-terra` / `medium` | `completed / idle` | 正确本地项目的只读工作树任务；首次交付被退回，修订版 `CONTENT-M0-001` 已 accepted |
 
-当前没有运行中的下层任务。`M0-L4-011` / `01a03800-3d9f-7c70-b1dc-70a30bc8bf01` 已完成，只读无修改；第一层退回一次覆盖缺口后收回修订版。用户已接受 `AUDIT-M0-CODE-BOUNDARY-001`，186 项按实现前置检查；下一任务 `M0-L2-201` ready，尚未创建物理任务。`AUDIT-M0-TOOLS-001` 与 `AUDIT-M0-TECH-001` 已接受；R1、R2、R3 保留为旧错误项目下的历史证据。
+当前没有运行中的下层任务。`M0-L2-201` / `01a0382b-4e62-77e0-904c-a35b9e7be8f5` 已只读完成并 accepted。用户已授权同步记录并开始 `M0-L3-301`；第三层任务必须从包含 `CONTENT-M0-001` accepted 状态的同步提交创建。
 
 从 `M0-S003-U089` 起，昼夜分工正式生效：白天由第一层完成方案、范围、验收与夜间执行单；夜间任务只执行一个已授权的大结果，通常按约六小时估算，但额度、上下文和环境允许时可以运行八小时或更久，并按新的预计结束时间预留收尾验证时间；次日由第一层收回证据并交给用户验收。详细规则见 accepted 的 `day-night-execution-plan.md` 和 `NIGHT_WORK_ORDER_TEMPLATE.md`。研究型审计与代码实现不得塞进同一夜间任务；上下文接近上限时必须先写检查点，再建立新任务继续。
 
@@ -103,5 +104,5 @@ OpenAI 官方用例把长期目标与专属项目协作者列为 Codex 工作流
 - `handoff_pending` 时 `active_lane`、`active_host`、`active_session` 必须为 `null`，不能提前虚构接管完成。
 - 第一层可以在依赖满足后创建、驱动、读取、等待、退回和收回第二至第四层任务；下层必须完整读取自己的角色卡和任务卡，并把产物、证据与阻塞交回第一层。
 - 第一层统筹不允许越过串行依赖，不替代第二、三层的职责，也不是第四层写入授权。`M0-L4-401` 至 `404` 每个实现任务仍须用户单独授权。
-- `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011` 已 accepted 且 `overall_spec_frozen: true`；当前 `M0-L2-201` ready，`M0-L3-301` 继续按 `ACTIVE_TASKS.md` 阻塞。
+- `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011`、`M0-L2-201` 已 accepted 且 `overall_spec_frozen: true`；当前 `M0-L3-301` ready_sync_pending。
 - 当前任务和状态只以 `ACTIVE_TASKS.md` 为准；当前唯一下一动作只以 `NEXT_ACTION.md` 为准。

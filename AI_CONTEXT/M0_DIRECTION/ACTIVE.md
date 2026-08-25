@@ -6,7 +6,7 @@ status: active
 branch: context/m0-direction
 base_main: a08c40bb3596918347c9719d5c82c5af26707d95
 direction_protocol_version: 5
-routing_epoch: 10
+routing_epoch: 12
 active_lane: M0-DIR-A
 active_host: mac
 preferred_host: mac
@@ -18,15 +18,15 @@ next_lane: null
 next_host: null
 handoff_id: M0-H002
 last_session: M0-S003
-last_turn: M0-S003-A264
-updated_at: 2026-08-25T16:53:36+08:00
+last_turn: M0-S003-A280
+updated_at: 2026-08-25T17:27:12+08:00
 ---
 
 # 当前接续卡
 
 ## 当前目标
 
-GitHub 登录和推送已经恢复，真实仓库已登记为本地 `always game` 项目。用户已接受 `M0-L4-011` 与 `AUDIT-M0-CODE-BOUNDARY-001`：353 个相关文件全部归类，保留 64、改造后保留 6、拟删除 97、无法判断 186；未分类为 0。186 项按相关实现批次的前置检查处理，不再单独开大审计。当前唯一下一任务为 `M0-L2-201`，状态 ready；尚未创建物理任务，也未授权修改或删除代码。`overall_spec_frozen: true`，`implementation_authorized: false`。
+用户已整体接受 `M0-L2-201` 与 `CONTENT-M0-001`，并授权提交推送记录和开始 `M0-L3-301`。八节点主线、三个临时事故和第三层交接边界全部 accepted；M0 整体验收后继续扩增食物等内容。当前先同步 accepted 记录，再从同步提交创建第三层独立任务。`overall_spec_frozen: true`，`implementation_authorized: false`。
 
 ## 已确认
 
@@ -105,6 +105,10 @@ GitHub 登录和推送已经恢复，真实仓库已登记为本地 `always game
 - `D-M0-PROD-044`：第六项按完全严肃 50%、中度 40%、重度最多 10% accepted；只统计首次独立正文，重度缺额回到严肃，不为配比制造受害者。
 - `D-M0-PROD-045`：旧时代科技考古和先驱文明研究是有效科技来源；来源历史与玩家当前社会分开归属，发现不等于采用，谁实际实施谁承担当前后果。
 - `D-M0-PROD-046`：文案描述世界，数据解释系统；四类科技来源仍有效，旧时代与先驱来源只在首次发现说明；玩家文字不用格子、版本、差异耗时和账本兜底，重复工程只写建成，事故只写事实状态。
+- `D-M0-PROD-047`：八节点主线作为 M0 内容骨架获得分项接受；M0 仍保留最低食物循环，整体验收后的扩展阶段必须继续增加食物等生活、生产与资源内容，不能把 M0 最低范围当作完整游戏内容上限。
+- `D-M0-PROD-048`：三个临时事故结构获得分项接受；事故由真实运行状态随机产生，不绑定主线、不指定唯一解法。维护积压只有实际影响具体设施时才成为事故，不能凭空生成事件卡。
+- `D-M0-PROD-049`：第三层交接边界获得分项接受；第三层只写冻结槽位中的最终玩家文字，必须全文读取 revision 6 源语料，不能创造新玩法或世界事实，缺少真实状态时必须阻塞。
+- `D-M0-PROD-050`：用户整体接受 `M0-L2-201` 与 `CONTENT-M0-001`，允许提交推送记录并开始 `M0-L3-301`；这只授权第三层只读读取与文字交付，不授权游戏代码实现。
 - 方向聊天唯一允许的写操作，是维护并推送本目录中的接力文档。
 
 ## 当前冻结结果
