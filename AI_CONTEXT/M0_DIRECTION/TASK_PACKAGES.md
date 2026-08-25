@@ -171,7 +171,7 @@ ACTIVE_TASKS.md、TASK_PACKAGES.md 和第四层角色卡。
 ### M0-L2-201-R1 · 首座前哨工程故事补包
 
 - 层级：第二层返工批次；复用 `M0-L2-CONTENT` 稳定工作 lane，不增加新的常驻层级。
-- 状态：`active`；物理任务 `01a0386f-71e3-7cd1-9b03-85724a9fc464` 从同步提交 `ad466fa` 创建。
+- 状态：`accepted`；物理任务 `01a0386f-71e3-7cd1-9b03-85724a9fc464` 从同步提交 `ad466fa` 创建，首稿退回后在同一任务完成修订。
 - 依赖：`D-M0-PROD-052`、`D-M0-PROD-053` 已接受；`M0-L2-201` 原内容包仍是结构基础。
 - 目标：为首座工业废墟回收前哨写出从开工序章到生产验收的完整故事事实包，替代 `TEXT-M0-001` 被退回的短阶段提示。
 - 输入：本规格第 14 节、`CONTENT-M0-001`、六份冻结 M0 规格、两个 accepted 代码审计，以及 revision 6 源语料全文。
@@ -199,7 +199,7 @@ ACTIVE_TASKS.md、TASK_PACKAGES.md 和第四层角色卡。
 ### M0-L3-301-R1 · 首座前哨多章正文重写
 
 - 层级：第三层返工批次；复用 `M0-L3-TEXT` 稳定工作 lane。
-- 状态：`blocked_upstream`。
+- 状态：`ready_sync_pending`。
 - 依赖：`CONTENT-M0-STORY-001` 经第一层与用户接受。
 - 目标：把已接受的序章与七章故事事实写成玩家可见的项目标题、章节标题和完整正文。
 - 输入：accepted 的 `CONTENT-M0-STORY-001`、本规格第 14 节、`TEXT-M0-001` 中已接受的科技文字及 revision 6 源语料全文。

@@ -8,13 +8,13 @@ source_lane: M0-DIR-B
 source_session: M0-S002
 target_host: mac
 target_lane: M0-DIR-A
-target_work_lane: M0-L2-CONTENT
-target_layer: 2
-target_task: M0-L2-201-R1
-assigned_session: 01a0386f-71e3-7cd1-9b03-85724a9fc464
-action_status: active
+target_work_lane: M0-L3-TEXT
+target_layer: 3
+target_task: M0-L3-301-R1
+assigned_session: null
+action_status: ready_sync_pending
 required_branch: context/m0-direction
-startup_phrase: 你是第二层
+startup_phrase: 你是第三层
 ---
 
 # 唯一下一动作卡
@@ -23,19 +23,20 @@ startup_phrase: 你是第二层
 
 - 设备：Mac。
 - 逻辑方向 lane：`M0-DIR-A`。
-- 稳定工作 lane：`M0-L2-CONTENT`。
-- 活动任务：`AG-M0｜L2-CONTENT｜201-R1｜MAC`；thread `01a0386f-71e3-7cd1-9b03-85724a9fc464`，host `local`，工作树 `/Users/xujiangyue/.codex/worktrees/5aa0/always game`，`gpt-5.6-terra` / `medium`。
+- 稳定工作 lane：`M0-L3-TEXT`。
+- 待创建任务：`AG-M0｜L3-TEXT｜301-R1｜MAC`；远端核对成功后登记正式 thread、host 与工作树。
 - 逻辑主线程 session：`M0-S003`；第一层已完成并收回全部前置审计。
 - 已接受任务：`M0-L1-101` 至 `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011`、`M0-L2-201`。
 - 已接受输出：`CONTENT-M0-001`，路径 `CONTENT_M0_001.md`，决定 `D-M0-PROD-050`。
-- 当前任务：`M0-L2-201-R1 · 首座前哨工程故事补包`，状态为 `active`。
-- 当前输入：accepted 的 `CONTENT-M0-001`、`SPEC-M0-DESCRIPTION-001` 第 14 节、六份冻结规格、两个 accepted 代码审计、完整科技描述源语料和第二层角色卡。
-- 预期输出：`CONTENT-M0-STORY-001`。已有 `TEXT-M0-001` 第一批科技文字 accepted，第二批工程短稿 returned，仅作为返工证据。
+- 已接受任务：`M0-L2-201-R1 · 首座前哨工程故事补包`；输出 `CONTENT-M0-STORY-001`，路径 `CONTENT_M0_STORY_001.md`，决定 `D-M0-PROD-054`。
+- 当前任务：`M0-L3-301-R1 · 首座前哨多章正文重写`，状态为 `ready_sync_pending`。
+- 当前输入：accepted 的 `CONTENT-M0-STORY-001`、`SPEC-M0-DESCRIPTION-001` 第 14 节、`TEXT-M0-001` 中已接受的《恢复精密制造》、六份冻结规格、完整 revision 6 科技描述源语料和第三层角色卡。
+- 预期输出：最终项目标题、开工序章和七章正文、章节回看短索引、第二座正常复制短记录；不改已接受科技文字。
 - 已接受分项：第一批《恢复精密制造》完整科技卡文字，决定 `D-M0-PROD-051`。
 - 已退回分项：第二批短标题与短正文方案。首次前哨必须改为从开工到验收的完整多章工程故事，决定 `D-M0-PROD-052`。
 - 已接受结构：用户接受序章加七章、章节标题与正文分工、默认自动解锁和重复工程分流，决定 `D-M0-PROD-053`；`Q-M0-049` resolved。
-- 当前授权：用户允许提交推送工程故事结构并开始 `M0-L2-201-R1`，决定 `D-M0-DIR-031`。
-- 当前动作：第一层等待、读取并复核第二层完整 `CONTENT-M0-STORY-001`；用户不需要手工搬运结果。第二层不写最终正文，不进入第三层或第四层。
+- 当前授权：用户接受 `M0-L2-201-R1`，允许提交推送记录并开始 `M0-L3-301-R1`，决定 `D-M0-DIR-032`。
+- 当前动作：第一层先提交推送 accepted 故事包并核对远端，再创建独立第三层任务；用户不需要手工搬运结果。第三层只写最终文字，不进入第四层。
 - 字段边界：所有 `BLOCKED_FIELD` 动态文字留待字段语义确认和第四层真实实现，不随当前文字批次默认通过。
 - 后续边界：M0 的食物循环仍属于正式最低内容；M0 整体验收后的扩展阶段继续增加食物等生活、生产与资源内容。
 
