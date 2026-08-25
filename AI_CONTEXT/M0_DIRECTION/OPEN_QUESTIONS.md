@@ -594,6 +594,17 @@
 - 已接受线程统筹：`M0-S003-U084` 要求下层以线程方式启动、当前任务作为主线程，形成 `D-M0-DIR-020`。当前任务是逻辑主线程；第二至第四层正式任务使用独立 Codex 任务线程，Git 是权威上下文。最终冻结前没有创建线程。
 - 冻结执行：用户在 `M0-S003-U086` 明确回复最终冻结短语，形成 `D-M0-DIR-021`；`M0-L1-106` 与规格 accepted，`overall_spec_frozen: true`。冻结记录推送后创建 `AG-M0｜L4-AUDIT｜005-010｜MAC` 执行 `M0-L4-005` 只读能力审计。
 - 硬边界：第二、第三层不得用文案创造新玩法、库存、地点、技术效果、事故结果、社会制度或人物伤亡；第四层不得把内部字段重新显示为玩家小作文。来源缺失、因果不成立、变量不存在或内容身份不明时必须阻塞，不能猜测补齐。
-- 完成结果：本项 resolved 且冻结门已执行；`SPEC-M0-DESCRIPTION-001` 与 `M0-L1-106` accepted，`M0-L4-005` ready。主线程创建并派发审计后，`M0-L4-010`、第二层和第三层仍按依赖阻塞。
+- 完成结果：本项 resolved 且冻结门已执行；`SPEC-M0-DESCRIPTION-001` 与 `M0-L1-106` accepted。主线程已经创建审计任务，R3 已交付 `AUDIT-M0-TOOLS-001`；`M0-L4-005` 当前 review，`M0-L4-010`、第二层和第三层仍按依赖阻塞。
 - 输出：`SPEC-M0-DESCRIPTION-001` 第八项与总验收清单。
-- 来源：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-021`、`D-M0-PROD-037` 至 `D-M0-PROD-046`、`M0-S003-U075` 至 `U086`、`M0-S003-A180` 至 `A209`、`SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6、`SPEC-M0-DESCRIPTION-001` 第 4 至第 13 节。
+- 来源：`D-M0-DIR-007`、`D-M0-DIR-009` 至 `D-M0-DIR-022`、`D-M0-PROD-037` 至 `D-M0-PROD-046`、`M0-S003-U075` 至 `U086`、`M0-S003-A180` 至 `A219`、`SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6、`SPEC-M0-DESCRIPTION-001` 第 4 至第 13 节。
+
+## Q-M0-043 · 是否接受 M0-L4-005 能力审计结论
+
+- 状态：`active`
+- 决定者：用户
+- 当前输出：`AUDIT-M0-TOOLS-001`；路径 `AUDIT_M0_TOOLS_001.md`；R3 thread `01a03741-b9b7-7302-84d0-5b57447051b9`。
+- 当前结论：现在不接入任何新工具；只保留 `tauri-agent-tools` 作为未来另行授权的受控试用候选；Playwright CLI、frontend-design、Chrome DevTools MCP、Context7、awesome-copilot game-engine 与 shipshitgames/skills 继续观察；旧 OpenAI Skills、hypothesi、P3GLEG 与 dirvine 当前淘汰。
+- 验收边界：接受审计只表示接受候选分类与未来验证顺序，不授权安装、配置、桥接、权限、服务或代码修改。
+- 路由结果：用户接受前 `M0-L4-005` 保持 review；`M0-L4-010`、第二层和第三层继续 blocked_upstream。
+- 同步阻塞：冻结提交 `ff064af` 已在远端；线程登记和审计文件因 GitHub token 失效、设备登录接口返回 `unexpected EOF` 仍只在本地，恢复认证后必须补推。
+- 建议回复：若接受当前审计，回复 `接受 M0-L4-005`；若不接受，指出需要重审的候选或判断。

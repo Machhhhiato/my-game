@@ -12,7 +12,7 @@ target_work_lane: M0-L4-AUDIT
 target_layer: 4
 target_task: M0-L4-005
 assigned_session: 01a03741-b9b7-7302-84d0-5b57447051b9
-action_status: active
+action_status: review
 required_branch: context/m0-direction
 startup_phrase: 你是第四层
 ---
@@ -27,12 +27,12 @@ startup_phrase: 你是第四层
 - 活动任务标题：`AG-M0｜L4-AUDIT｜005-010｜MAC R3`。
 - 逻辑主线程 session：`M0-S003`；活动审计 thread 为 `01a03741-b9b7-7302-84d0-5b57447051b9`，host 为 `local`。
 - 已接受任务：`M0-L1-101` 至 `M0-L1-106`；`M0-L1-106` 的冻结来源为 `M0-S003-U086`。
-- 当前任务：`M0-L4-005 · GitHub Skills/MCP 能力审计`，状态为 `active`。
+- 当前任务：`M0-L4-005 · GitHub Skills/MCP 能力审计`，状态为 `review`。
 - 当前输入：冻结的 M0 规格、真实技术栈、当前内置能力与 `REF-M0-GITHUB-TOOLS-AUDIT-001`。
-- 当前输出：`AUDIT-M0-TOOLS-001`，尚未创建。
-- 当前动作：等待接替任务完成并返回 `AUDIT-M0-TOOLS-001`；主线程先核验，再交用户接受。不得自动进入 `M0-L4-010`。
+- 当前输出：`AUDIT-M0-TOOLS-001`；路径 `AUDIT_M0_TOOLS_001.md`；等待用户接受。
+- 当前动作：先恢复 GitHub 登录并推送审计登记；同时可由用户验收审计结论。不得自动进入 `M0-L4-010`。
 
-首个任务 `01a0373a-75c9-71a3-8cb3-3e0213ca1322` 和精简本地输入的 R2 `01a0373c-b12c-7c70-ba06-9c329180be59` 均在整批外部证据阶段因上下文窗口耗尽而失败，且都没有修改文件。R3 不再读取本地长文档，固定 11 个候选并限制每项证据量；临时使用 `gpt-5.6-terra` / `high` 完成研究型审计，实际执行层仍默认 5.3。
+首个任务 `01a0373a-75c9-71a3-8cb3-3e0213ca1322` 和精简本地输入的 R2 `01a0373c-b12c-7c70-ba06-9c329180be59` 均在整批外部证据阶段因上下文窗口耗尽而失败，且都没有修改文件。R3 固定 11 个候选并限制每项证据量，已经使用 `gpt-5.6-terra` / `high` 完成研究型审计；实际执行层仍默认 5.3。
 
 Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是唯一优先工作机；Windows 历史会话只保留证据，不再作为当前或计划中的接力目的地。第一层是唯一用户统筹入口，是否创建下层任务由依赖和任务卡决定，不需要用户手工复制提示词。
 
@@ -94,6 +94,7 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 54. 用户在 `M0-S003-U086` 明确回复`接受 M0-L1-106，冻结 M0 规格`，形成 `D-M0-DIR-021`。`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` accepted，`overall_spec_frozen: true`；`M0-L4-005` ready，冻结记录推送后由主线程创建独立审计线程。
 55. 冻结提交 `ff064af` 已推送。首个审计任务 `01a0373a-75c9-71a3-8cb3-3e0213ca1322` 因上下文窗口耗尽失败；主线程创建精简上下文的接替任务 `01a0373c-b12c-7c70-ba06-9c329180be59`，`M0-L4-005` 切到 active，形成 `D-M0-DIR-022`。
 56. R2 仍在整批外部证据阶段耗尽上下文；主线程停止继续尝试 5.3 单任务整批审计，创建限量证据的 R3 `01a03741-b9b7-7302-84d0-5b57447051b9`，临时使用 `gpt-5.6-terra` / `high`。R3 active，实际执行层 5.3 默认不变。
+57. R3 完成 `AUDIT-M0-TOOLS-001`：当前不接入任何新工具，只保留 `tauri-agent-tools` 作为未来另行授权的受控试用候选；任务切到 review。GitHub token 已失效，设备登录接口又返回 `unexpected EOF`，因此冻结提交已在远端，但审计登记仍只在本地等待推送。
 
 ## 当前正确状态至少包含
 
@@ -103,7 +104,7 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 活动 lane：M0-DIR-A｜Mac｜M0-S003
 已接受任务：M0-L1-106｜SPEC-M0-DESCRIPTION-001｜overall_spec_frozen true
 当前任务：M0-L4-005｜GitHub Skills/MCP 能力审计
-任务状态：active
+任务状态：review
 已接受输出：SPEC-M0-PLAY-001｜specs/spec-m0-play-001.md｜0e2637f
 已接受输出：SPEC-M0-OPS-001｜specs/spec-m0-ops-001.md｜f8ae1e9
 不会做：故事正文、最终玩家文字、游戏代码和 main 修改
@@ -140,12 +141,12 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 已接受线程统筹：当前任务是逻辑主线程｜下层使用独立 Codex 任务线程｜Git 是权威上下文
 复核：M0-S003-A208｜八项最终结论、撤回项、暂缓项、revision 6 与下一路线均已交付
 当前冻结：M0-L1-106 accepted｜SPEC-M0-DESCRIPTION-001 accepted｜overall_spec_frozen true
-当前输出：AUDIT-M0-TOOLS-001｜尚未创建
+当前输出：AUDIT-M0-TOOLS-001｜AUDIT_M0_TOOLS_001.md｜review
 未启动：M0-L4-010｜M0-L2-201｜M0-L3-301
-活动任务：AG-M0｜L4-AUDIT｜005-010｜MAC R3｜01a03741-b9b7-7302-84d0-5b57447051b9｜local
-下一步：等待 AUDIT-M0-TOOLS-001，主线程核验并交用户接受；不得自动开始 M0-L4-010
+完成任务：AG-M0｜L4-AUDIT｜005-010｜MAC R3｜01a03741-b9b7-7302-84d0-5b57447051b9｜local
+下一步：恢复 GitHub 登录并推送审计登记；用户接受前不得开始 M0-L4-010
 ```
 
 ## 完成条件
 
-`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` 已 accepted，`overall_spec_frozen: true`；冻结记录和线程登记已推送。当前完成条件是接替任务返回完整 `AUDIT-M0-TOOLS-001`，主线程完成核验并由用户接受。能力审计不产生工具安装或实施授权；未接受前不得开始 `M0-L4-010`。
+`M0-L1-106` 与 `SPEC-M0-DESCRIPTION-001` 已 accepted，`overall_spec_frozen: true`；冻结记录已推送。`AUDIT-M0-TOOLS-001` 已交付并进入 review，线程登记与审计文件因 GitHub 登录失效仍待推送。当前完成条件是恢复 GitHub 登录、推送本地记录并由用户接受审计。能力审计不产生工具安装或实施授权；未接受前不得开始 `M0-L4-010`。
