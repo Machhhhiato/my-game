@@ -1,6 +1,6 @@
 ---
 work_order_id: NIGHT-M0-L4-401-001
-status: accepted_authorized_dispatch_pending
+status: executed_waiting_user_acceptance
 formal_task: M0-L4-401
 project_label: always game
 real_repo: /Users/xujiangyue/AGENT Project/always game
@@ -18,7 +18,7 @@ new_thread_attempt_limit: 1
 fallback_thread: 01a03800-3d9f-7c70-b1dc-70a30bc8bf01
 ---
 
-# NIGHT-M0-L4-401-001 · 第一次 M0 长执行草案
+# NIGHT-M0-L4-401-001 · 第一次 M0 长执行单
 
 用户已一次性接受本执行单，并授权创建第四层线程、修改限定范围内代码、运行测试和本地启动检查、本地提交及推送 `context/m0-direction`。执行阶段不再逐项请求审批。
 

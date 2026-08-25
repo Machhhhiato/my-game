@@ -36,7 +36,7 @@ handoff_id: M0-H002
 | `M0-L4-011` | `M0-L4-AUDIT` | `AG-M0｜L4-AUDIT｜011｜MAC` | 010 accepted 后创建；逐文件审计保留、改造与拟删除边界，完成后封存 |
 | `M0-L2-201` | `M0-L2-CONTENT` | `AG-M0｜L2-CONTENT｜201｜MAC` | 依赖满足后由第一层创建 |
 | `M0-L3-301` | `M0-L3-TEXT` | `AG-M0｜L3-TEXT｜301｜MAC` | 依赖满足后由第一层创建 |
-| `M0-L4-401` | `M0-L4-CORE` | `AG-M0｜L4-CORE｜401-402｜MAC` | 用户单独授权实现后由第一层创建核心实现任务 |
+| `M0-L4-401` | `M0-L4-CORE` | `AG-M0｜L4-CORE｜401-402｜MAC` | 一次新建失败后按用户授权复用既有第四层线程；实现已完成并等待用户接受 |
 | `M0-L4-402` | `M0-L4-CORE` | 同上 | 可复用 401 任务，但用户必须重新授权 402 |
 | `M0-L4-403` | `M0-L4-OUTPOST` | `AG-M0｜L4-OUTPOST｜403｜MAC` | 用户单独授权后由第一层创建 |
 | `M0-L4-404` | `M0-L4-CANDIDATE` | `AG-M0｜L4-CANDIDATE｜404｜MAC` | 用户单独授权后由第一层创建，保持独立验收视角 |
@@ -77,7 +77,7 @@ handoff_id: M0-H002
 - 新线程提示只写角色、任务、仓库路径、分支、必须读取的 Git 文档和验收条件。完整上下文以 Git 为准，不依赖复制当前长聊天。
 - 稳定 lane 复用同一职责与权威上下文，但不强制永久复用同一个物理 Codex 任务。可按夜间批次、正式大阶段或上下文压力滚动创建接替任务；同一时刻只能有一个活动实例，旧实例只保留证据，跨职责任务不混用。
 - 线程 ID、host ID、模型、推理强度和当前任务在实际创建后回写本文件或 `ACTIVE_TASKS.md`。没有创建时不得编造 ID。
-- 所有线程使用本机环境，不创建 ChatGPT 云任务。串行依赖不变；`M0-S003-U086` 已满足最终冻结门，当前只允许创建 `M0-L4-AUDIT` 线程。
+- 所有线程使用本机环境，不创建 ChatGPT 云任务。串行依赖不变；`M0-S003-U126` 已授权 M0-L4-401，当前实现与第一层验证已经完成，不创建新的活动下层线程。
 
 ## 当前审计任务登记
 
@@ -91,8 +91,9 @@ handoff_id: M0-H002
 | `AG-M0｜L2-CONTENT｜201｜MAC` | `01a0382b-4e62-77e0-904c-a35b9e7be8f5` | `local` | `gpt-5.6-terra` / `medium` | `completed / idle` | 正确本地项目的只读工作树任务；首次交付被退回，修订版 `CONTENT-M0-001` 已 accepted |
 | `AG-M0｜L2-CONTENT｜201-R1｜MAC` | `01a0386f-71e3-7cd1-9b03-85724a9fc464` | `local` | `gpt-5.6-terra` / `medium` | `completed / idle` | 首稿被第一层退回；同一任务修订版 `CONTENT-M0-STORY-001` 已 accepted |
 | `AG-M0｜L3-TEXT｜301｜MAC` | `01a03845-90a7-7c73-95e6-f48796358313` | `local` | `gpt-5.6-sol` / `medium` | `completed / idle` | 首次交付被第一层退回；完整修订版已固化为 `TEXT_M0_001.md` 并进入用户 review |
+| `AG-M0｜L4-CORE｜401｜MAC（复用）` | `01a03800-3d9f-7c70-b1dc-70a30bc8bf01` | `local` | `gpt-5.6-terra` / `medium` | `completed / idle` | 一次新建失败后复用旧第四层线程；首版被第一层退回，R1 完成；最终代码由第一层补修、验证和 Git 收口 |
 
-当前没有已经创建的活动下层任务。`M0-L2-201-R1` / `01a0386f-71e3-7cd1-9b03-85724a9fc464` 已 completed，修订版故事事实包 accepted。`M0-L3-301-R1` 的输入已在 `09723c8` 同步，但 Codex 应用项目列表为空，正确历史项目 ID 的 worktree 与 local 创建都失败，状态为 `blocked_task_creation`。
+当前没有活动下层任务。`M0-L4-401` 复用线程已 completed / idle；`BUILD-M0-CORE-001` 已通过第一层验证，状态为 `implemented_waiting_user_acceptance`。
 
 从 `M0-S003-U089` 起，昼夜分工正式生效：白天由第一层完成方案、范围、验收与夜间执行单；夜间任务只执行一个已授权的大结果，通常按约六小时估算，但额度、上下文和环境允许时可以运行八小时或更久，并按新的预计结束时间预留收尾验证时间；次日由第一层收回证据并交给用户验收。详细规则见 accepted 的 `day-night-execution-plan.md` 和 `NIGHT_WORK_ORDER_TEMPLATE.md`。研究型审计与代码实现不得塞进同一夜间任务；上下文接近上限时必须先写检查点，再建立新任务继续。
 
@@ -105,6 +106,6 @@ OpenAI 官方用例把长期目标与专属项目协作者列为 Codex 工作流
 - 同一稳定任务线同时只能有一个活动任务；当前只允许 Mac 任务成为活动实例。
 - `handoff_pending` 时 `active_lane`、`active_host`、`active_session` 必须为 `null`，不能提前虚构接管完成。
 - 第一层可以在依赖满足后创建、驱动、读取、等待、退回和收回第二至第四层任务；下层必须完整读取自己的角色卡和任务卡，并把产物、证据与阻塞交回第一层。
-- 第一层统筹不允许越过串行依赖，不替代第二、三层的职责，也不是第四层写入授权。`M0-L4-401` 至 `404` 每个实现任务仍须用户单独授权。
-- `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011`、`M0-L2-201`、`M0-L2-201-R1` 已 accepted 且 `overall_spec_frozen: true`；当前 `M0-L3-301-R1` blocked_task_creation。
+- 第一层统筹不允许越过串行依赖，也不替代第二、三层职责。`D-M0-DIR-037` 提供项目内持续总控授权，但每张执行单的依赖、白名单、非目标和停止条件仍然有效。
+- `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011`、`M0-L2-201`、`M0-L2-201-R1`、`M0-L3-301` 已 accepted 且 `overall_spec_frozen: true`；当前 `M0-L4-401` 等待用户试玩接受。
 - 当前任务和状态只以 `ACTIVE_TASKS.md` 为准；当前唯一下一动作只以 `NEXT_ACTION.md` 为准。

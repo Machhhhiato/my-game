@@ -8,6 +8,7 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
+    "test:m0": "node --import tsx scripts/m0-core-sim.ts",
     "tauri": "tauri"
   },
   "dependencies": {
