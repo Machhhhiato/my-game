@@ -4,11 +4,13 @@
 |---|---|---|---|---|---|---|
 | `M0-S001` | `M0-DIR-A` | `mac` | 2026-08-20 11:59 +08:00 | closed | `M0-S001-A035` | `sessions/20260820-1159-mac-m0-s001.md` |
 | `M0-S002` | `M0-DIR-B` | `windows` | 2026-08-20 20:34 +08:00 | closed | `M0-S002-A014` | `sessions/20260820-2034-windows-m0-s002.md` |
-| `M0-S003` | `M0-DIR-A` | `mac` | 2026-08-21 11:55 +08:00 | active | `M0-S003-R122` | `sessions/20260821-1155-mac-m0-s003.md` |
+| `M0-S003` | `M0-DIR-A` | `mac` | 2026-08-21 11:55 +08:00 | handoff_ready | `M0-S003-R124` | `sessions/20260821-1155-mac-m0-s003.md` + `sessions/20260826-1900-mac-m0-s003-amendment-002.md` |
 
 补记：`M0-S002-AMEND-001` 记录交接推送等待期间遗漏的一条可见 commentary；它不改变 `M0-S002-A014` 的最终记录或任何路由状态。文件：`sessions/20260820-2228-windows-m0-s002-amendment-001.md`。
 
 补记：`M0-S003-AMEND-001` 校正 `U078` 至 `R061` 的物理阅读顺序；完整消息仍在活动 session 原文件中，没有删除或改写。`U080` 起已经恢复在文件末尾继续追加。文件：`sessions/20260825-1020-mac-m0-s003-amendment-001.md`。
+
+补记：`M0-S003-AMEND-002` 逐字保存 `U139` 至 `U143` 的 UI 与工作流纠错，登记 402-R2 第一层直接实施的流程错误，并准备 `M0-H003` 向新第一层 session `M0-S004` 交接。新 session 尚未由真实对话建立，不得编造 thread ID。文件：`sessions/20260826-1900-mac-m0-s003-amendment-002.md`。
 
 ## 规则
 
