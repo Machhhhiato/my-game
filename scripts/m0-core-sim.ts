@@ -23,6 +23,7 @@ import {
   setResearchDomainAutomatic,
   setResearchDomainOrder,
   setResearchFacilityEnabled,
+  setResearchFacilityOpenPositions,
   setResearchMode,
   setResearchTarget,
   setSurveyPaused,
@@ -491,7 +492,7 @@ saveM0State(exhaustionState, exhaustionStorage);
 equal(JSON.stringify(loadM0State(exhaustionStorage).monthly.resources.water.exhaustionDate), JSON.stringify({ year: 2001, month: 1, day: 3 }), 'save reload preserves deterministic exhaustion node');
 storage.values.set(M0_SAVE_KEY, '{broken');
 equal(loadM0State(storage).elapsedDays, 0, 'broken M0 save resets to initial state');
-storage.values.set(M0_SAVE_KEY, JSON.stringify({ version: 5 }));
+storage.values.set(M0_SAVE_KEY, JSON.stringify({ version: 6 }));
 equal(loadM0State(storage).elapsedDays, 0, 'incomplete same-version save resets to initial state');
 
 const malformedProject = JSON.parse(JSON.stringify(first)) as M0State;
@@ -643,6 +644,15 @@ equal(enabledResearchCapacity(researchFacility.research), 6, 'enabled research f
 researchFacility = setResearchTarget(researchFacility, 'restore-precision-manufacturing');
 researchFacility = advanceOneDay(researchFacility);
 equal(researchFacility.projects.find((project) => project.id === 'restore-precision-manufacturing')?.workDone, 6, 'six staffed facility jobs advance six daylight work');
+researchFacility = setResearchFacilityOpenPositions(researchFacility, 'hq-basic-research-room-01', 3);
+equal(enabledResearchCapacity(researchFacility.research), 3, 'player can close research positions without changing the building capacity');
+equal(researchFacility.projects.find((project) => project.id === 'restore-precision-manufacturing')?.staffing.planned, 3, 'research plan follows open building positions');
+const openPositionStorage = new MemoryStorage();
+saveM0State(researchFacility, openPositionStorage);
+equal(loadM0State(openPositionStorage).research.facilities[0].openPositions, 3, 'open research positions survive strict save reload');
+const closedResearchPositions = setResearchFacilityOpenPositions(researchFacility, 'hq-basic-research-room-01', 0);
+equal(enabledResearchCapacity(closedResearchPositions.research), 0, 'closing every research position leaves the building enabled without ghost capacity');
+equal(advanceOneDay(closedResearchPositions).projects.find((project) => project.id === 'restore-precision-manufacturing')?.workDone, 6, 'an enabled research building with no open positions creates no progress');
 researchFacility = setResearchFacilityEnabled(researchFacility, 'hq-basic-research-room-01', false);
 equal(enabledResearchCapacity(researchFacility.research), 0, 'stopping the facility removes its research capacity');
 researchFacility = advanceOneDay(researchFacility);
@@ -650,6 +660,7 @@ equal(researchFacility.projects.find((project) => project.id === 'restore-precis
 researchFacility.population.normal = 17;
 researchFacility.population.unableToWork = 11;
 researchFacility = setResearchFacilityEnabled(researchFacility, 'hq-basic-research-room-01', true);
+researchFacility = setResearchFacilityOpenPositions(researchFacility, 'hq-basic-research-room-01', 6);
 equal(researchFacility.projects.find((project) => project.id === 'restore-precision-manufacturing')?.staffing.actual, 1, 'actual employment can stay below building capacity when labor is short');
 researchFacility = advanceOneDay(researchFacility);
 equal(researchFacility.projects.find((project) => project.id === 'restore-precision-manufacturing')?.workDone, 7, 'one actual researcher advances one daylight work without a player staffing selector');
@@ -659,6 +670,7 @@ scaledResearchFacilities.research.facilities.push({
   name: '避难所第二研究室',
   locationId: 'hq',
   capacity: 4,
+  openPositions: 4,
   enabled: true,
 });
 scaledResearchFacilities = setResearchTarget(scaledResearchFacilities, 'restore-precision-manufacturing');
@@ -865,6 +877,7 @@ expectRejectedCapabilitySave((state) => { state.research.domainOrder[0] = 'inval
 expectRejectedCapabilitySave((state) => { state.research.manualQueue.push('unknown-technology'); }, 'unknown research queue ID resets safely');
 expectRejectedCapabilitySave((state) => { state.research.facilities.push({ ...state.research.facilities[0] }); }, 'duplicate research facility ID resets safely');
 expectRejectedCapabilitySave((state) => { state.research.facilities[0].capacity = 0; }, 'zero-capacity research facility resets safely');
+expectRejectedCapabilitySave((state) => { state.research.facilities[0].openPositions = 7; }, 'research positions above building capacity reset safely');
 expectRejectedCapabilitySave((state) => { state.map.surveys[0].targetId = state.map.surveys[1].targetId; }, 'duplicate survey target resets safely');
 expectRejectedCapabilitySave((state) => { state.map.surveys[0].stage = 'invalid' as M0State['map']['surveys'][number]['stage']; }, 'invalid survey stage resets safely');
 expectRejectedCapabilitySave((state) => { state.map.surveys[0].projectId = 'missing-project'; }, 'invalid survey project reference resets safely');
@@ -887,4 +900,4 @@ expectRejectedCapabilitySave((state) => {
   }
 }, 'charging drone must be in overnight or inspection phase');
 
-console.log('M0 stage A+B+402-R1 checks passed: core accounting, shared-edge spherical surface, facility-driven research staffing, strict capability saves, intelligence boundaries, automatic research rounds, entity work, queued drone recharge, and editable survey progression.');
+console.log('M0 stage A+B+402-R2 checks passed: core accounting, shared-edge spherical surface, player-controlled building positions, strict capability saves, intelligence boundaries, automatic research rounds, entity work, queued drone recharge, and editable survey progression.');

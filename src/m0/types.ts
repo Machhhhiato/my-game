@@ -1,4 +1,4 @@
-export const M0_STATE_VERSION = 5 as const;
+export const M0_STATE_VERSION = 6 as const;
 
 export type ResourceId = 'water' | 'food' | 'commonParts' | 'engineeringComponents' | 'alloy' | 'precisionParts';
 export type DailyLineId = 'water' | 'food' | 'maintenance' | 'logistics';
@@ -168,6 +168,7 @@ export interface ResearchFacility {
   name: string;
   locationId: 'hq';
   capacity: number;
+  openPositions: number;
   enabled: boolean;
 }
 

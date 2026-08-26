@@ -861,6 +861,17 @@ export function setResearchFacilityEnabled(state: M0State, facilityId: string, e
   return next;
 }
 
+export function setResearchFacilityOpenPositions(state: M0State, facilityId: string, openPositions: number): M0State {
+  const next = cloneState(state);
+  const facility = next.research.facilities.find((candidate) => candidate.id === facilityId);
+  if (!facility) return state;
+  facility.openPositions = Math.max(0, Math.min(facility.capacity, Math.floor(openPositions)));
+  synchronizeResearch(next);
+  enforceStaffing(next, []);
+  next.feedback = `${facility.name}开放 ${facility.openPositions} 个岗位。`;
+  return next;
+}
+
 export function setResearchDomainOrder(state: M0State, order: ResearchDomain[]): M0State {
   const expected = ['manufacturing', 'surveying', 'engineering'];
   if (order.length !== expected.length

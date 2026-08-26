@@ -109,7 +109,7 @@ export function researchDomainName(domain: ResearchDomain): string {
 export function enabledResearchCapacity(research: Pick<ResearchState, 'facilities'>): number {
   return research.facilities
     .filter((facility) => facility.enabled)
-    .reduce((total, facility) => total + facility.capacity, 0);
+    .reduce((total, facility) => total + facility.openPositions, 0);
 }
 
 export function projectForCapability(

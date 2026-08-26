@@ -13,6 +13,8 @@ first_layer_review_status: automatic_and_browser_passed_waiting_user_recheck
 
 # NIGHT-M0-L4-402-R1-001 现场修订报告
 
+> 2026-08-26：本报告记录 R1 历史结果。后续界面骨架修订已由 `NIGHT_RUN_M0_L4_402_R2_001.md` 接替。
+
 ## 结论
 
 402 首次真实试玩提出的三项修订已落地：六边格使用共边球面投影，科研速度改由研究设施岗位与实际入职人数决定，顶部资源栏收紧为单行缩略信息。当前状态为 `implemented_waiting_user_recheck`，不是用户试玩接受，不进入 `M0-L4-403`。

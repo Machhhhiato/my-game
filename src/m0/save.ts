@@ -396,7 +396,7 @@ function isCapabilityState(value: unknown, projects: Project[]): boolean {
   const facilities = research.facilities as unknown[];
   if (new Set(facilities.map((facility) => isRecord(facility) ? facility.id : null)).size !== facilities.length
     || facilities.some((facility) => !isRecord(facility)
-      || !hasExactKeys(facility, ['id', 'name', 'locationId', 'capacity', 'enabled'])
+      || !hasExactKeys(facility, ['id', 'name', 'locationId', 'capacity', 'openPositions', 'enabled'])
       || typeof facility.id !== 'string'
       || facility.id.length === 0
       || typeof facility.name !== 'string'
@@ -404,12 +404,14 @@ function isCapabilityState(value: unknown, projects: Project[]): boolean {
       || facility.locationId !== 'hq'
       || !isNonNegativeInteger(facility.capacity)
       || Number(facility.capacity) < 1
+      || !isNonNegativeInteger(facility.openPositions)
+      || Number(facility.openPositions) > Number(facility.capacity)
       || !isBoolean(facility.enabled))) return false;
   if ((research.blockedReason === 'physical-prerequisite' || research.blockedReason === 'manual-choice')
     && research.blockedProjectId === null) return false;
   const activeResearch = projects.filter((project) => technologyIds.includes(project.id) && project.status === 'active');
   const enabledFacilityCapacity = facilities.reduce<number>((total, facility) => (
-    total + (isRecord(facility) && facility.enabled === true ? Number(facility.capacity) : 0)
+    total + (isRecord(facility) && facility.enabled === true ? Number(facility.openPositions) : 0)
   ), 0);
   if (activeResearch.length > 1
     || (research.currentProjectId === null) !== (research.currentSource === null)
