@@ -6,7 +6,7 @@ output_id: BUILD-M0-CAPABILITY-001-R1
 run_status: implemented_waiting_user_recheck
 authorized_source: M0-S003-U138
 input_commit: d00f22c274ac1f582f7af8bbd7f439dcae8a2db3
-implementation_commit: pending_commit
+implementation_commit: 42a47b02e9f4351839ae5aee89adb9fc520ba205
 first_layer_reviewed_at: 2026-08-26T16:59:14+08:00
 first_layer_review_status: automatic_and_browser_passed_waiting_user_recheck
 ---

@@ -18,7 +18,7 @@ next_lane: null
 next_host: null
 handoff_id: M0-H002
 last_session: M0-S003
-last_turn: M0-S003-R121
+last_turn: M0-S003-R122
 updated_at: 2026-08-26T16:59:14+08:00
 ---
 
