@@ -42,6 +42,7 @@ import {
 } from './map';
 import {
   capabilityPrerequisites,
+  enabledResearchCapacity,
   isPrecisionWorkshopProjectId,
   isResearchProjectId,
   projectForCapability,
@@ -79,7 +80,8 @@ function isSurveyProject(project: Project): boolean {
 function minimumProjectStaff(project: Project): number {
   if (project.id === 'repair-precision-workshop') return 9;
   if (isPrecisionWorkshopProjectId(project.id)) return 6;
-  if (isResearchProjectId(project.id) || isSurveyProject(project)) return 2;
+  if (isResearchProjectId(project.id)) return 1;
+  if (isSurveyProject(project)) return 2;
   return 0;
 }
 
@@ -93,8 +95,9 @@ function synchronizeResearch(state: M0State): void {
   state.research.blockedProjectId = selection.blockedProjectId;
   state.research.blockedReason = selection.blockedReason;
 
+  const facilityCapacity = enabledResearchCapacity(state.research);
   for (const project of state.projects.filter((candidate) => isResearchProjectId(candidate.id) && candidate.status !== 'complete')) {
-    project.staffing.planned = state.research.workers;
+    project.staffing.planned = facilityCapacity;
     if (project.id === selection.id) {
       if (project.pausedReason === 'player_pause' || project.pausedReason === 'research_prerequisite') {
         project.status = 'active';
@@ -108,7 +111,7 @@ function synchronizeResearch(state: M0State): void {
   }
 
   if (selection.id && !state.projects.some((project) => project.id === selection.id)) {
-    const project = projectForCapability(selection.id, 'P1', state.research.workers);
+    const project = projectForCapability(selection.id, 'P1', facilityCapacity);
     if (project) state.projects.push(project);
   }
   const selectedProject = selection.id ? projectById(state, selection.id) : undefined;
@@ -165,7 +168,10 @@ function enforceStaffing(state: M0State, events: ProjectEvent[]): void {
   if (required > workable) {
     for (const priority of PAUSE_PRIORITIES) {
       const candidates = state.projects
-        .filter((project) => project.priority === priority && project.status === 'active' && !project.directRecovery)
+        .filter((project) => project.priority === priority
+          && project.status === 'active'
+          && !project.directRecovery
+          && !isResearchProjectId(project.id))
         .sort((left, right) => right.queueOrder - left.queueOrder);
 
       for (const project of candidates) {
@@ -844,11 +850,14 @@ export function setResearchMode(state: M0State, mode: ResearchMode): M0State {
   return next;
 }
 
-export function setResearchStaffing(state: M0State, workers: 2 | 4 | 6): M0State {
+export function setResearchFacilityEnabled(state: M0State, facilityId: string, enabled: boolean): M0State {
   const next = cloneState(state);
-  next.research.workers = workers;
+  const facility = next.research.facilities.find((candidate) => candidate.id === facilityId);
+  if (!facility) return state;
+  facility.enabled = enabled;
   synchronizeResearch(next);
   enforceStaffing(next, []);
+  next.feedback = `${facility.name}已${enabled ? '启用' : '停用'}。`;
   return next;
 }
 
@@ -887,7 +896,7 @@ export function approveCapabilityProject(state: M0State, id: string): M0State {
   if (isPrecisionWorkshopProjectId(id) && next.projects.some((project) => (
     isPrecisionWorkshopProjectId(project.id) && project.status !== 'complete'
   ))) return { ...state, feedback: '精密工坊当前已有一项任务。' };
-  const project = projectForCapability(id, 'P1', next.research.workers);
+  const project = projectForCapability(id, 'P1', enabledResearchCapacity(next.research));
   const approved = project ? approveProject(next, project, project.investedResources) : next;
   synchronizeResearch(approved);
   enforceStaffing(approved, []);

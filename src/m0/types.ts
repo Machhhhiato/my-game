@@ -1,4 +1,4 @@
-export const M0_STATE_VERSION = 4 as const;
+export const M0_STATE_VERSION = 5 as const;
 
 export type ResourceId = 'water' | 'food' | 'commonParts' | 'engineeringComponents' | 'alloy' | 'precisionParts';
 export type DailyLineId = 'water' | 'food' | 'maintenance' | 'logistics';
@@ -163,6 +163,14 @@ export type TerrainId = 'hardground' | 'mud' | 'slope' | 'shore' | 'plain';
 export type OccupationId = 'empty' | 'headquarters' | 'waterworks' | 'food-site' | 'industrial-ruin' | 'future-site';
 export type SurveyPauseReason = 'player' | 'day-limit' | 'route-choice' | 'staffing' | 'safety' | null;
 
+export interface ResearchFacility {
+  id: string;
+  name: string;
+  locationId: 'hq';
+  capacity: number;
+  enabled: boolean;
+}
+
 export interface LocalMapCell {
   id: string;
   q: number;
@@ -213,7 +221,7 @@ export interface ResearchState {
   domainOrder: ResearchDomain[];
   automaticDomains: ResearchDomain[];
   completed: string[];
-  workers: 2 | 4 | 6;
+  facilities: ResearchFacility[];
   currentProjectId: string | null;
   currentSource: ResearchMode | null;
   roundTarget: number | null;

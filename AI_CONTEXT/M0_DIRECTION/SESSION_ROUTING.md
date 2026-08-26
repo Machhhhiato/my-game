@@ -37,7 +37,7 @@ handoff_id: M0-H002
 | `M0-L2-201` | `M0-L2-CONTENT` | `AG-M0｜L2-CONTENT｜201｜MAC` | 依赖满足后由第一层创建 |
 | `M0-L3-301` | `M0-L3-TEXT` | `AG-M0｜L3-TEXT｜301｜MAC` | 依赖满足后由第一层创建 |
 | `M0-L4-401-R1` | `M0-L4-CORE` | `AG-M0｜L4-CORE｜401-R1｜MAC` | 首次 Terra / medium 任务已成功创建但因能力不足停止并清理；规则同步后使用更合适模型建立一个第四层接替任务 |
-| `M0-L4-402` | `M0-L4-CORE` | `AG-M0｜L4-CORE｜402｜MAC` | 已获用户授权，按新的大型第四层批次执行 |
+| `M0-L4-402` / `M0-L4-402-R1` | `M0-L4-CORE` | `AG-M0｜L4-CORE｜402｜MAC` | 402 大批次已完成；402-R1 由第一层在现场试玩中直接修正，没有创建新线程 |
 | `M0-L4-403` | `M0-L4-OUTPOST` | `AG-M0｜L4-OUTPOST｜403｜MAC` | 用户单独授权后由第一层创建 |
 | `M0-L4-404` | `M0-L4-CANDIDATE` | `AG-M0｜L4-CANDIDATE｜404｜MAC` | 用户单独授权后由第一层创建，保持独立验收视角 |
 
@@ -99,7 +99,7 @@ handoff_id: M0-H002
 | `AG-M0｜L4-CORE｜402｜MAC A1` | `/root/m0_l4_402` | `local` | `gpt-5.6-terra` / `medium` | `stopped_incomplete / closed` | 自动测试通过但缺领域自动科研、勘测调度和完整地点事实 UI；两份冻结规格无完整 EOF 回执，未提交、未推送 |
 | `AG-M0｜L4-CORE｜402｜MAC A2` | `/root/m0_l4_402_sol` | `local` | `gpt-5.6-sol` / `high` | `completed / idle` | 依据 `D-M0-DIR-040` 接替能力不足实例；经历一次第一层退回后通过自动验收，未启动页面、未进入 403 |
 
-当前没有活动下层任务。首次 `/root/m0_l4_402` 已因实质缺项停止；接替任务 `/root/m0_l4_402_sol` 已完成 402 地图、科研、精密工坊与勘测无人机实现并 idle，等待以后试玩细调。
+当前没有活动下层任务。首次 `/root/m0_l4_402` 已因实质缺项停止；接替任务 `/root/m0_l4_402_sol` 已完成并 idle。用户现场试玩后的 402-R1 由第一层在真实仓库直接修正，没有另建第四层线程；当前本地服务运行中，等待用户复查。
 
 从 `M0-S003-U089` 起，昼夜分工正式生效：白天由第一层完成方案、范围、验收与夜间执行单；夜间任务只执行一个已授权的大结果，通常按约六小时估算，但额度、上下文和环境允许时可以运行八小时或更久，并按新的预计结束时间预留收尾验证时间；次日由第一层收回证据并交给用户验收。详细规则见 accepted 的 `day-night-execution-plan.md` 和 `NIGHT_WORK_ORDER_TEMPLATE.md`。研究型审计与代码实现不得塞进同一夜间任务；上下文接近上限时必须先写检查点，再建立新任务继续。
 
@@ -113,5 +113,5 @@ OpenAI 官方用例把长期目标与专属项目协作者列为 Codex 工作流
 - `handoff_pending` 时 `active_lane`、`active_host`、`active_session` 必须为 `null`，不能提前虚构接管完成。
 - 第一层可以在依赖满足后创建、驱动、读取、等待、退回和收回第二至第四层任务；下层必须完整读取自己的角色卡和任务卡，并把产物、证据与阻塞交回第一层。
 - 第一层统筹不允许越过串行依赖，也不替代第二、三层职责。`D-M0-DIR-037` 提供项目内持续总控授权，但每张执行单的依赖、白名单、非目标和停止条件仍然有效。
-- `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011`、`M0-L2-201`、`M0-L2-201-R1`、`M0-L3-301` 与 `M0-L4-401-R1` 已 accepted 且 `overall_spec_frozen: true`；当前 `M0-L4-402` 为 `implemented_waiting_future_playtest`，`M0-L4-403` 继续阻塞。
+- `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011`、`M0-L2-201`、`M0-L2-201-R1`、`M0-L3-301` 与 `M0-L4-401-R1` 已 accepted 且 `overall_spec_frozen: true`；当前 `M0-L4-402-R1` 为 `implemented_waiting_user_recheck`，`M0-L4-403` 继续阻塞。
 - 当前任务和状态只以 `ACTIVE_TASKS.md` 为准；当前唯一下一动作只以 `NEXT_ACTION.md` 为准。

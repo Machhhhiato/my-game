@@ -370,7 +370,7 @@ function isCapabilityState(value: unknown, projects: Project[]): boolean {
 
   const technologyIds = technologies.map((technology) => technology.id);
   if (!hasExactKeys(research, [
-    'mode', 'manualQueue', 'domainOrder', 'automaticDomains', 'completed', 'workers',
+    'mode', 'manualQueue', 'domainOrder', 'automaticDomains', 'completed', 'facilities',
     'currentProjectId', 'currentSource', 'roundTarget', 'blockedProjectId', 'blockedReason',
   ])
     || !['manual', 'automatic'].includes(research.mode as string)
@@ -387,20 +387,38 @@ function isCapabilityState(value: unknown, projects: Project[]): boolean {
     || !isStringArray(research.completed)
     || new Set(research.completed).size !== research.completed.length
     || research.completed.some((id) => !technologyIds.includes(id))
-    || ![2, 4, 6].includes(research.workers as number)
+    || !Array.isArray(research.facilities)
     || (research.currentProjectId !== null && !technologyIds.includes(research.currentProjectId as string))
     || !['manual', 'automatic', null].includes(research.currentSource as string | null)
     || (research.roundTarget !== null && !isNonNegativeInteger(research.roundTarget))
     || (research.blockedProjectId !== null && !technologyIds.includes(research.blockedProjectId as string))
     || !['physical-prerequisite', 'manual-choice', 'no-project', null].includes(research.blockedReason as string | null)) return false;
+  const facilities = research.facilities as unknown[];
+  if (new Set(facilities.map((facility) => isRecord(facility) ? facility.id : null)).size !== facilities.length
+    || facilities.some((facility) => !isRecord(facility)
+      || !hasExactKeys(facility, ['id', 'name', 'locationId', 'capacity', 'enabled'])
+      || typeof facility.id !== 'string'
+      || facility.id.length === 0
+      || typeof facility.name !== 'string'
+      || facility.name.length === 0
+      || facility.locationId !== 'hq'
+      || !isNonNegativeInteger(facility.capacity)
+      || Number(facility.capacity) < 1
+      || !isBoolean(facility.enabled))) return false;
   if ((research.blockedReason === 'physical-prerequisite' || research.blockedReason === 'manual-choice')
     && research.blockedProjectId === null) return false;
   const activeResearch = projects.filter((project) => technologyIds.includes(project.id) && project.status === 'active');
+  const enabledFacilityCapacity = facilities.reduce<number>((total, facility) => (
+    total + (isRecord(facility) && facility.enabled === true ? Number(facility.capacity) : 0)
+  ), 0);
   if (activeResearch.length > 1
     || (research.currentProjectId === null) !== (research.currentSource === null)
     || (research.currentProjectId === null) !== (activeResearch.length === 0)
     || (research.currentProjectId !== null
       && !activeResearch.some((project) => project.id === research.currentProjectId))
+    || projects.some((project) => technologyIds.includes(project.id)
+      && project.status !== 'complete'
+      && project.staffing.planned !== enabledFacilityCapacity)
     || research.completed.some((id) => projects.find((project) => project.id === id)?.status !== 'complete')) return false;
 
   if (value.drone === null) return true;

@@ -23,8 +23,8 @@ import {
   selectMapCell,
   setResearchDomainAutomatic,
   setResearchDomainOrder,
+  setResearchFacilityEnabled,
   setResearchMode,
-  setResearchStaffing,
   setResearchTarget,
   setSurveyPaused,
   setProjectAutoResume,
@@ -50,7 +50,7 @@ import {
   type WorkMode,
 } from './types';
 import { futureFarmConclusion, intelStageName, projectSphericalLocalWindow, routeForTarget, surveyConclusion, surveyPlanControlState, surveyVisibleFacts, visibleCellClass, visibleCellTitle } from './map';
-import { researchDomainName, technologyName } from './progression';
+import { enabledResearchCapacity, researchDomainName, technologyName } from './progression';
 import './m0.css';
 
 const resourceLabels: Record<ResourceId, string> = {
@@ -360,6 +360,10 @@ function ResearchSheet({ state, updateState }: { state: M0State; updateState: (u
   const currentProject = state.research.currentProjectId
     ? state.projects.find((project) => project.id === state.research.currentProjectId)
     : null;
+  const totalCapacity = state.research.facilities.reduce((sum, facility) => sum + facility.capacity, 0);
+  const enabledCapacity = enabledResearchCapacity(state.research);
+  const actualResearchers = currentProject?.staffing.actual ?? 0;
+  let unassignedActualResearchers = actualResearchers;
   const moveDomain = (domain: ResearchDomain, offset: -1 | 1): void => {
     const order = [...state.research.domainOrder];
     const index = order.indexOf(domain);
@@ -376,14 +380,35 @@ function ResearchSheet({ state, updateState }: { state: M0State; updateState: (u
         ? '参与自动科研的领域已经达到当前公开上限。'
         : null;
   return <div className="m0-project-list">
-    <p className="m0-fact-note">一条科研工作线；只在白昼由实际调度人员推进。</p>
-    <label className="m0-command-control"><span>科研人数</span><select value={state.research.workers} onChange={(event) => updateState((current) => setResearchStaffing(current, Number(event.target.value) as 2 | 4 | 6))}>
-      <option value={2}>2 人</option><option value={4}>4 人</option><option value={6}>6 人</option>
-    </select></label>
-    <button type="button" disabled={completed.includes('restore-precision-manufacturing')} onClick={() => updateState((current) => setResearchTarget(current, 'restore-precision-manufacturing'))}>设为远期目标：恢复精密制造</button>
-    <button type="button" disabled={completed.includes('adapt-survey-drone')} onClick={() => updateState((current) => setResearchTarget(current, 'adapt-survey-drone'))}>设为远期目标：适配勘测无人机</button>
+    <section className="m0-research-facilities">
+      <div className="m0-project-heading"><h3>科研设施</h3><span>{state.research.facilities.filter((facility) => facility.enabled).length} / {state.research.facilities.length} 座运行</span></div>
+      {state.research.facilities.map((facility) => {
+        const staffed = facility.enabled ? Math.min(facility.capacity, unassignedActualResearchers) : 0;
+        unassignedActualResearchers -= staffed;
+        return <article className="m0-research-facility" key={facility.id}>
+          <div className="m0-command-heading">
+            <h4>{facility.name}</h4>
+            <button
+              type="button"
+              className={facility.enabled ? 'is-active' : ''}
+              onClick={() => updateState((current) => setResearchFacilityEnabled(current, facility.id, !facility.enabled))}
+            >{facility.enabled ? '运行中' : '已停用'}</button>
+          </div>
+          <dl className="m0-fact-list">
+            <div><dt>地点</dt><dd>总部避难所</dd></div>
+            <div><dt>岗位上限</dt><dd>{facility.capacity} 人</dd></div>
+            <div><dt>实际到岗</dt><dd>{staffed} 人</dd></div>
+          </dl>
+        </article>;
+      })}
+      <p className="m0-fact-note">已建岗位 {totalCapacity} 个，当前启用 {enabledCapacity} 个；每日科研推进由实际到岗人数决定。以后新建科研设施会直接增加岗位容量。</p>
+    </section>
+    <div className="m0-research-targets">
+      <button type="button" disabled={completed.includes('restore-precision-manufacturing')} onClick={() => updateState((current) => setResearchTarget(current, 'restore-precision-manufacturing'))}>设为远期目标：恢复精密制造</button>
+      <button type="button" disabled={completed.includes('adapt-survey-drone')} onClick={() => updateState((current) => setResearchTarget(current, 'adapt-survey-drone'))}>设为远期目标：适配勘测无人机</button>
+    </div>
     <h3>当前科研</h3>
-    <p>{currentProject ? `${currentProject.name} · ${state.research.currentSource === 'manual' ? '指定队列' : '领域自动'} · ${formatNumber(currentProject.workDone)} / ${formatNumber(currentProject.workRequired)}` : blockedText ?? '科研工作线待命。'}</p>
+    <p>{currentProject ? `${currentProject.name} · ${state.research.currentSource === 'manual' ? '指定队列' : '领域自动'} · ${formatNumber(currentProject.workDone)} / ${formatNumber(currentProject.workRequired)} · 在岗 ${actualResearchers} 人` : blockedText ?? '科研工作线待命。'}</p>
     {currentProject && blockedText ? <p className="m0-fact-note">{blockedText}</p> : null}
     <h3>指定队列</h3><p>{state.research.manualQueue.length ? state.research.manualQueue.map(technologyName).join(' → ') : '尚未指定'}</p>
     <div className="m0-project-heading"><h3>领域自动顺序</h3><button type="button" onClick={() => updateState((current) => setResearchMode(current, 'automatic'))}>切换到领域自动</button></div>
@@ -727,10 +752,12 @@ function MapStage({
   onRotationChange: (rotation: MapRotation) => void;
 }): ReactElement {
   const mapRef = useRef<HTMLDivElement>(null);
-  const dragRef = useRef<{ pointerId: number; x: number; y: number; rotation: MapRotation } | null>(null);
+  const dragRef = useRef<{ pointerId: number; x: number; y: number; rotation: MapRotation; moved: boolean } | null>(null);
+  const suppressCellClickRef = useRef(false);
   const pendingRotationRef = useRef<MapRotation | null>(null);
   const rotationTimerRef = useRef<number | null>(null);
-  const projected = new Map(projectSphericalLocalWindow(state.map.cells, state.ui.mapRotation).map((cell) => [cell.id, cell]));
+  const projectedCells = projectSphericalLocalWindow(state.map.cells, state.ui.mapRotation);
+  const projected = new Map(projectedCells.map((cell) => [cell.id, cell]));
 
   useEffect(() => () => {
     if (rotationTimerRef.current !== null) window.clearTimeout(rotationTimerRef.current);
@@ -751,19 +778,21 @@ function MapStage({
   };
 
   const onSpherePointerDown = (event: ReactPointerEvent<HTMLDivElement>): void => {
-    if (event.target !== event.currentTarget) return;
+    if (event.button !== 0) return;
     event.currentTarget.setPointerCapture(event.pointerId);
     dragRef.current = {
       pointerId: event.pointerId,
       x: event.clientX,
       y: event.clientY,
       rotation: { ...state.ui.mapRotation },
+      moved: false,
     };
   };
 
   const onSpherePointerMove = (event: ReactPointerEvent<HTMLDivElement>): void => {
     const drag = dragRef.current;
     if (!drag || drag.pointerId !== event.pointerId) return;
+    if (Math.hypot(event.clientX - drag.x, event.clientY - drag.y) > 3) drag.moved = true;
     scheduleRotation({
       yaw: drag.rotation.yaw + (event.clientX - drag.x) * 0.005,
       pitch: drag.rotation.pitch - (event.clientY - drag.y) * 0.005,
@@ -771,9 +800,12 @@ function MapStage({
   };
 
   const onSpherePointerEnd = (event: ReactPointerEvent<HTMLDivElement>): void => {
-    if (dragRef.current?.pointerId !== event.pointerId) return;
+    const drag = dragRef.current;
+    if (drag?.pointerId !== event.pointerId) return;
+    suppressCellClickRef.current = drag.moved;
     dragRef.current = null;
     flushRotation();
+    window.setTimeout(() => { suppressCellClickRef.current = false; }, 0);
   };
 
   const onSphereKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>): void => {
@@ -802,24 +834,33 @@ function MapStage({
         onPointerCancel={onSpherePointerEnd}
         onKeyDown={onSphereKeyDown}
       >
-        {state.map.cells.map((cell) => {
+        <svg className="m0-map-grid" viewBox="0 0 100 100" role="group" aria-label="总部周围地表网格">
+        {state.map.cells
+          .slice()
+          .sort((left, right) => (projected.get(left.id)?.depth ?? 0) - (projected.get(right.id)?.depth ?? 0))
+          .map((cell) => {
           const position = projected.get(cell.id);
           if (!position?.visible) return null;
-          return <button
-            type="button"
+          const points = position.corners.map((corner) => `${corner.xPercent},${corner.yPercent}`).join(' ');
+          return <polygon
             key={cell.id}
             className={`m0-map-cell is-${visibleCellClass(cell)} ${state.map.selectedCellId === cell.id ? 'is-selected' : ''}`}
-            style={{
-              '--map-x': `${position.xPercent}%`,
-              '--map-y': `${position.yPercent}%`,
-              '--map-scale': position.scale,
-              zIndex: Math.round((position.depth + 1) * 100),
-            } as CSSProperties}
-            onClick={() => onSelectCell(cell.id)}
+            points={points}
+            role="button"
+            tabIndex={0}
+            onClick={() => {
+              if (suppressCellClickRef.current) return;
+              onSelectCell(cell.id);
+            }}
+            onKeyDown={(event) => {
+              if (event.key !== 'Enter' && event.key !== ' ') return;
+              event.preventDefault();
+              onSelectCell(cell.id);
+            }}
             aria-label={visibleCellTitle(cell)}
-            title={visibleCellTitle(cell)}
-          />;
+          ><title>{visibleCellTitle(cell)}</title></polygon>;
         })}
+        </svg>
       </div>
       <p id="m0-planet-help" className="m0-planet-help">拖动球面或使用方向键有限旋转；Home 恢复总部视角。球壳外未制作地点内容。</p>
       <button type="button" className="m0-map-reset" onClick={() => onRotationChange({ yaw: 0, pitch: 0 })}>恢复总部视角</button>

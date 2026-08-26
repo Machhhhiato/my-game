@@ -22,13 +22,13 @@ import {
   selectSurveyRoute,
   setResearchDomainAutomatic,
   setResearchDomainOrder,
+  setResearchFacilityEnabled,
   setResearchMode,
-  setResearchStaffing,
   setResearchTarget,
   setSurveyPaused,
   setRunning,
 } from '../src/m0/simulation';
-import { createInitialM0State, setEventWindowPosition, setMapRotation } from '../src/m0/state';
+import { M0_SAVE_KEY, createInitialM0State, setEventWindowPosition, setMapRotation } from '../src/m0/state';
 import type { M0State, Project, ScenarioConfig } from '../src/m0/types';
 import {
   LOCATION_CELLS,
@@ -43,7 +43,7 @@ import {
   visibleCellClass,
   visibleCellTitle,
 } from '../src/m0/map';
-import { automaticSelectionForDefinitions, researchDomainName, technologies, technologyName, type TechnologyDefinition } from '../src/m0/progression';
+import { automaticSelectionForDefinitions, enabledResearchCapacity, researchDomainName, technologies, technologyName, type TechnologyDefinition } from '../src/m0/progression';
 
 function expect(value: unknown, message: string): asserts value {
   if (!value) throw new Error(message);
@@ -489,64 +489,64 @@ exhaustionState.stocks.water.amount = 8;
 refreshMonthlyProjection(exhaustionState);
 saveM0State(exhaustionState, exhaustionStorage);
 equal(JSON.stringify(loadM0State(exhaustionStorage).monthly.resources.water.exhaustionDate), JSON.stringify({ year: 2001, month: 1, day: 3 }), 'save reload preserves deterministic exhaustion node');
-storage.values.set('always-game-m0-v4', '{broken');
+storage.values.set(M0_SAVE_KEY, '{broken');
 equal(loadM0State(storage).elapsedDays, 0, 'broken M0 save resets to initial state');
-storage.values.set('always-game-m0-v4', JSON.stringify({ version: 3 }));
+storage.values.set(M0_SAVE_KEY, JSON.stringify({ version: 5 }));
 equal(loadM0State(storage).elapsedDays, 0, 'incomplete same-version save resets to initial state');
 
 const malformedProject = JSON.parse(JSON.stringify(first)) as M0State;
 delete (malformedProject.projects[0] as Partial<Project>).staffing;
-storage.values.set('always-game-m0-v4', JSON.stringify(malformedProject));
+storage.values.set(M0_SAVE_KEY, JSON.stringify(malformedProject));
 equal(loadM0State(storage).elapsedDays, 0, 'malformed project resets safely');
 const invalidMode = JSON.parse(JSON.stringify(first)) as M0State;
 invalidMode.dailyModes.water = 'invalid' as M0State['dailyModes']['water'];
-storage.values.set('always-game-m0-v4', JSON.stringify(invalidMode));
+storage.values.set(M0_SAVE_KEY, JSON.stringify(invalidMode));
 equal(loadM0State(storage).elapsedDays, 0, 'invalid work mode resets safely');
 const invalidCalendar = JSON.parse(JSON.stringify(first)) as M0State;
 invalidCalendar.calendar = { year: 2001, month: 2, day: 29 };
-storage.values.set('always-game-m0-v4', JSON.stringify(invalidCalendar));
+storage.values.set(M0_SAVE_KEY, JSON.stringify(invalidCalendar));
 equal(loadM0State(storage).elapsedDays, 0, 'invalid calendar date resets safely');
 const invalidMonthly = JSON.parse(JSON.stringify(first)) as M0State;
 invalidMonthly.monthly.processedDays = 0;
-storage.values.set('always-game-m0-v4', JSON.stringify(invalidMonthly));
+storage.values.set(M0_SAVE_KEY, JSON.stringify(invalidMonthly));
 equal(loadM0State(storage).elapsedDays, 0, 'calendar and month accumulation mismatch resets safely');
 const invalidProjection = JSON.parse(JSON.stringify(first)) as M0State;
 invalidProjection.monthly.resources.food.projectedClosingAmount += 1;
-storage.values.set('always-game-m0-v4', JSON.stringify(invalidProjection));
+storage.values.set(M0_SAVE_KEY, JSON.stringify(invalidProjection));
 equal(loadM0State(storage).elapsedDays, 0, 'corrupt monthly prediction resets safely');
 const shadowStock = JSON.parse(JSON.stringify(first)) as M0State;
 (shadowStock.stocks.water as unknown as Record<string, unknown>).reserved = 1;
-storage.values.set('always-game-m0-v4', JSON.stringify(shadowStock));
+storage.values.set(M0_SAVE_KEY, JSON.stringify(shadowStock));
 equal(loadM0State(storage).elapsedDays, 0, 'same-version shadow stock field is rejected');
 const shadowProject = JSON.parse(JSON.stringify(first)) as M0State;
 (shadowProject.projects[0] as unknown as Record<string, unknown>).lockedCost = {};
-storage.values.set('always-game-m0-v4', JSON.stringify(shadowProject));
+storage.values.set(M0_SAVE_KEY, JSON.stringify(shadowProject));
 equal(loadM0State(storage).elapsedDays, 0, 'same-version shadow project cost is rejected');
 const invalidEvents = JSON.parse(JSON.stringify(shortageDay)) as M0State;
 invalidEvents.events[0].date = { year: 2001, month: 2, day: 30 };
-storage.values.set('always-game-m0-v4', JSON.stringify(invalidEvents));
+storage.values.set(M0_SAVE_KEY, JSON.stringify(invalidEvents));
 equal(loadM0State(storage).elapsedDays, 0, 'invalid persisted event date resets safely');
 const invalidEventPosition = JSON.parse(JSON.stringify(first)) as M0State;
 invalidEventPosition.ui.eventWindow.xRatio = -0.01;
-storage.values.set('always-game-m0-v4', JSON.stringify(invalidEventPosition));
+storage.values.set(M0_SAVE_KEY, JSON.stringify(invalidEventPosition));
 equal(JSON.stringify(loadM0State(storage).ui.eventWindow), JSON.stringify({ xRatio: 1, yRatio: 0.08 }), 'out-of-range saved event window position resets safely');
 const nonFiniteEventPosition = JSON.parse(JSON.stringify(first)) as M0State;
 nonFiniteEventPosition.ui.eventWindow.yRatio = Number.NaN;
-storage.values.set('always-game-m0-v4', JSON.stringify(nonFiniteEventPosition));
+storage.values.set(M0_SAVE_KEY, JSON.stringify(nonFiniteEventPosition));
 equal(JSON.stringify(loadM0State(storage).ui.eventWindow), JSON.stringify({ xRatio: 1, yRatio: 0.08 }), 'non-finite saved event window position resets safely');
 const savedPopulationPulse = JSON.parse(JSON.stringify(first)) as M0State & { populationDelta?: number };
 savedPopulationPulse.populationDelta = -1;
-storage.values.set('always-game-m0-v4', JSON.stringify(savedPopulationPulse));
+storage.values.set(M0_SAVE_KEY, JSON.stringify(savedPopulationPulse));
 equal(loadM0State(storage).elapsedDays, 0, 'transient population pulse is rejected from the strict save schema');
 
 const oldOnly = new MemoryStorage();
 oldOnly.values.set('always-game-m0-v1', JSON.stringify(first));
 loadM0State(oldOnly);
-expect(oldOnly.reads.every((key) => key === 'always-game-m0-v4'), 'old M0 save key is never read');
+expect(oldOnly.reads.every((key) => key === M0_SAVE_KEY), 'old M0 save key is never read');
 const olderOnly = new MemoryStorage();
 olderOnly.values.set('always-game-text-idle-v6', JSON.stringify(first));
 loadM0State(olderOnly);
-expect(olderOnly.reads.every((key) => key === 'always-game-m0-v4'), 'pre-M0 save key is never read');
+expect(olderOnly.reads.every((key) => key === M0_SAVE_KEY), 'pre-M0 save key is never read');
 
 const timeStorage = new MemoryStorage();
 saveM0State(setRunning(createInitialM0State(), true), timeStorage);
@@ -568,6 +568,13 @@ const centeredProjection = projectSphericalLocalWindow(capabilityMap.map.cells, 
 const centerProjection = centeredProjection.find((cell) => cell.id === LOCATION_CELLS.headquarters)!;
 const edgeProjection = centeredProjection.find((cell) => cell.id === capabilityMap.map.cells.find((cell) => Math.max(Math.abs(cell.q), Math.abs(cell.r), Math.abs(cell.q + cell.r)) === 3)!.id)!;
 expect(edgeProjection.depth < centerProjection.depth && edgeProjection.scale < centerProjection.scale, 'local cells follow sphere depth instead of a flat board');
+equal(centerProjection.corners.length, 6, 'each local cell projects six real surface corners');
+const centerNeighborProjection = centeredProjection.find((cell) => cell.id === 'local-1-0')!;
+const projectedCornerKey = (corner: { xPercent: number; yPercent: number }): string => `${corner.xPercent.toFixed(6)},${corner.yPercent.toFixed(6)}`;
+const sharedProjectedCorners = centerProjection.corners
+  .map(projectedCornerKey)
+  .filter((corner) => centerNeighborProjection.corners.map(projectedCornerKey).includes(corner));
+equal(sharedProjectedCorners.length, 2, 'adjacent surface cells share the same projected edge instead of floating over each other');
 const mapLogicBeforeRotation = JSON.stringify(capabilityMap.map);
 const rotatedMapState = setMapRotation(capabilityMap, { yaw: 99, pitch: -99 });
 equal(rotatedMapState.ui.mapRotation.yaw, MAP_ROTATION_LIMITS.yaw, 'finite sphere rotation clamps yaw');
@@ -576,6 +583,12 @@ equal(JSON.stringify(rotatedMapState.map), mapLogicBeforeRotation, 'rotating the
 const rotatedProjection = projectSphericalLocalWindow(rotatedMapState.map.cells, rotatedMapState.ui.mapRotation);
 equal(rotatedProjection.map((cell) => cell.id).join('|'), centeredProjection.map((cell) => cell.id).join('|'), 'sphere projection preserves stable local-cell ordering and IDs');
 equal(rotatedProjection.some((cell) => !cell.visible), true, 'rotating to the finite edge hides local content behind an unexplored shell');
+const rotatedCenterProjection = rotatedProjection.find((cell) => cell.id === LOCATION_CELLS.headquarters)!;
+const rotatedNeighborProjection = rotatedProjection.find((cell) => cell.id === 'local-1-0')!;
+const rotatedSharedCorners = rotatedCenterProjection.corners
+  .map(projectedCornerKey)
+  .filter((corner) => rotatedNeighborProjection.corners.map(projectedCornerKey).includes(corner));
+equal(rotatedSharedCorners.length, 2, 'adjacent cells keep one shared edge while the sphere is rotated');
 const rotationStorage = new MemoryStorage();
 saveM0State(rotatedMapState, rotationStorage);
 equal(JSON.stringify(loadM0State(rotationStorage).ui.mapRotation), JSON.stringify(rotatedMapState.ui.mapRotation), 'finite sphere rotation survives strict save reload');
@@ -625,17 +638,36 @@ syntheticSelection = automaticSelectionForDefinitions(syntheticRound, syntheticD
 equal(syntheticSelection.id, null, 'blocked round cannot skip into a stage-three entry');
 equal(syntheticSelection.blockedProjectId, 'synthetic-surveying-2', 'round remains blocked at the unmet stage-two entry');
 
-let researchStaffing = minimumDailyStaffing(createInitialM0State());
-researchStaffing = setResearchStaffing(researchStaffing, 2);
-researchStaffing = setResearchTarget(researchStaffing, 'restore-precision-manufacturing');
-researchStaffing = advanceOneDay(researchStaffing);
-equal(researchStaffing.projects.find((project) => project.id === 'restore-precision-manufacturing')?.workDone, 2, 'two-person research advances two daylight work');
-researchStaffing = setResearchStaffing(researchStaffing, 4);
-researchStaffing = advanceOneDay(researchStaffing);
-equal(researchStaffing.projects.find((project) => project.id === 'restore-precision-manufacturing')?.workDone, 6, 'four-person research advances four daylight work');
-researchStaffing = setResearchStaffing(researchStaffing, 6);
-researchStaffing = advanceOneDay(researchStaffing);
-equal(researchStaffing.projects.find((project) => project.id === 'restore-precision-manufacturing')?.workDone, 12, 'six-person research advances six daylight work');
+let researchFacility = minimumDailyStaffing(createInitialM0State());
+equal(enabledResearchCapacity(researchFacility.research), 6, 'enabled research facility provides six real jobs');
+researchFacility = setResearchTarget(researchFacility, 'restore-precision-manufacturing');
+researchFacility = advanceOneDay(researchFacility);
+equal(researchFacility.projects.find((project) => project.id === 'restore-precision-manufacturing')?.workDone, 6, 'six staffed facility jobs advance six daylight work');
+researchFacility = setResearchFacilityEnabled(researchFacility, 'hq-basic-research-room-01', false);
+equal(enabledResearchCapacity(researchFacility.research), 0, 'stopping the facility removes its research capacity');
+researchFacility = advanceOneDay(researchFacility);
+equal(researchFacility.projects.find((project) => project.id === 'restore-precision-manufacturing')?.workDone, 6, 'stopped facility cannot create research progress');
+researchFacility.population.normal = 17;
+researchFacility.population.unableToWork = 11;
+researchFacility = setResearchFacilityEnabled(researchFacility, 'hq-basic-research-room-01', true);
+equal(researchFacility.projects.find((project) => project.id === 'restore-precision-manufacturing')?.staffing.actual, 1, 'actual employment can stay below building capacity when labor is short');
+researchFacility = advanceOneDay(researchFacility);
+equal(researchFacility.projects.find((project) => project.id === 'restore-precision-manufacturing')?.workDone, 7, 'one actual researcher advances one daylight work without a player staffing selector');
+let scaledResearchFacilities = minimumDailyStaffing(createInitialM0State());
+scaledResearchFacilities.research.facilities.push({
+  id: 'hq-basic-research-room-02',
+  name: '避难所第二研究室',
+  locationId: 'hq',
+  capacity: 4,
+  enabled: true,
+});
+scaledResearchFacilities = setResearchTarget(scaledResearchFacilities, 'restore-precision-manufacturing');
+equal(scaledResearchFacilities.projects.find((project) => project.id === 'restore-precision-manufacturing')?.staffing.planned, 10, 'additional enabled facility adds its real job capacity');
+equal(scaledResearchFacilities.projects.find((project) => project.id === 'restore-precision-manufacturing')?.staffing.actual, 10, 'actual employment fills enabled research jobs from the common workforce');
+const disabledResearchFacility = setResearchFacilityEnabled(minimumDailyStaffing(createInitialM0State()), 'hq-basic-research-room-01', false);
+const researchFacilityStorage = new MemoryStorage();
+saveM0State(disabledResearchFacility, researchFacilityStorage);
+equal(JSON.stringify(loadM0State(researchFacilityStorage).research.facilities), JSON.stringify(disabledResearchFacility.research.facilities), 'research facility enable state survives strict save reload');
 
 let automaticResearch = minimumDailyStaffing(createInitialM0State());
 automaticResearch = setResearchDomainAutomatic(automaticResearch, 'surveying', true);
@@ -818,7 +850,7 @@ function expectRejectedCapabilitySave(
   const invalid = JSON.parse(JSON.stringify(base)) as M0State;
   mutator(invalid);
   const invalidStorage = new MemoryStorage();
-  invalidStorage.values.set('always-game-m0-v4', JSON.stringify(invalid));
+  invalidStorage.values.set(M0_SAVE_KEY, JSON.stringify(invalid));
   equal(JSON.stringify(loadM0State(invalidStorage)), JSON.stringify(createInitialM0State()), label);
 }
 
@@ -831,6 +863,8 @@ expectRejectedCapabilitySave((state) => { state.ui.mapRotation.yaw = MAP_ROTATIO
 expectRejectedCapabilitySave((state) => { state.research.domainOrder[1] = state.research.domainOrder[0]; }, 'duplicate research domain resets safely');
 expectRejectedCapabilitySave((state) => { state.research.domainOrder[0] = 'invalid' as M0State['research']['domainOrder'][number]; }, 'invalid research domain enum resets safely');
 expectRejectedCapabilitySave((state) => { state.research.manualQueue.push('unknown-technology'); }, 'unknown research queue ID resets safely');
+expectRejectedCapabilitySave((state) => { state.research.facilities.push({ ...state.research.facilities[0] }); }, 'duplicate research facility ID resets safely');
+expectRejectedCapabilitySave((state) => { state.research.facilities[0].capacity = 0; }, 'zero-capacity research facility resets safely');
 expectRejectedCapabilitySave((state) => { state.map.surveys[0].targetId = state.map.surveys[1].targetId; }, 'duplicate survey target resets safely');
 expectRejectedCapabilitySave((state) => { state.map.surveys[0].stage = 'invalid' as M0State['map']['surveys'][number]['stage']; }, 'invalid survey stage resets safely');
 expectRejectedCapabilitySave((state) => { state.map.surveys[0].projectId = 'missing-project'; }, 'invalid survey project reference resets safely');
@@ -853,4 +887,4 @@ expectRejectedCapabilitySave((state) => {
   }
 }, 'charging drone must be in overnight or inspection phase');
 
-console.log('M0 stage A+B+402 checks passed: core accounting, spherical local window, strict capability saves, intelligence boundaries, automatic research rounds, entity work, queued drone recharge, and editable survey progression.');
+console.log('M0 stage A+B+402-R1 checks passed: core accounting, shared-edge spherical surface, facility-driven research staffing, strict capability saves, intelligence boundaries, automatic research rounds, entity work, queued drone recharge, and editable survey progression.');

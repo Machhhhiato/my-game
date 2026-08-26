@@ -29,6 +29,11 @@ export interface ProjectedLocalCell {
   depth: number;
   scale: number;
   visible: boolean;
+  corners: Array<{
+    xPercent: number;
+    yPercent: number;
+    depth: number;
+  }>;
 }
 
 export function normalizeMapRotation(rotation: MapRotation): MapRotation {
@@ -39,10 +44,11 @@ export function normalizeMapRotation(rotation: MapRotation): MapRotation {
   };
 }
 
-export function projectLocalCell(cell: LocalMapCell, requestedRotation: MapRotation): ProjectedLocalCell {
-  const rotation = normalizeMapRotation(requestedRotation);
-  const tangentX = cell.q + cell.r * 0.5;
-  const tangentY = -cell.r * Math.sqrt(3) / 2;
+function projectTangentPoint(
+  tangentX: number,
+  tangentY: number,
+  rotation: MapRotation,
+): { xPercent: number; yPercent: number; depth: number; scale: number } {
   const tangentRadius = Math.hypot(tangentX, tangentY);
   const angularRadius = tangentRadius * 0.23;
   const radialScale = tangentRadius === 0 ? 0 : Math.sin(angularRadius) / tangentRadius;
@@ -61,13 +67,38 @@ export function projectLocalCell(cell: LocalMapCell, requestedRotation: MapRotat
   const perspective = 0.82 + Math.max(-0.2, depth) * 0.18;
 
   return {
-    id: cell.id,
-    intel: cell.intel,
     xPercent: 50 + yawX * 44 * perspective,
     yPercent: 50 - pitchY * 44 * perspective,
     depth,
     scale: Math.max(0.62, 0.76 + depth * 0.24),
-    visible: depth > 0.04,
+  };
+}
+
+export function projectLocalCell(cell: LocalMapCell, requestedRotation: MapRotation): ProjectedLocalCell {
+  const rotation = normalizeMapRotation(requestedRotation);
+  const tangentX = cell.q + cell.r * 0.5;
+  const tangentY = -cell.r * Math.sqrt(3) / 2;
+  const center = projectTangentPoint(tangentX, tangentY, rotation);
+  const cornerRadius = 1 / Math.sqrt(3);
+  const corners = Array.from({ length: 6 }, (_, index) => {
+    const angle = Math.PI / 6 + index * Math.PI / 3;
+    const corner = projectTangentPoint(
+      tangentX + Math.cos(angle) * cornerRadius,
+      tangentY + Math.sin(angle) * cornerRadius,
+      rotation,
+    );
+    return { xPercent: corner.xPercent, yPercent: corner.yPercent, depth: corner.depth };
+  });
+
+  return {
+    id: cell.id,
+    intel: cell.intel,
+    xPercent: center.xPercent,
+    yPercent: center.yPercent,
+    depth: center.depth,
+    scale: center.scale,
+    visible: center.depth > 0.04,
+    corners,
   };
 }
 

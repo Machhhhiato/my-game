@@ -13,7 +13,7 @@ import {
 } from './types';
 import { createLocalMap, normalizeMapRotation } from './map';
 
-export const M0_SAVE_KEY = 'always-game-m0-v4';
+export const M0_SAVE_KEY = 'always-game-m0-v5';
 export const M0_DAY_MS = 20_000;
 
 export const DEFAULT_EVENT_WINDOW_POSITION: EventWindowPosition = {
@@ -227,7 +227,13 @@ export function createInitialM0State(scenario: ScenarioConfig = DEFAULT_M0_SCENA
       domainOrder: ['manufacturing', 'surveying', 'engineering'],
       automaticDomains: [],
       completed: [],
-      workers: 6,
+      facilities: [{
+        id: 'hq-basic-research-room-01',
+        name: '避难所基础研究室',
+        locationId: 'hq',
+        capacity: 6,
+        enabled: true,
+      }],
       currentProjectId: null,
       currentSource: null,
       roundTarget: null,

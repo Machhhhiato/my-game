@@ -2,7 +2,7 @@
 card_version: 3
 handoff_id: M0-H002
 routing_epoch: 16
-routing_state: waiting_user_playtest
+routing_state: waiting_user_recheck
 source_host: mac
 source_lane: M0-DIR-A
 source_session: M0-S003
@@ -10,9 +10,9 @@ target_host: mac
 target_lane: M0-DIR-A
 target_work_lane: M0-DIR-A
 target_layer: 1
-target_task: M0-L4-402
+target_task: M0-L4-402-R1
 assigned_session: M0-S003
-action_status: waiting_user_playtest
+action_status: waiting_user_recheck
 required_branch: context/m0-direction
 startup_phrase: 你是第一层
 ---
@@ -24,7 +24,7 @@ startup_phrase: 你是第一层
 - 设备：Mac。
 - 逻辑方向 lane：`M0-DIR-A`。
 - 稳定工作 lane：`M0-DIR-A`；第三层会话 `01a03908-d738-76a3-83ad-a6892e53e6c8` 只在第一层再次派发文字任务时复用。
-- 当前任务：`M0-L4-402`；两次第一层退回后的 Sol 接替版已通过自动验收，按用户要求保留到以后启动试玩时做视觉和操作细调。
+- 当前任务：`M0-L4-402-R1`；球面共边地表、科研设施岗位和紧凑资源栏已实现，当前页面保持运行等待现场复查。
 - 逻辑主线程 session：`M0-S003`；第一层已完成并收回全部前置审计。
 - 已接受任务：`M0-L1-101` 至 `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011`、`M0-L2-201`、`M0-L3-301`。
 - 已接受输出：`CONTENT-M0-001`，路径 `CONTENT_M0_001.md`，决定 `D-M0-PROD-050`。
@@ -40,7 +40,7 @@ startup_phrase: 你是第一层
 - 当前结果：一次新任务创建失败后按约定复用 `01a03800-3d9f-7c70-b1dc-70a30bc8bf01`；第一层否决首版、收回 R1 并完成补修。输出 `BUILD-M0-CORE-001`，报告 `NIGHT_RUN_M0_L4_401_001.md`。
 - 线程规则：`D-M0-DIR-040` 规定创建接口或路由错误才执行“只新建一次”；任务创建成功后的能力失败可在清理后换用更合适模型接替。第一至第三层默认复用长期会话，第四层可按大型实施批次定期接替。
 - 当前派发结果：首次 `/root/m0_l4_401_r1` 使用 Terra / medium 成功创建，但因压缩重写与核心迁移能力不足被关闭；工作区恢复干净，无提交、无推送。
-- 当前动作：不启动页面。以后用户准备试玩时，先运行并检查 `M0-L4-402` 的球面地图、科研、精密工坊和无人机完整链；本轮不得进入 `M0-L4-403`。
+- 当前动作：用户直接在 `http://127.0.0.1:5173/` 复查 402-R1 的球面拖动、科研设施岗位和顶部资源栏。未获得用户接受前不得进入 `M0-L4-403`。
 - 字段边界：所有 `BLOCKED_FIELD` 动态文字留待字段语义确认和第四层真实实现，不随当前文字批次默认通过。
 - 后续边界：M0 的食物循环仍属于正式最低内容；M0 整体验收后的扩展阶段继续增加食物等生活、生产与资源内容。
 
@@ -130,8 +130,8 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 层级：第一层｜方向与系统设计
 活动 lane：M0-DIR-A｜Mac｜M0-S003
 已接受任务：M0-L1-106｜SPEC-M0-DESCRIPTION-001｜overall_spec_frozen true
-当前任务：M0-L4-402｜地图、选址、科研与高级资产
-任务状态：M0-L4-401-R1 accepted｜M0-L4-402 implemented_waiting_future_playtest
+当前任务：M0-L4-402-R1｜球面、科研设施岗位与资源栏现场修订
+任务状态：M0-L4-401-R1 accepted｜M0-L4-402-R1 implemented_waiting_user_recheck
 第三层复用会话：01a03908-d738-76a3-83ad-a6892e53e6c8
 有限接受输出：TEXT-M0-STORY-001｜第一工程构件回收整备厂
 接受范围：M0 草稿与故事制作流程
@@ -141,12 +141,12 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 工厂规则：按真实产品与工艺分类｜M0 样例不代表未来工业上限
 已知债务：含糊动作词｜口头禅重复｜部分段落偏说明
 动态字段：继续 BLOCKED_FIELD，不随故事有限接受通过
-实施状态：implementation_authorized true｜BUILD-M0-CORE-001 已通过第一层验证
+实施状态：implementation_authorized true｜BUILD-M0-CAPABILITY-001-R1 已通过第一层验证并等待用户复查
 输入锚点：a3a11d7｜402 实现提交：pending
 第四层任务：/root/m0_l4_402_sol｜gpt-5.6-sol / high｜接替已停止的 Terra / medium 首次实例
-下一步：第一层收回检查点、审查实现并阻止范围进入 403
+下一步：用户在已运行的 5173 页面复查 402-R1；未接受前不进入 403
 ```
 
 ## 完成条件
 
-`M0-L4-401-R1` 已由用户试玩接受，`M0-L4-402` 已派发。当前完成条件是第四层交付通过第一层逐项审查、自动测试和后续用户试玩；不自动进入 `M0-L4-403`。
+`M0-L4-401-R1` 已由用户试玩接受，`M0-L4-402-R1` 已通过第一层自动和浏览器验证。当前完成条件是用户完成现场复查；不自动进入 `M0-L4-403`。

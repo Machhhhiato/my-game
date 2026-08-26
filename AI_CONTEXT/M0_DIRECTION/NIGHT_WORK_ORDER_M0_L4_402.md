@@ -1,6 +1,6 @@
 ---
 night_run_id: NIGHT-M0-L4-402-001
-work_order_status: implemented_waiting_future_playtest
+work_order_status: superseded_by_402_R1_recheck
 formal_task: M0-L4-402
 parent_task: M0-L4-402
 authorized_source: M0-S003-U137
@@ -27,6 +27,8 @@ first_layer_review: automatic_passed_visual_deferred_by_user
 ---
 
 # NIGHT-M0-L4-402-001 · 地图、科研、精密工坊与勘测无人机
+
+> 2026-08-26 现场修订：用户在 `M0-S003-U138` 真实试玩后修订球面显示、科研岗位和资源栏。原执行单保留 402 历史边界；当前结果、验证和状态改看 `NIGHT_RUN_M0_L4_402_R1_001.md`、`D-M0-PROD-059` 与 `D-M0-DIR-044`。原科研“使用 2/4/6 人”的表达只保留为历史，现行规则是设施岗位上限加实际入职人数。
 
 ## 任务身份
 

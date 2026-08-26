@@ -106,15 +106,21 @@ export function researchDomainName(domain: ResearchDomain): string {
   }[domain];
 }
 
+export function enabledResearchCapacity(research: Pick<ResearchState, 'facilities'>): number {
+  return research.facilities
+    .filter((facility) => facility.enabled)
+    .reduce((total, facility) => total + facility.capacity, 0);
+}
+
 export function projectForCapability(
   id: string,
   priority: Priority = 'P1',
-  researchWorkers: 2 | 4 | 6 = 6,
+  researchWorkers = 6,
 ): Project | null {
   const technology = technologies.find((item) => item.id === id);
   const recipe = capabilityRecipes[id];
   if (!technology && !recipe) return null;
-  const workers = technology ? researchWorkers : recipe.workers;
+  const workers = technology ? Math.max(0, Math.floor(researchWorkers)) : recipe.workers;
   return {
     id,
     name: technology?.name ?? recipe.name,
