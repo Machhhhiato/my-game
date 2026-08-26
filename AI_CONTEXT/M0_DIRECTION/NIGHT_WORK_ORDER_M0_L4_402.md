@@ -1,6 +1,6 @@
 ---
 night_run_id: NIGHT-M0-L4-402-001
-work_order_status: active_replacement
+work_order_status: implemented_waiting_future_playtest
 formal_task: M0-L4-402
 parent_task: M0-L4-402
 authorized_source: M0-S003-U137
@@ -21,6 +21,9 @@ physical_task: /root/m0_l4_402_sol
 replacement_model: gpt-5.6-sol / high
 dispatched_at: 2026-08-26T12:03:50+08:00
 replacement_started_at: 2026-08-26T12:10:31+08:00
+completed_at: 2026-08-26T13:05:33+08:00
+implementation_commit: d00f22c274ac1f582f7af8bbd7f439dcae8a2db3
+first_layer_review: automatic_passed_visual_deferred_by_user
 ---
 
 # NIGHT-M0-L4-402-001 · 地图、科研、精密工坊与勘测无人机
