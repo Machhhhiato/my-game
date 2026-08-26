@@ -19,7 +19,7 @@ replacement_model: gpt-5.6-sol
 replacement_task: /root/m0_l4_401_r1_sol
 replacement_started_at: 2026-08-26T10:24:03+08:00
 finished_at: 2026-08-26T11:23:13+08:00
-output_commit: this_implementation_commit
+output_commit: dadcc22437a4a7914ebba39b3990fa5499c5b09d
 run_report: NIGHT_RUN_M0_L4_401_R1_001.md
 ---
 

@@ -142,7 +142,7 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 已知债务：含糊动作词｜口头禅重复｜部分段落偏说明
 动态字段：继续 BLOCKED_FIELD，不随故事有限接受通过
 实施状态：implementation_authorized true｜BUILD-M0-CORE-001 已通过第一层验证
-输入锚点：2820297d｜输出提交：2a871c08
+输入锚点：fe637359｜实现提交：dadcc224
 下一步：用户试玩 BUILD-M0-CORE-001-R1，决定接受或退回
 ```
 
