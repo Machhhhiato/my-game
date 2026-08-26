@@ -1,23 +1,28 @@
+import { createEmptyMonthlyLedger, refreshMonthlyProjection } from './economy';
 import {
   M0_STATE_VERSION,
   type DailyModes,
+  type EventWindowPosition,
   type M0State,
   type Priority,
   type Project,
-  type SafetyLines,
+  type ScenarioConfig,
   type Stocks,
   type Workforce,
-  type WorkMode,
 } from './types';
 
-export const M0_SAVE_KEY = 'always-game-m0-v1';
+export const M0_SAVE_KEY = 'always-game-m0-v2';
 export const M0_DAY_MS = 20_000;
 
-export const MAINLINE_LOCKS = {
-  commonParts: 20,
-  engineeringComponents: 72,
-  alloy: 32,
-} as const;
+export const DEFAULT_EVENT_WINDOW_POSITION: EventWindowPosition = {
+  xRatio: 1,
+  yRatio: 0.08,
+};
+
+export const DEFAULT_M0_SCENARIO: ScenarioConfig = {
+  id: 'm0-core-test-scenario',
+  startDate: { year: 2001, month: 1, day: 1 },
+};
 
 export const MODE_STAFF = {
   water: { minimum: 2, standard: 4, accelerated: 6 },
@@ -122,21 +127,19 @@ export function applyWorkforcePlan(state: M0State): void {
 }
 
 function initialStocks(): Stocks {
-  const stock = (amount: number, capacity: number, locked = 0) => ({
+  const stock = (amount: number, capacity: number, consumed = 0) => ({
     locationId: 'hq' as const,
     amount,
     capacity,
-    locked,
-    reserved: 0,
-    consumed: 0,
+    consumed,
   });
 
   return {
     water: stock(280, 420),
     food: stock(560, 840),
-    commonParts: stock(45, 90, MAINLINE_LOCKS.commonParts),
-    engineeringComponents: stock(80, 120, MAINLINE_LOCKS.engineeringComponents),
-    alloy: stock(40, 60, MAINLINE_LOCKS.alloy),
+    commonParts: stock(41, 90, 4),
+    engineeringComponents: stock(68, 120, 12),
+    alloy: stock(40, 60),
     precisionParts: stock(0, 24),
   };
 }
@@ -162,29 +165,28 @@ function initialProjects(): Project[] {
     },
     workDone: 0,
     workRequired: 24,
-    lockedCost: {
+    investedResources: {
       commonParts: 4,
       engineeringComponents: 12,
     },
   }];
 }
 
-export function createInitialM0State(): M0State {
+export function createInitialM0State(scenario: ScenarioConfig = DEFAULT_M0_SCENARIO): M0State {
+  const calendar = { ...scenario.startDate };
+  const stocks = initialStocks();
   const dailyModes: DailyModes = {
     water: 'standard',
     food: 'standard',
     maintenance: 'standard',
     logistics: 'standard',
   };
-  const safetyLines: SafetyLines = {
-    water: { hardDays: 2, safetyDays: 5 },
-    food: { hardDays: 3, safetyDays: 7 },
-    commonParts: { hardDays: 3, safetyDays: 5 },
-  };
   const state: M0State = {
     version: M0_STATE_VERSION,
-    day: 0,
-    clock: { running: false, elapsedMs: 0, millisecondsPerDay: M0_DAY_MS },
+    scenario: { id: scenario.id, startDate: { ...scenario.startDate } },
+    calendar,
+    elapsedDays: 0,
+    clock: { running: false, elapsedMs: 0, millisecondsPerDay: M0_DAY_MS, speed: 1 },
     population: {
       normal: 28,
       unableToWork: 0,
@@ -205,68 +207,54 @@ export function createInitialM0State(): M0State {
       workable: 0,
     },
     staffingShortage: null,
-    safetyLines,
     feedback: null,
-    stocks: initialStocks(),
+    stocks,
+    monthly: createEmptyMonthlyLedger(calendar, stocks),
+    resourceShortages: { water: false, food: false },
     maintenanceBacklog: 8,
     oldRepairableParts: 240,
     headquartersSalvage: { approved: false, dismantledItems: 0 },
     waterworks: { repaired: false, workDone: 0, workRequired: 24 },
     projects: initialProjects(),
     warnings: [],
+    events: [],
+    ui: {
+      eventWindow: { ...DEFAULT_EVENT_WINDOW_POSITION },
+    },
     ledger: [],
   };
 
   applyWorkforcePlan(state);
+  refreshMonthlyProjection(state);
   return state;
 }
 
-export function setDailyMode(state: M0State, line: keyof DailyModes, mode: WorkMode): M0State {
-  const candidate: M0State = {
-    ...state,
-    dailyModes: { ...state.dailyModes, [line]: mode },
-    projects: state.projects.map((project) => ({
-      ...project,
-      staffing: { ...project.staffing },
-      lockedCost: { ...project.lockedCost },
-    })),
-    feedback: null,
+export function setEventWindowPosition(
+  state: M0State,
+  position: EventWindowPosition,
+): M0State {
+  const safeRatio = (requested: number, current: number, fallback: number): number => {
+    if (Number.isFinite(requested)) return Math.max(0, Math.min(1, requested));
+    if (Number.isFinite(current)) return Math.max(0, Math.min(1, current));
+    return fallback;
   };
-  const required = requestedWorkers(candidate);
-  const workable = workablePopulation(candidate);
-
-  if (required > workable) {
-    const modeName = mode === 'accelerated' ? '加速' : mode === 'standard' ? '标准' : '最低';
-    return {
-      ...state,
-      feedback: `无法改为${modeName}：需要 ${required} 人，当前可工作人口只有 ${workable} 人。`,
-    };
-  }
-
-  applyWorkforcePlan(candidate);
-  return candidate;
-}
-
-export function setSafetyDays(state: M0State, resource: keyof SafetyLines, safetyDays: number): M0State {
-  const hardDays = state.safetyLines[resource].hardDays;
-  if (!Number.isInteger(safetyDays) || safetyDays < hardDays) {
-    return { ...state, feedback: `安全线不能低于硬底线 ${hardDays} 日。` };
-  }
 
   return {
     ...state,
-    safetyLines: {
-      ...state.safetyLines,
-      [resource]: { hardDays, safetyDays },
+    ui: {
+      ...state.ui,
+      eventWindow: {
+        xRatio: safeRatio(
+          position.xRatio,
+          state.ui.eventWindow.xRatio,
+          DEFAULT_EVENT_WINDOW_POSITION.xRatio,
+        ),
+        yRatio: safeRatio(
+          position.yRatio,
+          state.ui.eventWindow.yRatio,
+          DEFAULT_EVENT_WINDOW_POSITION.yRatio,
+        ),
+      },
     },
-    feedback: '安全线已更新。',
-  };
-}
-
-export function setHeadquartersSalvageApproval(state: M0State, approved: boolean): M0State {
-  return {
-    ...state,
-    headquartersSalvage: { ...state.headquartersSalvage, approved },
-    feedback: approved ? '已允许普通零件接近安全线时启动低效拆解。' : '已取消低效拆解预授权。',
   };
 }

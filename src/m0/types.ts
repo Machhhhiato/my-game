@@ -1,4 +1,4 @@
-export const M0_STATE_VERSION = 1 as const;
+export const M0_STATE_VERSION = 2 as const;
 
 export type ResourceId = 'water' | 'food' | 'commonParts' | 'engineeringComponents' | 'alloy' | 'precisionParts';
 export type DailyLineId = 'water' | 'food' | 'maintenance' | 'logistics';
@@ -6,13 +6,23 @@ export type WorkMode = 'minimum' | 'standard' | 'accelerated';
 export type Priority = 'P0' | 'P1' | 'P2' | 'P3';
 export type PauseReason = 'safety_line' | 'hard_floor' | 'staffing_shortage' | null;
 export type ReturnTo = DailyLineId | 'development' | 'standby' | null;
+export type GameSpeed = 1 | 2 | 4;
+
+export interface GameDate {
+  year: number;
+  month: number;
+  day: number;
+}
+
+export interface ScenarioConfig {
+  id: string;
+  startDate: GameDate;
+}
 
 export interface Stock {
   locationId: 'hq';
   capacity: number;
   amount: number;
-  locked: number;
-  reserved: number;
   consumed: number;
 }
 
@@ -67,15 +77,8 @@ export interface Project {
   staffing: ProjectStaffing;
   workDone: number;
   workRequired: number;
-  lockedCost: Partial<Record<ResourceId, number>>;
+  investedResources: Partial<Record<ResourceId, number>>;
 }
-
-export interface SafetyLine {
-  hardDays: number;
-  safetyDays: number;
-}
-
-export type SafetyLines = Record<'water' | 'food' | 'commonParts', SafetyLine>;
 
 export interface StaffingShortage {
   required: number;
@@ -99,9 +102,49 @@ export interface ProjectEvent {
   reason: PauseReason;
 }
 
+export interface M0Event {
+  id: string;
+  date: GameDate;
+  kind: 'project_status' | 'project_complete' | 'resource_shortage' | 'resource_restored';
+  message: string;
+  relatedId: string;
+}
+
+export interface MonthlyResourceAccount {
+  openingAmount: number;
+  accruedInflow: number;
+  accruedOutflow: number;
+  accruedOverflow: number;
+  currentDailyInflow: number;
+  currentDailyOutflow: number;
+  projectedRemainingInflow: number;
+  projectedRemainingOutflow: number;
+  projectedClosingAmount: number;
+  exhaustionDate: GameDate | null;
+}
+
+export interface MonthlyLedger {
+  year: number;
+  month: number;
+  processedDays: number;
+  settlementDate: GameDate;
+  resources: Record<ResourceId, MonthlyResourceAccount>;
+}
+
+export interface EventWindowPosition {
+  xRatio: number;
+  yRatio: number;
+}
+
+export interface M0UiState {
+  eventWindow: EventWindowPosition;
+}
+
 export interface DayLedger {
-  day: number;
+  elapsedDay: number;
+  date: GameDate;
   resources: Record<ResourceId, ResourceFlow>;
+  monthSettled: boolean;
   maintenanceBacklogStart: number;
   maintenanceBacklogEnd: number;
   waterworksWorkStart: number;
@@ -117,19 +160,23 @@ export interface DayLedger {
 
 export interface M0State {
   version: typeof M0_STATE_VERSION;
-  day: number;
+  scenario: ScenarioConfig;
+  calendar: GameDate;
+  elapsedDays: number;
   clock: {
     running: boolean;
     elapsedMs: number;
     millisecondsPerDay: number;
+    speed: GameSpeed;
   };
   population: Population;
   dailyModes: DailyModes;
   workforce: Workforce;
   staffingShortage: StaffingShortage | null;
-  safetyLines: SafetyLines;
   feedback: string | null;
   stocks: Stocks;
+  monthly: MonthlyLedger;
+  resourceShortages: Record<'water' | 'food', boolean>;
   maintenanceBacklog: number;
   oldRepairableParts: number;
   headquartersSalvage: {
@@ -143,6 +190,8 @@ export interface M0State {
   };
   projects: Project[];
   warnings: string[];
+  events: M0Event[];
+  ui: M0UiState;
   ledger: DayLedger[];
 }
 

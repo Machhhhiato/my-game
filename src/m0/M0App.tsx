@@ -1,30 +1,58 @@
-import { useEffect, useMemo, useState, type ReactElement } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type PointerEvent as ReactPointerEvent,
+  type ReactElement,
+  type RefObject,
+} from 'react';
 import { clearM0State, loadM0State, saveM0State } from './save';
-import { coverageDays, advanceOneDay, advanceRealTime, setProjectAutoResume, setRunning } from './simulation';
+import {
+  advanceRealTime,
+  availableAmount,
+  setDailyMode,
+  setGameSpeed,
+  setHeadquartersSalvageApproval,
+  setProjectAutoResume,
+  setRunning,
+} from './simulation';
 import {
   createInitialM0State,
-  setDailyMode,
-  setHeadquartersSalvageApproval,
-  setSafetyDays,
+  livingPopulation,
+  setEventWindowPosition,
 } from './state';
 import {
   RESOURCE_IDS,
   type DailyLineId,
+  type EventWindowPosition,
+  type GameSpeed,
+  type M0Event,
   type M0State,
   type Project,
-  type ProjectEvent,
+  type ResourceId,
   type WorkMode,
 } from './types';
 import './m0.css';
 
-const labels = {
+const resourceLabels: Record<ResourceId, string> = {
   water: '水',
   food: '食物',
   commonParts: '普通零件',
   engineeringComponents: '工程构件',
   alloy: '合金料',
   precisionParts: '精密部件',
-} as const;
+};
+
+const resourceIcons: Record<ResourceId, string> = {
+  water: '◒',
+  food: '❧',
+  commonParts: '⚙',
+  engineeringComponents: '◇',
+  alloy: '⬡',
+  precisionParts: '✦',
+};
 
 const lineLabels: Record<DailyLineId, string> = {
   water: '供水',
@@ -32,114 +60,600 @@ const lineLabels: Record<DailyLineId, string> = {
   maintenance: '维护与手工作坊',
   logistics: '总部短途物流',
 };
+
 const modes: WorkMode[] = ['minimum', 'standard', 'accelerated'];
-const modeLabels: Record<WorkMode, string> = { minimum: '最低', standard: '标准', accelerated: '加速' };
+const modeLabels: Record<WorkMode, string> = {
+  minimum: '最低',
+  standard: '标准',
+  accelerated: '加速',
+};
 
-function pauseReason(reason: Project['pausedReason']): string {
-  if (reason === 'hard_floor') return '触及硬底线';
-  if (reason === 'safety_line') return '触及安全线';
-  if (reason === 'staffing_shortage') return '岗位不足';
-  return '原因待确认';
+type SheetId = 'headquarters' | 'research' | 'engineering' | 'assets' | 'locations' | 'maintenance' | 'archives';
+
+const sheetEntries: Array<{ id: SheetId; icon: string; label: string }> = [
+  { id: 'headquarters', icon: '⌂', label: '总部' },
+  { id: 'research', icon: '⌁', label: '科研' },
+  { id: 'engineering', icon: '▱', label: '工程' },
+  { id: 'assets', icon: '◆', label: '资产' },
+  { id: 'locations', icon: '◎', label: '地点' },
+  { id: 'maintenance', icon: '⚒', label: '维修' },
+  { id: 'archives', icon: '▤', label: '档案' },
+];
+
+const numberFormatter = new Intl.NumberFormat('zh-CN', {
+  maximumFractionDigits: 2,
+});
+
+function formatNumber(value: number): string {
+  return numberFormatter.format(Math.abs(value) < 0.005 ? 0 : value);
 }
 
-function projectStatus(project: Project): string {
-  if (project.status === 'active') return '进行中';
+function formatDate(date: M0State['calendar']): string {
+  return `${date.year} 年 ${date.month} 月 ${date.day} 日`;
+}
+
+function formatProjectStatus(project: Project): string {
+  if (project.status === 'active') return '正在进行';
   if (project.status === 'complete') return '已完成';
-  if (project.status === 'waiting_confirmation') return `等待确认：${pauseReason(project.pausedReason)}`;
-  return `已暂停：${pauseReason(project.pausedReason)}`;
+  if (project.status === 'waiting_confirmation') return '已停止，等待确认';
+  return '已暂停';
 }
 
-function projectEventText(event: ProjectEvent): string {
-  if (event.status === 'active') return `${event.projectName}已自动恢复`;
-  if (event.status === 'waiting_confirmation') return `${event.projectName}等待确认：${pauseReason(event.reason)}`;
-  return `${event.projectName}已暂停：${pauseReason(event.reason)}`;
+function ResourceReadout({ state, resource }: { state: M0State; resource: ResourceId }): ReactElement {
+  const stock = state.stocks[resource];
+  const account = state.monthly.resources[resource];
+  const available = availableAmount(state, resource);
+  const netChange = account.projectedClosingAmount - available;
+  const netDailyUse = account.currentDailyOutflow - account.currentDailyInflow;
+  let coverage = '当前生产不低于需求';
+  if ((resource === 'water' || resource === 'food') && state.resourceShortages[resource]) {
+    coverage = '当前存在短缺';
+  } else if (account.currentDailyOutflow === 0) {
+    coverage = '当前无持续需求';
+  } else if (netDailyUse > 0) {
+    const days = `${formatNumber(available / netDailyUse)} 日`;
+    coverage = account.exhaustionDate
+      ? `${days}；预计 ${formatDate(account.exhaustionDate)} 耗尽`
+      : days;
+  }
+  const tooltipId = `m0-resource-${resource}`;
+
+  return <div className="m0-resource-readout">
+    <button type="button" className="m0-resource-summary" aria-describedby={tooltipId}>
+      <span className="m0-resource-icon" aria-hidden="true">{resourceIcons[resource]}</span>
+      <span className="m0-resource-name">{resourceLabels[resource]}</span>
+      <strong>{formatNumber(available)}</strong>
+      <span className={`m0-resource-delta ${netChange === 0 ? 'is-empty' : ''}`}>
+        {netChange > 0 ? `+${formatNumber(netChange)}` : netChange < 0 ? `-${formatNumber(Math.abs(netChange))}` : ''}
+      </span>
+    </button>
+    <div className="m0-resource-detail" id={tooltipId} role="tooltip">
+      <h2>{resourceLabels[resource]}</h2>
+      <dl>
+        <div><dt>容量</dt><dd>{formatNumber(stock.capacity)}</dd></div>
+        <div><dt>下次结算</dt><dd>{formatDate(state.monthly.settlementDate)}</dd></div>
+        <div><dt>当前每日生产</dt><dd>{formatNumber(account.currentDailyInflow)}</dd></div>
+        <div><dt>当前每日需求</dt><dd>{formatNumber(account.currentDailyOutflow)}</dd></div>
+        <div><dt>本月已累计生产</dt><dd>{formatNumber(account.accruedInflow)}</dd></div>
+        <div><dt>本月已累计需求</dt><dd>{formatNumber(account.accruedOutflow)}</dd></div>
+        <div><dt>剩余预计生产</dt><dd>{formatNumber(account.projectedRemainingInflow)}</dd></div>
+        <div><dt>剩余预计需求</dt><dd>{formatNumber(account.projectedRemainingOutflow)}</dd></div>
+        <div><dt>预计结余</dt><dd>{formatNumber(account.projectedClosingAmount)}</dd></div>
+        <div><dt>可维持时间</dt><dd>{coverage}</dd></div>
+      </dl>
+    </div>
+  </div>;
+}
+
+function TopBar({
+  state,
+  populationDelta,
+  onPause,
+  onSpeed,
+}: {
+  state: M0State;
+  populationDelta: number | null;
+  onPause: () => void;
+  onSpeed: (speed: GameSpeed) => void;
+}): ReactElement {
+  return <header className="m0-topbar">
+    <div className="m0-population" aria-label={`存活人口 ${livingPopulation(state)}`}>
+      <span aria-hidden="true">♟</span>
+      <span>人口</span>
+      <strong>{livingPopulation(state)}</strong>
+      <span className={`m0-population-delta ${populationDelta === null ? 'is-empty' : ''}`} aria-live="polite">
+        {populationDelta !== null && populationDelta > 0 ? `+${populationDelta}` : populationDelta}
+      </span>
+    </div>
+    <div className="m0-resource-strip" aria-label="持续资源">
+      {RESOURCE_IDS.map((resource) => <ResourceReadout key={resource} state={state} resource={resource} />)}
+    </div>
+    <div className="m0-time-controls">
+      <time>{formatDate(state.calendar)}</time>
+      <div className="m0-speed-buttons" aria-label="时间速度">
+        <button
+          type="button"
+          className={!state.clock.running ? 'is-active' : ''}
+          aria-label="暂停"
+          title="暂停"
+          onClick={onPause}
+        >Ⅱ</button>
+        {([1, 2, 4] as GameSpeed[]).map((speed) => <button
+          type="button"
+          className={state.clock.running && state.clock.speed === speed ? 'is-active' : ''}
+          aria-label={`${speed} 倍速度`}
+          title={`${speed} 倍速度`}
+          key={speed}
+          onClick={() => onSpeed(speed)}
+        >{speed}x</button>)}
+      </div>
+    </div>
+  </header>;
+}
+
+function SystemRail({ activeSheet, onSelect }: {
+  activeSheet: SheetId | null;
+  onSelect: (sheet: SheetId) => void;
+}): ReactElement {
+  return <nav className="m0-system-rail" aria-label="系统入口">
+    {sheetEntries.map((entry) => <button
+      type="button"
+      className={activeSheet === entry.id ? 'is-active' : ''}
+      aria-label={entry.label}
+      title={entry.label}
+      aria-pressed={activeSheet === entry.id}
+      key={entry.id}
+      onClick={() => onSelect(entry.id)}
+    ><span aria-hidden="true">{entry.icon}</span></button>)}
+  </nav>;
+}
+
+function HeadquartersSheet({ state, updateState }: {
+  state: M0State;
+  updateState: (updater: (current: M0State) => M0State) => void;
+}): ReactElement {
+  const workforce = state.workforce;
+  return <>
+    <section>
+      <h3>日常运行</h3>
+      {(Object.keys(lineLabels) as DailyLineId[]).map((line) => <label className="m0-select-row" key={line}>
+        <span>{lineLabels[line]}</span>
+        <select
+          value={state.dailyModes[line]}
+          onChange={(event) => updateState((current) => setDailyMode(current, line, event.target.value as WorkMode))}
+        >
+          {modes.map((mode) => <option key={mode} value={mode}>{modeLabels[mode]}</option>)}
+        </select>
+      </label>)}
+    </section>
+    <section>
+      <h3>总部人力</h3>
+      <dl className="m0-fact-list">
+        <div><dt>可工作</dt><dd>{workforce.workable}</dd></div>
+        <div><dt>基本值守</dt><dd>{workforce.basicDuty}</dd></div>
+        <div><dt>供水</dt><dd>{workforce.water}</dd></div>
+        <div><dt>食物</dt><dd>{workforce.food}</dd></div>
+        <div><dt>维护</dt><dd>{workforce.maintenance}</dd></div>
+        <div><dt>物流</dt><dd>{workforce.logistics}</dd></div>
+        <div><dt>可调度</dt><dd>{workforce.development}</dd></div>
+        <div><dt>待命</dt><dd>{workforce.standby}</dd></div>
+      </dl>
+      {state.staffingShortage ? <p className="m0-fact-note">{state.staffingShortage.message}</p> : null}
+    </section>
+  </>;
+}
+
+function EngineeringSheet({ state, updateState }: {
+  state: M0State;
+  updateState: (updater: (current: M0State) => M0State) => void;
+}): ReactElement {
+  const projects = state.projects.filter((project) => !project.testOnly);
+  if (projects.length === 0) return <p className="m0-empty-state">目前没有已批准工程。</p>;
+
+  return <div className="m0-project-list">
+    {projects.map((project) => <article className="m0-project-card" key={project.id}>
+      <div className="m0-project-heading">
+        <h3>{project.name}</h3>
+        <span>{formatProjectStatus(project)}</span>
+      </div>
+      <p>进度 {formatNumber(project.workDone)} / {formatNumber(project.workRequired)}</p>
+      <p>现场人员 {project.staffing.actual} / {project.staffing.planned}</p>
+      <div className="m0-progress" aria-label={`工程进度 ${formatNumber(project.workDone)} / ${formatNumber(project.workRequired)}`}>
+        <span style={{ width: `${project.workRequired > 0 ? Math.min(100, project.workDone / project.workRequired * 100) : 100}%` }} />
+      </div>
+      <h4>已投入</h4>
+      <dl className="m0-fact-list">
+        {RESOURCE_IDS.filter((resource) => (project.investedResources[resource] ?? 0) > 0).map((resource) => <div key={resource}>
+          <dt>{resourceLabels[resource]}</dt>
+          <dd>{formatNumber(project.investedResources[resource] ?? 0)}</dd>
+        </div>)}
+      </dl>
+      <label className="m0-check-row">
+        <span>条件恢复后自动继续</span>
+        <input
+          type="checkbox"
+          checked={project.autoResume}
+          disabled={project.status === 'complete'}
+          onChange={(event) => updateState((current) => setProjectAutoResume(current, project.id, event.target.checked))}
+        />
+      </label>
+    </article>)}
+  </div>;
+}
+
+function MaintenanceSheet({ state, updateState }: {
+  state: M0State;
+  updateState: (updater: (current: M0State) => M0State) => void;
+}): ReactElement {
+  return <>
+    <dl className="m0-fact-list">
+      <div><dt>维护积压</dt><dd>{formatNumber(state.maintenanceBacklog)}</dd></div>
+      <div><dt>可修旧件</dt><dd>{formatNumber(state.oldRepairableParts)}</dd></div>
+      <div><dt>已拆解物件</dt><dd>{state.headquartersSalvage.dismantledItems}</dd></div>
+    </dl>
+    <label className="m0-check-row">
+      <span>普通零件不足时允许低效拆解</span>
+      <input
+        type="checkbox"
+        checked={state.headquartersSalvage.approved}
+        onChange={(event) => updateState((current) => setHeadquartersSalvageApproval(current, event.target.checked))}
+      />
+    </label>
+  </>;
+}
+
+function ArchivesSheet({ state, status, onSave, onLoad, onNew }: {
+  state: M0State;
+  status: string | null;
+  onSave: () => void;
+  onLoad: () => void;
+  onNew: () => void;
+}): ReactElement {
+  return <>
+    <dl className="m0-fact-list">
+      <div><dt>当前日期</dt><dd>{formatDate(state.calendar)}</dd></div>
+      <div><dt>已记录事件</dt><dd>{state.events.length}</dd></div>
+    </dl>
+    <div className="m0-archive-actions">
+      <button type="button" onClick={onSave}>保存</button>
+      <button type="button" onClick={onLoad}>读取</button>
+      <button type="button" onClick={onNew}>新档</button>
+    </div>
+    <p className="m0-save-status" aria-live="polite">{status ?? ''}</p>
+  </>;
+}
+
+function SystemSheet({
+  sheet,
+  state,
+  archiveStatus,
+  updateState,
+  onClose,
+  onSave,
+  onLoad,
+  onNew,
+}: {
+  sheet: SheetId;
+  state: M0State;
+  archiveStatus: string | null;
+  updateState: (updater: (current: M0State) => M0State) => void;
+  onClose: () => void;
+  onSave: () => void;
+  onLoad: () => void;
+  onNew: () => void;
+}): ReactElement {
+  const title = sheetEntries.find((entry) => entry.id === sheet)?.label ?? '';
+  return <aside className="m0-system-sheet" aria-label={`${title}面板`}>
+    <header>
+      <h2>{title}</h2>
+      <button type="button" aria-label={`关闭${title}`} title={`关闭${title}`} onClick={onClose}>×</button>
+    </header>
+    <div className="m0-sheet-content">
+      {sheet === 'headquarters' ? <HeadquartersSheet state={state} updateState={updateState} /> : null}
+      {sheet === 'research' ? <p className="m0-empty-state">目前没有可查看的科研项目。</p> : null}
+      {sheet === 'engineering' ? <EngineeringSheet state={state} updateState={updateState} /> : null}
+      {sheet === 'assets' ? <p className="m0-empty-state">目前没有可查看的高级资产。</p> : null}
+      {sheet === 'locations' ? <p className="m0-empty-state">当前库存地点为总部。</p> : null}
+      {sheet === 'maintenance' ? <MaintenanceSheet state={state} updateState={updateState} /> : null}
+      {sheet === 'archives' ? <ArchivesSheet
+        state={state}
+        status={archiveStatus}
+        onSave={onSave}
+        onLoad={onLoad}
+        onNew={onNew}
+      /> : null}
+    </div>
+  </aside>;
+}
+
+interface DragState {
+  pointerId: number;
+  offsetX: number;
+  offsetY: number;
+}
+
+interface PixelPosition {
+  left: number;
+  top: number;
+}
+
+function clamp(value: number, minimum: number, maximum: number): number {
+  return Math.max(minimum, Math.min(maximum, value));
+}
+
+function EventWindow({
+  containerRef,
+  events,
+  savedPosition,
+  onPositionCommit,
+}: {
+  containerRef: RefObject<HTMLDivElement | null>;
+  events: M0Event[];
+  savedPosition: EventWindowPosition;
+  onPositionCommit: (position: EventWindowPosition) => void;
+}): ReactElement {
+  const panelRef = useRef<HTMLElement>(null);
+  const dragRef = useRef<DragState | null>(null);
+  const cleanupDragRef = useRef<(() => void) | null>(null);
+  const pendingPositionRef = useRef<PixelPosition | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const [position, setPosition] = useState<PixelPosition>({ left: 0, top: 0 });
+
+  const bounds = (): { maxLeft: number; maxTop: number } => {
+    const container = containerRef.current;
+    const panel = panelRef.current;
+    return {
+      maxLeft: Math.max(0, (container?.clientWidth ?? 0) - (panel?.offsetWidth ?? 0) - 8),
+      maxTop: Math.max(0, (container?.clientHeight ?? 0) - (panel?.offsetHeight ?? 0) - 8),
+    };
+  };
+
+  const fromRatio = (): PixelPosition => {
+    const { maxLeft, maxTop } = bounds();
+    return {
+      left: savedPosition.xRatio * maxLeft,
+      top: savedPosition.yRatio * maxTop,
+    };
+  };
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return undefined;
+    let resizeTimer: number | null = null;
+    const synchronizePosition = (): void => {
+      if (resizeTimer !== null) window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => setPosition(fromRatio()), 50);
+    };
+    const observer = new ResizeObserver(synchronizePosition);
+    observer.observe(container);
+    if (panelRef.current) observer.observe(panelRef.current);
+    setPosition(fromRatio());
+    return () => {
+      observer.disconnect();
+      if (resizeTimer !== null) window.clearTimeout(resizeTimer);
+    };
+  }, [containerRef, savedPosition.xRatio, savedPosition.yRatio]);
+
+  useEffect(() => () => {
+    cleanupDragRef.current?.();
+    if (animationFrameRef.current !== null) window.cancelAnimationFrame(animationFrameRef.current);
+  }, []);
+
+  const pointFromClient = (clientX: number, clientY: number): PixelPosition => {
+    const container = containerRef.current;
+    const drag = dragRef.current;
+    if (!container || !drag) return position;
+    const rectangle = container.getBoundingClientRect();
+    const { maxLeft, maxTop } = bounds();
+    return {
+      left: clamp(clientX - rectangle.left - drag.offsetX, 0, maxLeft),
+      top: clamp(clientY - rectangle.top - drag.offsetY, 0, maxTop),
+    };
+  };
+
+  const onPointerDown = (event: ReactPointerEvent<HTMLElement>): void => {
+    const panel = panelRef.current;
+    if (!panel) return;
+    cleanupDragRef.current?.();
+    const rectangle = panel.getBoundingClientRect();
+    dragRef.current = {
+      pointerId: event.pointerId,
+      offsetX: event.clientX - rectangle.left,
+      offsetY: event.clientY - rectangle.top,
+    };
+
+    const removeWindowListeners = (): void => {
+      window.removeEventListener('pointermove', moveDrag, true);
+      window.removeEventListener('pointerup', finishDrag, true);
+      window.removeEventListener('pointercancel', finishDrag, true);
+      cleanupDragRef.current = null;
+    };
+    const moveDrag = (moveEvent: PointerEvent): void => {
+      if (dragRef.current?.pointerId !== moveEvent.pointerId) return;
+      pendingPositionRef.current = pointFromClient(moveEvent.clientX, moveEvent.clientY);
+      if (animationFrameRef.current !== null) return;
+      animationFrameRef.current = window.requestAnimationFrame(() => {
+        animationFrameRef.current = null;
+        if (pendingPositionRef.current) setPosition(pendingPositionRef.current);
+      });
+    };
+    const finishDrag = (finishEvent: PointerEvent): void => {
+      if (dragRef.current?.pointerId !== finishEvent.pointerId) return;
+      const finalPosition = pointFromClient(finishEvent.clientX, finishEvent.clientY);
+      dragRef.current = null;
+      pendingPositionRef.current = null;
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+      setPosition(finalPosition);
+      const { maxLeft, maxTop } = bounds();
+      onPositionCommit({
+        xRatio: maxLeft > 0 ? finalPosition.left / maxLeft : 0,
+        yRatio: maxTop > 0 ? finalPosition.top / maxTop : 0,
+      });
+      removeWindowListeners();
+    };
+
+    cleanupDragRef.current = removeWindowListeners;
+    window.addEventListener('pointermove', moveDrag, true);
+    window.addEventListener('pointerup', finishDrag, true);
+    window.addEventListener('pointercancel', finishDrag, true);
+  };
+
+  const onKeyDown = (event: ReactKeyboardEvent<HTMLElement>): void => {
+    const step = 0.04;
+    let next = savedPosition;
+    if (event.key === 'ArrowLeft') next = { ...savedPosition, xRatio: savedPosition.xRatio - step };
+    else if (event.key === 'ArrowRight') next = { ...savedPosition, xRatio: savedPosition.xRatio + step };
+    else if (event.key === 'ArrowUp') next = { ...savedPosition, yRatio: savedPosition.yRatio - step };
+    else if (event.key === 'ArrowDown') next = { ...savedPosition, yRatio: savedPosition.yRatio + step };
+    else return;
+
+    event.preventDefault();
+    onPositionCommit({
+      xRatio: clamp(next.xRatio, 0, 1),
+      yRatio: clamp(next.yRatio, 0, 1),
+    });
+  };
+
+  const style: CSSProperties = {
+    transform: `translate3d(${position.left}px, ${position.top}px, 0)`,
+  };
+
+  return <aside className="m0-event-window" ref={panelRef} style={style} aria-label="事件">
+    <header
+      className="m0-event-handle"
+      role="button"
+      tabIndex={0}
+      aria-label="移动事件窗，使用方向键调整位置"
+      title="拖动或使用方向键移动事件窗"
+      onPointerDown={onPointerDown}
+      onKeyDown={onKeyDown}
+    >
+      <h2>事件</h2>
+      <span aria-hidden="true">⠿</span>
+    </header>
+    <div className="m0-event-list">
+      {events.length === 0 ? <p className="m0-empty-state">目前没有已记录事件。</p> : events.slice().reverse().map((event) => <article key={event.id}>
+        <time>{formatDate(event.date)}</time>
+        <p>{event.message}</p>
+      </article>)}
+    </div>
+  </aside>;
+}
+
+function MapStage({
+  events,
+  eventWindow,
+  onPositionCommit,
+}: {
+  events: M0Event[];
+  eventWindow: EventWindowPosition;
+  onPositionCommit: (position: EventWindowPosition) => void;
+}): ReactElement {
+  const mapRef = useRef<HTMLDivElement>(null);
+  return <section className="m0-map-stage" ref={mapRef} aria-label="地图">
+    <EventWindow
+      containerRef={mapRef}
+      events={events}
+      savedPosition={eventWindow}
+      onPositionCommit={onPositionCommit}
+    />
+  </section>;
 }
 
 export function M0App(): ReactElement {
   const [state, setState] = useState<M0State>(() => loadM0State());
+  const [activeSheet, setActiveSheet] = useState<SheetId | null>(null);
+  const [populationDelta, setPopulationDelta] = useState<number | null>(null);
+  const [archiveStatus, setArchiveStatus] = useState<string | null>(null);
+  const previousPopulationRef = useRef(livingPopulation(state));
 
   useEffect(() => {
     if (!state.clock.running) return undefined;
-    const timer = window.setInterval(() => setState((current) => advanceRealTime(current, 1_000)), 1_000);
+    const timer = window.setInterval(() => {
+      setState((current) => advanceRealTime(current, 1_000));
+    }, 1_000);
     return () => window.clearInterval(timer);
   }, [state.clock.running]);
 
-  const latest = state.ledger.at(-1);
-  const living = state.population.normal + state.population.unableToWork + state.population.critical;
-  const workforceTotal = state.workforce.basicDuty
-    + state.workforce.water
-    + state.workforce.food
-    + state.workforce.maintenance
-    + state.workforce.logistics
-    + state.workforce.development
-    + state.workforce.standby
-    + state.projects
-      .filter((project) => project.staffing.source === 'development')
-      .reduce((sum, project) => sum + project.staffing.actual, 0);
-  const save = (): void => saveM0State(state);
-  const fresh = (): void => setState(createInitialM0State());
+  const living = livingPopulation(state);
+  useEffect(() => {
+    const difference = living - previousPopulationRef.current;
+    previousPopulationRef.current = living;
+    if (difference !== 0) setPopulationDelta(difference);
+  }, [living]);
 
-  const protectedCoverage = useMemo(() => ({
-    water: coverageDays(state, 'water'),
-    food: coverageDays(state, 'food'),
-    commonParts: coverageDays(state, 'commonParts'),
-  }), [state]);
+  useEffect(() => {
+    if (populationDelta === null) return undefined;
+    const timer = window.setTimeout(() => setPopulationDelta(null), 3_000);
+    return () => window.clearTimeout(timer);
+  }, [populationDelta]);
+
+  const updateState = (updater: (current: M0State) => M0State): void => {
+    setArchiveStatus(null);
+    setState(updater);
+  };
+
+  const replaceStateWithoutPopulationPulse = (next: M0State): void => {
+    previousPopulationRef.current = livingPopulation(next);
+    setPopulationDelta(null);
+    setArchiveStatus(null);
+    setState(next);
+  };
+
+  const save = (): void => {
+    saveM0State(state);
+    setArchiveStatus('已保存。');
+  };
+
+  const load = (): void => {
+    replaceStateWithoutPopulationPulse(loadM0State());
+    setArchiveStatus('已读取。');
+  };
+
+  const fresh = (): void => {
+    clearM0State();
+    replaceStateWithoutPopulationPulse(createInitialM0State());
+    setArchiveStatus('已建立新档。');
+  };
+
+  const commitEventPosition = (position: EventWindowPosition): void => {
+    setState((current) => {
+      const next = setEventWindowPosition(current, position);
+      saveM0State(next);
+      return next;
+    });
+  };
 
   return <main className="m0-app">
-    <header className="m0-header">
-      <div><h1>总部运行总览</h1><p>{state.day === 0 ? '开局' : `第 ${state.day} 日`} · {state.clock.running ? '运行中' : '已暂停'} · 20 秒/游戏日</p></div>
-      <div className="m0-actions">
-        <button onClick={() => setState((current) => setRunning(current, !current.clock.running))}>{state.clock.running ? '暂停时间' : '开始时间'}</button>
-        <button onClick={() => setState((current) => advanceOneDay(current))}>结算 1 日</button>
-        <button onClick={save}>保存</button>
-        <button onClick={() => setState(loadM0State())}>读取</button>
-        <button onClick={() => { clearM0State(); fresh(); }}>新档</button>
-      </div>
-    </header>
-
-    <section className="m0-grid">
-      <article><h2>人口与岗位</h2>
-        <p>存活 {living}；正常 {state.population.normal}；无法工作 {state.population.unableToWork}；危急 {state.population.critical}；死亡 {state.population.deceased}</p>
-        <p>连续供水缺口 {state.population.waterDebt} 日；连续食物缺口 {state.population.foodDebt} 日</p>
-        <p>基本值守 {state.workforce.basicDuty}；供水 {state.workforce.water}；食物 {state.workforce.food}；维护 {state.workforce.maintenance}；物流 {state.workforce.logistics}；可调度 {state.workforce.development}；原地待命 {state.workforce.standby}</p>
-        <p>已安排 {workforceTotal}/{state.workforce.workable} 名可工作人口</p>
-        <p>{state.staffingShortage?.message ?? state.feedback ?? '当前岗位均已安排。'}</p>
-      </article>
-      <article><h2>日常调度</h2>
-        {(Object.keys(lineLabels) as DailyLineId[]).map((line) => <label className="m0-control" key={line}>{lineLabels[line]}
-          <select value={state.dailyModes[line]} onChange={(event) => setState((current) => setDailyMode(current, line, event.target.value as WorkMode))}>
-            {modes.map((mode) => <option key={mode} value={mode}>{modeLabels[mode]}</option>)}
-          </select>
-        </label>)}
-      </article>
-      <article><h2>六种库存</h2>
-        <table><thead><tr><th>库存</th><th>数量/容量</th><th>锁定</th><th>可用</th></tr></thead><tbody>
-          {RESOURCE_IDS.map((resource) => <tr key={resource}><td>{labels[resource]}</td><td>{state.stocks[resource].amount}/{state.stocks[resource].capacity}</td><td>{state.stocks[resource].locked}</td><td>{Math.max(0, state.stocks[resource].amount - state.stocks[resource].locked - state.stocks[resource].reserved)}</td></tr>)}
-        </tbody></table>
-      </article>
-      <article><h2>底线与预警</h2>
-        {(['water', 'food', 'commonParts'] as const).map((resource) => <label className="m0-control" key={resource}>{labels[resource]} {protectedCoverage[resource].toFixed(1)} 日，硬底线 {state.safetyLines[resource].hardDays}
-          <span>安全线 <input type="number" min={state.safetyLines[resource].hardDays} value={state.safetyLines[resource].safetyDays} onChange={(event) => setState((current) => setSafetyDays(current, resource, Number(event.target.value)))} /></span>
-        </label>)}
-        <p>{state.warnings.length ? state.warnings.join('；') : '当前没有新的预警'}</p>
-      </article>
-      <article><h2>维护与水务</h2>
-        <p>维护积压 {state.maintenanceBacklog} 工作量；可修旧件 {state.oldRepairableParts}</p>
-        <label>普通零件接近安全线时允许低效拆解 <input type="checkbox" checked={state.headquartersSalvage.approved} onChange={(event) => setState((current) => setHeadquartersSalvageApproval(current, event.target.checked))} /></label>
-        <p>低效拆解已移除总部可用物件 {state.headquartersSalvage.dismantledItems} 件。</p>
-        <p>总部水务恢复 {state.waterworks.workDone}/{state.waterworks.workRequired}，{state.waterworks.repaired ? '已恢复' : '降级运行'}</p>
-        <p>主线工程已预留：普通零件 {state.stocks.commonParts.locked}、工程构件 {state.stocks.engineeringComponents.locked}、合金料 {state.stocks.alloy.locked}。预留物资尚未消耗。</p>
-      </article>
-      <article><h2>优先级与队列</h2>
-        <div className="m0-project"><strong>P0 生存保障</strong><span>人口供给与最低值守</span></div>
-        {state.projects.filter((project) => !project.testOnly).map((project) => <div className="m0-project" key={project.id}><strong>{project.priority} {project.name}</strong><span>{projectStatus(project)} · 占用 {project.staffing.actual}/{project.staffing.planned} 人</span>
-          <label>自动恢复 <input type="checkbox" checked={project.autoResume} disabled={project.status === 'complete'} onChange={(event) => setState((current) => setProjectAutoResume(current, project.id, event.target.checked))} /></label>
-        </div>)}
-      </article>
-      <article className="m0-wide"><h2>最近流水</h2>
-        {latest ? <><p>第 {latest.day} 日：水 {latest.resources.water.start}+{latest.resources.water.inflow}-{latest.resources.water.outflow}={latest.resources.water.end}；食物 {latest.resources.food.start}+{latest.resources.food.inflow}-{latest.resources.food.outflow}={latest.resources.food.end}；普通零件 {latest.resources.commonParts.start}+{latest.resources.commonParts.inflow}-{latest.resources.commonParts.outflow}={latest.resources.commonParts.end}</p>
-          <p>水务 {latest.waterworksWorkStart}→{latest.waterworksWorkEnd}；旧件 {latest.oldRepairablePartsStart}→{latest.oldRepairablePartsEnd}；拆解物件 {latest.headquartersSalvageStart}→{latest.headquartersSalvageEnd}；项目物流 {latest.logisticsProjectCapacity} 工作量；项目变化 {latest.projectEvents.map(projectEventText).join('、') || '无'}</p></> : <p>尚未结算。开局默认暂停。</p>}
-      </article>
-    </section>
+    <TopBar
+      state={state}
+      populationDelta={populationDelta}
+      onPause={() => updateState((current) => setRunning(current, false))}
+      onSpeed={(speed) => updateState((current) => setRunning(setGameSpeed(current, speed), true))}
+    />
+    <div className="m0-workspace">
+      <SystemRail
+        activeSheet={activeSheet}
+        onSelect={(sheet) => setActiveSheet((current) => current === sheet ? null : sheet)}
+      />
+      <MapStage
+        events={state.events}
+        eventWindow={state.ui.eventWindow}
+        onPositionCommit={commitEventPosition}
+      />
+      {activeSheet ? <SystemSheet
+        sheet={activeSheet}
+        state={state}
+        archiveStatus={archiveStatus}
+        updateState={updateState}
+        onClose={() => setActiveSheet(null)}
+        onSave={save}
+        onLoad={load}
+        onNew={fresh}
+      /> : null}
+    </div>
   </main>;
 }

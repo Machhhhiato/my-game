@@ -1,6 +1,6 @@
 ---
 night_run_id: NIGHT-M0-L4-401-R1-001
-work_order_status: active_phase_a
+work_order_status: implemented_waiting_user_acceptance
 formal_task: M0-L4-401-R1
 parent_task: M0-L4-401
 accepted_source: M0-S003-U135
@@ -18,6 +18,9 @@ first_attempt_result: failed_capability_clean_restore
 replacement_model: gpt-5.6-sol
 replacement_task: /root/m0_l4_401_r1_sol
 replacement_started_at: 2026-08-26T10:24:03+08:00
+finished_at: 2026-08-26T11:23:13+08:00
+output_commit: this_implementation_commit
+run_report: NIGHT_RUN_M0_L4_401_R1_001.md
 ---
 
 # NIGHT-M0-L4-401-R1-001 · 地图中心式正式界面与月度资源结算返工

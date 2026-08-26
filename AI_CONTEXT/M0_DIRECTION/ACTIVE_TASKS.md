@@ -4,7 +4,7 @@ milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
 overall_current_task: M0-L4-401-R1
 handoff_id: M0-H002
-updated_at: 2026-08-26T10:17:56+08:00
+updated_at: 2026-08-26T11:23:13+08:00
 ---
 
 # M0 当前任务路由
@@ -19,7 +19,7 @@ updated_at: 2026-08-26T10:17:56+08:00
 | 第二层 | `M0-L2-201-R1` 首座前哨工程故事补包 | `accepted` | 无 | `ACCEPTED` |
 | 第三层 | `M0-L3-301` 玩家可见文字包 | `accepted` | 动态字段继续阻塞到具有真实来源的相关实现批次 | `ACCEPTED` |
 | 第四层（能力） | `M0-L4-005` GitHub Skills/MCP 能力审计 | `accepted` | 无 | `ACCEPTED` |
-| 第四层（代码） | `M0-L4-401-R1` 地图中心式正式界面与月度资源结算返工 | `active` | Sol / high 接替任务正在执行阶段 A；第一层审查前不开始正式 UI | `ACTIVE` |
+| 第四层（代码） | `M0-L4-401-R1` 地图中心式正式界面与月度资源结算返工 | `implemented_waiting_user_acceptance` | 第一层实现验收完成；等待用户试玩，不进入 `M0-L4-402` | `WAITING_USER_ACCEPTANCE` |
 | 第四层（边界） | `M0-L4-011` 可复用底座与旧代码删除边界审计 | `accepted` | 无 | `ACCEPTED` |
 
 用户在 `M0-S003-U086` 明确接受 `M0-L1-106` 并冻结 M0 规格，形成 `D-M0-DIR-021`。冻结提交为 `ff064af236614b9d4cb7630690decd551dc0229d`。两个 `gpt-5.3-codex-spark` 审计任务先后耗尽上下文；R3 使用 `gpt-5.6-terra`、固定候选和限量证据完成只读审计，形成 `D-M0-DIR-022`。输出已经交回主线程，等待用户验收。
@@ -62,8 +62,8 @@ updated_at: 2026-08-26T10:17:56+08:00
 - 长执行结果：一次新任务创建按约定失败后没有重试，复用第四层线程完成首版和 R1；第一层否决首版并继续修正状态污染、缺件幽灵维护、存档校验、人员待命、玩家文案和页面可读性。`BUILD-M0-CORE-001` 已通过 `npm run typecheck`、`npm run test:m0`、`npm run build`、`git diff --check`、本地 HTTP、浏览器交互和真实 20 秒推进检查，当前等待用户试玩接受，不进入 402。
 - 试玩返工：用户接受上述数学模型，但在 `M0-S003-U129` 至 `U134` 退回信息架构并完成整合修订；`U135` 接受 `M0-L4-401-R1`。新输出必须建立地图中心式正式 UI 骨架、顶部人口与月度资源、左侧系统 sheet、可拖动事实事件窗、无影子预留、日级公历与月度资源结算；执行单为 `NIGHT_WORK_ORDER_M0_L4_401_R1.md`。
 - 线程规则修订：用户在 `M0-S003-U136` 明确只有创建动作本身报错才适用“只新建一次”；创建成功后的能力失败允许清理后换用更合适模型接替。第一至第三层默认复用长期会话，第四层可按大型实施批次定期接替，形成 `D-M0-DIR-040`。
-- 401-R1 首次派发：`/root/m0_l4_401_r1` 使用 `gpt-5.6-terra / medium` 成功创建，但压缩重写被否决，还原后又确认无法安全完成核心迁移；已按能力失败关闭，工作区恢复输入提交，无提交、无推送。规则同步后派发一个 `gpt-5.6-sol / high` 接替任务。
-- 401-R1 接替派发：规则提交 `1caa7a7b667fbab1bbcefb73f5a0eddff54af6a2` 已推送并与远端一致；接替任务 `/root/m0_l4_401_r1_sol` 使用 `gpt-5.6-sol / high`，当前只执行公历、月结、存档和测试迁移的阶段 A，不提交、不推送。
+- 401-R1 首次派发：`/root/m0_l4_401_r1` 使用 `gpt-5.6-terra / medium` 成功创建，但压缩重写被否决，还原后又确认无法安全完成核心迁移；已按能力失败关闭，工作区恢复输入提交，无提交、无推送。
+- 401-R1 接替结果：规则提交 `1caa7a7b667fbab1bbcefb73f5a0eddff54af6a2` 已推送并与远端一致；接替任务 `/root/m0_l4_401_r1_sol` 使用 `gpt-5.6-sol / high` 完成公历、月结、存档、正式 UI 和测试迁移。第一层两轮退回后补修指针拖动，类型检查、M0 测试、构建、差异检查、桌面与窄屏浏览器验收全部通过。
 - 新流程：每个独立故事必须先建立内部场景设定卡；设定保证因果和空间，玩家正文以故事为主。工厂按真实产品与工艺分类，`第一工程构件回收整备厂` 只是 M0 第一种样例。
 - 接受证据：`M0-S003-U044` 接受第一项的信息结构；`D-M0-PROD-037` 明确视觉示意未获接受，后续必须随整体 UI 重做。
 - 返工证据：`M0-S003-U045` 指出玩法元语言不是正文；`U046` 指出技术段太长且制度口吻自我揭露；`U047` 判断整体方向仍不对，并要求先收集真实描述样本。
@@ -75,7 +75,7 @@ updated_at: 2026-08-26T10:17:56+08:00
 - 第七项接受：`D-M0-PROD-046` 保留四类科技来源，并冻结旧时代与先驱来源在发现记录建立、世界文案禁用机制数据、首建节点一至两句、重复工程完成一句和事故事实时间线。`Q-M0-041` resolved。
 - 第八项接受：`D-M0-DIR-015` 至 `D-M0-DIR-019` 冻结单张工作单、责任层缺失阻塞、分级验收、独立正文统计和两步冻结门；`D-M0-DIR-020` 冻结独立任务线程与逻辑主线程统筹。
 - 源包证据：`SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6 逐字保留第七项初案、完整参考、`U073` 修正与 `A177` 接受稿，并原样保留 revision 1—5 的全部材料。
-- 冻结边界：`overall_spec_frozen: true`，`implementation_authorized: true`；`CONTENT-M0-STORY-001` 已被用户后续修订取代；`TEXT-M0-STORY-001` 仅为 `accepted_for_m0_process_prototype`；`M0-L3-301` accepted；当前 `M0-L4-401-R1` 为 `authorized_dispatch_pending`。
+- 冻结边界：`overall_spec_frozen: true`，`implementation_authorized: true`；`CONTENT-M0-STORY-001` 已被用户后续修订取代；`TEXT-M0-STORY-001` 仅为 `accepted_for_m0_process_prototype`；`M0-L3-301` accepted；当前 `M0-L4-401-R1` 为 `implemented_waiting_user_acceptance`。
 - 实现证据：`BUILD-M0-CORE-001` 已落在提交 `2a871c08cf035877cab60301f63f6c558ad32cf5`，通过代理推送后远端分支返回同一提交；最终接力记录由后续同步提交补齐。
 - 失败任务 1：`AG-M0｜L4-AUDIT｜005-010｜MAC`；thread `01a0373a-75c9-71a3-8cb3-3e0213ca1322`；host `local`；`gpt-5.3-codex-spark` / `high`；状态 `systemError`；原因是上下文窗口耗尽；未写文件。
 - 失败任务 2：`AG-M0｜L4-AUDIT｜005-010｜MAC R2`；thread `01a0373c-b12c-7c70-ba06-9c329180be59`；host `local`；`gpt-5.3-codex-spark` / `high`；状态 `systemError`；原因仍是外部证据超过上下文；未写文件。
