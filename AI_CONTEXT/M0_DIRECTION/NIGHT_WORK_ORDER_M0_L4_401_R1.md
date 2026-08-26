@@ -1,6 +1,6 @@
 ---
 night_run_id: NIGHT-M0-L4-401-R1-001
-work_order_status: implemented_waiting_user_acceptance
+work_order_status: accepted
 formal_task: M0-L4-401-R1
 parent_task: M0-L4-401
 accepted_source: M0-S003-U135

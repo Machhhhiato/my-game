@@ -63,9 +63,16 @@ const lineLabels: Record<DailyLineId, string> = {
 
 const modes: WorkMode[] = ['minimum', 'standard', 'accelerated'];
 const modeLabels: Record<WorkMode, string> = {
-  minimum: '最低',
-  standard: '标准',
-  accelerated: '加速',
+  minimum: '基本值守',
+  standard: '常规运行',
+  accelerated: '集中投入',
+};
+
+const commandDescriptions: Record<DailyLineId, string> = {
+  water: '调配人员维持总部供水。',
+  food: '组织食物生产并完成总部转运。',
+  maintenance: '安排旧件修复与总部设施维护。',
+  logistics: '维持总部短途运输与工程物流。',
 };
 
 type SheetId = 'headquarters' | 'research' | 'engineering' | 'assets' | 'locations' | 'maintenance' | 'archives';
@@ -100,22 +107,32 @@ function formatProjectStatus(project: Project): string {
 }
 
 function ResourceReadout({ state, resource }: { state: M0State; resource: ResourceId }): ReactElement {
-  const stock = state.stocks[resource];
   const account = state.monthly.resources[resource];
   const available = availableAmount(state, resource);
   const netChange = account.projectedClosingAmount - available;
-  const netDailyUse = account.currentDailyOutflow - account.currentDailyInflow;
-  let coverage = '当前生产不低于需求';
-  if ((resource === 'water' || resource === 'food') && state.resourceShortages[resource]) {
-    coverage = '当前存在短缺';
-  } else if (account.currentDailyOutflow === 0) {
-    coverage = '当前无持续需求';
-  } else if (netDailyUse > 0) {
-    const days = `${formatNumber(available / netDailyUse)} 日`;
-    coverage = account.exhaustionDate
-      ? `${days}；预计 ${formatDate(account.exhaustionDate)} 耗尽`
-      : days;
-  }
+  const remainingIncome = account.projectedRemainingInflow;
+  const remainingExpense = account.projectedRemainingOutflow;
+  const incomeSource = resource === 'water'
+    ? '总部供水'
+    : resource === 'food'
+      ? '食物生产与转运'
+      : resource === 'commonParts'
+        && state.oldRepairableParts === 0
+        && state.headquartersSalvage.approved
+        && account.currentDailyInflow > 0
+        ? '总部物件拆解'
+        : resource === 'commonParts'
+          ? '旧件修复'
+          : '无收入';
+  const expenseDestination = resource === 'water'
+    ? '居民生活用水'
+      : resource === 'food'
+      ? '居民食物供应'
+      : resource === 'commonParts'
+        ? '总部设施维护'
+        : remainingExpense > 0
+          ? '工程投入'
+          : '无支出';
   const tooltipId = `m0-resource-${resource}`;
 
   return <div className="m0-resource-readout">
@@ -129,18 +146,20 @@ function ResourceReadout({ state, resource }: { state: M0State; resource: Resour
     </button>
     <div className="m0-resource-detail" id={tooltipId} role="tooltip">
       <h2>{resourceLabels[resource]}</h2>
-      <dl>
-        <div><dt>容量</dt><dd>{formatNumber(stock.capacity)}</dd></div>
-        <div><dt>下次结算</dt><dd>{formatDate(state.monthly.settlementDate)}</dd></div>
-        <div><dt>当前每日生产</dt><dd>{formatNumber(account.currentDailyInflow)}</dd></div>
-        <div><dt>当前每日需求</dt><dd>{formatNumber(account.currentDailyOutflow)}</dd></div>
-        <div><dt>本月已累计生产</dt><dd>{formatNumber(account.accruedInflow)}</dd></div>
-        <div><dt>本月已累计需求</dt><dd>{formatNumber(account.accruedOutflow)}</dd></div>
-        <div><dt>剩余预计生产</dt><dd>{formatNumber(account.projectedRemainingInflow)}</dd></div>
-        <div><dt>剩余预计需求</dt><dd>{formatNumber(account.projectedRemainingOutflow)}</dd></div>
-        <div><dt>预计结余</dt><dd>{formatNumber(account.projectedClosingAmount)}</dd></div>
-        <div><dt>可维持时间</dt><dd>{coverage}</dd></div>
-      </dl>
+      <section className="m0-resource-flow">
+        <div className="m0-resource-flow-total"><span>收入</span><strong>+{formatNumber(remainingIncome)}</strong></div>
+        <div className="m0-resource-flow-line">
+          <span>{remainingIncome > 0 ? incomeSource : '无收入'}</span>
+          <span>{remainingIncome > 0 ? `+${formatNumber(remainingIncome)}` : ''}</span>
+        </div>
+      </section>
+      <section className="m0-resource-flow">
+        <div className="m0-resource-flow-total is-expense"><span>支出</span><strong>-{formatNumber(remainingExpense)}</strong></div>
+        <div className="m0-resource-flow-line">
+          <span>{remainingExpense > 0 ? expenseDestination : '无支出'}</span>
+          <span>{remainingExpense > 0 ? `-${formatNumber(remainingExpense)}` : ''}</span>
+        </div>
+      </section>
     </div>
   </div>;
 }
@@ -213,18 +232,47 @@ function HeadquartersSheet({ state, updateState }: {
   updateState: (updater: (current: M0State) => M0State) => void;
 }): ReactElement {
   const workforce = state.workforce;
+  const directResult = (line: DailyLineId): string => {
+    if (line === 'water') {
+      const account = state.monthly.resources.water;
+      return `当前每日供水 ${formatNumber(account.currentDailyInflow)}，居民用水 ${formatNumber(account.currentDailyOutflow)}。`;
+    }
+    if (line === 'food') {
+      const account = state.monthly.resources.food;
+      return `当前每日生产与转运食物 ${formatNumber(account.currentDailyInflow)}，居民食物供应 ${formatNumber(account.currentDailyOutflow)}。`;
+    }
+    if (line === 'maintenance') {
+      const account = state.monthly.resources.commonParts;
+      return `当前每日修复普通零件 ${formatNumber(account.currentDailyInflow)}，总部设施维护使用 ${formatNumber(account.currentDailyOutflow)}。`;
+    }
+    if (state.workforce.logistics >= 5) return '当前优先保障工程运输。';
+    if (state.workforce.logistics >= 3) return '当前可维持少量工程运输。';
+    return '当前只维持总部必要运输，工程运输暂停。';
+  };
+
   return <>
     <section>
-      <h3>日常运行</h3>
-      {(Object.keys(lineLabels) as DailyLineId[]).map((line) => <label className="m0-select-row" key={line}>
-        <span>{lineLabels[line]}</span>
-        <select
-          value={state.dailyModes[line]}
-          onChange={(event) => updateState((current) => setDailyMode(current, line, event.target.value as WorkMode))}
-        >
-          {modes.map((mode) => <option key={mode} value={mode}>{modeLabels[mode]}</option>)}
-        </select>
-      </label>)}
+      <h3>运行调度令</h3>
+      <div className="m0-command-list">
+        {(Object.keys(lineLabels) as DailyLineId[]).map((line) => <article className="m0-command-card" key={line}>
+          <div className="m0-command-heading">
+            <h4>{lineLabels[line]}调度令</h4>
+            <span>当前占用 {state.workforce[line]} 人</span>
+          </div>
+          <p>{commandDescriptions[line]}</p>
+          <label className="m0-command-control">
+            <span>执行力度</span>
+            <select
+              aria-label={`${lineLabels[line]}调度令执行力度`}
+              value={state.dailyModes[line]}
+              onChange={(event) => updateState((current) => setDailyMode(current, line, event.target.value as WorkMode))}
+            >
+              {modes.map((mode) => <option key={mode} value={mode}>{modeLabels[mode]}</option>)}
+            </select>
+          </label>
+          <p className="m0-command-result">{directResult(line)}</p>
+        </article>)}
+      </div>
     </section>
     <section>
       <h3>总部人力</h3>

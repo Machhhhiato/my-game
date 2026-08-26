@@ -216,12 +216,10 @@ input:focus-visible {
   font-weight: 600;
 }
 
-.m0-resource-detail dl,
 .m0-fact-list {
   margin: 0;
 }
 
-.m0-resource-detail dl > div,
 .m0-fact-list > div {
   display: flex;
   justify-content: space-between;
@@ -229,17 +227,51 @@ input:focus-visible {
   padding: 0.23rem 0;
 }
 
-.m0-resource-detail dt,
 .m0-fact-list dt {
   color: #9db0ba;
 }
 
-.m0-resource-detail dd,
 .m0-fact-list dd {
   margin: 0;
   color: #f2f6f8;
   font-variant-numeric: tabular-nums;
   text-align: right;
+}
+
+.m0-resource-flow {
+  padding: 0.55rem 0;
+  border-top: 1px solid #3a505b;
+}
+
+.m0-resource-flow-total,
+.m0-resource-flow-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.m0-resource-flow-total {
+  color: #d9e4e8;
+}
+
+.m0-resource-flow-total strong {
+  color: #8fd2a4;
+  font-variant-numeric: tabular-nums;
+}
+
+.m0-resource-flow-total.is-expense strong {
+  color: #d8a093;
+}
+
+.m0-resource-flow-line {
+  padding-top: 0.35rem;
+  color: #95a9b3;
+  font-size: 0.78rem;
+}
+
+.m0-resource-flow-line span:last-child {
+  font-variant-numeric: tabular-nums;
 }
 
 .m0-time-controls {
@@ -389,7 +421,6 @@ input:focus-visible {
   font-weight: 600;
 }
 
-.m0-select-row,
 .m0-check-row {
   display: flex;
   align-items: center;
@@ -399,12 +430,58 @@ input:focus-visible {
   color: #c8d5db;
 }
 
-.m0-select-row select {
-  min-width: 5.3rem;
+.m0-command-list {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.m0-command-card {
+  padding: 0.7rem;
+  border: 1px solid #3d535e;
+  border-radius: 2px;
+  background: #18262f;
+}
+
+.m0-command-heading,
+.m0-command-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.m0-command-heading h4 {
+  margin: 0;
+  color: #edf3f5;
+  font-size: 0.87rem;
+  font-weight: 600;
+}
+
+.m0-command-heading span,
+.m0-command-card p,
+.m0-command-control {
+  color: #aebfc7;
+  font-size: 0.79rem;
+}
+
+.m0-command-card p {
+  margin: 0.45rem 0;
+  line-height: 1.45;
+}
+
+.m0-command-control select {
+  min-width: 7rem;
   padding: 0.3rem 0.45rem;
   border: 1px solid #4a626d;
   border-radius: 2px;
   background: #192832;
+}
+
+.m0-command-card .m0-command-result {
+  margin-bottom: 0;
+  padding-top: 0.45rem;
+  border-top: 1px solid #30454f;
+  color: #cbd7dc;
 }
 
 .m0-check-row input {
