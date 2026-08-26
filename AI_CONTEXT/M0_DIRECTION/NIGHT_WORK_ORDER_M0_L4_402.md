@@ -1,6 +1,6 @@
 ---
 night_run_id: NIGHT-M0-L4-402-001
-work_order_status: active
+work_order_status: active_replacement
 formal_task: M0-L4-402
 parent_task: M0-L4-402
 authorized_source: M0-S003-U137
@@ -14,8 +14,13 @@ initial_model: gpt-5.6-terra
 reasoning_effort: medium
 highest_reasoning_effort: high
 run_report: NIGHT_RUN_M0_L4_402_001.md
-physical_task: /root/m0_l4_402
+first_attempt: /root/m0_l4_402
+first_attempt_model: gpt-5.6-terra / medium
+first_attempt_result: stopped_incomplete_capability
+physical_task: /root/m0_l4_402_sol
+replacement_model: gpt-5.6-sol / high
 dispatched_at: 2026-08-26T12:03:50+08:00
+replacement_started_at: 2026-08-26T12:10:31+08:00
 ---
 
 # NIGHT-M0-L4-402-001 · 地图、科研、精密工坊与勘测无人机
