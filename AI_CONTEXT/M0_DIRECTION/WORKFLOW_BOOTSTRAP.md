@@ -1,6 +1,6 @@
 ---
 workflow_id: always-game-m0-four-layer
-workflow_version: 5
+workflow_version: 6
 milestone: M0-personal-playable
 direction_branch: context/m0-direction
 active_tasks: AI_CONTEXT/M0_DIRECTION/ACTIVE_TASKS.md
@@ -33,6 +33,8 @@ session_routing: AI_CONTEXT/M0_DIRECTION/SESSION_ROUTING.md
 - 当前工作机只有 Mac；Windows 历史记录继续保留，但不进入当前启动、派发或接力计划。
 - 各层默认模型只看 `SESSION_ROUTING.md` 的当前运行表；创建任务时重新核对可用模型，模型名称变化不改变四层职责。
 - 下层任务默认使用完成任务所需的最低合理思考深度：机械任务 `low`，内容组织和有边界的实现 `medium`。提高到 `high` 必须记录具体原因；`xhigh`、`max`、`ultra` 必须先获用户明确确认。
+- 第一至第三层默认复用已经建立的长期会话，维持方向、故事事实与文字风格连续性；第四层才按大型实施批次、上下文压力或已记录的能力不匹配定期建立接替任务。
+- 新建接口或路由报错时，同一次派发只尝试一次新建，随后复用安全旧会话。任务已经创建成功但后来因模型能力或交付质量失败时，可以在清理失败实例并记录证据后，换用更合适的模型建立一个接替任务；两类失败不得混写。
 
 ## 启动时的读取顺序
 

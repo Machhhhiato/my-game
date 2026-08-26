@@ -11,8 +11,11 @@ branch: context/m0-direction
 baseline_commit: 926a3fc6599a895018bf5c96d50db02ec630b192
 input_commit: this_work_order_commit
 output_id: BUILD-M0-CORE-001-R1
-reasoning_effort: medium
-highest_reasoning_effort: medium
+reasoning_effort: high
+highest_reasoning_effort: high
+first_attempt: /root/m0_l4_401_r1
+first_attempt_result: failed_capability_clean_restore
+replacement_model: gpt-5.6-sol
 ---
 
 # NIGHT-M0-L4-401-R1-001 · 地图中心式正式界面与月度资源结算返工
@@ -27,10 +30,11 @@ highest_reasoning_effort: medium
 
 ## 模型与线程
 
-- 任务模型：`gpt-5.6-terra`。
-- 初始思考深度：`medium`。
-- 最高自动升级档：`medium`；机械测试可降到 `low`，不得自动升到 `high`。
-- 线程：优先只尝试一次新的短上下文第四层任务；创建失败后立即复用 `01a03800-3d9f-7c70-b1dc-70a30bc8bf01`，不得连续重试新建。
+- 接替任务模型：`gpt-5.6-sol`。
+- 初始思考深度：`high`；机械测试与明确核对可降到 `low`。
+- 最高自动升级档：`high`；不得自动升到 `xhigh`、`max` 或 `ultra`。
+- 升档依据：首次 `/root/m0_l4_401_r1` 已由 `gpt-5.6-terra / medium` 成功创建，但其压缩重写被第一层否决，清理后又明确无法安全完成核心迁移，属于已记录的能力失败，不是创建接口错误。
+- 线程：依据 `D-M0-DIR-040`，先确认首次实例关闭且工作区恢复干净，再建立一个更合适模型的第四层接替任务。接替任务仍受本执行单全部范围、白名单和停止条件约束；不得同时保留两个活动实例。
 - 第四层不得提交或推送；第一层负责独立审查、退回、补修、提交和推送。
 
 ## 项目与起点
