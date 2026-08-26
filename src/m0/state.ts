@@ -1,7 +1,7 @@
 import { createEmptyMonthlyLedger, refreshMonthlyProjection } from './economy';
 import {
   M0_STATE_VERSION,
-  type DailyModes,
+  type DailyPositions,
   type EventWindowPosition,
   type MapRotation,
   type M0State,
@@ -12,8 +12,9 @@ import {
   type Workforce,
 } from './types';
 import { createLocalMap, normalizeMapRotation } from './map';
+import { enabledResearchCapacity, isResearchProjectId } from './progression';
 
-export const M0_SAVE_KEY = 'always-game-m0-v6';
+export const M0_SAVE_KEY = 'always-game-m0-v7';
 export const M0_DAY_MS = 20_000;
 
 export const DEFAULT_EVENT_WINDOW_POSITION: EventWindowPosition = {
@@ -52,7 +53,9 @@ export function minimumBasicDuty(state: Pick<M0State, 'population'>): number {
 
 export function projectDevelopmentDemand(projects: Project[]): number {
   return projects
-    .filter((project) => project.status === 'active' && project.staffing.source === 'development')
+    .filter((project) => project.status === 'active'
+      && project.staffing.source === 'development'
+      && !isResearchProjectId(project.id))
     .reduce((sum, project) => sum + project.staffing.planned, 0);
 }
 
@@ -65,12 +68,12 @@ export function projectStandbyDemand(projects: Project[]): number {
     .reduce((sum, project) => sum + project.staffing.planned, 0);
 }
 
-export function requestedWorkers(state: Pick<M0State, 'population' | 'dailyModes' | 'projects'>): number {
+export function requestedWorkers(state: Pick<M0State, 'population' | 'dailyPositions' | 'projects' | 'research'>): number {
   return minimumBasicDuty(state)
-    + MODE_STAFF.water[state.dailyModes.water]
-    + MODE_STAFF.food[state.dailyModes.food]
-    + MODE_STAFF.maintenance[state.dailyModes.maintenance]
-    + MODE_STAFF.logistics[state.dailyModes.logistics]
+    + state.dailyPositions.water
+    + state.dailyPositions.food
+    + state.dailyPositions.maintenance
+    + state.dailyPositions.logistics
     + projectDevelopmentDemand(state.projects)
     + projectStandbyDemand(state.projects);
 }
@@ -80,7 +83,7 @@ interface WorkforcePlan {
   projectWorkers: Map<string, number>;
 }
 
-function calculateWorkforce(state: Pick<M0State, 'population' | 'dailyModes' | 'projects'>): WorkforcePlan {
+function calculateWorkforce(state: Pick<M0State, 'population' | 'dailyPositions' | 'projects' | 'research'>): WorkforcePlan {
   const workable = workablePopulation(state);
   let remaining = workable;
   const projectWorkers = new Map<string, number>();
@@ -92,13 +95,15 @@ function calculateWorkforce(state: Pick<M0State, 'population' | 'dailyModes' | '
   };
 
   const basicDuty = take(minimumBasicDuty(state));
-  const water = take(MODE_STAFF.water[state.dailyModes.water]);
-  const food = take(MODE_STAFF.food[state.dailyModes.food]);
-  const maintenance = take(MODE_STAFF.maintenance[state.dailyModes.maintenance]);
-  const logistics = take(MODE_STAFF.logistics[state.dailyModes.logistics]);
+  const water = take(state.dailyPositions.water);
+  const food = take(state.dailyPositions.food);
+  const maintenance = take(state.dailyPositions.maintenance);
+  const logistics = take(state.dailyPositions.logistics);
 
   const activeDevelopmentProjects = state.projects
-    .filter((project) => project.status === 'active' && project.staffing.source === 'development')
+    .filter((project) => project.status === 'active'
+      && project.staffing.source === 'development'
+      && !isResearchProjectId(project.id))
     .sort((left, right) => {
       const priorityDifference = PROJECT_PRIORITY_ORDER.indexOf(left.priority) - PROJECT_PRIORITY_ORDER.indexOf(right.priority);
       return priorityDifference !== 0 ? priorityDifference : left.queueOrder - right.queueOrder;
@@ -109,9 +114,10 @@ function calculateWorkforce(state: Pick<M0State, 'population' | 'dailyModes' | '
   }
 
   const standby = take(projectStandbyDemand(state.projects));
+  const research = take(enabledResearchCapacity(state.research));
 
   return {
-    workforce: { basicDuty, water, food, maintenance, logistics, development: remaining, standby, workable },
+    workforce: { basicDuty, water, food, maintenance, logistics, research, development: remaining, standby, workable },
     projectWorkers,
   };
 }
@@ -122,8 +128,10 @@ export function applyWorkforcePlan(state: M0State): void {
 
   for (const project of state.projects) {
     if (project.staffing.source === 'daily_water') {
-      project.staffing.planned = MODE_STAFF.water[state.dailyModes.water];
+      project.staffing.planned = state.dailyPositions.water;
       project.staffing.actual = project.status === 'active' ? plan.workforce.water : 0;
+    } else if (isResearchProjectId(project.id)) {
+      project.staffing.actual = project.status === 'active' ? plan.workforce.research : 0;
     } else {
       project.staffing.actual = plan.projectWorkers.get(project.id) ?? 0;
     }
@@ -179,11 +187,11 @@ function initialProjects(): Project[] {
 export function createInitialM0State(scenario: ScenarioConfig = DEFAULT_M0_SCENARIO): M0State {
   const calendar = { ...scenario.startDate };
   const stocks = initialStocks();
-  const dailyModes: DailyModes = {
-    water: 'standard',
-    food: 'standard',
-    maintenance: 'standard',
-    logistics: 'standard',
+  const dailyPositions: DailyPositions = {
+    water: MODE_STAFF.water.standard,
+    food: MODE_STAFF.food.standard,
+    maintenance: MODE_STAFF.maintenance.standard,
+    logistics: MODE_STAFF.logistics.standard,
   };
   const state: M0State = {
     version: M0_STATE_VERSION,
@@ -199,13 +207,14 @@ export function createInitialM0State(scenario: ScenarioConfig = DEFAULT_M0_SCENA
       waterDebt: 0,
       foodDebt: 0,
     },
-    dailyModes,
+    dailyPositions,
     workforce: {
       basicDuty: 0,
       water: 0,
       food: 0,
       maintenance: 0,
       logistics: 0,
+      research: 0,
       development: 0,
       standby: 0,
       workable: 0,

@@ -176,7 +176,6 @@ function createSurvey(targetId: SurveyTargetId): SurveyRecord {
     workDone: 0,
     approved: false,
     workers: 2,
-    priority: 'P2',
     paused: false,
     pauseReason: null,
     maximumDays: null,

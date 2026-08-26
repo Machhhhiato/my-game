@@ -12,6 +12,7 @@ import {
   availableAmount,
   coverageDays,
   injectTestProject,
+  setDailyLinePositions,
   setDailyMode,
   setGameSpeed,
   setHeadquartersSalvageApproval,
@@ -74,13 +75,15 @@ function scenario(id: string, year: number, month: number, day = 1): ScenarioCon
 function workforceTotal(state: M0State): number {
   const workforce = state.workforce;
   const projectWorkers = state.projects
-    .filter((project) => project.staffing.source === 'development')
+    .filter((project) => project.staffing.source === 'development'
+      && !technologies.some((technology) => technology.id === project.id))
     .reduce((sum, project) => sum + project.staffing.actual, 0);
   return workforce.basicDuty
     + workforce.water
     + workforce.food
     + workforce.maintenance
     + workforce.logistics
+    + workforce.research
     + workforce.development
     + workforce.standby
     + projectWorkers;
@@ -207,15 +210,15 @@ const oneWorker = createInitialM0State();
 oneWorker.population.normal = 1;
 equal(advanceOneDay(oneWorker).ledger[0].resources.water.inflow, 0, 'below-minimum water has no ghost output');
 
-let rejected = setDailyMode(createInitialM0State(), 'water', 'accelerated');
-rejected = setDailyMode(rejected, 'food', 'accelerated');
-rejected = setDailyMode(rejected, 'maintenance', 'accelerated');
-rejected = setDailyMode(rejected, 'logistics', 'accelerated');
-equal(rejected.dailyModes.logistics, 'standard', 'overallocated choice keeps previous mode');
-expect(rejected.feedback?.includes('无法改为加速'), 'overallocated choice reports player reason');
-equal(rejected.workforce.water, 6, 'accepted accelerated water is fully staffed');
-equal(rejected.projects[0].staffing.planned, 6, 'waterworks plan follows selected water staffing');
-equal(rejected.projects[0].staffing.actual, 6, 'waterworks actual staffing follows selected water staffing');
+let connectedStaffing = setDailyLinePositions(createInitialM0State(), 'food', 6);
+equal(connectedStaffing.workforce.research, 5, 'daily staffing can leave one research position vacant');
+connectedStaffing = setDailyLinePositions(connectedStaffing, 'water', 3);
+equal(connectedStaffing.dailyPositions.water, 3, 'daily staffing changes one person at a time');
+equal(connectedStaffing.workforce.water, 3, 'three selected water positions staff three people');
+equal(connectedStaffing.workforce.research, 6, 'a worker released from water fills the vacant research position');
+equal(connectedStaffing.projects[0].staffing.planned, 3, 'waterworks plan follows selected water positions');
+equal(connectedStaffing.projects[0].staffing.actual, 3, 'waterworks actual staffing follows selected water positions');
+equal(advanceOneDay(connectedStaffing).ledger[0].resources.water.inflow, 26, 'a third water worker changes output without waiting for another staffing tier');
 
 const immutableInput = createInitialM0State();
 const immutableSnapshot = JSON.stringify(immutableInput);
@@ -382,15 +385,15 @@ survivors = setDailyMode(survivors, 'logistics', 'minimum');
 survivors.population.normal = 15;
 const survivorDay = advanceOneDay(survivors);
 equal(survivorDay.workforce.basicDuty, 4, 'fifteen survivors need four basic-duty workers');
-equal(survivorDay.workforce.development, 2, 'fifteen survivors retain two recovery workers');
+equal(survivorDay.workforce.research, 2, 'fifteen survivors fill two research positions after essential work');
 equal(workforceTotal(survivorDay), 15, 'fifteen-survivor workforce is conserved');
 
 const shortage = createInitialM0State();
 shortage.stocks.water.amount = 0;
 shortage.stocks.food.amount = 0;
-shortage.dailyModes.water = 'minimum';
-shortage.dailyModes.food = 'minimum';
-shortage.dailyModes.logistics = 'minimum';
+shortage.dailyPositions.water = 2;
+shortage.dailyPositions.food = 3;
+shortage.dailyPositions.logistics = 2;
 refreshMonthlyProjection(shortage);
 const shortageDay = advanceOneDay(shortage);
 equal(shortageDay.population.waterDebt, 1, 'water debt updates on the actual shortage day');
@@ -492,17 +495,17 @@ saveM0State(exhaustionState, exhaustionStorage);
 equal(JSON.stringify(loadM0State(exhaustionStorage).monthly.resources.water.exhaustionDate), JSON.stringify({ year: 2001, month: 1, day: 3 }), 'save reload preserves deterministic exhaustion node');
 storage.values.set(M0_SAVE_KEY, '{broken');
 equal(loadM0State(storage).elapsedDays, 0, 'broken M0 save resets to initial state');
-storage.values.set(M0_SAVE_KEY, JSON.stringify({ version: 6 }));
+storage.values.set(M0_SAVE_KEY, JSON.stringify({ version: 7 }));
 equal(loadM0State(storage).elapsedDays, 0, 'incomplete same-version save resets to initial state');
 
 const malformedProject = JSON.parse(JSON.stringify(first)) as M0State;
 delete (malformedProject.projects[0] as Partial<Project>).staffing;
 storage.values.set(M0_SAVE_KEY, JSON.stringify(malformedProject));
 equal(loadM0State(storage).elapsedDays, 0, 'malformed project resets safely');
-const invalidMode = JSON.parse(JSON.stringify(first)) as M0State;
-invalidMode.dailyModes.water = 'invalid' as M0State['dailyModes']['water'];
-storage.values.set(M0_SAVE_KEY, JSON.stringify(invalidMode));
-equal(loadM0State(storage).elapsedDays, 0, 'invalid work mode resets safely');
+const invalidPositions = JSON.parse(JSON.stringify(first)) as M0State;
+invalidPositions.dailyPositions.water = 99;
+storage.values.set(M0_SAVE_KEY, JSON.stringify(invalidPositions));
+equal(loadM0State(storage).elapsedDays, 0, 'invalid daily positions reset safely');
 const invalidCalendar = JSON.parse(JSON.stringify(first)) as M0State;
 invalidCalendar.calendar = { year: 2001, month: 2, day: 29 };
 storage.values.set(M0_SAVE_KEY, JSON.stringify(invalidCalendar));
@@ -770,17 +773,21 @@ equal(capability.drone?.status, 'available', 'drone becomes available only after
 equal(capability.drone?.inspectionWorkDone, 1, 'post-recharge inspection records one maintenance work');
 
 let concurrentSurvey = JSON.parse(JSON.stringify(capability)) as M0State;
-concurrentSurvey = approveSurvey(concurrentSurvey, 'ruin-a', 6, 'P1', null, true);
-concurrentSurvey = approveSurvey(concurrentSurvey, 'ruin-b', 2, 'P3', null, true);
+concurrentSurvey = approveSurvey(concurrentSurvey, 'ruin-b', 2, null, true);
+concurrentSurvey = approveSurvey(concurrentSurvey, 'ruin-a', 6, null, true);
+expect(
+  (concurrentSurvey.projects.find((project) => project.id === 'survey-ruin-b')?.queueOrder ?? 0)
+    < (concurrentSurvey.projects.find((project) => project.id === 'survey-ruin-a')?.queueOrder ?? 0),
+  'survey queue order follows approval order instead of target identity',
+);
 concurrentSurvey = advanceOneDay(concurrentSurvey);
-equal(concurrentSurvey.map.surveys.find((survey) => survey.targetId === 'ruin-a')?.droneAppliedStages.includes('area'), true, 'higher-priority survey receives the single available drone');
-equal(concurrentSurvey.map.surveys.find((survey) => survey.targetId === 'ruin-b')?.droneAppliedStages.length, 0, 'same drone cannot serve a second survey on the same day');
-equal(concurrentSurvey.map.surveys.find((survey) => survey.targetId === 'ruin-b')?.workDone, 0, 'lower-priority survey with no available staff preserves zero progress');
+equal(concurrentSurvey.map.surveys.find((survey) => survey.targetId === 'ruin-b')?.droneAppliedStages.includes('area'), true, 'first-approved survey receives the single available drone');
+equal(concurrentSurvey.map.surveys.find((survey) => survey.targetId === 'ruin-a')?.droneAppliedStages.length, 0, 'same drone cannot serve a later-approved survey on the same day');
+equal(concurrentSurvey.map.surveys.find((survey) => survey.targetId === 'ruin-a')?.workDone, 0, 'later-approved survey pauses before the earlier approved survey when labor is short');
 
-capability = approveSurvey(capability, 'ruin-a', 2, 'P1', 1, true);
+capability = approveSurvey(capability, 'ruin-a', 2, 1, true);
 let surveyA = capability.map.surveys.find((survey) => survey.targetId === 'ruin-a')!;
 equal(surveyA.workers, 2, 'survey plan saves the two-person choice');
-equal(surveyA.priority, 'P1', 'survey plan saves priority');
 equal(surveyA.maximumDays, 1, 'survey plan saves maximum daylight');
 capability = advanceOneDay(capability);
 surveyA = capability.map.surveys.find((survey) => survey.targetId === 'ruin-a')!;
@@ -821,7 +828,7 @@ equal(surveyPlanControlState(surveyA).editable, false, 'completed site confirmat
 equal(JSON.stringify(surveyA.droneAppliedStages), JSON.stringify(['area', 'route', 'site']), 'drone reduction is recorded once for each stage');
 equal(surveyConclusion('ruin-a', surveyA.stage)?.reason.includes('清理较重'), true, 'site confirmation exposes the frozen ruin A construction fact');
 
-capability = approveSurvey(capability, 'ruin-b', 2, 'P3', 1, false);
+capability = approveSurvey(capability, 'ruin-b', 2, 1, false);
 capability = advanceOneDay(capability);
 let surveyB = capability.map.surveys.find((survey) => survey.targetId === 'ruin-b')!;
 equal(surveyB.workDone, 2, 'pure-human survey records partial work');
@@ -831,10 +838,10 @@ surveyB = capability.map.surveys.find((survey) => survey.targetId === 'ruin-b')!
 equal(surveyB.pauseReason, 'day-limit', 'survey pauses after the saved maximum daylight');
 equal(surveyB.workDone, 2, 'day-limit pause preserves partial progress');
 equal(surveyPlanControlState(surveyB).editable, true, 'day-limit pause keeps approved survey controls editable');
-capability = configureSurvey(capability, 'ruin-b', { workers: 4, priority: 'P2', useDrone: true });
+capability = configureSurvey(capability, 'ruin-b', { workers: 4, useDrone: true });
 surveyB = capability.map.surveys.find((survey) => survey.targetId === 'ruin-b')!;
-equal(`${surveyB.workers}/${surveyB.priority}/${surveyB.useDrone}`, '4/P2/true', 'approved paused survey accepts staffing, priority, and drone changes');
-capability = configureSurvey(capability, 'ruin-b', { workers: 2, priority: 'P3', useDrone: false });
+equal(`${surveyB.workers}/${surveyB.useDrone}`, '4/true', 'approved paused survey accepts staffing and drone changes');
+capability = configureSurvey(capability, 'ruin-b', { workers: 2, useDrone: false });
 capability = configureSurvey(capability, 'ruin-b', { maximumDays: null });
 surveyB = capability.map.surveys.find((survey) => survey.targetId === 'ruin-b')!;
 equal(surveyB.pauseReason, null, 'clearing maximum daylight resumes the approved survey from partial progress');
@@ -900,4 +907,4 @@ expectRejectedCapabilitySave((state) => {
   }
 }, 'charging drone must be in overnight or inspection phase');
 
-console.log('M0 stage A+B+402-R2 checks passed: core accounting, shared-edge spherical surface, player-controlled building positions, strict capability saves, intelligence boundaries, automatic research rounds, entity work, queued drone recharge, and editable survey progression.');
+console.log('M0 stage A+B+402-R3 checks passed: per-person staffing, shared research workforce, approval-ordered surveys, explicit factory quantities, strict saves, capability progression, and resource accounting.');

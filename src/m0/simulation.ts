@@ -537,12 +537,11 @@ function processDroneRecharge(state: M0State): void {
 }
 
 function processSurveyProjects(state: M0State, date: M0State['calendar']): void {
-  const priorityOrder: Priority[] = ['P1', 'P2', 'P3'];
   const records = state.map.surveys.slice().sort((left, right) => {
     const leftProject = projectById(state, left.projectId);
     const rightProject = projectById(state, right.projectId);
-    return priorityOrder.indexOf(leftProject?.priority ?? left.priority)
-      - priorityOrder.indexOf(rightProject?.priority ?? right.priority);
+    return (leftProject?.queueOrder ?? Number.MAX_SAFE_INTEGER)
+      - (rightProject?.queueOrder ?? Number.MAX_SAFE_INTEGER);
   });
 
   for (const survey of records) {
@@ -759,21 +758,20 @@ export function setGameSpeed(state: M0State, speed: GameSpeed): M0State {
 }
 
 export function setDailyMode(state: M0State, line: keyof DailyModes, mode: WorkMode): M0State {
+  return setDailyLinePositions(state, line, MODE_STAFF[line][mode]);
+}
+
+export function setDailyLinePositions(state: M0State, line: keyof DailyModes, positions: number): M0State {
   const candidate = cloneState(state);
-  candidate.dailyModes[line] = mode;
+  const requestedPositions = Number.isFinite(positions)
+    ? Math.floor(positions)
+    : candidate.dailyPositions[line];
+  candidate.dailyPositions[line] = Math.max(0, Math.min(
+    MODE_STAFF[line].accelerated,
+    requestedPositions,
+  ));
   candidate.feedback = null;
-  const required = requestedWorkers(candidate);
-  const workable = workablePopulation(candidate);
-
-  if (required > workable) {
-    const modeName = mode === 'accelerated' ? '加速' : mode === 'standard' ? '标准' : '最低';
-    return {
-      ...state,
-      feedback: `无法改为${modeName}：需要 ${required} 人，当前可工作人口只有 ${workable} 人。`,
-    };
-  }
-
-  applyWorkforcePlan(candidate);
+  enforceStaffing(candidate, []);
   refreshMonthlyProjection(candidate);
   return candidate;
 }
@@ -919,7 +917,6 @@ export function configureSurvey(
   targetId: SurveyTargetId,
   settings: {
     workers?: 2 | 4 | 6;
-    priority?: 'P1' | 'P2' | 'P3';
     maximumDays?: number | null;
     useDrone?: boolean;
   },
@@ -927,7 +924,6 @@ export function configureSurvey(
   const next = cloneState(state);
   const survey = surveyFor(next.map, targetId);
   if (settings.workers !== undefined) survey.workers = settings.workers;
-  if (settings.priority !== undefined) survey.priority = settings.priority;
   if (settings.maximumDays !== undefined
     && (settings.maximumDays === null || (Number.isInteger(settings.maximumDays) && settings.maximumDays > 0))) {
     survey.maximumDays = settings.maximumDays;
@@ -936,7 +932,6 @@ export function configureSurvey(
   const project = projectById(next, survey.projectId);
   if (project) {
     project.staffing.planned = survey.workers;
-    project.priority = survey.priority;
     if (survey.pauseReason === 'day-limit'
       && (survey.maximumDays === null || survey.daysWorked < survey.maximumDays)) {
       survey.paused = false;
@@ -953,15 +948,17 @@ export function approveSurvey(
   state: M0State,
   targetId: SurveyTargetId,
   workers: 2 | 4 | 6 = 2,
-  priority: 'P1' | 'P2' | 'P3' = 'P2',
   maximumDays: number | null = null,
   useDrone = true,
 ): M0State {
-  let next = configureSurvey(state, targetId, { workers, priority, maximumDays, useDrone });
+  let next = configureSurvey(state, targetId, { workers, maximumDays, useDrone });
   const survey = surveyFor(next.map, targetId);
   if (survey.stage === 'site') return { ...state, feedback: '该地点已完成现场确认。' };
   if (survey.approved) return { ...state, feedback: '该地点的勘测计划已经获批；阶段会自动接续。' };
-  const project: Project = { id: survey.projectId, name: `${targetId === 'ruin-a' ? '工业废墟 A' : '工业废墟 B'}勘测`, priority, queueOrder: targetId === 'ruin-a' ? 200 : 201,
+  const queueOrder = Math.max(199, ...next.projects
+    .filter((candidate) => isSurveyProject(candidate))
+    .map((candidate) => candidate.queueOrder)) + 1;
+  const project: Project = { id: survey.projectId, name: `${targetId === 'ruin-a' ? '工业废墟 A' : '工业废墟 B'}勘测`, priority: 'P2', queueOrder,
     status: 'active', production: false, testOnly: false, directRecovery: false, autoResume: true, pausedReason: null, safeActiveDays: 0,
     staffing: { planned: workers, actual: 0, source: 'development', returnTo: 'development' }, workDone: survey.workDone,
     workRequired: surveyWorkRequired.area, investedResources: {} };

@@ -34,13 +34,14 @@ function livingPopulation(state: M0State): number {
 export function waterInflow(state: M0State): number {
   const workers = state.workforce.water;
   if (workers < 2) return 0;
-  if (state.waterworks.repaired) return workers >= 6 ? 44 : workers >= 4 ? 36 : 28;
-  return workers >= 6 ? 32 : workers >= 4 ? 28 : 24;
+  if (state.waterworks.repaired) return Math.min(44, 20 + workers * 4);
+  return Math.min(32, 20 + workers * 2);
 }
 
 export function foodInflow(state: M0State): number {
   if (state.workforce.food < 3 || state.workforce.logistics < 2) return 0;
-  return state.workforce.food >= 7 ? 42 : state.workforce.food >= 5 ? 30 : 20;
+  if (state.workforce.food <= 5) return 5 + state.workforce.food * 5;
+  return Math.min(42, 30 + (state.workforce.food - 5) * 6);
 }
 
 export function maintenancePlan(state: M0State): MaintenancePlan {

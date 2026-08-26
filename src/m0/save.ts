@@ -1,8 +1,8 @@
 import { compareGameDates, gameDateOrdinal, isValidGameDate, nextGameDate, nextMonthStart } from './calendar';
 import { refreshMonthlyProjection } from './economy';
-import { M0_DAY_MS, M0_SAVE_KEY, createInitialM0State } from './state';
+import { M0_DAY_MS, M0_SAVE_KEY, MODE_STAFF, createInitialM0State } from './state';
 import { createLocalMap, nextIntelStage, normalizeMapRotation, refreshMapIntel, surveyWorkRequired } from './map';
-import { technologies } from './progression';
+import { enabledResearchCapacity, technologies } from './progression';
 import {
   M0_STATE_VERSION,
   RESOURCE_IDS,
@@ -19,7 +19,6 @@ export interface StorageLike {
   removeItem(key: string): void;
 }
 
-const WORK_MODES = ['minimum', 'standard', 'accelerated'];
 const PRIORITIES = ['P0', 'P1', 'P2', 'P3'];
 const PROJECT_STATUSES = ['active', 'paused', 'waiting_confirmation', 'complete'];
 const PAUSE_REASONS = [
@@ -314,7 +313,7 @@ function isCapabilityState(value: unknown, projects: Project[]): boolean {
     const survey: unknown = mapSurveys.find((candidate) => isRecord(candidate) && candidate.targetId === targetId);
     if (!isRecord(survey)
       || !hasExactKeys(survey, [
-        'targetId', 'projectId', 'stage', 'workDone', 'approved', 'workers', 'priority',
+        'targetId', 'projectId', 'stage', 'workDone', 'approved', 'workers',
         'paused', 'pauseReason', 'maximumDays', 'daysWorked', 'useDrone',
         'droneAppliedStages', 'selectedRouteId',
       ])
@@ -323,7 +322,6 @@ function isCapabilityState(value: unknown, projects: Project[]): boolean {
       || !isNonNegativeNumber(survey.workDone)
       || !isBoolean(survey.approved)
       || ![2, 4, 6].includes(survey.workers as number)
-      || !['P1', 'P2', 'P3'].includes(survey.priority as string)
       || !isBoolean(survey.paused)
       || !['player', 'day-limit', 'route-choice', 'staffing', 'safety', null].includes(survey.pauseReason as string | null)
       || (survey.maximumDays !== null && (!isNonNegativeInteger(survey.maximumDays) || Number(survey.maximumDays) < 1))
@@ -351,7 +349,7 @@ function isCapabilityState(value: unknown, projects: Project[]): boolean {
             : project.pausedReason === 'player_pause' ? 'player'
               : project.pausedReason === 'staffing_shortage' ? 'staffing'
                 : project.pausedReason === 'safety_line' || project.pausedReason === 'hard_floor' ? 'safety' : undefined;
-      if (project.priority !== survey.priority
+      if (project.priority !== 'P2'
         || project.staffing.planned !== survey.workers
         || (survey.stage === 'site' ? project.workDone !== project.workRequired : project.workDone !== survey.workDone)
         || (nextStage !== null && project.workRequired !== surveyWorkRequired[nextStage])
@@ -473,7 +471,7 @@ function isM0State(value: unknown): value is M0State {
   if (!isRecord(value)
     || !hasExactKeys(value, [
       'version', 'scenario', 'calendar', 'elapsedDays', 'clock', 'population',
-      'dailyModes', 'workforce', 'staffingShortage', 'feedback', 'stocks', 'monthly',
+      'dailyPositions', 'workforce', 'staffingShortage', 'feedback', 'stocks', 'monthly',
       'resourceShortages', 'maintenanceBacklog', 'oldRepairableParts',
       'headquartersSalvage', 'waterworks', 'projects', 'map', 'research', 'drone', 'warnings', 'events', 'ui',
       'ledger',
@@ -502,14 +500,20 @@ function isM0State(value: unknown): value is M0State {
     || !['normal', 'unableToWork', 'critical', 'deceased', 'waterDebt', 'foodDebt']
       .every((key) => isNonNegativeInteger((value.population as Record<string, unknown>)[key]))) return false;
 
-  if (!isRecord(value.dailyModes)
-    || !hasExactKeys(value.dailyModes, ['water', 'food', 'maintenance', 'logistics'])
-    || !['water', 'food', 'maintenance', 'logistics']
-      .every((key) => WORK_MODES.includes((value.dailyModes as Record<string, unknown>)[key] as string))) return false;
+  if (!isRecord(value.dailyPositions)
+    || !hasExactKeys(value.dailyPositions, ['water', 'food', 'maintenance', 'logistics'])
+    || !isNonNegativeInteger(value.dailyPositions.water)
+    || !isNonNegativeInteger(value.dailyPositions.food)
+    || !isNonNegativeInteger(value.dailyPositions.maintenance)
+    || !isNonNegativeInteger(value.dailyPositions.logistics)
+    || Number(value.dailyPositions.water) > MODE_STAFF.water.accelerated
+    || Number(value.dailyPositions.food) > MODE_STAFF.food.accelerated
+    || Number(value.dailyPositions.maintenance) > MODE_STAFF.maintenance.accelerated
+    || Number(value.dailyPositions.logistics) > MODE_STAFF.logistics.accelerated) return false;
 
   if (!isRecord(value.workforce)
-    || !hasExactKeys(value.workforce, ['basicDuty', 'water', 'food', 'maintenance', 'logistics', 'development', 'standby', 'workable'])
-    || !['basicDuty', 'water', 'food', 'maintenance', 'logistics', 'development', 'standby', 'workable']
+    || !hasExactKeys(value.workforce, ['basicDuty', 'water', 'food', 'maintenance', 'logistics', 'research', 'development', 'standby', 'workable'])
+    || !['basicDuty', 'water', 'food', 'maintenance', 'logistics', 'research', 'development', 'standby', 'workable']
       .every((key) => isNonNegativeInteger((value.workforce as Record<string, unknown>)[key]))) return false;
 
   if (value.staffingShortage !== null) {
@@ -553,7 +557,8 @@ function isM0State(value: unknown): value is M0State {
   if (new Set(projectIds).size !== projectIds.length) return false;
 
   const projectWorkers = value.projects
-    .filter((project) => project.staffing.source === 'development')
+    .filter((project) => project.staffing.source === 'development'
+      && !technologies.some((technology) => technology.id === project.id))
     .reduce((sum, project) => sum + project.staffing.actual, 0);
   const workforce = value.workforce as Record<string, number>;
   const assignedWorkers = workforce.basicDuty
@@ -561,12 +566,22 @@ function isM0State(value: unknown): value is M0State {
     + workforce.food
     + workforce.maintenance
     + workforce.logistics
+    + workforce.research
     + workforce.development
     + workforce.standby
     + projectWorkers;
   if (assignedWorkers !== workforce.workable) return false;
 
   const state = value as unknown as M0State;
+  const activeResearchProject = state.projects.find((project) => (
+    technologies.some((technology) => technology.id === project.id)
+      && project.status === 'active'
+  ));
+  if (state.workforce.research > enabledResearchCapacity(state.research)
+    || (activeResearchProject && activeResearchProject.staffing.actual !== state.workforce.research)
+    || state.projects.some((project) => technologies.some((technology) => technology.id === project.id)
+      && project.status !== 'active'
+      && project.staffing.actual !== 0)) return false;
   if (!isMonthlyLedger(value.monthly, state)
     || !isStringArray(value.warnings)
     || !Array.isArray(value.events)

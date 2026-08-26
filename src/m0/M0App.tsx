@@ -12,7 +12,7 @@ import { clearM0State, loadM0State, saveM0State } from './save';
 import {
   advanceRealTime,
   availableAmount,
-  setDailyMode,
+  setDailyLinePositions,
   setGameSpeed,
   approveCapabilityProject,
   approveSurvey,
@@ -45,7 +45,6 @@ import {
   type M0State,
   type Project,
   type ResourceId,
-  type WorkMode,
 } from './types';
 import { intelStageName, projectSphericalLocalWindow, routeForTarget, surveyConclusion, surveyPlanControlState, surveyVisibleFacts, visibleCellClass, visibleCellTitle } from './map';
 import { technologies, technologyName } from './progression';
@@ -68,8 +67,6 @@ const resourceIcons: Record<ResourceId, string> = {
   alloy: '⬡',
   precisionParts: '✦',
 };
-
-const modes: WorkMode[] = ['minimum', 'standard', 'accelerated'];
 
 type SheetId = 'headquarters' | 'research' | 'exploration' | 'engineering' | 'production' | 'archives';
 
@@ -244,27 +241,22 @@ function HeadquartersSheet({ state, updateState }: {
     { line: 'logistics', name: '短途运输站', location: '总部' },
   ];
   const changeLinePositions = (line: DailyLineId, direction: -1 | 1): void => {
-    const currentIndex = modes.indexOf(state.dailyModes[line]);
-    const nextMode = modes[Math.max(0, Math.min(modes.length - 1, currentIndex + direction))];
-    updateState((current) => setDailyMode(current, line, nextMode));
+    updateState((current) => setDailyLinePositions(current, line, current.dailyPositions[line] + direction));
   };
-  const currentResearch = state.research.currentProjectId
-    ? state.projects.find((project) => project.id === state.research.currentProjectId)
-    : null;
-  let unassignedResearchers = currentResearch?.staffing.actual ?? 0;
+  let unassignedResearchers = state.workforce.research;
 
   return <div className="m0-facility-list">
     {lineBuildings.map(({ line, name, location }) => {
-      const open = MODE_STAFF[line][state.dailyModes[line]];
+      const open = state.dailyPositions[line];
       const maximum = MODE_STAFF[line].accelerated;
       const staffed = state.workforce[line];
       return <article className="m0-facility-row" key={line}>
         <div className="m0-facility-heading">
           <div><h3>{name}</h3><small>{location}</small></div>
           <div className="m0-position-stepper">
-            <button type="button" aria-label={`减少${name}岗位`} disabled={state.dailyModes[line] === 'minimum'} onClick={() => changeLinePositions(line, -1)}>−</button>
+            <button type="button" aria-label={`减少${name}岗位`} disabled={open === 0} onClick={() => changeLinePositions(line, -1)}>−</button>
             <strong>{staffed} / {open}</strong>
-            <button type="button" aria-label={`增加${name}岗位`} disabled={state.dailyModes[line] === 'accelerated'} onClick={() => changeLinePositions(line, 1)}>+</button>
+            <button type="button" aria-label={`增加${name}岗位`} disabled={open === maximum} onClick={() => changeLinePositions(line, 1)}>+</button>
           </div>
         </div>
         <WorkerSlots open={open} staffed={staffed} maximum={maximum} />
@@ -295,7 +287,8 @@ function HeadquartersSheet({ state, updateState }: {
     <dl className="m0-workforce-summary">
       <div><dt>可工作</dt><dd>{workforce.workable}</dd></div>
       <div><dt>基本值守</dt><dd>{workforce.basicDuty}</dd></div>
-      <div><dt>工程与科研</dt><dd>{workforce.workable - workforce.basicDuty - workforce.water - workforce.food - workforce.maintenance - workforce.logistics - workforce.standby - workforce.development}</dd></div>
+      <div><dt>科研</dt><dd>{workforce.research}</dd></div>
+      <div><dt>工程与探索</dt><dd>{workforce.workable - workforce.basicDuty - workforce.water - workforce.food - workforce.maintenance - workforce.logistics - workforce.research - workforce.standby - workforce.development}</dd></div>
       <div><dt>可调度</dt><dd>{workforce.development}</dd></div>
     </dl>
   </div>;
@@ -458,11 +451,10 @@ function ExplorationSheet({ state, updateState }: { state: M0State; updateState:
         {conclusion ? <p><strong>{conclusion.label}</strong>：{conclusion.reason}</p> : null}
         {controls.editable ? <>
           <label className="m0-command-control"><span>勘测人数</span><select value={record.workers} onChange={(event) => updateState((current) => configureSurvey(current, record.targetId, { workers: Number(event.target.value) as 2 | 4 | 6 }))}><option value={2}>2 人</option><option value={4}>4 人</option><option value={6}>6 人</option></select></label>
-          <label className="m0-command-control"><span>优先级</span><select value={record.priority} onChange={(event) => updateState((current) => configureSurvey(current, record.targetId, { priority: event.target.value as 'P1' | 'P2' | 'P3' }))}><option value="P1">P1</option><option value="P2">P2</option><option value="P3">P3</option></select></label>
           <label className="m0-command-control"><span>最多投入白昼</span><input type="number" min={1} value={record.maximumDays ?? ''} placeholder="不限" onChange={(event) => updateState((current) => configureSurvey(current, record.targetId, { maximumDays: event.target.value === '' ? null : Number(event.target.value) }))} /></label>
           <label className="m0-check-row"><span>允许调用无人机</span><input type="checkbox" checked={record.useDrone} onChange={(event) => updateState((current) => configureSurvey(current, record.targetId, { useDrone: event.target.checked }))} /></label>
           {controls.needsApproval
-            ? <button type="button" onClick={() => updateState((current) => approveSurvey(current, record.targetId, record.workers, record.priority, record.maximumDays, record.useDrone))}>开始勘测</button>
+            ? <button type="button" onClick={() => updateState((current) => approveSurvey(current, record.targetId, record.workers, record.maximumDays, record.useDrone))}>开始勘测</button>
             : <>
               <p>投入进度：{record.workDone}；已投入 {record.daysWorked}{record.maximumDays === null ? '' : ` / ${record.maximumDays}`} 个白昼。</p>
               {record.pauseReason === 'day-limit' ? <p className="m0-fact-note">已达到投入上限；增加或清空上限后会从已有进度继续。</p> : null}
@@ -479,6 +471,8 @@ function ProductionSheet({ state, updateState }: {
   state: M0State;
   updateState: (updater: (current: M0State) => M0State) => void;
 }): ReactElement {
+  const [prototypeFactories, setPrototypeFactories] = useState(0);
+  const [assemblyFactories, setAssemblyFactories] = useState(0);
   const workshopComplete = state.projects.some((project) => project.id === 'repair-precision-workshop' && project.status === 'complete');
   const prototype = state.projects.find((project) => project.id === 'prototype-precision-parts');
   const assembly = state.projects.find((project) => project.id === 'assemble-survey-drone');
@@ -494,19 +488,44 @@ function ProductionSheet({ state, updateState }: {
     if (project.status === 'complete') return completeLabel;
     return `${formatNumber(project.workDone)} / ${formatNumber(project.workRequired)}`;
   };
+  const activeFactoryCount = (project: Project | undefined): number => (
+    project && project.status !== 'complete' ? 1 : 0
+  );
 
   return <div className="m0-production-list">
     <article className={`m0-production-line ${workshopComplete ? '' : 'is-locked'}`}>
       <div className="m0-production-heading"><div><h3>精密部件</h3><small>总部精密工坊 → 总部仓库</small></div><strong>4 / 批</strong></div>
-      <div className="m0-factory-allocation"><span className={prototype && prototype.status !== 'complete' ? 'is-assigned' : ''} aria-hidden="true" /><b>{prototype && prototype.status !== 'complete' ? '1 / 1 座' : '0 / 1 座'}</b><em>{lineStatus(prototype, '本批完成')}</em></div>
+      <div className="m0-factory-allocation">
+        <span>投入工厂</span>
+        <div className="m0-factory-stepper">
+          <button type="button" aria-label="减少精密部件生产工厂" disabled={Boolean(prototype) || prototypeFactories === 0} onClick={() => setPrototypeFactories(0)}>−</button>
+          <b>{activeFactoryCount(prototype) || prototypeFactories} / 1 座</b>
+          <button type="button" aria-label="增加精密部件生产工厂" disabled={Boolean(prototype) || !workshopComplete || prototypeFactories === 1} onClick={() => setPrototypeFactories(1)}>+</button>
+        </div>
+        <em>{lineStatus(prototype, '本批完成')}</em>
+      </div>
       <dl className="m0-compact-costs"><div><dt>普通零件</dt><dd>2</dd></div><div><dt>工程构件</dt><dd>4</dd></div><div><dt>合金料</dt><dd>4</dd></div></dl>
-      <button type="button" disabled={!prototypeCanStart} onClick={() => updateState((current) => approveCapabilityProject(current, 'prototype-precision-parts'))}>开始生产</button>
+      <button type="button" disabled={!prototypeCanStart || prototypeFactories === 0} onClick={() => {
+        setPrototypeFactories(0);
+        updateState((current) => approveCapabilityProject(current, 'prototype-precision-parts'));
+      }}>确认生产</button>
     </article>
     <article className={`m0-production-line ${state.research.completed.includes('adapt-survey-drone') ? '' : 'is-locked'}`}>
       <div className="m0-production-heading"><div><h3>多光谱勘测无人机系统</h3><small>总部精密工坊 → 总部</small></div><strong>1 / 批</strong></div>
-      <div className="m0-factory-allocation"><span className={assembly && assembly.status !== 'complete' ? 'is-assigned' : ''} aria-hidden="true" /><b>{assembly && assembly.status !== 'complete' ? '1 / 1 座' : '0 / 1 座'}</b><em>{state.drone ? '已交付' : lineStatus(assembly, '已交付')}</em></div>
+      <div className="m0-factory-allocation">
+        <span>投入工厂</span>
+        <div className="m0-factory-stepper">
+          <button type="button" aria-label="减少无人机组装工厂" disabled={Boolean(assembly) || assemblyFactories === 0} onClick={() => setAssemblyFactories(0)}>−</button>
+          <b>{activeFactoryCount(assembly) || assemblyFactories} / 1 座</b>
+          <button type="button" aria-label="增加无人机组装工厂" disabled={Boolean(assembly) || !assemblyCanStart || assemblyFactories === 1} onClick={() => setAssemblyFactories(1)}>+</button>
+        </div>
+        <em>{state.drone ? '已交付' : lineStatus(assembly, '已交付')}</em>
+      </div>
       <dl className="m0-compact-costs"><div><dt>普通零件</dt><dd>3</dd></div><div><dt>工程构件</dt><dd>10</dd></div><div><dt>合金料</dt><dd>8</dd></div><div><dt>精密部件</dt><dd>2</dd></div></dl>
-      <button type="button" disabled={!assemblyCanStart} onClick={() => updateState((current) => approveCapabilityProject(current, 'assemble-survey-drone'))}>开始组装</button>
+      <button type="button" disabled={!assemblyCanStart || assemblyFactories === 0} onClick={() => {
+        setAssemblyFactories(0);
+        updateState((current) => approveCapabilityProject(current, 'assemble-survey-drone'));
+      }}>确认组装</button>
     </article>
   </div>;
 }

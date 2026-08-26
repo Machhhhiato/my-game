@@ -1,4 +1,4 @@
-export const M0_STATE_VERSION = 6 as const;
+export const M0_STATE_VERSION = 7 as const;
 
 export type ResourceId = 'water' | 'food' | 'commonParts' | 'engineeringComponents' | 'alloy' | 'precisionParts';
 export type DailyLineId = 'water' | 'food' | 'maintenance' | 'logistics';
@@ -52,12 +52,20 @@ export interface DailyModes {
   logistics: WorkMode;
 }
 
+export interface DailyPositions {
+  water: number;
+  food: number;
+  maintenance: number;
+  logistics: number;
+}
+
 export interface Workforce {
   basicDuty: number;
   water: number;
   food: number;
   maintenance: number;
   logistics: number;
+  research: number;
   development: number;
   standby: number;
   workable: number;
@@ -199,7 +207,6 @@ export interface SurveyRecord {
   workDone: number;
   approved: boolean;
   workers: 2 | 4 | 6;
-  priority: Exclude<Priority, 'P0'>;
   paused: boolean;
   pauseReason: SurveyPauseReason;
   maximumDays: number | null;
@@ -274,7 +281,7 @@ export interface M0State {
     speed: GameSpeed;
   };
   population: Population;
-  dailyModes: DailyModes;
+  dailyPositions: DailyPositions;
   workforce: Workforce;
   staffingShortage: StaffingShortage | null;
   feedback: string | null;
