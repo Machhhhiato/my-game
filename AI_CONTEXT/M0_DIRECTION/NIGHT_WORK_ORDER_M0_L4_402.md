@@ -1,6 +1,6 @@
 ---
 night_run_id: NIGHT-M0-L4-402-001
-work_order_status: authorized_ready_to_dispatch
+work_order_status: active
 formal_task: M0-L4-402
 parent_task: M0-L4-402
 authorized_source: M0-S003-U137
@@ -8,12 +8,14 @@ authorized_at: 2026-08-26T11:55:03+08:00
 project_label: always game
 real_repo: /Users/xujiangyue/AGENT Project/always game
 branch: context/m0-direction
-input_commit: this_work_order_commit
+input_commit: a3a11d76822a9149d2e6862c01a124747d25b03d
 output_id: BUILD-M0-CAPABILITY-001
 initial_model: gpt-5.6-terra
 reasoning_effort: medium
 highest_reasoning_effort: high
 run_report: NIGHT_RUN_M0_L4_402_001.md
+physical_task: /root/m0_l4_402
+dispatched_at: 2026-08-26T12:03:50+08:00
 ---
 
 # NIGHT-M0-L4-402-001 · 地图、科研、精密工坊与勘测无人机

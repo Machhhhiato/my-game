@@ -5,6 +5,7 @@ output_id: BUILD-M0-CORE-001-R1
 run_status: accepted
 input_commit: fe6373591098c854246cad93a0e349fd65e7eab7
 output_commit: dadcc22437a4a7914ebba39b3990fa5499c5b09d
+acceptance_commit: a3a11d76822a9149d2e6862c01a124747d25b03d
 started_at: 2026-08-26T10:24:03+08:00
 finished_at: 2026-08-26T11:23:13+08:00
 accepted_source: M0-S003-U137

@@ -20,6 +20,7 @@ replacement_task: /root/m0_l4_401_r1_sol
 replacement_started_at: 2026-08-26T10:24:03+08:00
 finished_at: 2026-08-26T11:23:13+08:00
 output_commit: dadcc22437a4a7914ebba39b3990fa5499c5b09d
+acceptance_commit: a3a11d76822a9149d2e6862c01a124747d25b03d
 run_report: NIGHT_RUN_M0_L4_401_R1_001.md
 ---
 
