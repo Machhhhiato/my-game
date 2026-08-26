@@ -95,8 +95,9 @@ handoff_id: M0-H002
 | `AG-M0｜L3-TEXT｜301｜MAC` | `01a03845-90a7-7c73-95e6-f48796358313` | `local` | `gpt-5.6-sol` / `medium` | `completed / idle` | 首次交付被第一层退回；完整修订版已固化为 `TEXT_M0_001.md` 并进入用户 review |
 | `AG-M0｜L4-CORE｜401｜MAC（复用）` | `01a03800-3d9f-7c70-b1dc-70a30bc8bf01` | `local` | `gpt-5.6-terra` / `medium` | `completed / idle` | 一次新建失败后复用旧第四层线程；首版被第一层退回，R1 完成；最终代码由第一层补修、验证和 Git 收口 |
 | `AG-M0｜L4-CORE｜401-R1｜MAC A1` | `/root/m0_l4_401_r1` | `local` | `gpt-5.6-terra` / `medium` | `failed_capability / closed` | 任务成功创建；压缩重写被第一层否决并还原，随后确认无法安全完成核心迁移；工作区已恢复干净，无提交、无推送 |
+| `AG-M0｜L4-CORE｜401-R1｜MAC A2` | `/root/m0_l4_401_r1_sol` | `local` | `gpt-5.6-sol` / `high` | `active / phase A` | 依据 `D-M0-DIR-040` 接替能力失败实例；先做公历、月结、存档与测试迁移，第一层审查前不开始正式 UI |
 
-当前没有活动下层任务。`BUILD-M0-CORE-001` 的数学模型已经用户认可，但旧界面被退回；`M0-L4-401-R1` 为 `authorized_dispatch_pending`。首次 `gpt-5.6-terra / medium` 任务属于创建成功后的能力失败，不受“创建错误只新建一次”限制；规则同步后建立一个 `gpt-5.6-sol / high` 接替任务，仍只执行原执行单。
+当前活动下层任务为 `/root/m0_l4_401_r1_sol`。它使用 `gpt-5.6-sol / high` 接替已清理的能力失败实例，只执行 `M0-L4-401-R1` 阶段 A；第一层收回并审查核心迁移后，才决定是否在同一任务继续正式 UI。
 
 从 `M0-S003-U089` 起，昼夜分工正式生效：白天由第一层完成方案、范围、验收与夜间执行单；夜间任务只执行一个已授权的大结果，通常按约六小时估算，但额度、上下文和环境允许时可以运行八小时或更久，并按新的预计结束时间预留收尾验证时间；次日由第一层收回证据并交给用户验收。详细规则见 accepted 的 `day-night-execution-plan.md` 和 `NIGHT_WORK_ORDER_TEMPLATE.md`。研究型审计与代码实现不得塞进同一夜间任务；上下文接近上限时必须先写检查点，再建立新任务继续。
 

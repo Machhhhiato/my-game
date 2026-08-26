@@ -12,7 +12,7 @@ target_work_lane: M0-DIR-A
 target_layer: 1
 target_task: M0-L4-401-R1
 assigned_session: M0-S003
-action_status: authorized_dispatch_pending
+action_status: active
 required_branch: context/m0-direction
 startup_phrase: 你是第一层
 ---
@@ -40,7 +40,7 @@ startup_phrase: 你是第一层
 - 当前结果：一次新任务创建失败后按约定复用 `01a03800-3d9f-7c70-b1dc-70a30bc8bf01`；第一层否决首版、收回 R1 并完成补修。输出 `BUILD-M0-CORE-001`，报告 `NIGHT_RUN_M0_L4_401_001.md`。
 - 线程规则：`D-M0-DIR-040` 规定创建接口或路由错误才执行“只新建一次”；任务创建成功后的能力失败可在清理后换用更合适模型接替。第一至第三层默认复用长期会话，第四层可按大型实施批次定期接替。
 - 当前派发结果：首次 `/root/m0_l4_401_r1` 使用 Terra / medium 成功创建，但因压缩重写与核心迁移能力不足被关闭；工作区恢复干净，无提交、无推送。
-- 当前动作：提交并推送线程规则与接替派发记录；随后使用 `gpt-5.6-sol / high` 建立一个第四层接替任务继续 `NIGHT-M0-L4-401-R1-001`。不得进入 `M0-L4-402`。
+- 当前动作：等待并收回 `/root/m0_l4_401_r1_sol` 的阶段 A，第一层逐项审查公历、月结、即时扣除、无影子预留、存档和测试覆盖；通过后才在同一第四层任务继续正式 UI。不得进入 `M0-L4-402`。
 - 字段边界：所有 `BLOCKED_FIELD` 动态文字留待字段语义确认和第四层真实实现，不随当前文字批次默认通过。
 - 后续边界：M0 的食物循环仍属于正式最低内容；M0 整体验收后的扩展阶段继续增加食物等生活、生产与资源内容。
 
@@ -131,7 +131,7 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 活动 lane：M0-DIR-A｜Mac｜M0-S003
 已接受任务：M0-L1-106｜SPEC-M0-DESCRIPTION-001｜overall_spec_frozen true
 当前任务：M0-L4-401-R1｜地图中心式正式界面与月度资源结算返工
-任务状态：M0-L3-301 accepted｜M0-L4-401-R1 authorized_dispatch_pending
+任务状态：M0-L3-301 accepted｜M0-L4-401-R1 active phase A
 第三层复用会话：01a03908-d738-76a3-83ad-a6892e53e6c8
 有限接受输出：TEXT-M0-STORY-001｜第一工程构件回收整备厂
 接受范围：M0 草稿与故事制作流程
@@ -143,7 +143,7 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 动态字段：继续 BLOCKED_FIELD，不随故事有限接受通过
 实施状态：implementation_authorized true｜BUILD-M0-CORE-001 已通过第一层验证
 输入锚点：2820297d｜输出提交：2a871c08
-下一步：同步线程修订并用 Sol / high 接替执行 M0-L4-401-R1
+下一步：收回并审查 Sol / high 的 401-R1 阶段 A
 ```
 
 ## 完成条件
