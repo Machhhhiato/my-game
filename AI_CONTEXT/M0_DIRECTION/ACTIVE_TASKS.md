@@ -2,9 +2,9 @@
 workflow_version: 7
 milestone: M0-personal-playable
 route_owner: M0-DIR-A:M0-S003
-overall_current_task: M0-L4-401
+overall_current_task: M0-L4-401-R1
 handoff_id: M0-H002
-updated_at: 2026-08-26T00:04:16+08:00
+updated_at: 2026-08-26T09:55:39+08:00
 ---
 
 # M0 当前任务路由
@@ -19,7 +19,7 @@ updated_at: 2026-08-26T00:04:16+08:00
 | 第二层 | `M0-L2-201-R1` 首座前哨工程故事补包 | `accepted` | 无 | `ACCEPTED` |
 | 第三层 | `M0-L3-301` 玩家可见文字包 | `accepted` | 动态字段继续阻塞到具有真实来源的相关实现批次 | `ACCEPTED` |
 | 第四层（能力） | `M0-L4-005` GitHub Skills/MCP 能力审计 | `accepted` | 无 | `ACCEPTED` |
-| 第四层（代码） | `M0-L4-401` 基础运行、资源、人力与存档 | `implemented_waiting_user_acceptance` | 实现提交 `2a871c0` 已推送并完成远端核对；等待用户试玩判断 | `REVIEW` |
+| 第四层（代码） | `M0-L4-401-R1` 地图中心式正式界面与月度资源结算返工 | `authorized_dispatch_pending` | 原数学模型已接受；旧界面退回；执行单等待同步后派发 | `DISPATCH_PENDING` |
 | 第四层（边界） | `M0-L4-011` 可复用底座与旧代码删除边界审计 | `accepted` | 无 | `ACCEPTED` |
 
 用户在 `M0-S003-U086` 明确接受 `M0-L1-106` 并冻结 M0 规格，形成 `D-M0-DIR-021`。冻结提交为 `ff064af236614b9d4cb7630690decd551dc0229d`。两个 `gpt-5.3-codex-spark` 审计任务先后耗尽上下文；R3 使用 `gpt-5.6-terra`、固定候选和限量证据完成只读审计，形成 `D-M0-DIR-022`。输出已经交回主线程，等待用户验收。
@@ -60,6 +60,7 @@ updated_at: 2026-08-26T00:04:16+08:00
 - 长执行准备：用户在 `M0-S003-U125` 要求下一次直接整张确认长工作方案，通过后立即连续执行。第一层已建立 `NIGHT-WORK-ORDER-M0-L4-401-DRAFT`；当前只完成计划，不创建第四层线程、不修改游戏代码、不提交或推送。
 - 长执行授权：用户在 `M0-S003-U126` 接受完整方案，授权项目内持续总控和相关线程、代码、测试、提交、推送操作，不再二次审批。模型改用 `gpt-5.6-terra / medium`；新任务只尝试一次，失败立即复用 `01a03800-3d9f-7c70-b1dc-70a30bc8bf01`。
 - 长执行结果：一次新任务创建按约定失败后没有重试，复用第四层线程完成首版和 R1；第一层否决首版并继续修正状态污染、缺件幽灵维护、存档校验、人员待命、玩家文案和页面可读性。`BUILD-M0-CORE-001` 已通过 `npm run typecheck`、`npm run test:m0`、`npm run build`、`git diff --check`、本地 HTTP、浏览器交互和真实 20 秒推进检查，当前等待用户试玩接受，不进入 402。
+- 试玩返工：用户接受上述数学模型，但在 `M0-S003-U129` 至 `U134` 退回信息架构并完成整合修订；`U135` 接受 `M0-L4-401-R1`。新输出必须建立地图中心式正式 UI 骨架、顶部人口与月度资源、左侧系统 sheet、可拖动事实事件窗、无影子预留、日级公历与月度资源结算；执行单为 `NIGHT_WORK_ORDER_M0_L4_401_R1.md`。
 - 新流程：每个独立故事必须先建立内部场景设定卡；设定保证因果和空间，玩家正文以故事为主。工厂按真实产品与工艺分类，`第一工程构件回收整备厂` 只是 M0 第一种样例。
 - 接受证据：`M0-S003-U044` 接受第一项的信息结构；`D-M0-PROD-037` 明确视觉示意未获接受，后续必须随整体 UI 重做。
 - 返工证据：`M0-S003-U045` 指出玩法元语言不是正文；`U046` 指出技术段太长且制度口吻自我揭露；`U047` 判断整体方向仍不对，并要求先收集真实描述样本。
@@ -71,7 +72,7 @@ updated_at: 2026-08-26T00:04:16+08:00
 - 第七项接受：`D-M0-PROD-046` 保留四类科技来源，并冻结旧时代与先驱来源在发现记录建立、世界文案禁用机制数据、首建节点一至两句、重复工程完成一句和事故事实时间线。`Q-M0-041` resolved。
 - 第八项接受：`D-M0-DIR-015` 至 `D-M0-DIR-019` 冻结单张工作单、责任层缺失阻塞、分级验收、独立正文统计和两步冻结门；`D-M0-DIR-020` 冻结独立任务线程与逻辑主线程统筹。
 - 源包证据：`SOURCE-BUNDLE-M0-TECH-PROSE-001` revision 6 逐字保留第七项初案、完整参考、`U073` 修正与 `A177` 接受稿，并原样保留 revision 1—5 的全部材料。
-- 冻结边界：`overall_spec_frozen: true`，`implementation_authorized: true`；`CONTENT-M0-STORY-001` 已被用户后续修订取代；`TEXT-M0-STORY-001` 仅为 `accepted_for_m0_process_prototype`；`M0-L3-301` accepted；`M0-L4-401` 为 `implemented_waiting_user_acceptance`。
+- 冻结边界：`overall_spec_frozen: true`，`implementation_authorized: true`；`CONTENT-M0-STORY-001` 已被用户后续修订取代；`TEXT-M0-STORY-001` 仅为 `accepted_for_m0_process_prototype`；`M0-L3-301` accepted；当前 `M0-L4-401-R1` 为 `authorized_dispatch_pending`。
 - 实现证据：`BUILD-M0-CORE-001` 已落在提交 `2a871c08cf035877cab60301f63f6c558ad32cf5`，通过代理推送后远端分支返回同一提交；最终接力记录由后续同步提交补齐。
 - 失败任务 1：`AG-M0｜L4-AUDIT｜005-010｜MAC`；thread `01a0373a-75c9-71a3-8cb3-3e0213ca1322`；host `local`；`gpt-5.3-codex-spark` / `high`；状态 `systemError`；原因是上下文窗口耗尽；未写文件。
 - 失败任务 2：`AG-M0｜L4-AUDIT｜005-010｜MAC R2`；thread `01a0373c-b12c-7c70-ba06-9c329180be59`；host `local`；`gpt-5.3-codex-spark` / `high`；状态 `systemError`；原因仍是外部证据超过上下文；未写文件。

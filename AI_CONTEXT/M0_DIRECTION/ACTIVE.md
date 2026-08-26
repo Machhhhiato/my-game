@@ -6,7 +6,7 @@ status: active
 branch: context/m0-direction
 base_main: a08c40bb3596918347c9719d5c82c5af26707d95
 direction_protocol_version: 5
-routing_epoch: 14
+routing_epoch: 15
 active_lane: M0-DIR-A
 active_host: mac
 preferred_host: mac
@@ -18,23 +18,25 @@ next_lane: null
 next_host: null
 handoff_id: M0-H002
 last_session: M0-S003
-last_turn: M0-S003-R111
-updated_at: 2026-08-26T00:04:16+08:00
+last_turn: M0-S003-R112
+updated_at: 2026-08-26T09:55:39+08:00
 ---
 
 # 当前接续卡
 
 ## 当前目标
 
-首座工厂正文已经通过有限接受：`TEXT-M0-STORY-001` 可以作为 M0 草稿和制作流程样例，但文风、第一人称、七章结构与重复句式都没有冻结。旧 `CONTENT-M0-STORY-001` 的零件与旧标记主线被后续用户复核取代，只保留历史证据。动态字段继续 `BLOCKED_FIELD`。`overall_spec_frozen: true`，`implementation_authorized: true`；第四层 `M0-L4-401` 已实现并等待用户试玩接受。
+首座工厂正文已经通过有限接受：`TEXT-M0-STORY-001` 可以作为 M0 草稿和制作流程样例，但文风、第一人称、七章结构与重复句式都没有冻结。旧 `CONTENT-M0-STORY-001` 的零件与旧标记主线被后续用户复核取代，只保留历史证据。动态字段继续 `BLOCKED_FIELD`。`overall_spec_frozen: true`，`implementation_authorized: true`；用户接受 `M0-L4-401` 的数学模型但退回旧界面，当前 `M0-L4-401-R1` 已授权派发。
 
 用户已经接受 `M0-L3-301-R5` 静态文字收口，形成 `D-M0-PROD-056`。首建短提示、首次稳定重复文字、手动验收按钮和无事实的第90日通知不再实现；第二座使用真实资产名。提交 `26ad2ba` 已推送并核对远端，形成 `D-M0-DIR-034` 与 `D-M0-DIR-035`；`M0-L3-301` accepted。`M0-L4-401` 当时只进入等待授权，现已由 `D-M0-DIR-037` 与 `D-M0-DIR-038` 更新为实现完成、等待用户试玩接受。
 
 用户在 `M0-S003-U125` 要求只确认一张整合长执行方案，通过后直接运行。第一层建立的 `NIGHT-WORK-ORDER-M0-L4-401-DRAFT` 后续已由 `U126` 接受并执行；“当时没有授权”只保留为历史过程，不是当前状态。
 
-用户在 `M0-S003-U126` 已接受长执行方案，授权第一层在项目完成前持续总控相关线程、代码、测试、提交、推送、审阅和退回，不再逐项审批。一次新建 `gpt-5.6-terra / medium` 第四层任务失败后按约定复用既有第四层代码边界线程；首版被第一层退回，R1 与第一层补修完成。`M0-L4-401` 现为 `implemented_waiting_user_acceptance`。
+用户在 `M0-S003-U126` 已接受长执行方案，授权第一层在项目完成前持续总控相关线程、代码、测试、提交、推送、审阅和退回，不再逐项审批。一次新建 `gpt-5.6-terra / medium` 第四层任务失败后按约定复用既有第四层代码边界线程；首版被第一层退回，R1 与第一层补修完成。该版本当时为 `implemented_waiting_user_acceptance`，后续试玩结论已由 `U129` 至 `U135` 的返工决定取代。
 
-实现提交 `2a871c08cf035877cab60301f63f6c558ad32cf5` 已通过本机 `7897` 代理推送，首次远端核对返回同一提交。当前只等待用户试玩判断；不进入 `M0-L4-402`。
+实现提交 `2a871c08cf035877cab60301f63f6c558ad32cf5` 已通过本机 `7897` 代理推送，首次远端核对返回同一提交；它现作为已认可数学模型与被退回旧界面的对照锚点，不进入 `M0-L4-402`。
+
+用户在 `M0-S003-U129` 至 `U134` 逐项修订资源栏、系统 sheet、地图中心布局、人口瞬时变化、事件悬浮窗、资源预留、日级时间、月度结算和真实公历；在 `U135` 接受整合方案，形成 `D-M0-PROD-057` 与 `D-M0-DIR-039`。`M0-L4-401-R1` 使用执行单 `NIGHT-M0-L4-401-R1-001`，当前 `authorized_dispatch_pending`，仍不进入 `M0-L4-402`。
 
 第二批短提示方案已由用户退回。首次重要工程改为从开工到验收的完整多章项目故事，形成 `D-M0-PROD-052`；该决定已经依次进入第二层故事事实包与当前第三层正文返工。现有第二批短稿不得实现。
 

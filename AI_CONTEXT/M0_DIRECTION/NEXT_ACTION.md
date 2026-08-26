@@ -1,7 +1,7 @@
 ---
 card_version: 3
 handoff_id: M0-H002
-routing_epoch: 14
+routing_epoch: 15
 routing_state: active
 source_host: mac
 source_lane: M0-DIR-A
@@ -10,9 +10,9 @@ target_host: mac
 target_lane: M0-DIR-A
 target_work_lane: M0-DIR-A
 target_layer: 1
-target_task: M0-L4-401
+target_task: M0-L4-401-R1
 assigned_session: M0-S003
-action_status: implemented_waiting_user_acceptance
+action_status: authorized_dispatch_pending
 required_branch: context/m0-direction
 startup_phrase: 你是第一层
 ---
@@ -24,7 +24,7 @@ startup_phrase: 你是第一层
 - 设备：Mac。
 - 逻辑方向 lane：`M0-DIR-A`。
 - 稳定工作 lane：`M0-DIR-A`；第三层会话 `01a03908-d738-76a3-83ad-a6892e53e6c8` 只在第一层再次派发文字任务时复用。
-- 当前任务：`M0-L4-401`；长执行、第一层返工审查、自动验证、构建和本地入口检查已完成，等待 Git 收口和用户试玩接受。
+- 当前任务：`M0-L4-401-R1`；数学模型已经用户接受，旧界面被退回，地图中心式正式 UI 与真实月份/月度资源结算整合方案已接受，等待授权同步后派发。
 - 逻辑主线程 session：`M0-S003`；第一层已完成并收回全部前置审计。
 - 已接受任务：`M0-L1-101` 至 `M0-L1-106`、`M0-L4-005`、`M0-L4-010`、`M0-L4-011`、`M0-L2-201`、`M0-L3-301`。
 - 已接受输出：`CONTENT-M0-001`，路径 `CONTENT_M0_001.md`，决定 `D-M0-PROD-050`。
@@ -38,7 +38,7 @@ startup_phrase: 你是第一层
 - 同步证据：`M0-L3-301` 收口提交 `26ad2baae53a69e9a991711f1c404959748acac2` 已推送，GitHub 远端返回同一提交。
 - 当前授权：`D-M0-DIR-037` 允许第一层在已接受执行单范围内持续总控线程、代码、测试、提交、推送、审阅和退回；M0-L4-401 的白名单与“不进入 402”边界仍有效。
 - 当前结果：一次新任务创建失败后按约定复用 `01a03800-3d9f-7c70-b1dc-70a30bc8bf01`；第一层否决首版、收回 R1 并完成补修。输出 `BUILD-M0-CORE-001`，报告 `NIGHT_RUN_M0_L4_401_001.md`。
-- 当前动作：实现提交 `2a871c08cf035877cab60301f63f6c558ad32cf5` 已推送并完成远端核对；当前唯一动作是由用户试玩判断，不得把第一层验证冒充用户 accepted。
+- 当前动作：提交并推送 `NIGHT-M0-L4-401-R1-001` 授权锚点；随后只尝试一次新 Terra / medium 第四层任务，失败即复用既有第四层线程。不得进入 `M0-L4-402`。
 - 字段边界：所有 `BLOCKED_FIELD` 动态文字留待字段语义确认和第四层真实实现，不随当前文字批次默认通过。
 - 后续边界：M0 的食物循环仍属于正式最低内容；M0 整体验收后的扩展阶段继续增加食物等生活、生产与资源内容。
 
@@ -128,8 +128,8 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 层级：第一层｜方向与系统设计
 活动 lane：M0-DIR-A｜Mac｜M0-S003
 已接受任务：M0-L1-106｜SPEC-M0-DESCRIPTION-001｜overall_spec_frozen true
-当前任务：M0-L4-401｜基础运行、资源、人力与存档｜等待用户试玩接受
-任务状态：M0-L3-301 accepted｜M0-L4-401 implemented_waiting_user_acceptance
+当前任务：M0-L4-401-R1｜地图中心式正式界面与月度资源结算返工
+任务状态：M0-L3-301 accepted｜M0-L4-401-R1 authorized_dispatch_pending
 第三层复用会话：01a03908-d738-76a3-83ad-a6892e53e6c8
 有限接受输出：TEXT-M0-STORY-001｜第一工程构件回收整备厂
 接受范围：M0 草稿与故事制作流程
@@ -141,9 +141,9 @@ Mac 已在原用户聊天中接管 `M0-H002` 并创建 `M0-S003`。Mac 现在是
 动态字段：继续 BLOCKED_FIELD，不随故事有限接受通过
 实施状态：implementation_authorized true｜BUILD-M0-CORE-001 已通过第一层验证
 输入锚点：2820297d｜输出提交：2a871c08
-下一步：由用户试玩判断 M0-L4-401
+下一步：同步执行单并派发 M0-L4-401-R1
 ```
 
 ## 完成条件
 
-`M0-L4-401` 的实现、第一层验证、提交、代理推送和远端核对已经完成。当前完成条件只剩用户试玩后决定是否接受；不自动进入 `M0-L4-402`。
+`M0-L4-401-R1` 必须完成地图中心式界面、真实公历、月度持续资源结算、存档和浏览器验收，再交给用户试玩决定是否整体接受 `M0-L4-401`；不自动进入 `M0-L4-402`。
