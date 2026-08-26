@@ -3,6 +3,7 @@ import {
   M0_STATE_VERSION,
   type DailyModes,
   type EventWindowPosition,
+  type MapRotation,
   type M0State,
   type Priority,
   type Project,
@@ -10,14 +11,17 @@ import {
   type Stocks,
   type Workforce,
 } from './types';
+import { createLocalMap, normalizeMapRotation } from './map';
 
-export const M0_SAVE_KEY = 'always-game-m0-v2';
+export const M0_SAVE_KEY = 'always-game-m0-v4';
 export const M0_DAY_MS = 20_000;
 
 export const DEFAULT_EVENT_WINDOW_POSITION: EventWindowPosition = {
   xRatio: 1,
   yRatio: 0.08,
 };
+
+export const DEFAULT_MAP_ROTATION: MapRotation = { yaw: 0, pitch: 0 };
 
 export const DEFAULT_M0_SCENARIO: ScenarioConfig = {
   id: 'm0-core-test-scenario',
@@ -216,10 +220,26 @@ export function createInitialM0State(scenario: ScenarioConfig = DEFAULT_M0_SCENA
     headquartersSalvage: { approved: false, dismantledItems: 0 },
     waterworks: { repaired: false, workDone: 0, workRequired: 24 },
     projects: initialProjects(),
+    map: createLocalMap(),
+    research: {
+      mode: 'manual',
+      manualQueue: [],
+      domainOrder: ['manufacturing', 'surveying', 'engineering'],
+      automaticDomains: [],
+      completed: [],
+      workers: 6,
+      currentProjectId: null,
+      currentSource: null,
+      roundTarget: null,
+      blockedProjectId: null,
+      blockedReason: null,
+    },
+    drone: null,
     warnings: [],
     events: [],
     ui: {
       eventWindow: { ...DEFAULT_EVENT_WINDOW_POSITION },
+      mapRotation: { ...DEFAULT_MAP_ROTATION },
     },
     ledger: [],
   };
@@ -227,6 +247,16 @@ export function createInitialM0State(scenario: ScenarioConfig = DEFAULT_M0_SCENA
   applyWorkforcePlan(state);
   refreshMonthlyProjection(state);
   return state;
+}
+
+export function setMapRotation(state: M0State, rotation: MapRotation): M0State {
+  return {
+    ...state,
+    ui: {
+      ...state.ui,
+      mapRotation: normalizeMapRotation(rotation),
+    },
+  };
 }
 
 export function setEventWindowPosition(

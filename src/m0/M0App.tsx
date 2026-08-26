@@ -15,6 +15,18 @@ import {
   setDailyMode,
   setGameSpeed,
   setHeadquartersSalvageApproval,
+  approveCapabilityProject,
+  approveSurvey,
+  configureSurvey,
+  completeDroneRecharge,
+  selectSurveyRoute,
+  selectMapCell,
+  setResearchDomainAutomatic,
+  setResearchDomainOrder,
+  setResearchMode,
+  setResearchStaffing,
+  setResearchTarget,
+  setSurveyPaused,
   setProjectAutoResume,
   setRunning,
 } from './simulation';
@@ -22,18 +34,23 @@ import {
   createInitialM0State,
   livingPopulation,
   setEventWindowPosition,
+  setMapRotation,
 } from './state';
 import {
   RESOURCE_IDS,
   type DailyLineId,
   type EventWindowPosition,
   type GameSpeed,
+  type MapRotation,
   type M0Event,
   type M0State,
   type Project,
+  type ResearchDomain,
   type ResourceId,
   type WorkMode,
 } from './types';
+import { futureFarmConclusion, intelStageName, projectSphericalLocalWindow, routeForTarget, surveyConclusion, surveyPlanControlState, surveyVisibleFacts, visibleCellClass, visibleCellTitle } from './map';
+import { researchDomainName, technologyName } from './progression';
 import './m0.css';
 
 const resourceLabels: Record<ResourceId, string> = {
@@ -295,10 +312,19 @@ function EngineeringSheet({ state, updateState }: {
   state: M0State;
   updateState: (updater: (current: M0State) => M0State) => void;
 }): ReactElement {
-  const projects = state.projects.filter((project) => !project.testOnly);
-  if (projects.length === 0) return <p className="m0-empty-state">目前没有已批准工程。</p>;
+  const hiddenProjectIds = new Set(['restore-precision-manufacturing', 'adapt-survey-drone', 'survey-ruin-a', 'survey-ruin-b']);
+  const projects = state.projects.filter((project) => !project.testOnly && !hiddenProjectIds.has(project.id));
+  const completed = (id: string): boolean => state.projects.some((project) => project.id === id && project.status === 'complete');
+  const exists = (id: string): boolean => state.projects.some((project) => project.id === id);
 
   return <div className="m0-project-list">
+    {state.research.completed.includes('restore-precision-manufacturing') && !exists('repair-precision-workshop')
+      ? <button type="button" onClick={() => updateState((current) => approveCapabilityProject(current, 'repair-precision-workshop'))}>批准修复精密工坊（9 人）</button>
+      : null}
+    {completed('repair-precision-workshop') && !exists('prototype-precision-parts')
+      ? <button type="button" onClick={() => updateState((current) => approveCapabilityProject(current, 'prototype-precision-parts'))}>批准独立试制批（6 人）</button>
+      : null}
+    {projects.length === 0 ? <p className="m0-empty-state">目前没有已批准工程。</p> : null}
     {projects.map((project) => <article className="m0-project-card" key={project.id}>
       <div className="m0-project-heading">
         <h3>{project.name}</h3>
@@ -326,6 +352,100 @@ function EngineeringSheet({ state, updateState }: {
         />
       </label>
     </article>)}
+  </div>;
+}
+
+function ResearchSheet({ state, updateState }: { state: M0State; updateState: (updater: (current: M0State) => M0State) => void }): ReactElement {
+  const completed = state.research.completed;
+  const currentProject = state.research.currentProjectId
+    ? state.projects.find((project) => project.id === state.research.currentProjectId)
+    : null;
+  const moveDomain = (domain: ResearchDomain, offset: -1 | 1): void => {
+    const order = [...state.research.domainOrder];
+    const index = order.indexOf(domain);
+    const target = index + offset;
+    if (target < 0 || target >= order.length) return;
+    [order[index], order[target]] = [order[target], order[index]];
+    updateState((current) => setResearchDomainOrder(current, order));
+  };
+  const blockedText = state.research.blockedReason === 'physical-prerequisite'
+    ? '有科研项目等待精密工坊完成独立试制；系统不会跳过这项实体前置。'
+    : state.research.blockedReason === 'manual-choice'
+      ? '较高顺序领域仍有未完成的确定前置；系统只处理本轮内其他可执行内容。'
+      : state.research.blockedReason === 'no-project' && state.research.automaticDomains.length > 0
+        ? '参与自动科研的领域已经达到当前公开上限。'
+        : null;
+  return <div className="m0-project-list">
+    <p className="m0-fact-note">一条科研工作线；只在白昼由实际调度人员推进。</p>
+    <label className="m0-command-control"><span>科研人数</span><select value={state.research.workers} onChange={(event) => updateState((current) => setResearchStaffing(current, Number(event.target.value) as 2 | 4 | 6))}>
+      <option value={2}>2 人</option><option value={4}>4 人</option><option value={6}>6 人</option>
+    </select></label>
+    <button type="button" disabled={completed.includes('restore-precision-manufacturing')} onClick={() => updateState((current) => setResearchTarget(current, 'restore-precision-manufacturing'))}>设为远期目标：恢复精密制造</button>
+    <button type="button" disabled={completed.includes('adapt-survey-drone')} onClick={() => updateState((current) => setResearchTarget(current, 'adapt-survey-drone'))}>设为远期目标：适配勘测无人机</button>
+    <h3>当前科研</h3>
+    <p>{currentProject ? `${currentProject.name} · ${state.research.currentSource === 'manual' ? '指定队列' : '领域自动'} · ${formatNumber(currentProject.workDone)} / ${formatNumber(currentProject.workRequired)}` : blockedText ?? '科研工作线待命。'}</p>
+    {currentProject && blockedText ? <p className="m0-fact-note">{blockedText}</p> : null}
+    <h3>指定队列</h3><p>{state.research.manualQueue.length ? state.research.manualQueue.map(technologyName).join(' → ') : '尚未指定'}</p>
+    <div className="m0-project-heading"><h3>领域自动顺序</h3><button type="button" onClick={() => updateState((current) => setResearchMode(current, 'automatic'))}>切换到领域自动</button></div>
+    {state.research.domainOrder.map((domain, index) => <article className="m0-domain-row" key={domain}>
+      <label><input type="checkbox" checked={state.research.automaticDomains.includes(domain)} onChange={(event) => updateState((current) => setResearchDomainAutomatic(current, domain, event.target.checked))} />{researchDomainName(domain)}</label>
+      <span><button type="button" aria-label={`${researchDomainName(domain)}上移`} disabled={index === 0} onClick={() => moveDomain(domain, -1)}>↑</button><button type="button" aria-label={`${researchDomainName(domain)}下移`} disabled={index === state.research.domainOrder.length - 1} onClick={() => moveDomain(domain, 1)}>↓</button></span>
+    </article>)}
+    <p>自动科研先按顺序让参与领域进入下一阶段，再补当前公开的普通项目；系统会保留阻塞，不越过本轮进入更高阶段。</p>
+  </div>;
+}
+
+function AssetSheet({ state, updateState }: { state: M0State; updateState: (updater: (current: M0State) => M0State) => void }): ReactElement {
+  const assembly = state.projects.find((project) => project.id === 'assemble-survey-drone');
+  if (!state.drone) return <div className="m0-project-list">
+    <p className="m0-empty-state">{assembly ? `首套无人机组装进度 ${formatNumber(assembly.workDone)} / ${formatNumber(assembly.workRequired)}，占用 ${assembly.staffing.actual} / 6 人。` : '尚无高级资产。'}</p>
+    {!assembly ? <button type="button" disabled={!state.research.completed.includes('adapt-survey-drone') || availableAmount(state, 'precisionParts') < 2} onClick={() => updateState((current) => approveCapabilityProject(current, 'assemble-survey-drone'))}>批准首套无人机组装（6 人）</button> : null}
+  </div>;
+  const statusLabels = { 'needs-charge': '待补能', charging: '过夜补能中', available: '可用且已充电', assigned: '已分配' } as const;
+  const rechargeLabels = { connection: '等待 2 人接入', overnight: '被动过夜补能', inspection: '等待 1 人检查', complete: '补能与检查完成' } as const;
+  return <div className="m0-project-list"><h3>{state.drone.name}</h3>
+    <p>位置：总部；状态：{statusLabels[state.drone.status]}</p>
+    <p>当前任务：{state.drone.assignment === 'ruin-a' ? '工业废墟 A 勘测' : state.drone.assignment === 'ruin-b' ? '工业废墟 B 勘测' : '未分配'}</p>
+    <p>维护与补能：{rechargeLabels[state.drone.recharge]}；接入 {state.drone.connectionWorkDone} / 2；检查 {state.drone.inspectionWorkDone} / 1。</p>
+    <button type="button" disabled={state.drone.status !== 'needs-charge' || state.drone.rechargeApproved} onClick={() => updateState(completeDroneRecharge)}>{state.drone.rechargeApproved ? '补能流程已排入维护' : '安排补能流程'}</button>
+  </div>;
+}
+
+function LocationsSheet({ state, updateState }: { state: M0State; updateState: (updater: (current: M0State) => M0State) => void }): ReactElement {
+  const records = state.map.surveys;
+  const selectedCell = state.map.cells.find((cell) => cell.id === state.map.selectedCellId);
+  const farmCell = state.map.cells.find((cell) => cell.resource === 'farmland-potential');
+  const farmConclusion = futureFarmConclusion(farmCell?.intel === 'site' ? 'site' : 'area');
+  return <div className="m0-project-list">
+    <article className="m0-project-card"><h3>当前选中格</h3><p>{selectedCell ? visibleCellTitle(selectedCell) : '尚未选择。'}</p></article>
+    {records.map((record) => {
+      const conclusion = surveyConclusion(record.targetId, record.stage);
+      const route = routeForTarget(state.map, record.targetId);
+      const controls = surveyPlanControlState(record);
+      return <article className="m0-project-card" key={record.targetId}>
+        <h3>{record.targetId === 'ruin-a' ? '工业废墟 A 方向' : '工业废墟 B 方向'}</h3>
+        <p>当前情报：{intelStageName(record.stage)}</p>
+        {surveyVisibleFacts(record.targetId, record.stage).map((fact) => <p key={fact}>{fact}</p>)}
+        {conclusion ? <p><strong>{conclusion.label}</strong>：{conclusion.reason}</p> : <p>回收前哨结论：尚未判断。</p>}
+        {controls.editable ? <>
+          <label className="m0-command-control"><span>勘测人数</span><select value={record.workers} onChange={(event) => updateState((current) => configureSurvey(current, record.targetId, { workers: Number(event.target.value) as 2 | 4 | 6 }))}><option value={2}>2 人</option><option value={4}>4 人</option><option value={6}>6 人</option></select></label>
+          <label className="m0-command-control"><span>优先级</span><select value={record.priority} onChange={(event) => updateState((current) => configureSurvey(current, record.targetId, { priority: event.target.value as 'P1' | 'P2' | 'P3' }))}><option value="P1">P1</option><option value="P2">P2</option><option value="P3">P3</option></select></label>
+          <label className="m0-command-control"><span>最多投入白昼</span><input type="number" min={1} value={record.maximumDays ?? ''} placeholder="不限" onChange={(event) => updateState((current) => configureSurvey(current, record.targetId, { maximumDays: event.target.value === '' ? null : Number(event.target.value) }))} /></label>
+          <label className="m0-check-row"><span>允许调用无人机</span><input type="checkbox" checked={record.useDrone} onChange={(event) => updateState((current) => configureSurvey(current, record.targetId, { useDrone: event.target.checked }))} /></label>
+          {controls.needsApproval
+            ? <button type="button" onClick={() => updateState((current) => approveSurvey(current, record.targetId, record.workers, record.priority, record.maximumDays, record.useDrone))}>批准一次完整勘测计划</button>
+            : <>
+              <p>投入进度：{record.workDone}；已投入 {record.daysWorked}{record.maximumDays === null ? '' : ` / ${record.maximumDays}`} 个白昼。</p>
+              {record.pauseReason === 'day-limit' ? <p className="m0-fact-note">已达到投入上限；增加或清空上限后会从已有进度继续。</p> : null}
+              {record.stage === 'area' && record.selectedRouteId === null ? <button type="button" onClick={() => updateState((current) => selectSurveyRoute(current, record.targetId, route.id))}>确认使用已发现路线</button> : null}
+              <button type="button" disabled={!controls.canTogglePause} onClick={() => updateState((current) => setSurveyPaused(current, record.targetId, !record.paused))}>{record.paused ? '继续勘测' : '暂停勘测'}</button>
+            </>}
+        </> : null}
+      </article>;
+    })}
+    <article className="m0-project-card"><h3>未来农田候选地</h3><p>已确认事实：平坦土壤，临近水源，没有可供回收的工业废墟。</p><p>{farmConclusion ? <><strong>{farmConclusion.label}</strong>：{farmConclusion.reason}</> : '回收前哨结论：尚未判断。'}</p></article>
+    <article className="m0-project-card"><h3>未来矿产坡地</h3><p>已知潜力：坡地与矿产迹象；本批不开放建设。</p></article>
+    <article className="m0-project-card"><h3>未来河岸候选地</h3><p>已知潜力：岸线与交通条件；本批不开放建设。</p></article>
   </div>;
 }
 
@@ -398,10 +518,10 @@ function SystemSheet({
     </header>
     <div className="m0-sheet-content">
       {sheet === 'headquarters' ? <HeadquartersSheet state={state} updateState={updateState} /> : null}
-      {sheet === 'research' ? <p className="m0-empty-state">目前没有可查看的科研项目。</p> : null}
+      {sheet === 'research' ? <ResearchSheet state={state} updateState={updateState} /> : null}
       {sheet === 'engineering' ? <EngineeringSheet state={state} updateState={updateState} /> : null}
-      {sheet === 'assets' ? <p className="m0-empty-state">目前没有可查看的高级资产。</p> : null}
-      {sheet === 'locations' ? <p className="m0-empty-state">当前库存地点为总部。</p> : null}
+      {sheet === 'assets' ? <AssetSheet state={state} updateState={updateState} /> : null}
+      {sheet === 'locations' ? <LocationsSheet state={state} updateState={updateState} /> : null}
       {sheet === 'maintenance' ? <MaintenanceSheet state={state} updateState={updateState} /> : null}
       {sheet === 'archives' ? <ArchivesSheet
         state={state}
@@ -592,16 +712,118 @@ function EventWindow({
 }
 
 function MapStage({
+  state,
   events,
   eventWindow,
   onPositionCommit,
+  onSelectCell,
+  onRotationChange,
 }: {
+  state: M0State;
   events: M0Event[];
   eventWindow: EventWindowPosition;
   onPositionCommit: (position: EventWindowPosition) => void;
+  onSelectCell: (cellId: string) => void;
+  onRotationChange: (rotation: MapRotation) => void;
 }): ReactElement {
   const mapRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{ pointerId: number; x: number; y: number; rotation: MapRotation } | null>(null);
+  const pendingRotationRef = useRef<MapRotation | null>(null);
+  const rotationTimerRef = useRef<number | null>(null);
+  const projected = new Map(projectSphericalLocalWindow(state.map.cells, state.ui.mapRotation).map((cell) => [cell.id, cell]));
+
+  useEffect(() => () => {
+    if (rotationTimerRef.current !== null) window.clearTimeout(rotationTimerRef.current);
+  }, []);
+
+  const flushRotation = (): void => {
+    if (rotationTimerRef.current !== null) window.clearTimeout(rotationTimerRef.current);
+    rotationTimerRef.current = null;
+    const rotation = pendingRotationRef.current;
+    pendingRotationRef.current = null;
+    if (rotation) onRotationChange(rotation);
+  };
+
+  const scheduleRotation = (rotation: MapRotation): void => {
+    pendingRotationRef.current = rotation;
+    if (rotationTimerRef.current !== null) return;
+    rotationTimerRef.current = window.setTimeout(flushRotation, 50);
+  };
+
+  const onSpherePointerDown = (event: ReactPointerEvent<HTMLDivElement>): void => {
+    if (event.target !== event.currentTarget) return;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    dragRef.current = {
+      pointerId: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+      rotation: { ...state.ui.mapRotation },
+    };
+  };
+
+  const onSpherePointerMove = (event: ReactPointerEvent<HTMLDivElement>): void => {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    scheduleRotation({
+      yaw: drag.rotation.yaw + (event.clientX - drag.x) * 0.005,
+      pitch: drag.rotation.pitch - (event.clientY - drag.y) * 0.005,
+    });
+  };
+
+  const onSpherePointerEnd = (event: ReactPointerEvent<HTMLDivElement>): void => {
+    if (dragRef.current?.pointerId !== event.pointerId) return;
+    dragRef.current = null;
+    flushRotation();
+  };
+
+  const onSphereKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>): void => {
+    const step = 0.1;
+    const current = state.ui.mapRotation;
+    const rotation = event.key === 'ArrowLeft' ? { ...current, yaw: current.yaw - step }
+      : event.key === 'ArrowRight' ? { ...current, yaw: current.yaw + step }
+        : event.key === 'ArrowUp' ? { ...current, pitch: current.pitch + step }
+          : event.key === 'ArrowDown' ? { ...current, pitch: current.pitch - step }
+            : event.key === 'Home' ? { yaw: 0, pitch: 0 } : null;
+    if (!rotation) return;
+    event.preventDefault();
+    onRotationChange(rotation);
+  };
+
   return <section className="m0-map-stage" ref={mapRef} aria-label="地图">
+    <div className="m0-planet-frame">
+      <div
+        className="m0-local-map m0-planet-shell"
+        aria-label="可旋转球体；当前只制作总部周围三圈 37 格"
+        aria-describedby="m0-planet-help"
+        tabIndex={0}
+        onPointerDown={onSpherePointerDown}
+        onPointerMove={onSpherePointerMove}
+        onPointerUp={onSpherePointerEnd}
+        onPointerCancel={onSpherePointerEnd}
+        onKeyDown={onSphereKeyDown}
+      >
+        {state.map.cells.map((cell) => {
+          const position = projected.get(cell.id);
+          if (!position?.visible) return null;
+          return <button
+            type="button"
+            key={cell.id}
+            className={`m0-map-cell is-${visibleCellClass(cell)} ${state.map.selectedCellId === cell.id ? 'is-selected' : ''}`}
+            style={{
+              '--map-x': `${position.xPercent}%`,
+              '--map-y': `${position.yPercent}%`,
+              '--map-scale': position.scale,
+              zIndex: Math.round((position.depth + 1) * 100),
+            } as CSSProperties}
+            onClick={() => onSelectCell(cell.id)}
+            aria-label={visibleCellTitle(cell)}
+            title={visibleCellTitle(cell)}
+          />;
+        })}
+      </div>
+      <p id="m0-planet-help" className="m0-planet-help">拖动球面或使用方向键有限旋转；Home 恢复总部视角。球壳外未制作地点内容。</p>
+      <button type="button" className="m0-map-reset" onClick={() => onRotationChange({ yaw: 0, pitch: 0 })}>恢复总部视角</button>
+    </div>
     <EventWindow
       containerRef={mapRef}
       events={events}
@@ -688,9 +910,12 @@ export function M0App(): ReactElement {
         onSelect={(sheet) => setActiveSheet((current) => current === sheet ? null : sheet)}
       />
       <MapStage
+        state={state}
         events={state.events}
         eventWindow={state.ui.eventWindow}
         onPositionCommit={commitEventPosition}
+        onSelectCell={(cellId) => updateState((current) => selectMapCell(current, cellId))}
+        onRotationChange={(rotation) => updateState((current) => setMapRotation(current, rotation))}
       />
       {activeSheet ? <SystemSheet
         sheet={activeSheet}

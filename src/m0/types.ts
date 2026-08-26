@@ -1,10 +1,18 @@
-export const M0_STATE_VERSION = 2 as const;
+export const M0_STATE_VERSION = 4 as const;
 
 export type ResourceId = 'water' | 'food' | 'commonParts' | 'engineeringComponents' | 'alloy' | 'precisionParts';
 export type DailyLineId = 'water' | 'food' | 'maintenance' | 'logistics';
 export type WorkMode = 'minimum' | 'standard' | 'accelerated';
 export type Priority = 'P0' | 'P1' | 'P2' | 'P3';
-export type PauseReason = 'safety_line' | 'hard_floor' | 'staffing_shortage' | null;
+export type PauseReason =
+  | 'safety_line'
+  | 'hard_floor'
+  | 'staffing_shortage'
+  | 'player_pause'
+  | 'day_limit'
+  | 'route_choice'
+  | 'research_prerequisite'
+  | null;
 export type ReturnTo = DailyLineId | 'development' | 'standby' | null;
 export type GameSpeed = 1 | 2 | 4;
 
@@ -136,8 +144,95 @@ export interface EventWindowPosition {
   yRatio: number;
 }
 
+export interface MapRotation {
+  yaw: number;
+  pitch: number;
+}
+
 export interface M0UiState {
   eventWindow: EventWindowPosition;
+  mapRotation: MapRotation;
+}
+
+export type IntelStage = 'direction' | 'area' | 'route' | 'site';
+export type SurveyTargetId = 'ruin-a' | 'ruin-b';
+export type ResearchMode = 'manual' | 'automatic';
+export type ResearchDomain = 'manufacturing' | 'surveying' | 'engineering';
+export type CellIntel = 'unknown' | 'known' | 'candidate' | 'route' | 'site';
+export type TerrainId = 'hardground' | 'mud' | 'slope' | 'shore' | 'plain';
+export type OccupationId = 'empty' | 'headquarters' | 'waterworks' | 'food-site' | 'industrial-ruin' | 'future-site';
+export type SurveyPauseReason = 'player' | 'day-limit' | 'route-choice' | 'staffing' | 'safety' | null;
+
+export interface LocalMapCell {
+  id: string;
+  q: number;
+  r: number;
+  terrain: TerrainId;
+  neighbors: string[];
+  occupation: OccupationId;
+  water: 'dry' | 'near-water' | 'waterlogging';
+  resource: 'none' | 'food' | 'engineering-salvage' | 'alloy-salvage' | 'farmland-potential' | 'mineral-sign' | 'shore-potential';
+  risk: 'none' | 'heavy-clearing' | 'damaged-passage' | 'future-use-only';
+  intel: CellIntel;
+}
+
+export interface LocalMapRoute {
+  id: string;
+  targetId: SurveyTargetId;
+  cellIds: string[];
+  facts: Array<'stable-old-road' | 'mud-section' | 'damaged-passage'>;
+}
+
+export interface SurveyRecord {
+  targetId: SurveyTargetId;
+  projectId: string;
+  stage: IntelStage;
+  workDone: number;
+  approved: boolean;
+  workers: 2 | 4 | 6;
+  priority: Exclude<Priority, 'P0'>;
+  paused: boolean;
+  pauseReason: SurveyPauseReason;
+  maximumDays: number | null;
+  daysWorked: number;
+  useDrone: boolean;
+  droneAppliedStages: Array<Exclude<IntelStage, 'direction'>>;
+  selectedRouteId: string | null;
+}
+
+export interface M0MapState {
+  cells: LocalMapCell[];
+  routes: LocalMapRoute[];
+  selectedCellId: string;
+  surveys: SurveyRecord[];
+}
+
+export interface ResearchState {
+  mode: ResearchMode;
+  manualQueue: string[];
+  domainOrder: ResearchDomain[];
+  automaticDomains: ResearchDomain[];
+  completed: string[];
+  workers: 2 | 4 | 6;
+  currentProjectId: string | null;
+  currentSource: ResearchMode | null;
+  roundTarget: number | null;
+  blockedProjectId: string | null;
+  blockedReason: 'physical-prerequisite' | 'manual-choice' | 'no-project' | null;
+}
+
+export interface DroneAsset {
+  id: 'multispectral-survey-drone-001';
+  name: string;
+  locationId: 'hq';
+  status: 'needs-charge' | 'charging' | 'available' | 'assigned';
+  assignment: SurveyTargetId | null;
+  maintenance: 'inspection-needed' | 'ready';
+  recharge: 'connection' | 'overnight' | 'inspection' | 'complete';
+  rechargeApproved: boolean;
+  connectionWorkDone: number;
+  inspectionWorkDone: number;
+  overnightStartedDay: number | null;
 }
 
 export interface DayLedger {
@@ -189,6 +284,9 @@ export interface M0State {
     workRequired: number;
   };
   projects: Project[];
+  map: M0MapState;
+  research: ResearchState;
+  drone: DroneAsset | null;
   warnings: string[];
   events: M0Event[];
   ui: M0UiState;

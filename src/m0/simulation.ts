@@ -34,6 +34,22 @@ import {
   type ResourceId,
   type WorkMode,
 } from './types';
+import {
+  nextIntelStage,
+  refreshMapIntel,
+  surveyFor,
+  surveyWorkRequired,
+} from './map';
+import {
+  capabilityPrerequisites,
+  isPrecisionWorkshopProjectId,
+  isResearchProjectId,
+  projectForCapability,
+  queueTarget,
+  selectResearch,
+  technologies,
+} from './progression';
+import type { IntelStage, ResearchDomain, ResearchMode, SurveyTargetId } from './types';
 
 export { availableAmount, coverageDays } from './economy';
 
@@ -54,6 +70,50 @@ function cloneState(state: M0State): M0State {
 
 function projectById(state: M0State, id: string): Project | undefined {
   return state.projects.find((project) => project.id === id);
+}
+
+function isSurveyProject(project: Project): boolean {
+  return project.id === 'survey-ruin-a' || project.id === 'survey-ruin-b';
+}
+
+function minimumProjectStaff(project: Project): number {
+  if (project.id === 'repair-precision-workshop') return 9;
+  if (isPrecisionWorkshopProjectId(project.id)) return 6;
+  if (isResearchProjectId(project.id) || isSurveyProject(project)) return 2;
+  return 0;
+}
+
+function synchronizeResearch(state: M0State): void {
+  state.research.manualQueue = state.research.manualQueue.filter((id) => !state.research.completed.includes(id));
+  if (state.research.mode === 'manual'
+    && state.research.manualQueue.length === 0
+    && state.research.automaticDomains.length > 0) state.research.mode = 'automatic';
+  const selection = selectResearch(state);
+  state.research.roundTarget = selection.roundTarget;
+  state.research.blockedProjectId = selection.blockedProjectId;
+  state.research.blockedReason = selection.blockedReason;
+
+  for (const project of state.projects.filter((candidate) => isResearchProjectId(candidate.id) && candidate.status !== 'complete')) {
+    project.staffing.planned = state.research.workers;
+    if (project.id === selection.id) {
+      if (project.pausedReason === 'player_pause' || project.pausedReason === 'research_prerequisite') {
+        project.status = 'active';
+        project.pausedReason = null;
+      }
+    } else if (project.status === 'active') {
+      project.status = 'paused';
+      project.pausedReason = 'player_pause';
+      project.staffing.actual = 0;
+    }
+  }
+
+  if (selection.id && !state.projects.some((project) => project.id === selection.id)) {
+    const project = projectForCapability(selection.id, 'P1', state.research.workers);
+    if (project) state.projects.push(project);
+  }
+  const selectedProject = selection.id ? projectById(state, selection.id) : undefined;
+  state.research.currentProjectId = selectedProject?.status === 'active' ? selectedProject.id : null;
+  state.research.currentSource = state.research.currentProjectId ? selection.source : null;
 }
 
 function projectStatusForPause(project: Project): 'paused' | 'waiting_confirmation' {
@@ -82,6 +142,22 @@ function pauseProject(
   events.push(recordProjectEvent(project));
 }
 
+function synchronizeSurveyPauseState(state: M0State): void {
+  for (const survey of state.map.surveys) {
+    const project = projectById(state, survey.projectId);
+    if (!project || project.status === 'complete' || project.status === 'active') {
+      survey.paused = false;
+      survey.pauseReason = null;
+      continue;
+    }
+    survey.paused = true;
+    survey.pauseReason = project.pausedReason === 'route_choice' ? 'route-choice'
+      : project.pausedReason === 'day_limit' ? 'day-limit'
+        : project.pausedReason === 'player_pause' ? 'player'
+          : project.pausedReason === 'staffing_shortage' ? 'staffing' : 'safety';
+  }
+}
+
 function enforceStaffing(state: M0State, events: ProjectEvent[]): void {
   let required = requestedWorkers(state);
   const workable = workablePopulation(state);
@@ -102,6 +178,7 @@ function enforceStaffing(state: M0State, events: ProjectEvent[]): void {
   }
 
   applyWorkforcePlan(state);
+  synchronizeSurveyPauseState(state);
   const finalRequired = requestedWorkers(state);
   state.staffingShortage = finalRequired > workable
     ? {
@@ -113,10 +190,22 @@ function enforceStaffing(state: M0State, events: ProjectEvent[]): void {
 }
 
 function calculateMaintenanceFlow(state: M0State): MaintenanceFlow {
-  const usedHeadquartersSalvage = shouldUseHeadquartersSalvage(state);
+  const droneMaintenanceDemand = !state.drone?.rechargeApproved
+    ? 0
+    : state.drone.recharge === 'connection'
+      ? 2
+      : state.drone.recharge === 'inspection'
+        || (state.drone.recharge === 'overnight'
+          && state.drone.overnightStartedDay !== null
+          && state.elapsedDays > state.drone.overnightStartedDay)
+        ? 1
+        : 0;
+  const routineState = cloneState(state);
+  routineState.workforce.maintenance = Math.max(0, state.workforce.maintenance - droneMaintenanceDemand);
+  const usedHeadquartersSalvage = shouldUseHeadquartersSalvage(routineState);
   const plan = usedHeadquartersSalvage
     ? { repair: 4, consume: 3, backlogDelta: 0 }
-    : maintenancePlan(state);
+    : maintenancePlan(routineState);
   const stock = state.stocks.commonParts;
   const repairCapacity = Math.max(0, stock.capacity - availableAmount(state, 'commonParts') + plan.consume);
   const repairSource = usedHeadquartersSalvage ? plan.repair : state.oldRepairableParts;
@@ -207,6 +296,8 @@ function dailyDeltaFor(state: M0State, resource: ProtectedResource): number {
 
 function canResume(state: M0State, project: Project): boolean {
   if (!project.autoResume || project.staffing.returnTo === null) return false;
+  if (project.pausedReason !== null
+    && !['safety_line', 'hard_floor', 'staffing_shortage'].includes(project.pausedReason)) return false;
 
   const resourcesSafe = PROTECTED_RESOURCES.every((resource) => {
     const unit = dailyUse(state, resource);
@@ -293,10 +384,10 @@ function applySafetyAndRecovery(
 
   for (const priority of RECOVERY_PRIORITIES) {
     const candidate = state.projects
-      .filter((project) => project.priority === priority && project.status === 'paused')
+      .filter((project) => project.priority === priority && project.status === 'paused' && canResume(state, project))
       .sort((left, right) => left.queueOrder - right.queueOrder)[0];
 
-    if (candidate && canResume(state, candidate)) {
+    if (candidate) {
       candidate.status = 'active';
       candidate.pausedReason = null;
       candidate.safeActiveDays = 0;
@@ -362,10 +453,155 @@ function settleMonthlyResources(state: M0State): void {
   state.monthly = createEmptyMonthlyLedger(state.calendar, state.stocks);
 }
 
+function completeCapability(state: M0State, project: Project, date: M0State['calendar']): boolean {
+  let resourcesChanged = false;
+  if (technologies.some((technology) => technology.id === project.id)) {
+    if (!state.research.completed.includes(project.id)) state.research.completed.push(project.id);
+    state.research.manualQueue = state.research.manualQueue.filter((id) => id !== project.id);
+  }
+  if (project.id === 'prototype-precision-parts') {
+    state.monthly.resources.precisionParts.accruedInflow += 4;
+    resourcesChanged = true;
+  }
+  if (project.id === 'assemble-survey-drone') {
+    state.drone = {
+      id: 'multispectral-survey-drone-001',
+      name: '多光谱勘测无人机组',
+      locationId: 'hq',
+      status: 'needs-charge',
+      assignment: null,
+      maintenance: 'inspection-needed',
+      recharge: 'connection',
+      rechargeApproved: false,
+      connectionWorkDone: 0,
+      inspectionWorkDone: 0,
+      overnightStartedDay: null,
+    };
+  }
+  appendEvent(state, { id: `${formatGameDate(date)}:capability:${project.id}:complete`, date: { ...date }, kind: 'project_complete', message: `${project.name}完成。`, relatedId: project.id });
+  return resourcesChanged;
+}
+
+function useDroneForSurvey(state: M0State, targetId: SurveyTargetId, stage: Exclude<IntelStage, 'direction'>): void {
+  const survey = surveyFor(state.map, targetId);
+  if (!state.drone
+    || state.drone.status !== 'available'
+    || !survey.useDrone
+    || survey.droneAppliedStages.includes(stage)) return;
+  survey.droneAppliedStages.push(stage);
+  survey.workDone += 6;
+  state.drone.status = 'needs-charge';
+  state.drone.assignment = null;
+  state.drone.maintenance = 'inspection-needed';
+  state.drone.recharge = 'connection';
+  state.drone.rechargeApproved = true;
+  state.drone.connectionWorkDone = 0;
+  state.drone.inspectionWorkDone = 0;
+  state.drone.overnightStartedDay = null;
+}
+
+function processDroneRecharge(state: M0State): void {
+  const drone = state.drone;
+  if (!drone?.rechargeApproved) return;
+  if (drone.recharge === 'connection') {
+    if (state.workforce.maintenance < 2) return;
+    drone.connectionWorkDone = Math.min(2, drone.connectionWorkDone + 2);
+    if (drone.connectionWorkDone === 2) {
+      drone.recharge = 'overnight';
+      drone.status = 'charging';
+      drone.overnightStartedDay = state.elapsedDays;
+    }
+    return;
+  }
+  if (drone.recharge === 'overnight') {
+    if (drone.overnightStartedDay === null || state.elapsedDays <= drone.overnightStartedDay) return;
+    drone.recharge = 'inspection';
+  }
+  if (drone.recharge === 'inspection') {
+    if (state.workforce.maintenance < 1) return;
+    drone.inspectionWorkDone = Math.min(1, drone.inspectionWorkDone + 1);
+    if (drone.inspectionWorkDone === 1) {
+      drone.recharge = 'complete';
+      drone.status = 'available';
+      drone.maintenance = 'ready';
+      drone.rechargeApproved = false;
+      drone.overnightStartedDay = null;
+    }
+  }
+}
+
+function processSurveyProjects(state: M0State, date: M0State['calendar']): void {
+  const priorityOrder: Priority[] = ['P1', 'P2', 'P3'];
+  const records = state.map.surveys.slice().sort((left, right) => {
+    const leftProject = projectById(state, left.projectId);
+    const rightProject = projectById(state, right.projectId);
+    return priorityOrder.indexOf(leftProject?.priority ?? left.priority)
+      - priorityOrder.indexOf(rightProject?.priority ?? right.priority);
+  });
+
+  for (const survey of records) {
+    const project = projectById(state, survey.projectId);
+    const nextStage = nextIntelStage[survey.stage];
+    if (!project || !nextStage || project.status !== 'active') continue;
+    if (survey.stage === 'area' && survey.selectedRouteId === null) {
+      survey.paused = true;
+      survey.pauseReason = 'route-choice';
+      project.status = 'waiting_confirmation';
+      project.pausedReason = 'route_choice';
+      project.staffing.actual = 0;
+      continue;
+    }
+    if (survey.maximumDays !== null && survey.daysWorked >= survey.maximumDays) {
+      survey.paused = true;
+      survey.pauseReason = 'day-limit';
+      project.status = 'waiting_confirmation';
+      project.pausedReason = 'day_limit';
+      project.staffing.actual = 0;
+      continue;
+    }
+    if (project.staffing.actual < 2) continue;
+
+    useDroneForSurvey(state, survey.targetId, nextStage);
+    survey.workDone = Math.min(surveyWorkRequired[nextStage], survey.workDone + project.staffing.actual);
+    project.workDone = survey.workDone;
+    survey.daysWorked += 1;
+    if (survey.workDone < surveyWorkRequired[nextStage]) continue;
+
+    survey.stage = nextStage;
+    survey.workDone = 0;
+    refreshMapIntel(state.map);
+    if (nextStage === 'site') {
+      project.status = 'complete';
+      project.staffing.actual = 0;
+      project.workDone = project.workRequired;
+      appendEvent(state, {
+        id: `${formatGameDate(date)}:survey:${survey.targetId}:site`,
+        date: { ...date },
+        kind: 'project_complete',
+        message: `${survey.targetId === 'ruin-a' ? '工业废墟 A' : '工业废墟 B'}完成现场确认。`,
+        relatedId: survey.projectId,
+      });
+      continue;
+    }
+
+    const followingStage = nextIntelStage[nextStage];
+    if (followingStage) project.workRequired = surveyWorkRequired[followingStage];
+    project.workDone = 0;
+    if (nextStage === 'area') {
+      survey.paused = true;
+      survey.pauseReason = 'route-choice';
+      project.status = 'waiting_confirmation';
+      project.pausedReason = 'route_choice';
+      project.staffing.actual = 0;
+    }
+  }
+}
+
 export function advanceOneDay(input: M0State): M0State {
   const state = cloneState(input);
   const processedDate = { ...state.calendar };
   const projectEvents: ProjectEvent[] = [];
+  synchronizeResearch(state);
   enforceStaffing(state, projectEvents);
 
   const flows = Object.fromEntries(
@@ -388,6 +624,7 @@ export function advanceOneDay(input: M0State): M0State {
   }
   flows.commonParts = applyContinuousFlow(state, 'commonParts', maintenance.repaired, maintenance.used);
   state.maintenanceBacklog = Math.max(0, state.maintenanceBacklog + maintenance.actualBacklogDelta);
+  processDroneRecharge(state);
 
   const waterworks = projectById(state, 'hq-waterworks-restoration');
   if (waterworks && waterworks.status !== 'complete') {
@@ -408,6 +645,22 @@ export function advanceOneDay(input: M0State): M0State {
       });
     }
   }
+
+  processSurveyProjects(state, processedDate);
+
+  let discreteResourcesChanged = false;
+  const capabilityProjects = state.projects.filter((project) => !isSurveyProject(project));
+  for (const project of capabilityProjects) {
+    if (project.id === 'hq-waterworks-restoration' || project.status !== 'active' || project.workRequired === 0) continue;
+    const work = project.staffing.actual;
+    if (work < minimumProjectStaff(project)) continue;
+    project.workDone = Math.min(project.workRequired, project.workDone + work);
+    if (project.workDone !== project.workRequired) continue;
+    project.status = 'complete';
+    project.staffing.actual = 0;
+    discreteResourcesChanged = completeCapability(state, project, processedDate) || discreteResourcesChanged;
+  }
+  synchronizeResearch(state);
 
   const waterSatisfied = flows.water.outflow === aliveAtStart;
   const foodSatisfied = flows.food.outflow === aliveAtStart;
@@ -439,7 +692,7 @@ export function advanceOneDay(input: M0State): M0State {
   if (monthSettled) {
     settleMonthlyResources(state);
     refreshMonthlyProjection(state);
-  } else if (resourceInputsChanged) {
+  } else if (resourceInputsChanged || discreteResourcesChanged) {
     refreshMonthlyProjection(state);
   } else {
     state.monthly.processedDays = state.calendar.day - 1;
@@ -569,6 +822,181 @@ export function approveProject(
   enforceStaffing(next, []);
   refreshMonthlyProjection(next);
   return next;
+}
+
+export function setResearchTarget(state: M0State, technologyId: string): M0State {
+  const next = cloneState(state);
+  const technology = technologies.find((item) => item.id === technologyId);
+  if (!technology || next.research.completed.includes(technologyId)) return next;
+  next.research.mode = 'manual';
+  next.research.manualQueue = queueTarget(next.research, technologyId);
+  synchronizeResearch(next);
+  enforceStaffing(next, []);
+  next.feedback = `${technology.name}已加入指定科研队列；必要前置会自动接续。`;
+  return next;
+}
+
+export function setResearchMode(state: M0State, mode: ResearchMode): M0State {
+  const next = cloneState(state);
+  next.research.mode = mode;
+  synchronizeResearch(next);
+  enforceStaffing(next, []);
+  return next;
+}
+
+export function setResearchStaffing(state: M0State, workers: 2 | 4 | 6): M0State {
+  const next = cloneState(state);
+  next.research.workers = workers;
+  synchronizeResearch(next);
+  enforceStaffing(next, []);
+  return next;
+}
+
+export function setResearchDomainOrder(state: M0State, order: ResearchDomain[]): M0State {
+  const expected = ['manufacturing', 'surveying', 'engineering'];
+  if (order.length !== expected.length
+    || new Set(order).size !== expected.length
+    || order.some((domain) => !expected.includes(domain))) return state;
+  const next = cloneState(state);
+  next.research.domainOrder = [...order];
+  next.research.roundTarget = null;
+  synchronizeResearch(next);
+  enforceStaffing(next, []);
+  return next;
+}
+
+export function setResearchDomainAutomatic(state: M0State, domain: ResearchDomain, enabled: boolean): M0State {
+  const next = cloneState(state);
+  next.research.automaticDomains = enabled
+    ? [...new Set([...next.research.automaticDomains, domain])]
+    : next.research.automaticDomains.filter((candidate) => candidate !== domain);
+  next.research.roundTarget = null;
+  synchronizeResearch(next);
+  enforceStaffing(next, []);
+  return next;
+}
+
+export function approveCapabilityProject(state: M0State, id: string): M0State {
+  const next = cloneState(state);
+  const missing = (capabilityPrerequisites[id] ?? []).find((required) => (
+    !next.research.completed.includes(required)
+      && next.projects.find((project) => project.id === required)?.status !== 'complete'
+  ));
+  if (missing) return { ...state, feedback: '该工作仍缺少已确认的前置条件。' };
+  if (id === 'assemble-survey-drone' && next.drone !== null) return { ...state, feedback: '首套无人机资产已经存在。' };
+  if (isPrecisionWorkshopProjectId(id) && next.projects.some((project) => (
+    isPrecisionWorkshopProjectId(project.id) && project.status !== 'complete'
+  ))) return { ...state, feedback: '精密工坊当前已有一项任务。' };
+  const project = projectForCapability(id, 'P1', next.research.workers);
+  const approved = project ? approveProject(next, project, project.investedResources) : next;
+  synchronizeResearch(approved);
+  enforceStaffing(approved, []);
+  return approved;
+}
+
+export function configureSurvey(
+  state: M0State,
+  targetId: SurveyTargetId,
+  settings: {
+    workers?: 2 | 4 | 6;
+    priority?: 'P1' | 'P2' | 'P3';
+    maximumDays?: number | null;
+    useDrone?: boolean;
+  },
+): M0State {
+  const next = cloneState(state);
+  const survey = surveyFor(next.map, targetId);
+  if (settings.workers !== undefined) survey.workers = settings.workers;
+  if (settings.priority !== undefined) survey.priority = settings.priority;
+  if (settings.maximumDays !== undefined
+    && (settings.maximumDays === null || (Number.isInteger(settings.maximumDays) && settings.maximumDays > 0))) {
+    survey.maximumDays = settings.maximumDays;
+  }
+  if (settings.useDrone !== undefined) survey.useDrone = settings.useDrone;
+  const project = projectById(next, survey.projectId);
+  if (project) {
+    project.staffing.planned = survey.workers;
+    project.priority = survey.priority;
+    if (survey.pauseReason === 'day-limit'
+      && (survey.maximumDays === null || survey.daysWorked < survey.maximumDays)) {
+      survey.paused = false;
+      survey.pauseReason = null;
+      project.status = 'active';
+      project.pausedReason = null;
+    }
+  }
+  enforceStaffing(next, []);
+  return next;
+}
+
+export function approveSurvey(
+  state: M0State,
+  targetId: SurveyTargetId,
+  workers: 2 | 4 | 6 = 2,
+  priority: 'P1' | 'P2' | 'P3' = 'P2',
+  maximumDays: number | null = null,
+  useDrone = true,
+): M0State {
+  let next = configureSurvey(state, targetId, { workers, priority, maximumDays, useDrone });
+  const survey = surveyFor(next.map, targetId);
+  if (survey.stage === 'site') return { ...state, feedback: '该地点已完成现场确认。' };
+  if (survey.approved) return { ...state, feedback: '该地点的勘测计划已经获批；阶段会自动接续。' };
+  const project: Project = { id: survey.projectId, name: `${targetId === 'ruin-a' ? '工业废墟 A' : '工业废墟 B'}勘测`, priority, queueOrder: targetId === 'ruin-a' ? 200 : 201,
+    status: 'active', production: false, testOnly: false, directRecovery: false, autoResume: true, pausedReason: null, safeActiveDays: 0,
+    staffing: { planned: workers, actual: 0, source: 'development', returnTo: 'development' }, workDone: survey.workDone,
+    workRequired: surveyWorkRequired.area, investedResources: {} };
+  next = approveProject(next, project, {});
+  const approvedSurvey = surveyFor(next.map, targetId);
+  approvedSurvey.approved = true;
+  approvedSurvey.paused = false;
+  approvedSurvey.pauseReason = null;
+  next.feedback = `${targetId === 'ruin-a' ? '工业废墟 A' : '工业废墟 B'}勘测计划已批准；情报阶段会按条件自动接续。`;
+  return next;
+}
+
+export function selectSurveyRoute(state: M0State, targetId: SurveyTargetId, routeId: string): M0State {
+  const next = cloneState(state);
+  const survey = surveyFor(next.map, targetId);
+  const route = next.map.routes.find((candidate) => candidate.id === routeId && candidate.targetId === targetId);
+  const project = projectById(next, survey.projectId);
+  if (!route || !project || survey.stage !== 'area') return { ...state, feedback: '当前没有可确认的候选路线。' };
+  survey.selectedRouteId = route.id;
+  survey.paused = false;
+  survey.pauseReason = null;
+  project.status = 'active';
+  project.pausedReason = null;
+  enforceStaffing(next, []);
+  return next;
+}
+
+export function setSurveyPaused(state: M0State, targetId: SurveyTargetId, paused: boolean): M0State {
+  const next = cloneState(state);
+  const survey = surveyFor(next.map, targetId);
+  const project = projectById(next, survey.projectId);
+  if (!project || project.status === 'complete') return state;
+  if (!paused && survey.pauseReason === 'route-choice' && survey.selectedRouteId === null) return state;
+  if (!paused && survey.pauseReason === 'day-limit'
+    && survey.maximumDays !== null && survey.daysWorked >= survey.maximumDays) return state;
+  survey.paused = paused;
+  survey.pauseReason = paused ? 'player' : null;
+  project.status = paused ? 'paused' : 'active';
+  project.pausedReason = paused ? 'player_pause' : null;
+  enforceStaffing(next, []);
+  return next;
+}
+
+export function completeDroneRecharge(state: M0State): M0State {
+  const next = cloneState(state);
+  if (next.drone?.status === 'needs-charge' && next.drone.recharge === 'connection') {
+    next.drone.rechargeApproved = true;
+    next.feedback = '已安排无人机接入、过夜补能和次日检查。';
+  }
+  return next;
+}
+
+export function selectMapCell(state: M0State, cellId: string): M0State {
+  if (!state.map.cells.some((cell) => cell.id === cellId)) return state;
+  return { ...state, map: { ...state.map, selectedCellId: cellId } };
 }
 
 export function injectTestProject(state: M0State, project: Project): M0State {
