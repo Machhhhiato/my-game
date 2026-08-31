@@ -9,6 +9,7 @@ import {
   foodInflow,
   maintenancePlan,
   refreshMonthlyProjection,
+  settlementServiceMaintenanceDemand,
   shouldUseHeadquartersSalvage,
   waterInflow,
   type MaintenancePlan,
@@ -21,6 +22,7 @@ import {
   requestedWorkers,
   workablePopulation,
 } from './state';
+import { actionTeamLivingPopulation } from './populationAccounting';
 import {
   RESOURCE_IDS,
   type DailyModes,
@@ -30,6 +32,7 @@ import {
   type Priority,
   type Project,
   type ProjectEvent,
+  type ProductionLineId,
   type ResourceFlow,
   type ResourceId,
   type WorkMode,
@@ -51,6 +54,18 @@ import {
   technologies,
 } from './progression';
 import type { IntelStage, ResearchDomain, ResearchMode, SurveyTargetId } from './types';
+import {
+  RECOVERY_RULES,
+  OPENING_PROJECT_RULES,
+  createOpeningContinuityMonth,
+  isOpeningProjectId,
+  isRecoveryProjectId,
+  openingServiceOperational,
+  recordOpeningServiceDay,
+  resetOpeningCurrentMonth,
+  settlementReadyForIntegration,
+} from './openingLoop';
+import type { OpeningProjectId, OpeningServiceId, RecoveryProjectId } from './types';
 
 export { availableAmount, coverageDays } from './economy';
 
@@ -82,14 +97,15 @@ function minimumProjectStaff(project: Project): number {
   if (isPrecisionWorkshopProjectId(project.id)) return 6;
   if (isResearchProjectId(project.id)) return 1;
   if (isSurveyProject(project)) return 2;
+  if (isRecoveryProjectId(project.id)) return 2;
   return 0;
 }
 
 function synchronizeResearch(state: M0State): void {
   state.research.manualQueue = state.research.manualQueue.filter((id) => !state.research.completed.includes(id));
-  if (state.research.mode === 'manual'
-    && state.research.manualQueue.length === 0
-    && state.research.automaticDomains.length > 0) state.research.mode = 'automatic';
+  state.research.mode = 'manual';
+  state.research.automaticDomains = [];
+  state.research.roundTarget = null;
   const selection = selectResearch(state);
   state.research.roundTarget = selection.roundTarget;
   state.research.blockedProjectId = selection.blockedProjectId;
@@ -117,6 +133,100 @@ function synchronizeResearch(state: M0State): void {
   const selectedProject = selection.id ? projectById(state, selection.id) : undefined;
   state.research.currentProjectId = selectedProject?.status === 'active' ? selectedProject.id : null;
   state.research.currentSource = state.research.currentProjectId ? selection.source : null;
+}
+
+const PRODUCTION_RECIPES: Record<ProductionLineId, {
+  work: number;
+  inputs: Partial<Record<ResourceId, number>>;
+  oldRepairablePartsInput?: number;
+}> = {
+  'common-parts-remanufacturing': { work: 6, inputs: {}, oldRepairablePartsInput: 3 },
+  'precision-parts': { work: 12, inputs: { commonParts: 2, engineeringComponents: 4, alloy: 4 } },
+  'survey-drone': { work: 18, inputs: { commonParts: 3, engineeringComponents: 10, alloy: 8, precisionParts: 2 } },
+};
+
+function workshopComplete(state: M0State): boolean {
+  return state.projects.some((project) => project.id === 'repair-precision-workshop' && project.status === 'complete');
+}
+
+function availableProductionUnits(state: M0State): number {
+  return state.settlement.basicProductionUnits + (workshopComplete(state) ? 1 : 0);
+}
+
+function processProduction(state: M0State, date: M0State['calendar']): boolean {
+  state.production.totalFactories = availableProductionUnits(state);
+  let resourcesChanged = false;
+  for (const line of state.production.lines) {
+    const facilityReady = line.id === 'common-parts-remanufacturing'
+      ? state.settlement.basicProductionUnits > 0
+      : workshopComplete(state);
+    const technologyReady = line.id !== 'survey-drone' || state.research.completed.includes('adapt-survey-drone');
+    if (!facilityReady) {
+      line.blockedReason = 'facility-unavailable';
+      continue;
+    }
+    if (!technologyReady) {
+      line.blockedReason = 'technology-locked';
+      continue;
+    }
+    if (line.allocatedFactories === 0) {
+      line.blockedReason = null;
+      continue;
+    }
+    const targetReached = line.id === 'common-parts-remanufacturing'
+      ? availableAmount(state, 'commonParts') >= state.stocks.commonParts.capacity
+      : line.id === 'precision-parts'
+        ? availableAmount(state, 'precisionParts') >= state.stocks.precisionParts.capacity
+        : state.drone !== null;
+    if (targetReached) {
+      line.blockedReason = 'asset-limit';
+      continue;
+    }
+    const recipe = PRODUCTION_RECIPES[line.id];
+    if (line.progress === 0) {
+      const batchScale = line.id === 'common-parts-remanufacturing' ? line.allocatedFactories : 1;
+      const missingInput = RESOURCE_IDS.some((resource) => (
+        availableAmount(state, resource) < (recipe.inputs[resource] ?? 0) * batchScale
+      )) || state.oldRepairableParts < (recipe.oldRepairablePartsInput ?? 0) * batchScale;
+      if (missingInput) {
+        line.blockedReason = 'input-shortage';
+        continue;
+      }
+      for (const resource of RESOURCE_IDS) {
+        const amount = (recipe.inputs[resource] ?? 0) * batchScale;
+        if (amount === 0) continue;
+        state.monthly.resources[resource].accruedOutflow += amount;
+        state.stocks[resource].consumed += amount;
+      }
+      state.oldRepairableParts -= (recipe.oldRepairablePartsInput ?? 0) * batchScale;
+      resourcesChanged = true;
+    }
+    line.blockedReason = null;
+    line.progress = Math.min(line.workRequired, line.progress + line.allocatedFactories * 6);
+    if (line.progress < line.workRequired) continue;
+    line.progress = 0;
+    line.batchesCompleted += 1;
+    if (line.id === 'common-parts-remanufacturing') {
+      state.monthly.resources.commonParts.accruedInflow += 3 * line.allocatedFactories;
+    } else if (line.id === 'precision-parts') {
+      state.monthly.resources.precisionParts.accruedInflow += 4;
+    } else {
+      state.drone = {
+        id: 'multispectral-survey-drone-001', name: '多光谱勘测无人机组', locationId: 'hq', status: 'needs-charge', assignment: null,
+        maintenance: 'inspection-needed', recharge: 'connection', rechargeApproved: false, connectionWorkDone: 0,
+        inspectionWorkDone: 0, overnightStartedDay: null,
+      };
+    }
+    resourcesChanged = true;
+    appendEvent(state, {
+      id: `${formatGameDate(date)}:production:${line.id}:${line.batchesCompleted}`,
+      date: { ...date }, kind: 'project_complete',
+      message: line.id === 'common-parts-remanufacturing' ? '普通零件再制造批完成。'
+        : line.id === 'precision-parts' ? '独立试制批完成。' : '首套多光谱勘测无人机系统完成。',
+      relatedId: line.id,
+    });
+  }
+  return resourcesChanged;
 }
 
 function projectStatusForPause(project: Project): 'paused' | 'waiting_confirmation' {
@@ -161,7 +271,27 @@ function synchronizeSurveyPauseState(state: M0State): void {
   }
 }
 
+function automateStrategicStaffing(state: M0State): void {
+  const workable = workablePopulation(state);
+  const reductionOrder = ['logistics', 'maintenance', 'food', 'water'] as const;
+  for (const line of reductionOrder) {
+    while (requestedWorkers(state) > workable && state.dailyPositions[line] > MODE_STAFF[line].minimum) {
+      const candidate = cloneState(state);
+      candidate.dailyPositions[line] -= 1;
+      applyWorkforcePlan(candidate);
+      const keepsPopulationSupplied = line === 'water'
+        ? dailyResourceRate(candidate, 'water').inflow >= dailyResourceRate(candidate, 'water').outflow
+        : line === 'food' || line === 'logistics'
+          ? dailyResourceRate(candidate, 'food').inflow >= dailyResourceRate(candidate, 'food').outflow
+          : true;
+      if (!keepsPopulationSupplied) break;
+      state.dailyPositions[line] = candidate.dailyPositions[line];
+    }
+  }
+}
+
 function enforceStaffing(state: M0State, events: ProjectEvent[]): void {
+  automateStrategicStaffing(state);
   let required = requestedWorkers(state);
   const workable = workablePopulation(state);
 
@@ -171,7 +301,8 @@ function enforceStaffing(state: M0State, events: ProjectEvent[]): void {
         .filter((project) => project.priority === priority
           && project.status === 'active'
           && !project.directRecovery
-          && !isResearchProjectId(project.id))
+          && !isResearchProjectId(project.id)
+          && !isRecoveryProjectId(project.id))
         .sort((left, right) => right.queueOrder - left.queueOrder);
 
       for (const project of candidates) {
@@ -209,9 +340,13 @@ function calculateMaintenanceFlow(state: M0State): MaintenanceFlow {
   const routineState = cloneState(state);
   routineState.workforce.maintenance = Math.max(0, state.workforce.maintenance - droneMaintenanceDemand);
   const usedHeadquartersSalvage = shouldUseHeadquartersSalvage(routineState);
-  const plan = usedHeadquartersSalvage
+  const basePlan = usedHeadquartersSalvage
     ? { repair: 4, consume: 3, backlogDelta: 0 }
     : maintenancePlan(routineState);
+  const plan = {
+    ...basePlan,
+    consume: basePlan.consume + settlementServiceMaintenanceDemand(state),
+  };
   const stock = state.stocks.commonParts;
   const repairCapacity = Math.max(0, stock.capacity - availableAmount(state, 'commonParts') + plan.consume);
   const repairSource = usedHeadquartersSalvage ? plan.repair : state.oldRepairableParts;
@@ -284,7 +419,7 @@ function applyPopulationDebts(state: M0State, waterSatisfied: boolean, foodSatis
   population.waterDebt = waterSatisfied ? Math.max(0, population.waterDebt - 1) : population.waterDebt + 1;
   population.foodDebt = foodSatisfied ? Math.max(0, population.foodDebt - 1) : population.foodDebt + 1;
 
-  const alive = livingPopulation(state);
+  const alive = actionTeamLivingPopulation(state);
   const level = severity(population.waterDebt, population.foodDebt);
   population.normal = level === 'normal' ? alive : 0;
   population.unableToWork = level === 'unable' ? alive : 0;
@@ -305,6 +440,15 @@ function canResume(state: M0State, project: Project): boolean {
   if (project.pausedReason !== null
     && !['safety_line', 'hard_floor', 'staffing_shortage'].includes(project.pausedReason)) return false;
 
+  if (isSurveyProject(project)) {
+    if (project.pausedReason !== 'staffing_shortage') return false;
+    const candidate = cloneState(state);
+    const target = projectById(candidate, project.id);
+    if (!target) return false;
+    target.status = 'active';
+    return requestedWorkers(candidate) <= workablePopulation(candidate);
+  }
+
   const resourcesSafe = PROTECTED_RESOURCES.every((resource) => {
     const unit = dailyUse(state, resource);
     const guard = SYSTEM_GUARD_DAYS[resource];
@@ -318,6 +462,7 @@ function canResume(state: M0State, project: Project): boolean {
   const target = projectById(candidate, project.id);
   if (!target) return false;
   target.status = 'active';
+  automateStrategicStaffing(candidate);
   return requestedWorkers(candidate) <= workablePopulation(candidate);
 }
 
@@ -350,7 +495,9 @@ function applySafetyAndRecovery(
   if (atHardFloor) {
     for (const priority of PAUSE_PRIORITIES) {
       state.projects
-        .filter((project) => project.priority === priority)
+        .filter((project) => project.priority === priority
+          && !isSurveyProject(project)
+          && !isRecoveryProjectId(project.id))
         .forEach((project) => pauseProject(project, 'hard_floor', events));
     }
     enforceStaffing(state, events);
@@ -359,12 +506,16 @@ function applySafetyAndRecovery(
 
   if (atOperatingFloor) {
     state.projects
-      .filter((project) => project.priority === 'P3')
+      .filter((project) => project.priority === 'P3'
+        && !isSurveyProject(project)
+        && !isRecoveryProjectId(project.id))
       .forEach((project) => pauseProject(project, 'safety_line', events));
 
     if (operatingResourceDeclining) {
       state.projects
-        .filter((project) => project.priority === 'P2')
+        .filter((project) => project.priority === 'P2'
+          && !isSurveyProject(project)
+          && !isRecoveryProjectId(project.id))
         .forEach((project) => pauseProject(project, 'safety_line', events));
     }
 
@@ -375,7 +526,9 @@ function applySafetyAndRecovery(
     });
     if (hardFloorInTwoDays) {
       state.projects
-        .filter((project) => project.priority === 'P1')
+        .filter((project) => project.priority === 'P1'
+          && !isSurveyProject(project)
+          && !isRecoveryProjectId(project.id))
         .forEach((project) => pauseProject(project, 'safety_line', events));
     }
 
@@ -461,6 +614,35 @@ function settleMonthlyResources(state: M0State): void {
 
 function completeCapability(state: M0State, project: Project, date: M0State['calendar']): boolean {
   let resourcesChanged = false;
+  if (isRecoveryProjectId(project.id)) {
+    const rule = RECOVERY_RULES[project.id];
+    const amount = Math.max(0, Math.min(rule.output, rule.cap - availableAmount(state, rule.resource)));
+    state.monthly.resources[rule.resource].accruedInflow += amount;
+    resourcesChanged = amount > 0;
+  }
+  if (isOpeningProjectId(project.id)) {
+    const capacity = state.settlement.population;
+    if (project.id === 'opening-water-repair') state.settlement.services.water = { capacity, operational: true };
+    if (project.id === 'opening-food-source') state.settlement.services.foodSource = { capacity, operational: true };
+    if (project.id === 'opening-food-processing') state.settlement.services.foodProcessing = { capacity, operational: true };
+    if (project.id === 'opening-critical-power') state.settlement.services.power = { capacity, operational: true };
+    if (project.id === 'opening-sanitation') state.settlement.services.sanitation = { capacity, operational: true };
+    if (project.id === 'opening-basic-medical') state.settlement.services.medical = { capacity, operational: true };
+    if (project.id === 'opening-housing') state.settlement.services.housing = { capacity, operational: true };
+    if (project.id === 'opening-registration') state.settlement.services.registrationComplete = true;
+    if (project.id === 'opening-basic-industry') state.settlement.basicProductionUnits = 3;
+    const services = state.settlement.services;
+    const allAtomicWorkComplete = services.water.operational
+      && services.foodSource.operational
+      && services.foodProcessing.operational
+      && services.power.operational
+      && services.sanitation.operational
+      && services.medical.operational
+      && services.housing.operational
+      && services.registrationComplete
+      && state.settlement.basicProductionUnits > 0;
+    state.settlement.status = allAtomicWorkComplete ? 'ready-to-integrate' : 'services-approved';
+  }
   if (technologies.some((technology) => technology.id === project.id)) {
     if (!state.research.completed.includes(project.id)) state.research.completed.push(project.id);
     state.research.manualQueue = state.research.manualQueue.filter((id) => id !== project.id);
@@ -549,12 +731,8 @@ function processSurveyProjects(state: M0State, date: M0State['calendar']): void 
     const nextStage = nextIntelStage[survey.stage];
     if (!project || !nextStage || project.status !== 'active') continue;
     if (survey.stage === 'area' && survey.selectedRouteId === null) {
-      survey.paused = true;
-      survey.pauseReason = 'route-choice';
-      project.status = 'waiting_confirmation';
-      project.pausedReason = 'route_choice';
-      project.staffing.actual = 0;
-      continue;
+      survey.selectedRouteId = state.map.routes.find((route) => route.targetId === survey.targetId)?.id ?? null;
+      if (survey.selectedRouteId === null) continue;
     }
     if (survey.maximumDays !== null && survey.daysWorked >= survey.maximumDays) {
       survey.paused = true;
@@ -592,13 +770,7 @@ function processSurveyProjects(state: M0State, date: M0State['calendar']): void 
     const followingStage = nextIntelStage[nextStage];
     if (followingStage) project.workRequired = surveyWorkRequired[followingStage];
     project.workDone = 0;
-    if (nextStage === 'area') {
-      survey.paused = true;
-      survey.pauseReason = 'route-choice';
-      project.status = 'waiting_confirmation';
-      project.pausedReason = 'route_choice';
-      project.staffing.actual = 0;
-    }
+    if (nextStage === 'area') survey.selectedRouteId = state.map.routes.find((route) => route.targetId === survey.targetId)?.id ?? null;
   }
 }
 
@@ -628,6 +800,7 @@ export function advanceOneDay(input: M0State): M0State {
     state.oldRepairableParts -= maintenance.repaired;
   }
   flows.commonParts = applyContinuousFlow(state, 'commonParts', maintenance.repaired, maintenance.used);
+  state.oldRepairableParts += maintenance.used;
   state.maintenanceBacklog = Math.max(0, state.maintenanceBacklog + maintenance.actualBacklogDelta);
   processDroneRecharge(state);
 
@@ -665,13 +838,16 @@ export function advanceOneDay(input: M0State): M0State {
     project.staffing.actual = 0;
     discreteResourcesChanged = completeCapability(state, project, processedDate) || discreteResourcesChanged;
   }
+  state.projects = state.projects.filter((project) => !(isRecoveryProjectId(project.id) && project.status === 'complete'));
   synchronizeResearch(state);
+  discreteResourcesChanged = processProduction(state, processedDate) || discreteResourcesChanged;
 
   const waterSatisfied = flows.water.outflow === aliveAtStart;
   const foodSatisfied = flows.food.outflow === aliveAtStart;
   updateShortageEvent(state, processedDate, 'water', waterSatisfied);
   updateShortageEvent(state, processedDate, 'food', foodSatisfied);
   applyPopulationDebts(state, waterSatisfied, foodSatisfied);
+  recordOpeningServiceDay(state, waterSatisfied, foodSatisfied, maintenance.used === maintenance.consume);
   enforceStaffing(state, projectEvents);
 
   for (const project of state.projects) {
@@ -695,8 +871,13 @@ export function advanceOneDay(input: M0State): M0State {
   state.calendar = nextGameDate(processedDate);
   const monthSettled = state.calendar.day === 1;
   if (monthSettled) {
+    state.openingLoop.continuityMonths = [
+      ...state.openingLoop.continuityMonths.slice(-2),
+      createOpeningContinuityMonth(state),
+    ];
     settleMonthlyResources(state);
     refreshMonthlyProjection(state);
+    resetOpeningCurrentMonth(state);
   } else if (resourceInputsChanged || discreteResourcesChanged) {
     refreshMonthlyProjection(state);
   } else {
@@ -828,6 +1009,116 @@ export function approveProject(
   return next;
 }
 
+export function approveRecoveryProject(state: M0State, id: RecoveryProjectId): M0State {
+  const rule = RECOVERY_RULES[id];
+  if (availableAmount(state, rule.resource) >= rule.floor) {
+    return { ...state, feedback: `${rule.label}仅在库存低于保底线时可批准。` };
+  }
+  if (state.projects.some((project) => project.id === id)) {
+    return { ...state, feedback: `${rule.label}已经在队列中。` };
+  }
+  const queueOrder = Math.max(399, ...state.projects.map((project) => project.queueOrder)) + 1;
+  const project: Project = {
+    id,
+    name: rule.label,
+    priority: 'P2',
+    queueOrder,
+    status: 'active',
+    production: false,
+    testOnly: false,
+    directRecovery: false,
+    autoResume: true,
+    pausedReason: null,
+    safeActiveDays: 0,
+    staffing: { planned: 2, actual: 0, source: 'development', returnTo: 'development' },
+    workDone: 0,
+    workRequired: rule.workRequired,
+    investedResources: {},
+  };
+  const approved = approveProject(state, project, {});
+  approved.feedback = `${rule.label}已批准；完成流入将进入本月资源账。`;
+  return approved;
+}
+
+export function contactExistingSettlement(state: M0State): M0State {
+  if (state.settlement.status !== 'uncontacted') return state;
+  const next = cloneState(state);
+  next.settlement.status = 'contacted';
+  next.feedback = `已接触既存聚居点，确认人口 ${next.settlement.population} 人。`;
+  return next;
+}
+
+export function approveOpeningProject(state: M0State, id: OpeningProjectId): M0State {
+  if (state.settlement.status !== 'contacted') {
+    if (state.settlement.status !== 'services-approved') {
+      return { ...state, feedback: '必须先接触既存聚居点。' };
+    }
+  }
+  if (state.projects.some((project) => project.id === id)) return state;
+  const rule = OPENING_PROJECT_RULES[id];
+  const queueOrder = Math.max(349, ...state.projects.map((project) => project.queueOrder)) + 1;
+  const project: Project = {
+    id,
+    name: rule.label,
+    priority: 'P1',
+    queueOrder,
+    status: 'active',
+    production: false,
+    testOnly: false,
+    directRecovery: false,
+    autoResume: true,
+    pausedReason: null,
+    safeActiveDays: 0,
+    staffing: { planned: 2, actual: 0, source: 'development', returnTo: 'development' },
+    workDone: 0,
+    workRequired: rule.workRequired,
+    investedResources: {},
+  };
+  const approved = approveProject(state, project, {});
+  approved.settlement.status = 'services-approved';
+  approved.feedback = `${rule.label}已批准。`;
+  return approved;
+}
+
+export function integrateExistingSettlement(state: M0State): M0State {
+  if (!settlementReadyForIntegration(state)) {
+    return { ...state, feedback: '供水、食物、供能、卫生医疗、住处或登记仍有缺口。' };
+  }
+  const next = cloneState(state);
+  next.settlement.status = 'served';
+  next.settlement.registeredPopulation = next.settlement.population;
+  next.settlement.servedPopulation = next.settlement.population;
+  next.settlement.servedSince = { ...next.calendar };
+  next.settlement.workforceEligible = Math.floor(next.settlement.population * 0.5);
+  const mobile = Math.ceil(next.settlement.population * 0.05);
+  next.settlement.workforceAssigned = Math.max(0, next.settlement.workforceEligible - mobile);
+  for (const line of ['water', 'food', 'maintenance', 'logistics'] as const) {
+    next.dailyPositions[line] = Math.max(next.dailyPositions[line], MODE_STAFF[line].standard);
+  }
+  if (next.maintenanceBacklog > 0) next.dailyPositions.maintenance = MODE_STAFF.maintenance.accelerated;
+  enforceStaffing(next, []);
+  refreshMonthlyProjection(next);
+  next.feedback = `既存聚居点 ${next.settlement.population} 人已登记并接入基础服务。`;
+  return next;
+}
+
+export function setOpeningServiceOperational(
+  state: M0State,
+  service: OpeningServiceId,
+  operational: boolean,
+): M0State {
+  const next = cloneState(state);
+  if (service === 'food') {
+    next.settlement.services.foodSource.operational = operational;
+    next.settlement.services.foodProcessing.operational = operational;
+  } else {
+    next.settlement.services[service].operational = operational;
+  }
+  refreshMonthlyProjection(next);
+  next.feedback = `${service === 'water' ? '供水' : service === 'food' ? '重复食物' : service === 'power' ? '关键供能' : service === 'sanitation' ? '卫生服务' : service === 'medical' ? '基础医疗' : '基本住处'}已${operational ? '恢复' : '暂停'}。`;
+  return next;
+}
+
 export function setResearchTarget(state: M0State, technologyId: string): M0State {
   const next = cloneState(state);
   const technology = technologies.find((item) => item.id === technologyId);
@@ -837,6 +1128,55 @@ export function setResearchTarget(state: M0State, technologyId: string): M0State
   synchronizeResearch(next);
   enforceStaffing(next, []);
   next.feedback = `${technology.name}已加入指定科研队列；必要前置会自动接续。`;
+  return next;
+}
+
+export function removeResearchTarget(state: M0State, technologyId: string): M0State {
+  if (state.research.completed.includes(technologyId)) return state;
+  const next = cloneState(state);
+  next.research.manualQueue = next.research.manualQueue.filter((id) => id !== technologyId);
+  next.projects = next.projects.filter((project) => project.id !== technologyId || project.status === 'complete');
+  next.research.currentProjectId = null;
+  next.research.currentSource = null;
+  synchronizeResearch(next);
+  enforceStaffing(next, []);
+  return next;
+}
+
+export function setProductionAllocation(state: M0State, lineId: ProductionLineId, factories: number): M0State {
+  const next = cloneState(state);
+  const line = next.production.lines.find((candidate) => candidate.id === lineId);
+  if (!line) return state;
+  next.production.totalFactories = availableProductionUnits(next);
+  const requested = Math.max(0, Math.floor(factories));
+  const allocatedElsewhere = next.production.lines
+    .filter((candidate) => candidate.id !== lineId)
+    .reduce((sum, candidate) => sum + candidate.allocatedFactories, 0);
+  line.allocatedFactories = Math.min(requested, Math.max(0, next.production.totalFactories - allocatedElsewhere));
+  return next;
+}
+
+export function setProjectPaused(state: M0State, projectId: string, paused: boolean): M0State {
+  const next = cloneState(state);
+  const project = projectById(next, projectId);
+  if (!project || project.status === 'complete' || project.directRecovery || isResearchProjectId(project.id) || isSurveyProject(project)) return state;
+  project.status = paused ? 'paused' : 'active';
+  project.pausedReason = paused ? 'player_pause' : null;
+  enforceStaffing(next, []);
+  return next;
+}
+
+export function moveProjectInQueue(state: M0State, projectId: string, direction: -1 | 1): M0State {
+  const next = cloneState(state);
+  const candidates = next.projects.filter((project) => !project.directRecovery && !isResearchProjectId(project.id) && !isSurveyProject(project) && project.status !== 'complete')
+    .sort((left, right) => left.queueOrder - right.queueOrder);
+  const index = candidates.findIndex((project) => project.id === projectId);
+  const swapIndex = index + direction;
+  if (index < 0 || swapIndex < 0 || swapIndex >= candidates.length) return state;
+  const currentOrder = candidates[index].queueOrder;
+  candidates[index].queueOrder = candidates[swapIndex].queueOrder;
+  candidates[swapIndex].queueOrder = currentOrder;
+  enforceStaffing(next, []);
   return next;
 }
 
@@ -914,44 +1254,24 @@ export function approveCapabilityProject(state: M0State, id: string): M0State {
 
 export function configureSurvey(
   state: M0State,
-  targetId: SurveyTargetId,
-  settings: {
+  _targetId: SurveyTargetId,
+  _settings: {
     workers?: 2 | 4 | 6;
     maximumDays?: number | null;
     useDrone?: boolean;
   },
 ): M0State {
-  const next = cloneState(state);
-  const survey = surveyFor(next.map, targetId);
-  if (settings.workers !== undefined) survey.workers = settings.workers;
-  if (settings.maximumDays !== undefined
-    && (settings.maximumDays === null || (Number.isInteger(settings.maximumDays) && settings.maximumDays > 0))) {
-    survey.maximumDays = settings.maximumDays;
-  }
-  if (settings.useDrone !== undefined) survey.useDrone = settings.useDrone;
-  const project = projectById(next, survey.projectId);
-  if (project) {
-    project.staffing.planned = survey.workers;
-    if (survey.pauseReason === 'day-limit'
-      && (survey.maximumDays === null || survey.daysWorked < survey.maximumDays)) {
-      survey.paused = false;
-      survey.pauseReason = null;
-      project.status = 'active';
-      project.pausedReason = null;
-    }
-  }
-  enforceStaffing(next, []);
-  return next;
+  return state;
 }
 
 export function approveSurvey(
   state: M0State,
   targetId: SurveyTargetId,
-  workers: 2 | 4 | 6 = 2,
-  maximumDays: number | null = null,
-  useDrone = true,
+  _workers: 2 | 4 | 6 = 2,
+  _maximumDays: number | null = null,
+  _useDrone = true,
 ): M0State {
-  let next = configureSurvey(state, targetId, { workers, maximumDays, useDrone });
+  let next = cloneState(state);
   const survey = surveyFor(next.map, targetId);
   if (survey.stage === 'site') return { ...state, feedback: '该地点已完成现场确认。' };
   if (survey.approved) return { ...state, feedback: '该地点的勘测计划已经获批；阶段会自动接续。' };
@@ -960,7 +1280,7 @@ export function approveSurvey(
     .map((candidate) => candidate.queueOrder)) + 1;
   const project: Project = { id: survey.projectId, name: `${targetId === 'ruin-a' ? '工业废墟 A' : '工业废墟 B'}勘测`, priority: 'P2', queueOrder,
     status: 'active', production: false, testOnly: false, directRecovery: false, autoResume: true, pausedReason: null, safeActiveDays: 0,
-    staffing: { planned: workers, actual: 0, source: 'development', returnTo: 'development' }, workDone: survey.workDone,
+    staffing: { planned: 2, actual: 0, source: 'development', returnTo: 'development' }, workDone: survey.workDone,
     workRequired: surveyWorkRequired.area, investedResources: {} };
   next = approveProject(next, project, {});
   const approvedSurvey = surveyFor(next.map, targetId);
@@ -971,19 +1291,8 @@ export function approveSurvey(
   return next;
 }
 
-export function selectSurveyRoute(state: M0State, targetId: SurveyTargetId, routeId: string): M0State {
-  const next = cloneState(state);
-  const survey = surveyFor(next.map, targetId);
-  const route = next.map.routes.find((candidate) => candidate.id === routeId && candidate.targetId === targetId);
-  const project = projectById(next, survey.projectId);
-  if (!route || !project || survey.stage !== 'area') return { ...state, feedback: '当前没有可确认的候选路线。' };
-  survey.selectedRouteId = route.id;
-  survey.paused = false;
-  survey.pauseReason = null;
-  project.status = 'active';
-  project.pausedReason = null;
-  enforceStaffing(next, []);
-  return next;
+export function selectSurveyRoute(state: M0State, _targetId: SurveyTargetId, _routeId: string): M0State {
+  return state;
 }
 
 export function setSurveyPaused(state: M0State, targetId: SurveyTargetId, paused: boolean): M0State {

@@ -12,8 +12,9 @@
 - `TASK_PACKAGES.md` 中当前第二层任务
 - 当前任务列出的第一层冻结规格和第四层只读审计
 - `references/reference-m0-tech-description-corpus-001.md` 全文；这是 `SOURCE-BUNDLE-M0-TECH-PROSE-001`，摘要不能替代
+- 任务涉及科研背景、重要工程故事或法令衍生事件时，全文读取 `RESEARCH_ENGINEERING_EDICT_TEXT_RULES_001.md`，按其中事实门、状态标签和阻塞规则组织内容
 
-开始工作前必须回执 `source_read_receipt`，写明完整读取的源文件路径与固定提交。文件缺失、被截断或只能看到摘要时，返回 `BLOCKED_SOURCE`，不得凭模型记忆继续。
+开始工作前必须回执 `source_read_receipt`，写明完整读取的源文件路径、实际范围、SHA-256 与固定提交。适用任务漏读科研/工程/法令专用规则，或文件缺失、被截断、只能看到摘要时，返回 `BLOCKED_SOURCE`，不得凭模型记忆继续。
 
 ## 可以做
 

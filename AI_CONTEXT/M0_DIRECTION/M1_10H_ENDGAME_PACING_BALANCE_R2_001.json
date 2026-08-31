@@ -1,0 +1,74 @@
+{
+  "modelId": "M1-10H-ENDGAME-PACING-BALANCE-R2-001",
+  "version": 2,
+  "status": "superseded",
+  "supersededBy": "M1-2H-ENDGAME-PACING-BALANCE-R3-001",
+  "sourceTask": "M1-L1-518",
+  "supersedes": "M1-24H-PACING-BALANCE-001",
+  "clock": {
+    "realSecondsPerWorldDay": 5,
+    "variableGregorianMonthLengthPreserved": true,
+    "realSecondsPer28DayMonth": 140,
+    "realSecondsPer30DayMonth": 150,
+    "realSecondsPer31DayMonth": 155,
+    "realSecondsPer365DayYear": 1825,
+    "oldTwoYearReferenceRealSeconds": 3650,
+    "openingLoopRealSeconds": 1200,
+    "openingLoopWorldDays": 240,
+    "postOpeningIdleTargetSeconds": 36000,
+    "postOpeningIdleWorldDays": 7200,
+    "referenceTotalRealSeconds": 37200,
+    "referenceTotalWorldDays": 7440,
+    "referenceTotalWorldYearsApprox": 20.37,
+    "calendarIsUnlockGate": false,
+    "specialMonthTimeMappingAllowed": false
+  },
+  "endgame": {
+    "displayName": "基础二十一世纪生产力终局",
+    "oldYearTwoIsContentOriginOnly": true,
+    "fixedCalendarDate": null,
+    "fixedElapsedTimeGate": null,
+    "earlyCompletionAllowed": true,
+    "standardPostOpeningIdleAcceptanceBandSeconds": [32400, 39600]
+  },
+  "openingLoop": {
+    "referenceRealEndSecond": 1200,
+    "referenceWorldDay": 240,
+    "openingMobileTeam": 28,
+    "generatedSettlementPopulationRange": [900, 1200],
+    "minimumRegisteredAndServedPopulation": 1000,
+    "oneTimeOpeningStockCountsAsRepeatableSupply": false
+  },
+  "retainedScopeBaselines": {
+    "r6TechnologyCount": 539,
+    "oldEndgameMainlineTechnologyCount": 389,
+    "oldEndgameMainlineResearchPoints": 25285,
+    "r6EngineeringCount": 85,
+    "oldEndgameMainlineEngineeringCount": 74,
+    "researchPointsAreRelativeDifficultyBaselineOnly": true,
+    "engineeringMonthTargetsRemainValid": false
+  },
+  "requiredRecalculationOutputs": [
+    "monthlyPopulationAndAgeCohorts",
+    "effectiveResearchCapacity",
+    "researchPointAllocationAndCompletion",
+    "engineeringCrewAndEquipmentCapacity",
+    "constructionMaterialsAndTransport",
+    "factoryExpansionAndRampUp",
+    "maintenanceBacklogAndSpareCoverage",
+    "endgameEvidenceGaps"
+  ],
+  "populationCorrections": {
+    "birthsCanReachWorkingAgeBeforeReferenceEndgame": true,
+    "naturalAgingUsesWorldCalendar": true,
+    "oldNoNewbornLaborWithinStageRuleSuperseded": true,
+    "referenceEndgamePopulationBand": [80000, 100000],
+    "populationBandIsCalendarGate": false
+  },
+  "implementationState": {
+    "currentM0RealMillisecondsPerWorldDay": 20000,
+    "targetRealMillisecondsPerWorldDay": 5000,
+    "productCodeChangedByThisTask": false,
+    "fourthLayerImplementationRequired": true
+  }
+}

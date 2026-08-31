@@ -1,4 +1,5 @@
 import { createEmptyMonthlyLedger, refreshMonthlyProjection } from './economy';
+import { daysInMonth } from './calendar';
 import {
   M0_STATE_VERSION,
   type DailyPositions,
@@ -12,10 +13,16 @@ import {
   type Workforce,
 } from './types';
 import { createLocalMap, normalizeMapRotation } from './map';
+import { OPENING_SETTLEMENT_CELL_ID } from './openingLoop';
 import { enabledResearchCapacity, isResearchProjectId } from './progression';
+import {
+  actionTeamLivingPopulation,
+  supportedPopulation,
+  unifiedWorkablePopulation,
+} from './populationAccounting';
 
-export const M0_SAVE_KEY = 'always-game-m0-v7';
-export const M0_DAY_MS = 20_000;
+export const M0_SAVE_KEY = 'always-game-m0-v9';
+export const M0_DAY_MS = 1_000;
 
 export const DEFAULT_EVENT_WINDOW_POSITION: EventWindowPosition = {
   xRatio: 1,
@@ -27,6 +34,7 @@ export const DEFAULT_MAP_ROTATION: MapRotation = { yaw: 0, pitch: 0 };
 export const DEFAULT_M0_SCENARIO: ScenarioConfig = {
   id: 'm0-core-test-scenario',
   startDate: { year: 2001, month: 1, day: 1 },
+  existingSettlementPopulation: 1_000,
 };
 
 export const MODE_STAFF = {
@@ -38,17 +46,16 @@ export const MODE_STAFF = {
 
 const PROJECT_PRIORITY_ORDER: Priority[] = ['P0', 'P1', 'P2', 'P3'];
 
-export function livingPopulation(state: Pick<M0State, 'population'>): number {
-  const { normal, unableToWork, critical } = state.population;
-  return normal + unableToWork + critical;
+export function livingPopulation(state: Pick<M0State, 'population' | 'settlement'>): number {
+  return supportedPopulation(state);
 }
 
-export function workablePopulation(state: Pick<M0State, 'population'>): number {
-  return state.population.normal;
+export function workablePopulation(state: Pick<M0State, 'population' | 'settlement'>): number {
+  return unifiedWorkablePopulation(state);
 }
 
 export function minimumBasicDuty(state: Pick<M0State, 'population'>): number {
-  return Math.ceil(livingPopulation(state) / 4);
+  return Math.ceil(actionTeamLivingPopulation(state) / 4);
 }
 
 export function projectDevelopmentDemand(projects: Project[]): number {
@@ -83,7 +90,7 @@ interface WorkforcePlan {
   projectWorkers: Map<string, number>;
 }
 
-function calculateWorkforce(state: Pick<M0State, 'population' | 'dailyPositions' | 'projects' | 'research'>): WorkforcePlan {
+function calculateWorkforce(state: Pick<M0State, 'population' | 'settlement' | 'dailyPositions' | 'projects' | 'research'>): WorkforcePlan {
   const workable = workablePopulation(state);
   let remaining = workable;
   const projectWorkers = new Map<string, number>();
@@ -186,6 +193,10 @@ function initialProjects(): Project[] {
 
 export function createInitialM0State(scenario: ScenarioConfig = DEFAULT_M0_SCENARIO): M0State {
   const calendar = { ...scenario.startDate };
+  const existingSettlementPopulation = Math.max(900, Math.min(
+    1_200,
+    Math.floor(scenario.existingSettlementPopulation ?? DEFAULT_M0_SCENARIO.existingSettlementPopulation ?? 1_000),
+  ));
   const stocks = initialStocks();
   const dailyPositions: DailyPositions = {
     water: MODE_STAFF.water.standard,
@@ -195,10 +206,10 @@ export function createInitialM0State(scenario: ScenarioConfig = DEFAULT_M0_SCENA
   };
   const state: M0State = {
     version: M0_STATE_VERSION,
-    scenario: { id: scenario.id, startDate: { ...scenario.startDate } },
+    scenario: { id: scenario.id, startDate: { ...scenario.startDate }, existingSettlementPopulation },
     calendar,
     elapsedDays: 0,
-    clock: { running: false, elapsedMs: 0, millisecondsPerDay: M0_DAY_MS, speed: 1 },
+    clock: { running: true, elapsedMs: 0, millisecondsPerDay: M0_DAY_MS, speed: 1 },
     population: {
       normal: 28,
       unableToWork: 0,
@@ -249,6 +260,49 @@ export function createInitialM0State(scenario: ScenarioConfig = DEFAULT_M0_SCENA
       roundTarget: null,
       blockedProjectId: null,
       blockedReason: null,
+    },
+    production: {
+      totalFactories: 0,
+      lines: [
+        { id: 'precision-parts', allocatedFactories: 0, progress: 0, workRequired: 12, batchesCompleted: 0, blockedReason: 'facility-unavailable' },
+        { id: 'survey-drone', allocatedFactories: 0, progress: 0, workRequired: 18, batchesCompleted: 0, blockedReason: 'facility-unavailable' },
+        { id: 'common-parts-remanufacturing', allocatedFactories: 0, progress: 0, workRequired: 6, batchesCompleted: 0, blockedReason: 'facility-unavailable' },
+      ],
+    },
+    settlement: {
+      id: 'opening-settlement-01',
+      locationCellId: OPENING_SETTLEMENT_CELL_ID,
+      population: existingSettlementPopulation,
+      status: 'uncontacted',
+      registeredPopulation: 0,
+      servedPopulation: 0,
+      servedSince: null,
+      workforceEligible: 0,
+      workforceAssigned: 0,
+      basicProductionUnits: 0,
+      services: {
+        water: { capacity: 0, operational: false },
+        foodSource: { capacity: 0, operational: false },
+        foodProcessing: { capacity: 0, operational: false },
+        power: { capacity: 0, operational: false },
+        sanitation: { capacity: 0, operational: false },
+        medical: { capacity: 0, operational: false },
+        housing: { capacity: 0, operational: false },
+        registrationComplete: false,
+      },
+    },
+    openingLoop: {
+      continuityMonths: [],
+      currentMonth: {
+        year: scenario.startDate.year,
+        month: scenario.startDate.month,
+        calendarDays: daysInMonth(scenario.startDate.year, scenario.startDate.month),
+        servedDays: 0,
+        waterGapDays: 0,
+        foodGapDays: 0,
+        criticalServiceGapDays: 0,
+        maintenanceGapDays: 0,
+      },
     },
     drone: null,
     warnings: [],

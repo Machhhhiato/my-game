@@ -1,19 +1,19 @@
 ---
-routing_version: 8
-routing_epoch: 19
-routing_state: handoff_ready
+routing_version: 18
+routing_epoch: 28
+routing_state: active
 active_lane: M0-DIR-A
 active_host: mac
 preferred_host: mac
 fallback_host: null
 coordination_owner: M0-L1-DIRECTION
-active_session: M0-S003
+active_session: M0-S004
 previous_lane: M0-DIR-B
 previous_host: windows
-previous_session: M0-S002
-next_lane: M0-DIR-A
-next_host: mac
-next_session: M0-S004
+previous_session: M0-S003
+next_lane: null
+next_host: null
+next_session: null
 handoff_id: M0-H003
 ---
 
@@ -21,7 +21,7 @@ handoff_id: M0-H003
 
 本文件回答“这个任务应该由哪条稳定任务线负责”。`ACTIVE_TASKS.md` 回答“现在轮到哪个任务”。两者必须同时读取。
 
-## 16 个任务对应的 8 条稳定任务线
+## 任务对应的稳定任务线
 
 | 任务 ID | 稳定工作 lane | 建议会话标题 | 使用规则 |
 |---|---|---|---|
@@ -41,6 +41,10 @@ handoff_id: M0-H003
 | `M0-L4-402` / `M0-L4-402-R1` / `M0-L4-402-R2` / `M0-L4-402-R3` | `M0-L4-CORE` | `AG-M0｜L4-CORE｜402｜MAC` | 402 大批次已完成；R1/R2 的第一层直改是历史流程错误。R3 仅因 U144 的一次性明确授权由第一层实施，收口后失效，不得作为后续派发先例 |
 | `M0-L4-403` | `M0-L4-OUTPOST` | `AG-M0｜L4-OUTPOST｜403｜MAC` | 402 用户验收且任务卡进入 ready 后由第一层创建；既有持续授权覆盖范围内执行，但不得跳过阶段门 |
 | `M0-L4-404` | `M0-L4-CANDIDATE` | `AG-M0｜L4-CANDIDATE｜404｜MAC` | 403 用户验收且任务卡进入 ready 后由第一层创建，保持独立验收视角；不重复询问范围内操作 |
+| `M1-L4-523-A-R1` | `M1-L4-VISUAL-SHELL` | `AG-M1｜L4-VISUAL｜523-A-R1｜MAC` | 接替任务`01a052f7-01b1-7bf2-bd78-2cb63d202c0f`已完成并idle，但用户试玩退回三项问题；保留为R2输入，不得并入主线 |
+| `M1-L4-523-A-R2` | `M1-L4-VISUAL-SHELL` | `AG-M1｜L4-VISUAL｜523-A-R1｜MAC` | 千人自循环产业纵向切片已在独立工作树完成两轮第一层退回修正和验证；任务idle，等待用户试玩，不合入主目录 |
+| `M1-L4-523-A-R3` | `M1-L4-VISUAL-SHELL` | `AG-M1｜L4-VISUAL｜523-A-R1｜MAC` | 四类粗版透明建筑贴图已接入地图并完成三尺寸验证；任务idle，等待用户联合试玩，不合入主目录 |
+| `M1-L4-523-A-R4` | `M1-L4-VISUAL-SHELL` | `AG-M1｜L4-VISUAL｜523-A-R4｜MAC` | 原任务恢复后完成最终复验与本地产品提交`099aa0e6994078cc7e0a8bb92668e1b9880e7484`；用户已接受并授权并入主目录、清理旧工作树和推送备份 |
 
 当前所有新任务固定使用 `MAC`。Windows 只保留 `M0-S002` 等历史接力证据，不是备用 host，也不出现在当前或计划中的任务标题；以后若用户重新提出跨设备需求，另开路由修订。
 
@@ -76,6 +80,7 @@ handoff_id: M0-H003
 - `M0-L4-AUDIT`、`M0-L2-CONTENT`、`M0-L3-TEXT` 及未来实现 lane 分别创建独立 Codex 任务线程；正式任务不得用一次性子代理冒充。
 - 主线程使用任务创建、等待、读取和追加消息能力统筹下层。下层线程完成或阻塞后，主线程收回结果并向用户报告；用户不需要手工复制提示词。
 - 新线程提示只写角色、任务、仓库路径、分支、必须读取的 Git 文档和验收条件。完整上下文以 Git 为准，不依赖复制当前长聊天。
+- 新线程涉及科研、工程或临时法令文字时，提示中必须逐字列出 `RESEARCH_ENGINEERING_EDICT_TEXT_RULES_001.md` 的全文读取与 SHA-256 回执要求；科研文字任务还必须列出 revision 6 原始语料全文。没有回执不得开始生成、审核或接入。
 - Git 上下文不能只给摘要。任务涉及用户多轮否决、语感、页面职责或用词边界时，任务卡必须指向保存原话的 session/amendment；下层必须读取对应原话后再工作。
 - 第一至第三层默认复用同一职责下已经建立的长期物理会话，只有原会话不可恢复、路由失效或上下文确实不能继续时才接替；第四层可以按夜间批次、正式大阶段、上下文压力或能力不匹配定期滚动。
 - 任务创建接口或路由本身报错时，同一次派发只尝试一次新建，随后复用安全旧会话。任务已经创建成功并开始执行、后来因模型能力或交付质量失败时，应先关闭失败实例并恢复干净检查点，再换用更合适模型建立一个接替任务；这不属于创建错误重试。
@@ -83,6 +88,7 @@ handoff_id: M0-H003
 - 第一层只审查、退回、独立验证和收口。发现一行代码、样式、测试或页面文字错误，也必须把修改要求发回第四层；不得自己补写。项目内持续总控授权不改变这条边界。
 - 只有用户针对当次任务明确说“允许第一层直接修改”才能形成一次性例外。此前 401、401-R1、402-R1 和 402-R2 中的第一层补修均保留为历史流程错误，不得类推。
 - 同一稳定 lane 同一时刻只能有一个活动实例，旧实例只保留证据，跨职责任务不混用。
+- 应用读取接口的空列表、空`latestAssistantMessage`或漏显正文只记为`API_EMPTY_READ`。第一层必须用准确任务ID与回合ID核对本地rollout日志中的`AgentMessage`、助手`response_item`和`task_complete.last_agent_message`；日志有结果时立即恢复交付，不得重发、接替或报`BLOCKED_THREAD`。用户明确说结果已返回时，先执行这项核验，再改任务状态。
 - 线程 ID、host ID、模型、推理强度和当前任务在实际创建后回写本文件或 `ACTIVE_TASKS.md`。没有创建时不得编造 ID。
 - 所有线程使用本机环境，不创建 ChatGPT 云任务。串行依赖不变；`M0-L4-401-R1` 已由用户试玩接受，`M0-L4-402` 已按执行单建立新的大型第四层批次。
 
@@ -98,13 +104,18 @@ handoff_id: M0-H003
 | `AG-M0｜L2-CONTENT｜201｜MAC` | `01a0382b-4e62-77e0-904c-a35b9e7be8f5` | `local` | `gpt-5.6-terra` / `medium` | `completed / idle` | 正确本地项目的只读工作树任务；首次交付被退回，修订版 `CONTENT-M0-001` 已 accepted |
 | `AG-M0｜L2-CONTENT｜201-R1｜MAC` | `01a0386f-71e3-7cd1-9b03-85724a9fc464` | `local` | `gpt-5.6-terra` / `medium` | `completed / idle` | 首稿被第一层退回；同一任务修订版 `CONTENT-M0-STORY-001` 已 accepted |
 | `AG-M0｜L3-TEXT｜301｜MAC` | `01a03845-90a7-7c73-95e6-f48796358313` | `local` | `gpt-5.6-sol` / `medium` | `completed / idle` | 首次交付被第一层退回；完整修订版已固化为 `TEXT_M0_001.md` 并进入用户 review |
+| `AG-M0｜L3-TEXT｜R7单科技返工｜MAC` | `01a045d9-3f1f-71b0-936b-e036d282cb92` | `local` | `gpt-5.6-sol` / `high` | `completed / idle / waiting_user_review` | 二十八阶段、五百一十九项候选已完成串行事实门与文风门；应用接口漏显结果均由准确本地rollout日志恢复，最终整树结构审查仍等待用户验收 |
 | `AG-M0｜L4-CORE｜401｜MAC（复用）` | `01a03800-3d9f-7c70-b1dc-70a30bc8bf01` | `local` | `gpt-5.6-terra` / `medium` | `completed / idle` | 一次新建失败后复用旧第四层线程；首版被第一层退回，R1 完成；最终代码由第一层补修、验证和 Git 收口 |
 | `AG-M0｜L4-CORE｜401-R1｜MAC A1` | `/root/m0_l4_401_r1` | `local` | `gpt-5.6-terra` / `medium` | `failed_capability / closed` | 任务成功创建；压缩重写被第一层否决并还原，随后确认无法安全完成核心迁移；工作区已恢复干净，无提交、无推送 |
 | `AG-M0｜L4-CORE｜401-R1｜MAC A2` | `/root/m0_l4_401_r1_sol` | `local` | `gpt-5.6-sol` / `high` | `completed / idle` | 依据 `D-M0-DIR-040` 接替能力失败实例；完成阶段 A、正式 UI、两轮第一层退回和最终修订，无独立提交或推送 |
 | `AG-M0｜L4-CORE｜402｜MAC A1` | `/root/m0_l4_402` | `local` | `gpt-5.6-terra` / `medium` | `stopped_incomplete / closed` | 自动测试通过但缺领域自动科研、勘测调度和完整地点事实 UI；两份冻结规格无完整 EOF 回执，未提交、未推送 |
 | `AG-M0｜L4-CORE｜402｜MAC A2` | `/root/m0_l4_402_sol` | `local` | `gpt-5.6-sol` / `high` | `completed / idle` | 依据 `D-M0-DIR-040` 接替能力不足实例；经历一次第一层退回后通过自动验收，未启动页面、未进入 403 |
+| `AG-M1｜L4-VISUAL｜523-A｜MAC` | `01a052e9-32da-7d31-bad1-95c80d24207e` | `local` | `gpt-5.3-codex-spark` / `medium` | `systemError / rejected_incomplete_draft` | 补读大型规格时耗尽上下文；留下五文件未验证草稿，第一层核得生产模型、科研移出、探索战略控制和测试缺口，不作为接替基线 |
+| `AG-M1｜L4-VISUAL｜523-A-R1｜MAC` | `01a052f7-01b1-7bf2-bd78-2cb63d202c0f` | `local` | `gpt-5.6-sol` / `high` | `completed / idle / R3 returned` | 工作树`/Users/xujiangyue/.codex/worktrees/c8b8/always game`；R2逻辑保留，R3地图母版与贴图接入被用户退回；不再追加实现任务 |
+| `AG-M1｜L4-VISUAL｜523-A-R4｜MAC` | `01a05695-be67-7c42-9d10-be44cbdf8f66` | `local` | `gpt-5.6-sol`恢复时由`gpt-5.6-terra`执行 / `high` | `completed / accepted / integration_source_committed` | 最终复验通过并创建本地产品提交`099aa0e6994078cc7e0a8bb92668e1b9880e7484`；用户接受后以无独立提交方式并入主目录，旧工作树可清理 |
+| `AG-M1｜L4-VISUAL｜523-A-R4-R1｜MAC` | `01a056c0-c5d2-7a62-b123-e6f1d9600bfb` | `local` | `gpt-5.6-terra` / `high` | `completed_empty_followup` | 同目录派生任务两次完成但未产生交付；原R4任务随后以Terra恢复并完成最终复验与交付，不以空读误判实现缺失 |
 
-当前没有活动下层任务。首次 `/root/m0_l4_402` 已因实质缺项停止；接替任务 `/root/m0_l4_402_sol` 已完成并 idle。402-R1 与 R2 的第一层直接修改已经登记为流程错误；402-R3 由 U144 形成一次性例外并已用完。任何后续产品修订必须重新派发第四层。当前准备由新第一层会话 `M0-S004` 接管，不自动进入 403。
+第三层`01a045d9-3f1f-71b0-936b-e036d282cb92`已经完成二十八阶段、五百一十九项正式候选的逐项文字工作；应用读取接口漏显的结果均由准确任务ID、回合ID和本地rollout日志恢复，错误的`BLOCKED_THREAD`状态已经撤销，没有重发或新建替代任务。候选仍不是`accepted_verbatim`，结构和文字不得直接接入产品。首次`/root/m0_l4_402`已因实质缺项停止；接替任务`/root/m0_l4_402_sol`已完成并idle。402-R1与R2的第一层直接修改已经登记为流程错误；402-R3由U144形成的一次性例外已经用完。第一层会话`M0-S004`已完成`M1-L1-521`与`M1-L1-522`基线闭合；V5预制确认与V6微观调度均已退回，V7修订2已接受并写入基准。`M1-L4-523-A-R2`已获用户授权并在原第四层任务连续实现千人自循环产业纵向切片，产品改动未并入主工作区；402-R3仍等待用户复查，不自动进入403。
 
 从 `M0-S003-U089` 起，昼夜分工正式生效：白天由第一层完成方案、范围、验收与夜间执行单；夜间任务只执行一个已授权的大结果，通常按约六小时估算，但额度、上下文和环境允许时可以运行八小时或更久，并按新的预计结束时间预留收尾验证时间；次日由第一层收回证据并交给用户验收。详细规则见 accepted 的 `day-night-execution-plan.md` 和 `NIGHT_WORK_ORDER_TEMPLATE.md`。研究型审计与代码实现不得塞进同一夜间任务；上下文接近上限时必须先写检查点，再建立新任务继续。
 

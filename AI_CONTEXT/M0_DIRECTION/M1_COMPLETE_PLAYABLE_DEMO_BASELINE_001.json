@@ -1,0 +1,173 @@
+{
+  "modelId": "M1-COMPLETE-PLAYABLE-DEMO-BASELINE-001",
+  "version": 1,
+  "taskId": "M1-L1-521",
+  "status": "accepted",
+  "accepted": true,
+  "implementationAuthorized": false,
+  "runtimeBaseline": {
+    "id": "M0-L4-402-R3",
+    "decision": "reusable_adaptation_skeleton_only",
+    "userAccepted": false,
+    "verifiedCommands": [
+      "npm run typecheck",
+      "npm run test:m0"
+    ]
+  },
+  "clock": {
+    "realSecondsPerWorldDay": 1,
+    "naturalGregorianMonths": true,
+    "totalStandardRealSeconds": 7200,
+    "totalStandardWorldDays": 7200,
+    "totalStandardWorldYearsApprox": 19.71,
+    "standardSeedAcceptanceBandRealSeconds": [
+      6480,
+      7920
+    ],
+    "openingIncludedInTotal": true,
+    "openingRealSeconds": 300,
+    "openingWorldDays": 300,
+    "calendarIsUnlockGate": false,
+    "earlyCompletionAllowed": true,
+    "lateCompletionAllowed": true
+  },
+  "population": {
+    "openingMobileTeam": 28,
+    "openingEncounterPopulationRange": [
+      900,
+      1200
+    ],
+    "openingMinimumRegisteredAndServed": 1000,
+    "terminalMinimumRegisteredAndServed": 80000,
+    "terminalReferenceBand": [
+      80000,
+      100000
+    ],
+    "abstractManpowerMayReplacePeople": false
+  },
+  "technologyBaseline": {
+    "r6SourceCount": 539,
+    "r6SourceResearchPoints": 43380,
+    "candidateCount": 519,
+    "candidateResearchPoints": 41090,
+    "currentScopeCandidateCount": 471,
+    "currentScopeCandidateResearchPoints": 29085,
+    "deferredCandidateCount": 48,
+    "deferredCandidateResearchPoints": 12005,
+    "currentScopeMeansRequiredMainline": false,
+    "requiredMainlineStatus": "pending_capability_backcast_and_balance"
+  },
+  "nonTechnologyCatalogs": {
+    "engineering": {
+      "count": 85,
+      "status": "r6_candidate_requires_r7_rewire_and_text_review"
+    },
+    "policies": {
+      "categoryCount": 15,
+      "optionCount": 67,
+      "status": "accepted_object_classification_text_not_accepted_verbatim"
+    },
+    "selectableLaws": {
+      "categoryCount": 19,
+      "optionCount": 57,
+      "status": "accepted_object_classification_text_not_accepted_verbatim"
+    },
+    "fixedRegulations": {
+      "count": 33,
+      "status": "catalog_only_text_not_accepted_verbatim"
+    },
+    "fixedProcedures": {
+      "count": 7,
+      "status": "catalog_only_text_not_accepted_verbatim"
+    },
+    "temporaryEdicts": {
+      "count": 34,
+      "status": "catalog_only_text_not_accepted_verbatim"
+    }
+  },
+  "terminalEvidence": {
+    "continuousEvidenceWindowCompleteCalendarMonths": 3,
+    "exactCapacityThresholdsStatus": "pending_joint_balance",
+    "capabilityEvidenceFields": [
+      "capabilityId",
+      "requirementClass",
+      "status",
+      "requiredAndCompletedTechnologyIds",
+      "facilityInstanceIdsAndLocations",
+      "productionLineIds",
+      "productFamilyIdsAndModels",
+      "qualifiedAndAssignedWorkforce",
+      "inputEnergyConsumableAndSpareSources",
+      "externalDependencyType",
+      "transportRoutesAndDeliveryTargets",
+      "monthlySupplyDemandInventoryAndLoss",
+      "qualifiedRejectedAndRecalledBatches",
+      "deployedRepairStoppedScrappedAndRecoveredQuantities",
+      "maintenanceBacklogAndSpareCoverage",
+      "faultRepairRetestEvidence",
+      "activeLimiterIds",
+      "settlementEvidenceRecordIds",
+      "passOrFailureReason"
+    ],
+    "requiredDomains": [
+      "P01_energy_and_electricity",
+      "P02_water_and_environment",
+      "P03_agriculture_and_food",
+      "P04_construction_and_settlement",
+      "P05_metals_and_materials",
+      "P06_machine_tools_and_manufacturing",
+      "P07_basic_chemicals",
+      "P08_transport_and_logistics",
+      "P09_communications_and_instruments",
+      "P10_health_and_medicine",
+      "P11_military_sustainment",
+      "P12_maintenance_and_replication",
+      "G01_population_capacity",
+      "G02_governance_and_budget",
+      "G03_external_network",
+      "G04_institutional_operation",
+      "G05_emergency_recovery",
+      "G06_persistence_integrity"
+    ],
+    "allDomainsMustPass": true,
+    "technologyCompletionAloneMayPass": false,
+    "oneTimeInventoryMayPass": false,
+    "terminalSnapshotArchived": true,
+    "worldContinuesAfterTerminal": true
+  },
+  "failureAndRecovery": {
+    "recoverableShortageIsAutomaticGameOver": false,
+    "localShortagePausesOnlyAffectedObjects": true,
+    "blockedObjectMustShowExactCause": true,
+    "randomCrisisWithoutRecoveryPathAllowed": false,
+    "hardFailureCandidates": [
+      "no_controllable_population_location_team_rescue_or_intake_source"
+    ],
+    "hardFailureReachabilityStatus": "pending_population_and_war_model_validation"
+  },
+  "sourcePriority": [
+    "M1_TECH_TREE_POST_PROSE_GAME_DESIGN_REVIEW_001.md",
+    "M1_TECH_TEXT_STAGE01_FINAL_REVIEW_001.md..M1_TECH_TEXT_STAGE28_WORKING_001.md",
+    "M1_TECH_FACT_ISSUE_LEDGER_001.md",
+    "M1_GOVERNANCE_TEXT_R6_001.json",
+    "M1_ENGINEERING_TEXT_R6_001.json",
+    "TECH_TREE_M1_PLAYER_LEAN_R6_001.json_as_historical_source_only"
+  ],
+  "supersededNumbers": [
+    "r4_635_tech_33980_points_408_mainline_20125_points",
+    "r5_857_tech_53045_points_631_mainline_32400_points",
+    "r6_539_runtime_389_mainline_25285_points",
+    "intermediate_521_candidates_40935_points",
+    "month24_or_day730_terminal",
+    "24_hour_pacing",
+    "10_hour_pacing",
+    "125_minute_total_pacing",
+    "24_month_population_and_research_closure",
+    "42_dedicated_product_factories"
+  ],
+  "nextStage": {
+    "taskId": "M1-L1-522",
+    "name": "完整Demo视觉与交互蓝图",
+    "authorized": false
+  }
+}

@@ -9,11 +9,14 @@ import type {
   SurveyTargetId,
 } from './types';
 
-export const SPHERICAL_LOCAL_WINDOW = {
-  kind: 'spherical-local-window',
-  contentCellCount: 37,
-  wholePlanetCellCount: null,
-  outsideContent: 'unexplored-shell',
+export const REGION_MAP = {
+  kind: 'continuous-region',
+  radius: 12,
+  contentCellCount: 469,
+  spanKm: 24,
+  worldWidth: 1200,
+  worldHeight: 760,
+  hexRadius: 18,
 } as const;
 
 export const MAP_ROTATION_LIMITS = {
@@ -21,21 +24,25 @@ export const MAP_ROTATION_LIMITS = {
   pitch: 0.6,
 } as const;
 
-export interface ProjectedLocalCell {
-  id: string;
-  intel: CellIntel;
-  xPercent: number;
-  yPercent: number;
-  depth: number;
-  scale: number;
-  visible: boolean;
-  corners: Array<{
-    xPercent: number;
-    yPercent: number;
-    depth: number;
-  }>;
+export interface RegionCamera {
+  x: number;
+  y: number;
+  zoom: number;
 }
 
+export interface RegionPoint {
+  x: number;
+  y: number;
+}
+
+export interface ProjectedRegionCell {
+  id: string;
+  intel: CellIntel;
+  center: RegionPoint;
+  points: string;
+}
+
+// Kept only so strict v7-v9 saves can still be validated and migrated.
 export function normalizeMapRotation(rotation: MapRotation): MapRotation {
   const finite = (value: number): number => Number.isFinite(value) ? value : 0;
   return {
@@ -44,66 +51,36 @@ export function normalizeMapRotation(rotation: MapRotation): MapRotation {
   };
 }
 
-function projectTangentPoint(
-  tangentX: number,
-  tangentY: number,
-  rotation: MapRotation,
-): { xPercent: number; yPercent: number; depth: number; scale: number } {
-  const tangentRadius = Math.hypot(tangentX, tangentY);
-  const angularRadius = tangentRadius * 0.23;
-  const radialScale = tangentRadius === 0 ? 0 : Math.sin(angularRadius) / tangentRadius;
-  const baseX = tangentX * radialScale;
-  const baseY = tangentY * radialScale;
-  const baseZ = Math.cos(angularRadius);
-
-  const cosYaw = Math.cos(rotation.yaw);
-  const sinYaw = Math.sin(rotation.yaw);
-  const yawX = baseX * cosYaw + baseZ * sinYaw;
-  const yawZ = -baseX * sinYaw + baseZ * cosYaw;
-  const cosPitch = Math.cos(rotation.pitch);
-  const sinPitch = Math.sin(rotation.pitch);
-  const pitchY = baseY * cosPitch - yawZ * sinPitch;
-  const depth = baseY * sinPitch + yawZ * cosPitch;
-  const perspective = 0.82 + Math.max(-0.2, depth) * 0.18;
-
+export function normalizeRegionCamera(camera: RegionCamera): RegionCamera {
+  const finite = (value: number, fallback: number): number => Number.isFinite(value) ? value : fallback;
+  const zoom = Math.max(1, Math.min(2.6, finite(camera.zoom, 1)));
+  const limitX = REGION_MAP.worldWidth * (zoom - 1) * 0.36;
+  const limitY = REGION_MAP.worldHeight * (zoom - 1) * 0.36;
   return {
-    xPercent: 50 + yawX * 44 * perspective,
-    yPercent: 50 - pitchY * 44 * perspective,
-    depth,
-    scale: Math.max(0.62, 0.76 + depth * 0.24),
+    zoom,
+    x: Math.max(-limitX, Math.min(limitX, finite(camera.x, 0))),
+    y: Math.max(-limitY, Math.min(limitY, finite(camera.y, 0))),
   };
 }
 
-export function projectLocalCell(cell: LocalMapCell, requestedRotation: MapRotation): ProjectedLocalCell {
-  const rotation = normalizeMapRotation(requestedRotation);
-  const tangentX = cell.q + cell.r * 0.5;
-  const tangentY = -cell.r * Math.sqrt(3) / 2;
-  const center = projectTangentPoint(tangentX, tangentY, rotation);
-  const cornerRadius = 1 / Math.sqrt(3);
-  const corners = Array.from({ length: 6 }, (_, index) => {
-    const angle = Math.PI / 6 + index * Math.PI / 3;
-    const corner = projectTangentPoint(
-      tangentX + Math.cos(angle) * cornerRadius,
-      tangentY + Math.sin(angle) * cornerRadius,
-      rotation,
-    );
-    return { xPercent: corner.xPercent, yPercent: corner.yPercent, depth: corner.depth };
-  });
-
+export function regionPoint(q: number, r: number): RegionPoint {
   return {
-    id: cell.id,
-    intel: cell.intel,
-    xPercent: center.xPercent,
-    yPercent: center.yPercent,
-    depth: center.depth,
-    scale: center.scale,
-    visible: center.depth > 0.04,
-    corners,
+    x: REGION_MAP.worldWidth / 2 + REGION_MAP.hexRadius * Math.sqrt(3) * (q + r / 2),
+    y: REGION_MAP.worldHeight / 2 + REGION_MAP.hexRadius * 1.5 * r,
   };
 }
 
-export function projectSphericalLocalWindow(cells: LocalMapCell[], rotation: MapRotation): ProjectedLocalCell[] {
-  return cells.map((cell) => projectLocalCell(cell, rotation));
+export function projectRegionCell(cell: LocalMapCell): ProjectedRegionCell {
+  const center = regionPoint(cell.q, cell.r);
+  const points = Array.from({ length: 6 }, (_, index) => {
+    const angle = Math.PI / 180 * (60 * index - 30);
+    return `${(center.x + REGION_MAP.hexRadius * Math.cos(angle)).toFixed(2)},${(center.y + REGION_MAP.hexRadius * Math.sin(angle)).toFixed(2)}`;
+  }).join(' ');
+  return { id: cell.id, intel: cell.intel, center, points };
+}
+
+export function projectRegionMap(cells: LocalMapCell[]): ProjectedRegionCell[] {
+  return cells.map(projectRegionCell);
 }
 
 export const localCellId = (q: number, r: number): string => `local-${q}-${r}`;
@@ -112,13 +89,14 @@ const directions = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]] as const
 
 export const LOCATION_CELLS = {
   headquarters: localCellId(0, 0),
-  waterworks: localCellId(0, -1),
-  foodSite: localCellId(-1, 1),
-  ruinA: localCellId(2, -1),
-  ruinB: localCellId(3, -2),
-  futureFarm: localCellId(-2, 2),
-  futureMine: localCellId(-3, 0),
-  futureShore: localCellId(1, 2),
+  waterworks: localCellId(-1, -1),
+  foodSite: localCellId(-3, 2),
+  ruinA: localCellId(4, -2),
+  ruinB: localCellId(7, -4),
+  futureFarm: localCellId(-5, 4),
+  futureMine: localCellId(6, 2),
+  futureShore: localCellId(1, 4),
+  openingSettlement: localCellId(-4, 0),
 } as const;
 
 export const SURVEY_ROUTE_IDS: Record<SurveyTargetId, string> = {
@@ -130,19 +108,29 @@ const createRoutes = (): LocalMapRoute[] => [
   {
     id: SURVEY_ROUTE_IDS['ruin-a'],
     targetId: 'ruin-a',
-    cellIds: [LOCATION_CELLS.headquarters, localCellId(1, 0), LOCATION_CELLS.ruinA],
+    cellIds: [LOCATION_CELLS.headquarters, localCellId(1, 0), localCellId(2, -1), localCellId(3, -1), LOCATION_CELLS.ruinA],
     facts: ['stable-old-road'],
   },
   {
     id: SURVEY_ROUTE_IDS['ruin-b'],
     targetId: 'ruin-b',
-    cellIds: [LOCATION_CELLS.headquarters, localCellId(1, -1), localCellId(2, -2), LOCATION_CELLS.ruinB],
+    cellIds: [
+      LOCATION_CELLS.headquarters,
+      localCellId(1, -1),
+      localCellId(2, -1),
+      localCellId(3, -2),
+      localCellId(4, -2),
+      localCellId(5, -3),
+      localCellId(6, -3),
+      LOCATION_CELLS.ruinB,
+    ],
     facts: ['mud-section', 'damaged-passage'],
   },
 ];
 
 function createCell(q: number, r: number): LocalMapCell {
   const id = localCellId(q, r);
+  const terrainNoise = Math.abs((q * 73 + r * 151 + q * r * 17) % 19);
   const cell: LocalMapCell = {
     id,
     q,
@@ -156,15 +144,22 @@ function createCell(q: number, r: number): LocalMapCell {
     intel: 'unknown',
   };
 
+  if (q + r < -8 || (terrainNoise < 3 && q < 7)) cell.terrain = 'slope';
+  if (Math.abs(q + r / 2 + 1.2) < 1.1) {
+    cell.water = 'near-water';
+    if (cell.terrain === 'plain') cell.terrain = 'shore';
+  }
+  if (terrainNoise === 4 || terrainNoise === 11) cell.terrain = 'mud';
   if (id === LOCATION_CELLS.headquarters) Object.assign(cell, { occupation: 'headquarters', terrain: 'hardground', intel: 'known' });
   if (id === LOCATION_CELLS.waterworks) Object.assign(cell, { occupation: 'waterworks', water: 'near-water', intel: 'known' });
   if (id === LOCATION_CELLS.foodSite) Object.assign(cell, { occupation: 'food-site', water: 'near-water', resource: 'food', intel: 'known' });
   if (id === LOCATION_CELLS.ruinA) Object.assign(cell, { occupation: 'industrial-ruin', terrain: 'hardground', resource: 'engineering-salvage', risk: 'heavy-clearing' });
   if (id === LOCATION_CELLS.ruinB) Object.assign(cell, { occupation: 'industrial-ruin', terrain: 'hardground', resource: 'alloy-salvage', risk: 'damaged-passage' });
-  if (id === localCellId(2, -2)) Object.assign(cell, { terrain: 'mud', water: 'waterlogging' });
+  if (id === localCellId(3, -2) || id === localCellId(5, -3)) Object.assign(cell, { terrain: 'mud', water: 'waterlogging' });
   if (id === LOCATION_CELLS.futureFarm) Object.assign(cell, { occupation: 'future-site', water: 'near-water', resource: 'farmland-potential', risk: 'future-use-only', intel: 'site' });
   if (id === LOCATION_CELLS.futureMine) Object.assign(cell, { occupation: 'future-site', terrain: 'slope', resource: 'mineral-sign', risk: 'future-use-only', intel: 'known' });
   if (id === LOCATION_CELLS.futureShore) Object.assign(cell, { occupation: 'future-site', terrain: 'shore', water: 'near-water', resource: 'shore-potential', risk: 'future-use-only', intel: 'known' });
+  if (id === LOCATION_CELLS.openingSettlement) Object.assign(cell, { occupation: 'settlement', terrain: 'hardground', water: 'near-water', intel: 'known' });
   return cell;
 }
 
@@ -188,9 +183,9 @@ function createSurvey(targetId: SurveyTargetId): SurveyRecord {
 
 export function createLocalMap(): M0MapState {
   const cells: LocalMapCell[] = [];
-  for (let q = -3; q <= 3; q += 1) {
-    for (let r = -3; r <= 3; r += 1) {
-      if (Math.max(Math.abs(q), Math.abs(r), Math.abs(q + r)) <= 3) cells.push(createCell(q, r));
+  for (let q = -REGION_MAP.radius; q <= REGION_MAP.radius; q += 1) {
+    for (let r = -REGION_MAP.radius; r <= REGION_MAP.radius; r += 1) {
+      if (Math.max(Math.abs(q), Math.abs(r), Math.abs(q + r)) <= REGION_MAP.radius) cells.push(createCell(q, r));
     }
   }
 
@@ -274,6 +269,7 @@ export function refreshMapIntel(map: M0MapState): void {
     LOCATION_CELLS.foodSite,
     LOCATION_CELLS.futureMine,
     LOCATION_CELLS.futureShore,
+    LOCATION_CELLS.openingSettlement,
   ]);
   for (const cell of map.cells) {
     cell.intel = cell.id === LOCATION_CELLS.futureFarm ? 'site' : permanentlyKnown.has(cell.id) ? 'known' : 'unknown';
@@ -328,6 +324,7 @@ export function visibleCellTitle(cell: LocalMapCell): string {
   if (cell.occupation === 'headquarters') return '总部';
   if (cell.occupation === 'waterworks') return '水源与旧供水设施';
   if (cell.occupation === 'food-site') return '附近食物点';
+  if (cell.occupation === 'settlement') return '既存聚居点';
   if (cell.resource === 'farmland-potential') return '未来农田候选地';
   if (cell.resource === 'mineral-sign') return '未来矿产坡地';
   if (cell.resource === 'shore-potential') return '未来河岸候选地';

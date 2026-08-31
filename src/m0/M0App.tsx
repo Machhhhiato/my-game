@@ -5,6 +5,7 @@ import {
   type CSSProperties,
   type KeyboardEvent as ReactKeyboardEvent,
   type PointerEvent as ReactPointerEvent,
+  type WheelEvent as ReactWheelEvent,
   type ReactElement,
   type RefObject,
 } from 'react';
@@ -12,18 +13,19 @@ import { clearM0State, loadM0State, saveM0State } from './save';
 import {
   advanceRealTime,
   availableAmount,
-  setDailyLinePositions,
+  approveOpeningProject,
+  approveRecoveryProject,
   setGameSpeed,
   approveCapabilityProject,
   approveSurvey,
-  configureSurvey,
   completeDroneRecharge,
-  selectSurveyRoute,
+  contactExistingSettlement,
+  integrateExistingSettlement,
   selectMapCell,
-  setResearchDomainAutomatic,
-  setResearchFacilityEnabled,
-  setResearchFacilityOpenPositions,
-  setResearchMode,
+  moveProjectInQueue,
+  removeResearchTarget,
+  setProductionAllocation,
+  setProjectPaused,
   setResearchTarget,
   setSurveyPaused,
   setRunning,
@@ -31,23 +33,34 @@ import {
 import {
   createInitialM0State,
   livingPopulation,
-  MODE_STAFF,
   setEventWindowPosition,
-  setMapRotation,
 } from './state';
 import {
   RESOURCE_IDS,
-  type DailyLineId,
   type EventWindowPosition,
   type GameSpeed,
-  type MapRotation,
   type M0Event,
   type M0State,
+  type OpeningProjectId,
   type Project,
   type ResourceId,
 } from './types';
-import { intelStageName, projectSphericalLocalWindow, routeForTarget, surveyConclusion, surveyPlanControlState, surveyVisibleFacts, visibleCellClass, visibleCellTitle } from './map';
+import {
+  LOCATION_CELLS,
+  REGION_MAP,
+  intelStageName,
+  normalizeRegionCamera,
+  projectRegionMap,
+  regionPoint,
+  surveyConclusion,
+  surveyPlanControlState,
+  surveyVisibleFacts,
+  visibleCellClass,
+  visibleCellTitle,
+  type RegionCamera,
+} from './map';
 import { technologies, technologyName } from './progression';
+import { OPENING_PROJECT_RULES, RECOVERY_RULES, openingLoopEvidence } from './openingLoop';
 import './m0.css';
 
 const resourceLabels: Record<ResourceId, string> = {
@@ -66,6 +79,18 @@ const resourceIcons: Record<ResourceId, string> = {
   engineeringComponents: '◇',
   alloy: '⬡',
   precisionParts: '✦',
+};
+
+const openingEvidenceLabels: Record<string, string> = {
+  population_registered_served: '已登记且受服务人口',
+  water_repeatable: '重复日供水',
+  food_repeatable: '重复食物',
+  critical_power: '关键供能',
+  sanitation_medical: '卫生与基础医疗',
+  repair_sustainment: '基础维修',
+  basic_industry: '基础产业',
+  mobile_workforce: '机动人力',
+  idle_queue: '可挂机队列',
 };
 
 type SheetId = 'headquarters' | 'research' | 'exploration' | 'engineering' | 'production' | 'archives';
@@ -89,6 +114,10 @@ function formatNumber(value: number): string {
 
 function formatDate(date: M0State['calendar']): string {
   return `${date.year} 年 ${date.month} 月 ${date.day} 日`;
+}
+
+function displayedPopulation(state: M0State): number {
+  return livingPopulation(state);
 }
 
 function formatProjectStatus(project: Project): string {
@@ -168,10 +197,10 @@ function TopBar({
   onSpeed: (speed: GameSpeed) => void;
 }): ReactElement {
   return <header className="m0-topbar">
-    <div className="m0-population" aria-label={`存活人口 ${livingPopulation(state)}`}>
+    <div className="m0-population" aria-label={`已登记人口 ${displayedPopulation(state)}`}>
       <span aria-hidden="true">♟</span>
       <span>人口</span>
-      <strong>{livingPopulation(state)}</strong>
+      <strong>{displayedPopulation(state)}</strong>
       <span className={`m0-population-delta ${populationDelta === null ? 'is-empty' : ''}`} aria-live="polite">
         {populationDelta !== null && populationDelta > 0 ? `+${populationDelta}` : populationDelta}
       </span>
@@ -219,69 +248,62 @@ function SystemRail({ activeSheet, onSelect }: {
   </nav>;
 }
 
-function WorkerSlots({ open, staffed, maximum }: { open: number; staffed: number; maximum: number }): ReactElement {
-  return <div className="m0-worker-slots" aria-label={`${staffed} 人到岗，开放 ${open} 个岗位，上限 ${maximum}`}>
-    {Array.from({ length: maximum }, (_, index) => <span
-      className={`m0-worker-slot ${index < staffed ? 'is-staffed' : ''} ${index >= open ? 'is-closed' : ''}`}
-      aria-hidden="true"
-      key={index}
-    />)}
-  </div>;
-}
-
 function HeadquartersSheet({ state, updateState }: {
   state: M0State;
   updateState: (updater: (current: M0State) => M0State) => void;
 }): ReactElement {
   const workforce = state.workforce;
-  const lineBuildings: Array<{ line: DailyLineId; name: string; location: string }> = [
+  const settlement = state.settlement;
+  const evidence = openingLoopEvidence(state);
+  const settlementStatus = settlement.status === 'uncontacted' ? '未接触'
+    : settlement.status === 'contacted' ? '已接触'
+      : settlement.status === 'services-approved' ? '接入项目进行中'
+        : settlement.status === 'ready-to-integrate' ? '等待人口接入'
+          : '已登记并受服务';
+  const lineBuildings = [
     { line: 'water', name: '总部供水站', location: '总部' },
     { line: 'food', name: '食物保障点', location: '总部' },
     { line: 'maintenance', name: '维护手工作坊', location: '总部' },
     { line: 'logistics', name: '短途运输站', location: '总部' },
-  ];
-  const changeLinePositions = (line: DailyLineId, direction: -1 | 1): void => {
-    updateState((current) => setDailyLinePositions(current, line, current.dailyPositions[line] + direction));
-  };
-  let unassignedResearchers = state.workforce.research;
-
+  ] as const;
   return <div className="m0-facility-list">
+    <article className="m0-settlement-card">
+      <div className="m0-project-heading"><h3>既存聚居点</h3><span>{settlementStatus}</span></div>
+      <dl className="m0-workforce-summary">
+        <div><dt>地点人口</dt><dd>{settlement.population}</dd></div>
+        <div><dt>已登记受服务</dt><dd>{settlement.servedPopulation}</dd></div>
+        <div><dt>可进入常规劳动</dt><dd>{settlement.workforceEligible}</dd></div>
+        <div><dt>地方常规岗位</dt><dd>{settlement.workforceAssigned}</dd></div>
+        <div><dt>机动人力</dt><dd>{settlement.workforceEligible - settlement.workforceAssigned}</dd></div>
+      </dl>
+      {settlement.status === 'uncontacted'
+        ? <button type="button" onClick={() => updateState(contactExistingSettlement)}>接触既存聚居点</button>
+        : null}
+      {settlement.status === 'ready-to-integrate'
+        ? <button type="button" onClick={() => updateState(integrateExistingSettlement)}>接入人口</button>
+        : null}
+    </article>
+    <article className="m0-loop-evidence">
+      <div className="m0-project-heading"><h3>千人自循环证据</h3><span>{evidence.passed ? '通过' : '未通过'} · {evidence.consecutiveMonths} / 3 月</span></div>
+      <ul>{evidence.items.map((item) => <li className={item.status === 'pass' ? 'is-pass' : 'is-blocked'} key={item.id}>
+        <strong>{openingEvidenceLabels[item.id]}</strong><span>{item.status === 'pass' ? '通过' : item.gap}</span>
+      </li>)}</ul>
+    </article>
     {lineBuildings.map(({ line, name, location }) => {
-      const open = state.dailyPositions[line];
-      const maximum = MODE_STAFF[line].accelerated;
       const staffed = state.workforce[line];
       return <article className="m0-facility-row" key={line}>
         <div className="m0-facility-heading">
           <div><h3>{name}</h3><small>{location}</small></div>
-          <div className="m0-position-stepper">
-            <button type="button" aria-label={`减少${name}岗位`} disabled={open === 0} onClick={() => changeLinePositions(line, -1)}>−</button>
-            <strong>{staffed} / {open}</strong>
-            <button type="button" aria-label={`增加${name}岗位`} disabled={open === maximum} onClick={() => changeLinePositions(line, 1)}>+</button>
-          </div>
+          <strong>{staffed} 人在岗</strong>
         </div>
-        <WorkerSlots open={open} staffed={staffed} maximum={maximum} />
       </article>;
     })}
     {state.research.facilities.map((facility) => {
-      const staffed = facility.enabled ? Math.min(facility.openPositions, unassignedResearchers) : 0;
-      unassignedResearchers -= staffed;
-      return <article className={`m0-facility-row ${facility.enabled ? '' : 'is-disabled'}`} key={facility.id}>
+      return <article className="m0-facility-row" key={facility.id}>
         <div className="m0-facility-heading">
           <div><h3>{facility.name}</h3><small>总部避难所</small></div>
-          <div className="m0-position-stepper">
-            <button
-              type="button"
-              className={facility.enabled ? 'm0-power is-active' : 'm0-power'}
-              aria-label={facility.enabled ? `停用${facility.name}` : `启用${facility.name}`}
-              aria-pressed={facility.enabled}
-              onClick={() => updateState((current) => setResearchFacilityEnabled(current, facility.id, !facility.enabled))}
-            >⏻</button>
-            <button type="button" aria-label={`减少${facility.name}岗位`} disabled={facility.openPositions === 0} onClick={() => updateState((current) => setResearchFacilityOpenPositions(current, facility.id, facility.openPositions - 1))}>−</button>
-            <strong>{staffed} / {facility.openPositions}</strong>
-            <button type="button" aria-label={`增加${facility.name}岗位`} disabled={facility.openPositions === facility.capacity} onClick={() => updateState((current) => setResearchFacilityOpenPositions(current, facility.id, facility.openPositions + 1))}>+</button>
-          </div>
+          <strong>{facility.enabled ? `${state.workforce.research} 人在岗` : '待命'}</strong>
         </div>
-        <WorkerSlots open={facility.openPositions} staffed={staffed} maximum={facility.capacity} />
       </article>;
     })}
     <dl className="m0-workforce-summary">
@@ -316,6 +338,9 @@ function EngineeringSheet({ state, updateState }: {
   const farmCell = state.map.cells.find((cell) => cell.resource === 'farmland-potential');
   const mineralCell = state.map.cells.find((cell) => cell.resource === 'mineral-sign');
   const shoreCell = state.map.cells.find((cell) => cell.resource === 'shore-potential');
+  const openingProjectIds = Object.keys(OPENING_PROJECT_RULES) as OpeningProjectId[];
+  const settlementProjectsOpen = state.settlement.status === 'contacted' || state.settlement.status === 'services-approved';
+  const recoveryProjectIds = Object.keys(RECOVERY_RULES) as Array<keyof typeof RECOVERY_RULES>;
 
   return <div className="m0-project-list">
     <div className="m0-sheet-tabs" role="tablist" aria-label="工程分类">
@@ -338,7 +363,31 @@ function EngineeringSheet({ state, updateState }: {
         </div>
       </article>
     </section> : null}
-    {view === 'build' && !workshopAvailable ? <p className="m0-empty-state">没有新的工程可建。</p> : null}
+    {view === 'build' ? <section className="m0-build-choice">
+      <div className="m0-section-heading"><h3>聚居点接入计划</h3><span>{state.settlement.status === 'uncontacted' ? '等待接触' : '逐项批准'}</span></div>
+      {openingProjectIds.map((id) => {
+        const project = state.projects.find((candidate) => candidate.id === id);
+        return <article className="m0-build-option" key={id}>
+          <div className="m0-project-heading"><h3>{OPENING_PROJECT_RULES[id].label}</h3><span>{project ? formatProjectStatus(project) : '未批准'}</span></div>
+          {project ? <div className="m0-progress" aria-label={`${OPENING_PROJECT_RULES[id].label}进度 ${project.workDone} / ${project.workRequired}`}><span style={{ width: `${Math.min(100, project.workDone / project.workRequired * 100)}%` }} /></div> : null}
+          <button type="button" disabled={!settlementProjectsOpen || Boolean(project)} onClick={() => updateState((current) => approveOpeningProject(current, id))}>批准</button>
+        </article>;
+      })}
+    </section> : null}
+    {view === 'build' ? <section className="m0-build-choice">
+      <div className="m0-section-heading"><h3>资源回收</h3><span>低于保底线时可批准</span></div>
+      {recoveryProjectIds.map((id) => {
+        const rule = RECOVERY_RULES[id];
+        const project = state.projects.find((candidate) => candidate.id === id);
+        const current = availableAmount(state, rule.resource);
+        return <article className="m0-build-option" key={id}>
+          <div className="m0-project-heading"><h3>{rule.label}</h3><span>{project ? formatProjectStatus(project) : `${formatNumber(current)} / ${rule.floor} 保底线`}</span></div>
+          <p>完成流入 {rule.output} · 保底上限 {rule.cap}</p>
+          {project ? <div className="m0-progress" aria-label={`${rule.label}进度 ${project.workDone} / ${project.workRequired}`}><span style={{ width: `${Math.min(100, project.workDone / project.workRequired * 100)}%` }} /></div> : null}
+          <button type="button" disabled={Boolean(project) || current >= rule.floor} onClick={() => updateState((stateBeforeClick) => approveRecoveryProject(stateBeforeClick, id))}>批准</button>
+        </article>;
+      })}
+    </section> : null}
     {view === 'active' ? <>
       {projects.length === 0 ? <p className="m0-empty-state">没有正在建设的工程。</p> : null}
       {projects.map((project) => <article className="m0-project-card" key={project.id}>
@@ -357,6 +406,11 @@ function EngineeringSheet({ state, updateState }: {
             <dd>{formatNumber(project.investedResources[resource] ?? 0)}</dd>
           </div>)}
         </dl>
+        {!project.directRecovery ? <div className="m0-project-actions">
+          <button type="button" onClick={() => updateState((current) => moveProjectInQueue(current, project.id, -1))}>提前</button>
+          <button type="button" onClick={() => updateState((current) => moveProjectInQueue(current, project.id, 1))}>延后</button>
+          <button type="button" onClick={() => updateState((current) => setProjectPaused(current, project.id, project.status === 'active'))}>{project.status === 'active' ? '暂停' : '继续'}</button>
+        </div> : null}
       </article>)}
     </> : null}
     {view === 'places' ? <div className="m0-place-list">
@@ -372,13 +426,6 @@ function ResearchSheet({ state, updateState }: { state: M0State; updateState: (u
   const currentProject = state.research.currentProjectId
     ? state.projects.find((project) => project.id === state.research.currentProjectId)
     : null;
-  const enableAutomaticResearch = (): void => updateState((current) => {
-    let next = current;
-    for (const domain of ['manufacturing', 'surveying', 'engineering'] as const) {
-      next = setResearchDomainAutomatic(next, domain, true);
-    }
-    return setResearchMode(next, 'automatic');
-  });
   const effectText: Record<string, string> = {
     'restore-precision-manufacturing': '复杂零件可以稳定复制，旧精密工坊重新具备修复价值。',
     'adapt-survey-drone': '现有无人机可以安装多光谱设备，承担大范围勘测任务。',
@@ -395,7 +442,6 @@ function ResearchSheet({ state, updateState }: { state: M0State; updateState: (u
         <strong>{currentProject ? currentProject.name : '科研待命'}</strong>
         <span>{currentProject ? `${formatNumber(currentProject.workDone)} / ${formatNumber(currentProject.workRequired)} · ${currentProject.staffing.actual} 人` : blockedText ?? ''}</span>
       </div>
-      <button type="button" className={state.research.mode === 'automatic' ? 'is-active' : ''} aria-pressed={state.research.mode === 'automatic'} onClick={enableAutomaticResearch}>自动</button>
     </div>
     {currentProject ? <div className="m0-progress" aria-label={`科研进度 ${formatNumber(currentProject.workDone)} / ${formatNumber(currentProject.workRequired)}`}>
       <span style={{ width: `${Math.min(100, currentProject.workDone / currentProject.workRequired * 100)}%` }} />
@@ -423,8 +469,11 @@ function ResearchSheet({ state, updateState }: { state: M0State; updateState: (u
     <div className="m0-research-queue">
       <h3>科研队列</h3>
       {state.research.manualQueue.length
-        ? <ol>{state.research.manualQueue.map((id) => <li key={id}>{technologyName(id)}</li>)}</ol>
-        : <p className="m0-empty-state">队列为空。</p>}
+        ? <ol>{state.research.manualQueue.map((id) => <li key={id} onContextMenu={(event) => {
+          event.preventDefault();
+          updateState((current) => removeResearchTarget(current, id));
+        }} title="右键移出科研队列">{technologyName(id)}</li>)}</ol>
+        : <p className="m0-empty-state">等待命令。</p>}
     </div>
   </div>;
 }
@@ -432,34 +481,40 @@ function ResearchSheet({ state, updateState }: { state: M0State; updateState: (u
 function ExplorationSheet({ state, updateState }: { state: M0State; updateState: (updater: (current: M0State) => M0State) => void }): ReactElement {
   const records = state.map.surveys;
   const selectedCell = state.map.cells.find((cell) => cell.id === state.map.selectedCellId);
-  const assembly = state.projects.find((project) => project.id === 'assemble-survey-drone' && project.status !== 'complete');
+  const assembly = state.production.lines.find((line) => line.id === 'survey-drone');
   const statusLabels = { 'needs-charge': '待补能', charging: '过夜补能中', available: '可用', assigned: '执行任务' } as const;
   return <div className="m0-project-list">
     {state.drone ? <article className="m0-equipment-card">
       <div className="m0-project-heading"><h3>{state.drone.name}</h3><span>{statusLabels[state.drone.status]}</span></div>
       <p>{state.drone.assignment === 'ruin-a' ? '工业废墟 A 勘测' : state.drone.assignment === 'ruin-b' ? '工业废墟 B 勘测' : '总部待命'}</p>
       {state.drone.status === 'needs-charge' ? <button type="button" disabled={state.drone.rechargeApproved} onClick={() => updateState(completeDroneRecharge)}>{state.drone.rechargeApproved ? '补能已安排' : '安排补能'}</button> : null}
-    </article> : assembly ? <article className="m0-equipment-card"><div className="m0-project-heading"><h3>多光谱勘测无人机系统</h3><span>组装中</span></div><div className="m0-progress"><span style={{ width: `${Math.min(100, assembly.workDone / assembly.workRequired * 100)}%` }} /></div></article> : null}
+    </article> : assembly && assembly.progress > 0 ? <article className="m0-equipment-card"><div className="m0-project-heading"><h3>多光谱勘测无人机系统</h3><span>组装中</span></div><div className="m0-progress"><span style={{ width: `${Math.min(100, assembly.progress / assembly.workRequired * 100)}%` }} /></div></article> : null}
     <article className="m0-selected-place"><span>地图所选</span><strong>{selectedCell ? visibleCellTitle(selectedCell) : '未选择'}</strong></article>
     {records.map((record) => {
       const conclusion = surveyConclusion(record.targetId, record.stage);
-      const route = routeForTarget(state.map, record.targetId);
       const controls = surveyPlanControlState(record);
+      const surveyStatus = !record.approved ? '未开始'
+        : record.stage === 'site' ? '完成'
+          : record.pauseReason === 'player' ? '玩家暂停'
+            : record.pauseReason !== null ? '系统暂停'
+              : '勘测中';
+      const systemPause = record.pauseReason !== null && record.pauseReason !== 'player';
+      const pauseReason = record.pauseReason === 'staffing' ? '原因：可工作人口不足；恢复条件：岗位缺口消失'
+        : record.pauseReason === 'safety' ? '原因：系统运行保障线；恢复条件：保障量恢复'
+          : record.pauseReason === 'route-choice' ? '原因：通路条件未成立'
+            : record.pauseReason === 'day-limit' ? '原因：勘测已到停止条件'
+              : null;
       return <article className="m0-project-card" key={record.targetId}>
-        <div className="m0-project-heading"><h3>{record.targetId === 'ruin-a' ? '工业废墟 A' : '工业废墟 B'}</h3><span>{intelStageName(record.stage)}</span></div>
+        <div className="m0-project-heading"><h3>{record.targetId === 'ruin-a' ? '工业废墟 A' : '工业废墟 B'}</h3><span>{surveyStatus} · {intelStageName(record.stage)}</span></div>
+        {systemPause && pauseReason ? <p className="m0-system-reason">{pauseReason}</p> : null}
         {surveyVisibleFacts(record.targetId, record.stage).map((fact) => <p key={fact}>{fact}</p>)}
         {conclusion ? <p><strong>{conclusion.label}</strong>：{conclusion.reason}</p> : null}
         {controls.editable ? <>
-          <label className="m0-command-control"><span>勘测人数</span><select value={record.workers} onChange={(event) => updateState((current) => configureSurvey(current, record.targetId, { workers: Number(event.target.value) as 2 | 4 | 6 }))}><option value={2}>2 人</option><option value={4}>4 人</option><option value={6}>6 人</option></select></label>
-          <label className="m0-command-control"><span>最多投入白昼</span><input type="number" min={1} value={record.maximumDays ?? ''} placeholder="不限" onChange={(event) => updateState((current) => configureSurvey(current, record.targetId, { maximumDays: event.target.value === '' ? null : Number(event.target.value) }))} /></label>
-          <label className="m0-check-row"><span>允许调用无人机</span><input type="checkbox" checked={record.useDrone} onChange={(event) => updateState((current) => configureSurvey(current, record.targetId, { useDrone: event.target.checked }))} /></label>
           {controls.needsApproval
-            ? <button type="button" onClick={() => updateState((current) => approveSurvey(current, record.targetId, record.workers, record.maximumDays, record.useDrone))}>开始勘测</button>
+            ? <button type="button" onClick={() => updateState((current) => approveSurvey(current, record.targetId))}>开始勘测</button>
             : <>
-              <p>投入进度：{record.workDone}；已投入 {record.daysWorked}{record.maximumDays === null ? '' : ` / ${record.maximumDays}`} 个白昼。</p>
-              {record.pauseReason === 'day-limit' ? <p className="m0-fact-note">已达到投入上限；增加或清空上限后会从已有进度继续。</p> : null}
-              {record.stage === 'area' && record.selectedRouteId === null ? <button type="button" onClick={() => updateState((current) => selectSurveyRoute(current, record.targetId, route.id))}>确认使用已发现路线</button> : null}
-              <button type="button" disabled={!controls.canTogglePause} onClick={() => updateState((current) => setSurveyPaused(current, record.targetId, !record.paused))}>{record.paused ? '继续勘测' : '暂停勘测'}</button>
+              <p>进度：{record.workDone}</p>
+              <button type="button" disabled={!controls.canTogglePause || systemPause} onClick={() => updateState((current) => setSurveyPaused(current, record.targetId, !record.paused))}>{record.paused ? '继续勘测' : '暂停勘测'}</button>
             </>}
         </> : null}
       </article>;
@@ -471,61 +526,64 @@ function ProductionSheet({ state, updateState }: {
   state: M0State;
   updateState: (updater: (current: M0State) => M0State) => void;
 }): ReactElement {
-  const [prototypeFactories, setPrototypeFactories] = useState(0);
-  const [assemblyFactories, setAssemblyFactories] = useState(0);
   const workshopComplete = state.projects.some((project) => project.id === 'repair-precision-workshop' && project.status === 'complete');
-  const prototype = state.projects.find((project) => project.id === 'prototype-precision-parts');
-  const assembly = state.projects.find((project) => project.id === 'assemble-survey-drone');
-  const prototypeCanStart = workshopComplete && !prototype;
-  const assemblyCanStart = workshopComplete
-    && state.research.completed.includes('adapt-survey-drone')
-    && availableAmount(state, 'precisionParts') >= 2
-    && !assembly
-    && !state.drone;
-
-  const lineStatus = (project: Project | undefined, completeLabel: string): string => {
-    if (!project) return '待生产';
-    if (project.status === 'complete') return completeLabel;
-    return `${formatNumber(project.workDone)} / ${formatNumber(project.workRequired)}`;
+  const remanufacturing = state.production.lines.find((line) => line.id === 'common-parts-remanufacturing')!;
+  const precision = state.production.lines.find((line) => line.id === 'precision-parts')!;
+  const assembly = state.production.lines.find((line) => line.id === 'survey-drone')!;
+  const allocated = state.production.lines.reduce((sum, line) => sum + line.allocatedFactories, 0);
+  const statusText = (line: typeof precision): string => {
+    if (line.blockedReason === 'facility-unavailable') return '等待工坊';
+    if (line.blockedReason === 'technology-locked') return '等待科技';
+    if (line.blockedReason === 'input-shortage') return '输入不足';
+    if (line.blockedReason === 'asset-limit') return '目标已达';
+    if (line.allocatedFactories === 0) return '等待命令';
+    return `${formatNumber(line.progress)} / ${formatNumber(line.workRequired)}`;
   };
-  const activeFactoryCount = (project: Project | undefined): number => (
-    project && project.status !== 'complete' ? 1 : 0
-  );
+  const canAdd = (line: typeof precision): boolean => (line.id === 'common-parts-remanufacturing'
+    ? state.settlement.basicProductionUnits > 0
+    : workshopComplete)
+    && allocated < state.production.totalFactories
+    && line.allocatedFactories < state.production.totalFactories;
 
   return <div className="m0-production-list">
+    <article className={`m0-production-line ${state.settlement.basicProductionUnits > 0 ? '' : 'is-locked'}`}>
+      <div className="m0-production-heading"><div><h3>普通零件再制造</h3><small>既存聚居点基础生产场址 → 总部仓库</small></div><strong>3 / 批 / 单元</strong></div>
+      <div className="m0-factory-allocation">
+        <span>投入生产单元</span>
+        <div className="m0-factory-stepper">
+          <button type="button" aria-label="减少普通零件再制造生产单元" disabled={remanufacturing.allocatedFactories === 0} onClick={() => updateState((current) => setProductionAllocation(current, remanufacturing.id, remanufacturing.allocatedFactories - 1))}>−</button>
+          <b>{remanufacturing.allocatedFactories} / {state.production.totalFactories} 个</b>
+          <button type="button" aria-label="增加普通零件再制造生产单元" disabled={!canAdd(remanufacturing)} onClick={() => updateState((current) => setProductionAllocation(current, remanufacturing.id, remanufacturing.allocatedFactories + 1))}>+</button>
+        </div>
+        <em>{statusText(remanufacturing)}</em>
+      </div>
+      <dl className="m0-compact-costs"><div><dt>旧可修件</dt><dd>3 / 批 / 单元</dd></div><div><dt>普通零件</dt><dd>+3 / 批 / 单元</dd></div></dl>
+    </article>
     <article className={`m0-production-line ${workshopComplete ? '' : 'is-locked'}`}>
       <div className="m0-production-heading"><div><h3>精密部件</h3><small>总部精密工坊 → 总部仓库</small></div><strong>4 / 批</strong></div>
       <div className="m0-factory-allocation">
         <span>投入工厂</span>
         <div className="m0-factory-stepper">
-          <button type="button" aria-label="减少精密部件生产工厂" disabled={Boolean(prototype) || prototypeFactories === 0} onClick={() => setPrototypeFactories(0)}>−</button>
-          <b>{activeFactoryCount(prototype) || prototypeFactories} / 1 座</b>
-          <button type="button" aria-label="增加精密部件生产工厂" disabled={Boolean(prototype) || !workshopComplete || prototypeFactories === 1} onClick={() => setPrototypeFactories(1)}>+</button>
+          <button type="button" aria-label="减少精密部件生产工厂" disabled={precision.allocatedFactories === 0} onClick={() => updateState((current) => setProductionAllocation(current, precision.id, precision.allocatedFactories - 1))}>−</button>
+          <b>{precision.allocatedFactories} / {state.production.totalFactories} 座</b>
+          <button type="button" aria-label="增加精密部件生产工厂" disabled={!canAdd(precision)} onClick={() => updateState((current) => setProductionAllocation(current, precision.id, precision.allocatedFactories + 1))}>+</button>
         </div>
-        <em>{lineStatus(prototype, '本批完成')}</em>
+        <em>{statusText(precision)}</em>
       </div>
       <dl className="m0-compact-costs"><div><dt>普通零件</dt><dd>2</dd></div><div><dt>工程构件</dt><dd>4</dd></div><div><dt>合金料</dt><dd>4</dd></div></dl>
-      <button type="button" disabled={!prototypeCanStart || prototypeFactories === 0} onClick={() => {
-        setPrototypeFactories(0);
-        updateState((current) => approveCapabilityProject(current, 'prototype-precision-parts'));
-      }}>确认生产</button>
     </article>
     <article className={`m0-production-line ${state.research.completed.includes('adapt-survey-drone') ? '' : 'is-locked'}`}>
       <div className="m0-production-heading"><div><h3>多光谱勘测无人机系统</h3><small>总部精密工坊 → 总部</small></div><strong>1 / 批</strong></div>
       <div className="m0-factory-allocation">
         <span>投入工厂</span>
         <div className="m0-factory-stepper">
-          <button type="button" aria-label="减少无人机组装工厂" disabled={Boolean(assembly) || assemblyFactories === 0} onClick={() => setAssemblyFactories(0)}>−</button>
-          <b>{activeFactoryCount(assembly) || assemblyFactories} / 1 座</b>
-          <button type="button" aria-label="增加无人机组装工厂" disabled={Boolean(assembly) || !assemblyCanStart || assemblyFactories === 1} onClick={() => setAssemblyFactories(1)}>+</button>
+          <button type="button" aria-label="减少无人机组装工厂" disabled={assembly.allocatedFactories === 0} onClick={() => updateState((current) => setProductionAllocation(current, assembly.id, assembly.allocatedFactories - 1))}>−</button>
+          <b>{assembly.allocatedFactories} / {state.production.totalFactories} 座</b>
+          <button type="button" aria-label="增加无人机组装工厂" disabled={!canAdd(assembly)} onClick={() => updateState((current) => setProductionAllocation(current, assembly.id, assembly.allocatedFactories + 1))}>+</button>
         </div>
-        <em>{state.drone ? '已交付' : lineStatus(assembly, '已交付')}</em>
+        <em>{statusText(assembly)}</em>
       </div>
       <dl className="m0-compact-costs"><div><dt>普通零件</dt><dd>3</dd></div><div><dt>工程构件</dt><dd>10</dd></div><div><dt>合金料</dt><dd>8</dd></div><div><dt>精密部件</dt><dd>2</dd></div></dl>
-      <button type="button" disabled={!assemblyCanStart || assemblyFactories === 0} onClick={() => {
-        setAssemblyFactories(0);
-        updateState((current) => approveCapabilityProject(current, 'assemble-survey-drone'));
-      }}>确认组装</button>
     </article>
   </div>;
 }
@@ -776,130 +834,241 @@ function MapStage({
   state,
   events,
   eventWindow,
+  activeSheet,
   onPositionCommit,
   onSelectCell,
-  onRotationChange,
 }: {
   state: M0State;
   events: M0Event[];
   eventWindow: EventWindowPosition;
+  activeSheet: SheetId | null;
   onPositionCommit: (position: EventWindowPosition) => void;
   onSelectCell: (cellId: string) => void;
-  onRotationChange: (rotation: MapRotation) => void;
 }): ReactElement {
   const mapRef = useRef<HTMLDivElement>(null);
-  const dragRef = useRef<{ pointerId: number; x: number; y: number; rotation: MapRotation; moved: boolean } | null>(null);
+  const [camera, setCamera] = useState<RegionCamera>({ x: 0, y: 0, zoom: 1 });
+  const dragRef = useRef<{ pointerId: number; x: number; y: number; camera: RegionCamera; moved: boolean } | null>(null);
   const suppressCellClickRef = useRef(false);
-  const pendingRotationRef = useRef<MapRotation | null>(null);
-  const rotationTimerRef = useRef<number | null>(null);
-  const projectedCells = projectSphericalLocalWindow(state.map.cells, state.ui.mapRotation);
+  const pendingCameraRef = useRef<RegionCamera | null>(null);
+  const cameraTimerRef = useRef<number | null>(null);
+  const projectedCells = projectRegionMap(state.map.cells);
   const projected = new Map(projectedCells.map((cell) => [cell.id, cell]));
+  const taskGridVisible = activeSheet === 'exploration' || activeSheet === 'engineering';
+  const workshopComplete = state.projects.some((project) => project.id === 'repair-precision-workshop' && project.status === 'complete');
+  const basicIndustryComplete = state.projects.some((project) => project.id === 'opening-basic-industry' && project.status === 'complete');
+  const settlementServed = state.settlement.status === 'served';
+  const mapTransform = `translate(${REGION_MAP.worldWidth / 2 + camera.x} ${REGION_MAP.worldHeight / 2 + camera.y}) scale(${camera.zoom}) translate(${-REGION_MAP.worldWidth / 2} ${-REGION_MAP.worldHeight / 2})`;
+
+  const pointFor = (cellId: string): { x: number; y: number } => {
+    const cell = state.map.cells.find((candidate) => candidate.id === cellId);
+    return cell ? regionPoint(cell.q, cell.r) : { x: REGION_MAP.worldWidth / 2, y: REGION_MAP.worldHeight / 2 };
+  };
+  const axialDistance = (leftId: string, rightId: string): number => {
+    const left = state.map.cells.find((cell) => cell.id === leftId);
+    const right = state.map.cells.find((cell) => cell.id === rightId);
+    if (!left || !right) return Number.POSITIVE_INFINITY;
+    return Math.max(Math.abs(left.q - right.q), Math.abs(left.r - right.r), Math.abs((left.q + left.r) - (right.q + right.r)));
+  };
+  const gridRelevant = (cellId: string): boolean => {
+    if (activeSheet === 'exploration') {
+      return axialDistance(cellId, LOCATION_CELLS.ruinA) <= 3
+        || axialDistance(cellId, LOCATION_CELLS.ruinB) <= 3
+        || state.map.routes.some((route) => route.cellIds.includes(cellId));
+    }
+    if (activeSheet === 'engineering') {
+      const anchor = state.map.selectedCellId ?? LOCATION_CELLS.headquarters;
+      return axialDistance(cellId, anchor) <= 4;
+    }
+    return false;
+  };
 
   useEffect(() => () => {
-    if (rotationTimerRef.current !== null) window.clearTimeout(rotationTimerRef.current);
+    if (cameraTimerRef.current !== null) window.clearTimeout(cameraTimerRef.current);
   }, []);
 
-  const flushRotation = (): void => {
-    if (rotationTimerRef.current !== null) window.clearTimeout(rotationTimerRef.current);
-    rotationTimerRef.current = null;
-    const rotation = pendingRotationRef.current;
-    pendingRotationRef.current = null;
-    if (rotation) onRotationChange(rotation);
+  const flushCamera = (): void => {
+    if (cameraTimerRef.current !== null) window.clearTimeout(cameraTimerRef.current);
+    cameraTimerRef.current = null;
+    const next = pendingCameraRef.current;
+    pendingCameraRef.current = null;
+    if (next) setCamera(normalizeRegionCamera(next));
   };
 
-  const scheduleRotation = (rotation: MapRotation): void => {
-    pendingRotationRef.current = rotation;
-    if (rotationTimerRef.current !== null) return;
-    rotationTimerRef.current = window.setTimeout(flushRotation, 50);
+  const scheduleCamera = (next: RegionCamera): void => {
+    pendingCameraRef.current = normalizeRegionCamera(next);
+    if (cameraTimerRef.current !== null) return;
+    cameraTimerRef.current = window.setTimeout(flushCamera, 50);
   };
 
-  const onSpherePointerDown = (event: ReactPointerEvent<HTMLDivElement>): void => {
+  const onMapPointerDown = (event: ReactPointerEvent<SVGSVGElement>): void => {
     if (event.button !== 0) return;
-    event.currentTarget.setPointerCapture(event.pointerId);
     dragRef.current = {
       pointerId: event.pointerId,
       x: event.clientX,
       y: event.clientY,
-      rotation: { ...state.ui.mapRotation },
+      camera: { ...camera },
       moved: false,
     };
   };
 
-  const onSpherePointerMove = (event: ReactPointerEvent<HTMLDivElement>): void => {
+  const onMapPointerMove = (event: ReactPointerEvent<SVGSVGElement>): void => {
     const drag = dragRef.current;
     if (!drag || drag.pointerId !== event.pointerId) return;
-    if (Math.hypot(event.clientX - drag.x, event.clientY - drag.y) > 3) drag.moved = true;
-    scheduleRotation({
-      yaw: drag.rotation.yaw + (event.clientX - drag.x) * 0.005,
-      pitch: drag.rotation.pitch - (event.clientY - drag.y) * 0.005,
+    if (!drag.moved && Math.hypot(event.clientX - drag.x, event.clientY - drag.y) > 3) {
+      drag.moved = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
+    const bounds = event.currentTarget.getBoundingClientRect();
+    scheduleCamera({
+      ...drag.camera,
+      x: drag.camera.x + (event.clientX - drag.x) * REGION_MAP.worldWidth / bounds.width,
+      y: drag.camera.y + (event.clientY - drag.y) * REGION_MAP.worldHeight / bounds.height,
     });
   };
 
-  const onSpherePointerEnd = (event: ReactPointerEvent<HTMLDivElement>): void => {
+  const onMapPointerEnd = (event: ReactPointerEvent<SVGSVGElement>): void => {
     const drag = dragRef.current;
     if (drag?.pointerId !== event.pointerId) return;
     suppressCellClickRef.current = drag.moved;
     dragRef.current = null;
-    flushRotation();
+    flushCamera();
     window.setTimeout(() => { suppressCellClickRef.current = false; }, 0);
   };
 
-  const onSphereKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>): void => {
-    const step = 0.1;
-    const current = state.ui.mapRotation;
-    const rotation = event.key === 'ArrowLeft' ? { ...current, yaw: current.yaw - step }
-      : event.key === 'ArrowRight' ? { ...current, yaw: current.yaw + step }
-        : event.key === 'ArrowUp' ? { ...current, pitch: current.pitch + step }
-          : event.key === 'ArrowDown' ? { ...current, pitch: current.pitch - step }
-            : event.key === 'Home' ? { yaw: 0, pitch: 0 } : null;
-    if (!rotation) return;
+  const onMapWheel = (event: ReactWheelEvent<SVGSVGElement>): void => {
     event.preventDefault();
-    onRotationChange(rotation);
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const localX = (event.clientX - bounds.left) * REGION_MAP.worldWidth / bounds.width;
+    const localY = (event.clientY - bounds.top) * REGION_MAP.worldHeight / bounds.height;
+    const nextZoom = Math.max(1, Math.min(2.6, camera.zoom * (event.deltaY < 0 ? 1.12 : 0.89)));
+    const centerX = REGION_MAP.worldWidth / 2;
+    const centerY = REGION_MAP.worldHeight / 2;
+    const worldX = (localX - centerX - camera.x) / camera.zoom + centerX;
+    const worldY = (localY - centerY - camera.y) / camera.zoom + centerY;
+    scheduleCamera({
+      zoom: nextZoom,
+      x: localX - centerX - (worldX - centerX) * nextZoom,
+      y: localY - centerY - (worldY - centerY) * nextZoom,
+    });
+  };
+
+  const onMapKeyDown = (event: ReactKeyboardEvent<SVGSVGElement>): void => {
+    const step = 34;
+    const next = event.key === 'ArrowLeft' ? { ...camera, x: camera.x + step }
+      : event.key === 'ArrowRight' ? { ...camera, x: camera.x - step }
+        : event.key === 'ArrowUp' ? { ...camera, y: camera.y + step }
+          : event.key === 'ArrowDown' ? { ...camera, y: camera.y - step }
+            : event.key === '+' || event.key === '=' ? { ...camera, zoom: camera.zoom * 1.12 }
+              : event.key === '-' ? { ...camera, zoom: camera.zoom * 0.89 }
+                : event.key === 'Home' ? { x: 0, y: 0, zoom: 1 } : null;
+    if (!next) return;
+    event.preventDefault();
+    scheduleCamera(next);
   };
 
   return <section className="m0-map-stage" ref={mapRef} aria-label="地图">
-    <div className="m0-planet-frame">
-      <div
-        className="m0-local-map m0-planet-shell"
-        aria-label="可旋转球体；当前只制作总部周围三圈 37 格"
-        aria-describedby="m0-planet-help"
+    <div className="m0-region-frame">
+      <svg
+        className="m0-region-map"
+        viewBox={`0 0 ${REGION_MAP.worldWidth} ${REGION_MAP.worldHeight}`}
+        aria-label="地图"
         tabIndex={0}
-        onPointerDown={onSpherePointerDown}
-        onPointerMove={onSpherePointerMove}
-        onPointerUp={onSpherePointerEnd}
-        onPointerCancel={onSpherePointerEnd}
-        onKeyDown={onSphereKeyDown}
+        onPointerDown={onMapPointerDown}
+        onPointerMove={onMapPointerMove}
+        onPointerUp={onMapPointerEnd}
+        onPointerCancel={onMapPointerEnd}
+        onWheel={onMapWheel}
+        onKeyDown={onMapKeyDown}
       >
-        <svg className="m0-map-grid" viewBox="0 0 100 100" role="group" aria-label="总部周围地表网格">
-        {state.map.cells
-          .slice()
-          .sort((left, right) => (projected.get(left.id)?.depth ?? 0) - (projected.get(right.id)?.depth ?? 0))
-          .map((cell) => {
-          const position = projected.get(cell.id);
-          if (!position?.visible) return null;
-          const points = position.corners.map((corner) => `${corner.xPercent},${corner.yPercent}`).join(' ');
-          return <polygon
-            key={cell.id}
-            className={`m0-map-cell is-${visibleCellClass(cell)} ${state.map.selectedCellId === cell.id ? 'is-selected' : ''}`}
-            points={points}
-            role="button"
-            tabIndex={0}
-            onClick={() => {
-              if (suppressCellClickRef.current) return;
-              onSelectCell(cell.id);
-            }}
-            onKeyDown={(event) => {
-              if (event.key !== 'Enter' && event.key !== ' ') return;
-              event.preventDefault();
-              onSelectCell(cell.id);
-            }}
-            aria-label={visibleCellTitle(cell)}
-          ><title>{visibleCellTitle(cell)}</title></polygon>;
-        })}
-        </svg>
+        <defs>
+          <linearGradient id="m0-ground" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#64735d" /><stop offset="0.52" stopColor="#596a55" /><stop offset="1" stopColor="#4e5d4f" /></linearGradient>
+          <linearGradient id="m0-highland" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#68715f" /><stop offset="1" stopColor="#3f4a43" /></linearGradient>
+          <pattern id="m0-fields" width="22" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(14)"><rect width="22" height="22" fill="#7d8253" /><path d="M0 5H22M0 15H22" stroke="#a09963" strokeWidth="3" opacity="0.45" /></pattern>
+          <filter id="m0-soft"><feGaussianBlur stdDeviation="8" /></filter>
+        </defs>
+        <g className="m0-region-world" transform={mapTransform}>
+          <rect width={REGION_MAP.worldWidth} height={REGION_MAP.worldHeight} fill="url(#m0-ground)" />
+          <path className="m0-terrain-highland" d="M0 0H1200V120C1060 154 968 116 828 174C710 224 652 185 552 142C408 80 304 173 190 205C105 229 46 195 0 171Z" fill="url(#m0-highland)" />
+          <path className="m0-terrain-ridge" d="M0 83C170 125 228 76 370 101S613 219 766 151S996 78 1200 126" />
+          <path className="m0-terrain-forest" d="M55 212C181 162 298 199 355 284C287 331 178 343 74 304Z" />
+          <path className="m0-terrain-forest is-east" d="M911 178C1021 132 1137 168 1200 238V366C1100 341 984 312 911 178Z" />
+          <path className="m0-field-area" d="M290 432C385 388 475 420 505 507C442 558 338 568 260 511Z" fill="url(#m0-fields)" />
+          <path className="m0-river-bank" d="M42 586C202 524 292 566 414 505S632 393 742 423S929 532 1169 446" />
+          <path className="m0-river" d="M42 586C202 524 292 566 414 505S632 393 742 423S929 532 1169 446" />
+          <path className="m0-road is-external" d="M89 463C252 447 367 416 526 379S851 320 1178 286" />
+          <path className="m0-road" d="M478 380C535 413 579 436 643 438S768 398 866 320" />
+          <path className="m0-water-line" d="M507 363C474 394 445 433 418 497" />
+          <path className="m0-control-area" d="M362 287C483 225 667 246 749 354C809 433 752 528 633 557C486 592 341 509 324 410C315 357 326 313 362 287Z" />
+          <g className="m0-unknown-regions" aria-hidden="true">
+            <path d="M0 0H1200V138C1051 165 994 136 864 181C724 230 642 193 548 153C394 87 270 183 155 203C88 215 36 190 0 172Z" />
+            <path d="M0 0V760H247C219 647 222 548 264 454C320 330 264 234 155 203C88 183 38 151 0 116Z" />
+            <path d="M1200 0V760H957C1018 651 1005 560 944 482C876 393 882 281 963 214C1038 153 1124 168 1200 137Z" />
+            <path d="M0 760H1200V625C1040 599 929 622 819 651C661 692 510 641 357 635C211 629 111 661 0 697Z" />
+          </g>
+          {taskGridVisible ? <g className="m0-task-grid" data-task-grid={activeSheet ?? undefined}>
+            {state.map.cells.filter((cell) => gridRelevant(cell.id)).map((cell) => {
+              const position = projected.get(cell.id);
+              if (!position) return null;
+              return <polygon
+                key={cell.id}
+                className={`m0-task-cell is-${visibleCellClass(cell)} ${state.map.selectedCellId === cell.id ? 'is-selected' : ''}`}
+                points={position.points}
+                role="button"
+                tabIndex={0}
+                onClick={() => {
+                  if (suppressCellClickRef.current) return;
+                  onSelectCell(cell.id);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key !== 'Enter' && event.key !== ' ') return;
+                  event.preventDefault();
+                  onSelectCell(cell.id);
+                }}
+                aria-label={visibleCellTitle(cell)}
+              ><title>{visibleCellTitle(cell)}</title></polygon>;
+            })}
+          </g> : null}
+          <g className="m0-settlement-area" transform={`translate(${pointFor(LOCATION_CELLS.openingSettlement).x} ${pointFor(LOCATION_CELLS.openingSettlement).y})`}>
+            <ellipse rx="78" ry="52" />
+            {[-44, -20, 4, 28, 48].map((x, index) => <path key={x} d={`M${x - 9} ${index % 2 === 0 ? -12 : 12}h18v13h-18z`} />)}
+          </g>
+          <g className={`m0-site is-settlement ${state.map.selectedCellId === LOCATION_CELLS.openingSettlement ? 'is-selected' : ''}`} data-site-id="opening-settlement-01" transform={`translate(${pointFor(LOCATION_CELLS.openingSettlement).x} ${pointFor(LOCATION_CELLS.openingSettlement).y})`} onPointerUp={() => onSelectCell(LOCATION_CELLS.openingSettlement)}>
+            <circle r="7" /><text x="0" y="-62">既存聚居点</text>
+          </g>
+          <g className={`m0-site is-headquarters ${state.map.selectedCellId === LOCATION_CELLS.headquarters ? 'is-selected' : ''}`} data-site-id="headquarters" transform={`translate(${pointFor(LOCATION_CELLS.headquarters).x} ${pointFor(LOCATION_CELLS.headquarters).y})`} onPointerUp={() => onSelectCell(LOCATION_CELLS.headquarters)}>
+            <path d="M-21 12V-4L-12-16H12L21-4V12Z" /><path className="m0-site-detail" d="M-8 12V1H8V12M-14-6H14" /><text x="18" y="-30">总部</text>
+          </g>
+          <g className={`m0-site is-water ${state.map.selectedCellId === LOCATION_CELLS.waterworks ? 'is-selected' : ''}`} data-site-id="waterworks" transform={`translate(${pointFor(LOCATION_CELLS.waterworks).x} ${pointFor(LOCATION_CELLS.waterworks).y})`} onPointerUp={() => onSelectCell(LOCATION_CELLS.waterworks)}>
+            <circle r="12" /><path d="M0-8C8 1 9 5 0 10C-9 5-8 1 0-8Z" /><text x="-46" y="-26">水源与旧供水设施</text>
+          </g>
+          <g className={`m0-site is-food ${state.map.selectedCellId === LOCATION_CELLS.foodSite ? 'is-selected' : ''}`} data-site-id="food-site" transform={`translate(${pointFor(LOCATION_CELLS.foodSite).x} ${pointFor(LOCATION_CELLS.foodSite).y})`} onPointerUp={() => onSelectCell(LOCATION_CELLS.foodSite)}>
+            <path d="M-14 9C-9-10 2-14 14-8C10 7 1 13-14 9Z" /><path className="m0-site-detail" d="M-8 7L9-7" /><text x="-22" y="31">附近食物点</text>
+          </g>
+          <g className="m0-site is-storage" data-site-id="headquarters-storage" transform={`translate(${pointFor(LOCATION_CELLS.headquarters).x + 42} ${pointFor(LOCATION_CELLS.headquarters).y + 32})`}>
+            <path d="M-15 11V-7L0-14L15-7V11Z" /><text x="30" y="29">总部仓库</text>
+          </g>
+          <g className={`m0-site is-workshop ${workshopComplete ? 'is-active' : 'is-inactive'}`} data-site-id="precision-workshop" transform={`translate(${pointFor(LOCATION_CELLS.headquarters).x - 45} ${pointFor(LOCATION_CELLS.headquarters).y + 34})`}>
+            <path d="M-17 11V-9L-5-2L4-9L17-2V11Z" /><text x="-28" y="31">总部精密工坊</text>
+          </g>
+          <g className={`m0-site is-industry ${basicIndustryComplete ? 'is-active' : 'is-inactive'}`} data-site-id="opening-basic-industry" transform={`translate(${pointFor(LOCATION_CELLS.openingSettlement).x + 67} ${pointFor(LOCATION_CELLS.openingSettlement).y + 37})`}>
+            <path d="M-15 10V-7L-5-1L4-7L15-1V10Z" />
+          </g>
+          {[['ruin-a', LOCATION_CELLS.ruinA, '工业废墟 A'], ['ruin-b', LOCATION_CELLS.ruinB, '工业废墟 B']].map(([id, cellId, label]) => {
+            const point = pointFor(cellId);
+            const cell = state.map.cells.find((candidate) => candidate.id === cellId);
+            return <g key={id} className={`m0-site is-ruin ${cell?.intel === 'unknown' ? 'is-unknown' : ''} ${state.map.selectedCellId === cellId ? 'is-selected' : ''}`} data-site-id={id} transform={`translate(${point.x} ${point.y})`} onPointerUp={() => onSelectCell(cellId)}>
+              <path d="M-20 12V-8L-10-14L-3-6L7-17L20-7V12Z" /><path className="m0-site-detail" d="M-14-2L14 7M-4-9L10 12" /><text x="0" y="-24">{label}</text>
+            </g>;
+          })}
+          <path className="m0-external-gate" d="M1137 271L1175 286L1137 301" />
+          <text className="m0-road-label" x="1085" y="270">旧路</text>
+        </g>
+      </svg>
+      <div className="m0-map-controls">
+        <button type="button" aria-label="缩小" onClick={() => scheduleCamera({ ...camera, zoom: camera.zoom * 0.89 })}>−</button>
+        <button type="button" aria-label="放大" onClick={() => scheduleCamera({ ...camera, zoom: camera.zoom * 1.12 })}>+</button>
+        <button type="button" className="m0-map-reset" onClick={() => scheduleCamera({ x: 0, y: 0, zoom: 1 })}>恢复总部视角</button>
       </div>
-      <p id="m0-planet-help" className="m0-planet-help">拖动球面或使用方向键有限旋转；Home 恢复总部视角。球壳外未制作地点内容。</p>
-      <button type="button" className="m0-map-reset" onClick={() => onRotationChange({ yaw: 0, pitch: 0 })}>恢复总部视角</button>
     </div>
     <EventWindow
       containerRef={mapRef}
@@ -915,7 +1084,7 @@ export function M0App(): ReactElement {
   const [activeSheet, setActiveSheet] = useState<SheetId | null>(null);
   const [populationDelta, setPopulationDelta] = useState<number | null>(null);
   const [archiveStatus, setArchiveStatus] = useState<string | null>(null);
-  const previousPopulationRef = useRef(livingPopulation(state));
+  const previousPopulationRef = useRef(displayedPopulation(state));
 
   useEffect(() => {
     if (!state.clock.running) return undefined;
@@ -925,7 +1094,7 @@ export function M0App(): ReactElement {
     return () => window.clearInterval(timer);
   }, [state.clock.running]);
 
-  const living = livingPopulation(state);
+  const living = displayedPopulation(state);
   useEffect(() => {
     const difference = living - previousPopulationRef.current;
     previousPopulationRef.current = living;
@@ -944,7 +1113,7 @@ export function M0App(): ReactElement {
   };
 
   const replaceStateWithoutPopulationPulse = (next: M0State): void => {
-    previousPopulationRef.current = livingPopulation(next);
+    previousPopulationRef.current = displayedPopulation(next);
     setPopulationDelta(null);
     setArchiveStatus(null);
     setState(next);
@@ -990,9 +1159,9 @@ export function M0App(): ReactElement {
         state={state}
         events={state.events}
         eventWindow={state.ui.eventWindow}
+        activeSheet={activeSheet}
         onPositionCommit={commitEventPosition}
         onSelectCell={(cellId) => updateState((current) => selectMapCell(current, cellId))}
-        onRotationChange={(rotation) => updateState((current) => setMapRotation(current, rotation))}
       />
       {activeSheet ? <SystemSheet
         sheet={activeSheet}

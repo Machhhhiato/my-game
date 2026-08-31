@@ -1,0 +1,130 @@
+{
+  "modelId": "M1-LEAN-SYSTEM-PRODUCT-ARCHITECTURE-001",
+  "version": 2,
+  "status": "active_review",
+  "populationBaseline": 100000,
+  "staffedPositionBaseline": 52000,
+  "standardIndustrialLaborEquivalents": 45,
+  "standardProductionUnitCount": 200,
+  "productionUnitRange": [180, 240],
+  "physicalProductionSiteRange": [70, 110],
+  "productionSiteGrowthModel": "M1-PRODUCTION-SITE-GROWTH-001",
+  "coreSystemCount": 10,
+  "coreSystems": [
+    {"id": "CORE-POP", "name": "人口与聚居点"},
+    {"id": "CORE-AGR", "name": "农业与食品"},
+    {"id": "CORE-NET", "name": "资源与公共网络"},
+    {"id": "CORE-IND", "name": "工业与建设"},
+    {"id": "CORE-LOG", "name": "运输与贸易"},
+    {"id": "CORE-KNW", "name": "科研与教育"},
+    {"id": "CORE-HLT", "name": "医疗与照护"},
+    {"id": "CORE-GOV", "name": "政府与法律"},
+    {"id": "CORE-MIL", "name": "军事与国防"},
+    {"id": "CORE-DIP", "name": "外交与领土统合"}
+  ],
+  "crossSystemLayers": [
+    {"id": "LAYER-EVENT", "name": "事件、灾害、事故与战争恢复", "isStandaloneSystem": false}
+  ],
+  "governmentCoreFunctions": [
+    {"id": "GOV-TAX", "name": "税收与预算"},
+    {"id": "GOV-ADMIN", "name": "行政"},
+    {"id": "GOV-POLICE", "name": "警察"},
+    {"id": "GOV-LAW", "name": "法律与最低司法"}
+  ],
+  "newTechnologyCandidateDisposition": {
+    "originalCandidates": 255,
+    "retainAsTechnology": 124,
+    "laterRouteTechnologyCount": 19,
+    "completeNewTechnologyCount": 143,
+    "reclassifyAsOperationOrRecord": 77,
+    "duplicateReviewAgainstR4": 35,
+    "moveToLaterRoute": 19,
+    "r4Baseline": 635,
+    "leanPreDedupR5CandidateTotal": 778,
+    "bySource": [
+      {"source": "内政警务", "original": 13, "retain": 8, "operation": 2, "duplicate": 3, "later": 0},
+      {"source": "农业食品", "original": 19, "retain": 11, "operation": 4, "duplicate": 2, "later": 2},
+      {"source": "能源电网", "original": 18, "retain": 11, "operation": 3, "duplicate": 2, "later": 2},
+      {"source": "水务卫生环境", "original": 15, "retain": 6, "operation": 5, "duplicate": 3, "later": 1},
+      {"source": "聚居点住房工程", "original": 16, "retain": 7, "operation": 5, "duplicate": 3, "later": 1},
+      {"source": "资源采掘林业回收", "original": 16, "retain": 10, "operation": 2, "duplicate": 2, "later": 2},
+      {"source": "材料冶金化工", "original": 18, "retain": 13, "operation": 2, "duplicate": 1, "later": 2},
+      {"source": "机床质量维修", "original": 18, "retain": 11, "operation": 4, "duplicate": 2, "later": 1},
+      {"source": "运输物流车辆", "original": 16, "retain": 7, "operation": 5, "duplicate": 3, "later": 1},
+      {"source": "通信数据仪器", "original": 16, "retain": 10, "operation": 3, "duplicate": 1, "later": 2},
+      {"source": "医疗公共卫生", "original": 18, "retain": 8, "operation": 6, "duplicate": 3, "later": 1},
+      {"source": "劳动教育民生", "original": 18, "retain": 7, "operation": 7, "duplicate": 3, "later": 1},
+      {"source": "预算市场贸易收入", "original": 18, "retain": 6, "operation": 8, "duplicate": 3, "later": 1},
+      {"source": "外交统合合法性", "original": 18, "retain": 7, "operation": 8, "duplicate": 2, "later": 1},
+      {"source": "事件灾害战争恢复", "original": 18, "retain": 2, "operation": 13, "duplicate": 2, "later": 1}
+    ]
+  },
+  "yearTwoFactoryProductDisposition": {
+    "originalIndependentProducts": 99,
+    "leanIndependentProductsTarget": 82,
+    "reclassifiedCount": 17,
+    "productionManagement": {
+      "flowOrControlledStockCount": 60,
+      "discreteOrderCount": 22,
+      "locallyActiveFlowProductRange": [45, 55],
+      "controlledHazardousStockProductIds": [
+        "Y2-PL-CHM-017",
+        "Y2-PL-CHM-018",
+        "Y2-PL-CHM-019",
+        "Y2-PL-MIL-002"
+      ],
+      "discreteOrderProductIds": [
+        "Y2-PL-MCH-008",
+        "Y2-PL-MCH-009",
+        "Y2-PL-MCH-010",
+        "Y2-PL-MCH-011",
+        "Y2-PL-MCH-012",
+        "Y2-PL-MCH-013",
+        "Y2-PL-MCH-014",
+        "Y2-PL-ELC-004",
+        "Y2-PL-ELC-006",
+        "Y2-PL-ELC-009",
+        "Y2-PL-ELC-010",
+        "Y2-PL-ELC-011",
+        "Y2-PL-ELC-012",
+        "Y2-PL-VEH-001",
+        "Y2-PL-VEH-002",
+        "Y2-PL-VEH-003",
+        "Y2-PL-VEH-004",
+        "Y2-PL-MED-003",
+        "Y2-PL-MED-004",
+        "Y2-PL-MED-005",
+        "Y2-PL-MIL-001",
+        "Y2-PL-MIL-003"
+      ]
+    },
+    "reclassified": [
+      {"id": "Y2-PL-CIV-007", "name": "货物固定带", "newType": "internal_facility_component"},
+      {"id": "Y2-PL-FOD-001", "name": "脱粒谷物", "newType": "batch_process_state"},
+      {"id": "Y2-PL-FOD-003", "name": "干燥谷物", "newType": "batch_storage_state"},
+      {"id": "Y2-PL-BLD-003", "name": "砌筑砂浆", "newType": "project_input_flow"},
+      {"id": "Y2-PL-BLD-004", "name": "结构混凝土", "newType": "project_input_flow"},
+      {"id": "Y2-PL-GLS-003", "name": "仪表防护玻璃片", "newType": "bill_of_material_component"},
+      {"id": "Y2-PL-STL-001", "name": "普通钢坯", "newType": "internal_intermediate_batch"},
+      {"id": "Y2-PL-STL-002", "name": "通用铸铁毛坯", "newType": "work_in_process"},
+      {"id": "Y2-PL-STL-003", "name": "通用铸钢毛坯", "newType": "work_in_process"},
+      {"id": "Y2-PL-CHM-008", "name": "卫生药剂", "newType": "remove_overbroad_product"},
+      {"id": "Y2-PL-CHM-012", "name": "漆包线绝缘漆", "newType": "recipe_input"},
+      {"id": "Y2-PL-CHM-013", "name": "电气绝缘浸渍材料", "newType": "recipe_input"},
+      {"id": "Y2-PL-CHM-015", "name": "机械冷却液", "newType": "automatic_operating_consumable"},
+      {"id": "Y2-PL-MCH-015", "name": "水井滤水管段", "newType": "project_bill_of_material_component"},
+      {"id": "Y2-PL-ELC-007", "name": "安全联锁装置", "newType": "equipment_bill_of_material_component"},
+      {"id": "Y2-PL-ELC-013", "name": "无线电天线", "newType": "radio_model_component"},
+      {"id": "Y2-PL-ELC-014", "name": "信号电缆", "newType": "duplicate_review_against_control_cable"}
+    ],
+    "explicitlyPreservedSeparations": [
+      ["空金属食品罐", "罐藏主食"],
+      ["空金属食品罐", "罐藏蛋白食品"],
+      ["空金属食品罐", "罐藏蔬菜"],
+      ["标准玻璃容器", "空金属食品罐"],
+      ["枪械", "枪械弹药"],
+      ["钢板", "钢棒", "钢线材", "钢管"],
+      ["车床", "铣床", "钻床", "磨床"]
+    ]
+  }
+}

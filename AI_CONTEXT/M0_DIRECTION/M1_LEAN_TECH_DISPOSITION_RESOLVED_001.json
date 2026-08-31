@@ -1,0 +1,3989 @@
+{
+  "resolutionId": "M1-LEAN-TECH-DISPOSITION-RESOLVED-001",
+  "status": "complete",
+  "sourceCandidateCount": 255,
+  "finalCounts": {
+    "merged_into_r4": 12,
+    "operation_or_record": 77,
+    "retained_actual_technology": 147,
+    "retained_later_technology": 19
+  },
+  "rows": [
+    {
+      "source": "internal_affairs_police",
+      "sourceFile": "specs/spec-m1-internal-affairs-police-001.md",
+      "id": "INT-REG-001",
+      "name": "人口、身份、居留与地点记录一致性核验方法",
+      "outputSummary": "跨地点登记差异核验行动与纠正记录",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "POP-AUD-001-A",
+          "name": "人口账本复核方法",
+          "score": 0.25
+        },
+        {
+          "id": "POP-REF-004-A",
+          "name": "技能核验方法",
+          "score": 0.211
+        },
+        {
+          "id": "POP-REF-005-A",
+          "name": "正式居留方法",
+          "score": 0.211
+        }
+      ],
+      "finalDisposition": "merged_into_r4",
+      "resultingTechnologyIds": [
+        "POP-AUD-001-A"
+      ],
+      "result": "与 POP-AUD-001-A 的可复现能力重合，不重复建节点。"
+    },
+    {
+      "source": "internal_affairs_police",
+      "sourceFile": "specs/spec-m1-internal-affairs-police-001.md",
+      "id": "INT-SVC-001",
+      "name": "聚居点公共行政事项分类与办理标准",
+      "outputSummary": "公共行政服务厅运行规程",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "GOV-NET-001",
+          "name": "多聚居点行政分级设计",
+          "score": 0.316
+        },
+        {
+          "id": "WTR-NET-001-A",
+          "name": "多聚居点水务标准",
+          "score": 0.278
+        },
+        {
+          "id": "SET-PUB-001-D",
+          "name": "聚居点公共登记设施配置",
+          "score": 0.238
+        }
+      ],
+      "finalDisposition": "merged_into_r4",
+      "resultingTechnologyIds": [
+        "GOV-NET-001"
+      ],
+      "result": "与 GOV-NET-001 的可复现能力重合，不重复建节点。"
+    },
+    {
+      "source": "internal_affairs_police",
+      "sourceFile": "specs/spec-m1-internal-affairs-police-001.md",
+      "id": "INT-APL-001",
+      "name": "行政申诉受理、转办、复核与纠正方法",
+      "outputSummary": "行政申诉案件及纠正行动",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "POP-AUD-001-A",
+          "name": "人口账本复核方法",
+          "score": 0.222
+        },
+        {
+          "id": "QLT-RCL-001-C",
+          "name": "纠正措施组织方法",
+          "score": 0.222
+        },
+        {
+          "id": "MED-REH-001-A",
+          "name": "创伤康复方法",
+          "score": 0.176
+        }
+      ],
+      "finalDisposition": "merged_into_r4",
+      "resultingTechnologyIds": [
+        "GOV-APL-001"
+      ],
+      "result": "与 GOV-APL-001 的可复现能力重合，不重复建节点。"
+    },
+    {
+      "source": "internal_affairs_police",
+      "sourceFile": "specs/spec-m1-internal-affairs-police-001.md",
+      "id": "INT-EMG-001",
+      "name": "跨部门民事应急协调与任务回执方法",
+      "outputSummary": "内政、医疗、工务、警务联合应急任务",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "internal_affairs_police",
+      "sourceFile": "specs/spec-m1-internal-affairs-police-001.md",
+      "id": "POL-DSP-001",
+      "name": "报警受理、事件分级与警务调度方法",
+      "outputSummary": "接警记录、事件等级和派遣任务",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "POL-DSP-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "internal_affairs_police",
+      "sourceFile": "specs/spec-m1-internal-affairs-police-001.md",
+      "id": "POL-PAT-001",
+      "name": "地点巡逻、现场隔离与初步处置方法",
+      "outputSummary": "日常巡逻与事件响应警务队训练标准",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "POL-PAT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "internal_affairs_police",
+      "sourceFile": "specs/spec-m1-internal-affairs-police-001.md",
+      "id": "POL-CAS-001",
+      "name": "案件登记、线索管理与责任交接方法",
+      "outputSummary": "独立案件对象与承办记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "internal_affairs_police",
+      "sourceFile": "specs/spec-m1-internal-affairs-police-001.md",
+      "id": "POL-EVI-001",
+      "name": "现场勘查、证据封存与连续保管方法",
+      "outputSummary": "证据对象、证据链和移交记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "POL-EVI-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "internal_affairs_police",
+      "sourceFile": "specs/spec-m1-internal-affairs-police-001.md",
+      "id": "POL-INV-001",
+      "name": "访问调查、交叉核对与跨地协查方法",
+      "outputSummary": "案件调查行动和司法移交材料",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "POL-INV-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "internal_affairs_police",
+      "sourceFile": "specs/spec-m1-internal-affairs-police-001.md",
+      "id": "POL-TRF-001",
+      "name": "道路事故处理、危险运输与路线安全方法",
+      "outputSummary": "事故案件、路线警务任务和临时管制选项",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "POL-TRF-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "internal_affairs_police",
+      "sourceFile": "specs/spec-m1-internal-affairs-police-001.md",
+      "id": "POL-UOF-001",
+      "name": "警务沟通降级、比例用力与事后复核方法",
+      "outputSummary": "用权等级、医疗检查和复核记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "POL-UOF-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "internal_affairs_police",
+      "sourceFile": "specs/spec-m1-internal-affairs-police-001.md",
+      "id": "POL-CUS-001",
+      "name": "临时羁押健康保障、时限核验与司法移交方法",
+      "outputSummary": "羁押对象、复核时点和移交行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "POL-CUS-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "internal_affairs_police",
+      "sourceFile": "specs/spec-m1-internal-affairs-police-001.md",
+      "id": "POL-OVS-001",
+      "name": "警务投诉、纪律调查与外部复核方法",
+      "outputSummary": "投诉案件、纪律调查和纠正责任记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "POL-OVS-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-CER-001",
+      "name": "谷物品种配置、播种密度与田间管理方法",
+      "outputSummary": "谷物生产线；合格谷物种子批次；收获谷物批次",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "AGR-CER-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-TUB-001",
+      "name": "块根繁殖材料保存、切块处理与田间管理方法",
+      "outputSummary": "块根作物生产线；合格块根繁殖材料批次；食用块根批次",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "AGR-TUB-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-LEG-001",
+      "name": "食用豆类接种、轮作与成熟收获方法",
+      "outputSummary": "食用豆类生产线；合格食用豆类种子批次；食用豆类批次",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "AGR-LEG-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-OIL-001",
+      "name": "油料作物栽培、成熟判定与含油率管理方法",
+      "outputSummary": "油料作物生产线；合格油料作物种子批次；油料作物批次",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "AGR-OIL-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-VEG-001",
+      "name": "蔬菜育苗、分期栽培与鲜食采收方法",
+      "outputSummary": "露地蔬菜生产线；合格蔬菜种苗批次；鲜食蔬菜批次",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "AGR-VEG-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-FOR-001",
+      "name": "饲草种植、刈割、干草与青贮管理方法",
+      "outputSummary": "饲草生产线；合格饲草种子批次；饲草作物批次",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "AGR-FOR-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-ORC-001",
+      "name": "旧果园鉴定、修复、嫁接与多年生作物管理方法",
+      "outputSummary": "果园恢复工程；果树种苗批次；鲜食水果批次",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "AGR-ORC-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-MEC-001",
+      "name": "农业拖拉机、农具配套与季节作业维护方法",
+      "outputSummary": "农机作业与维修站；农机作业任务；农机维护规程",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "AGR-MEC-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-GRD-001",
+      "name": "农产品称重、分级、批次追溯与用途分流方法",
+      "outputSummary": "农产品收集分级检验站；农产品批次；召回行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-MIL-001",
+      "name": "谷物清理、脱粒、磨制与粉尘控制方法",
+      "outputSummary": "脱粒谷物生产线；谷物粉生产线；粉尘防护规程",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "AGR-MIL-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-OIL-002",
+      "name": "油料清理、压榨、过滤与食用油检验方法",
+      "outputSummary": "食用植物油生产线；油料压榨副产物批次；食用油检验行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "AGR-OIL-002"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-FED-001",
+      "name": "饲料原料检验、营养配比与安全混合方法",
+      "outputSummary": "配合饲料生产线；饲料配方；饲料批次检验行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "AGR-FED-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-BIO-001",
+      "name": "种禽种畜来源核验、隔离与繁殖记录方法",
+      "outputSummary": "种禽群资产；种畜群资产；动物检疫隔离行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-POU-001",
+      "name": "家禽育雏、饲养、集蛋与出栏卫生方法",
+      "outputSummary": "家禽养殖容量；鲜蛋生产线；家禽出栏生产线",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-LIV-001",
+      "name": "家畜饲养、繁殖、体况与出栏管理方法",
+      "outputSummary": "家畜养殖容量；原料乳生产线；家畜出栏生产线",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-VET-001",
+      "name": "动物疫病监测、免疫、治疗与死亡处置方法",
+      "outputSummary": "动物卫生监测行动；隔离处置行动；养殖场健康状态",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "AGR-VET-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-DAI-001",
+      "name": "原料乳挤取、冷却、检验与巴氏杀菌方法",
+      "outputSummary": "原料乳批次；巴氏杀菌乳品生产线；乳品卫生检验行动",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "QLT-SMP-001-A",
+          "name": "原料检验",
+          "score": 0.267
+        },
+        {
+          "id": "MCH-CUT-001-A",
+          "name": "刀具材料方法",
+          "score": 0.167
+        },
+        {
+          "id": "POP-REF-002-C",
+          "name": "健康检疫方法",
+          "score": 0.167
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "AGR-DAI-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-SLA-001",
+      "name": "禽畜屠宰、胴体检验、冷却与污染控制方法",
+      "outputSummary": "家禽胴体批次；家畜胴体批次；冷却肉类生产线；不合格胴体处置行动",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "MED-EPI-001-C",
+          "name": "群体防控组织方法",
+          "score": 0.2
+        },
+        {
+          "id": "MED-IPC-001-D",
+          "name": "医疗感染控制",
+          "score": 0.158
+        },
+        {
+          "id": "POP-REF-002-C",
+          "name": "健康检疫方法",
+          "score": 0.158
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "AGR-SLA-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "agriculture_food",
+      "sourceFile": "specs/spec-m1-agricultural-production-system-001.md",
+      "id": "AGR-AQU-001",
+      "name": "养殖水体、水质、苗种、饲喂与起捕管理方法",
+      "outputSummary": "水产养殖容量；水产亲本群资产；可食用水产品批次",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "AGR-AQU-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-SLD-001",
+      "name": "固体矿物燃料分级、洗选与锅炉适配方法",
+      "outputSummary": "分级固体矿物燃料；固体燃料检验行动；灰渣处置规程",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-GAS-001",
+      "name": "沼气脱硫、脱水、储存与燃烧适配方法",
+      "outputSummary": "净化沼气；气体储存工程；气体燃烧安全规程",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ENE-GAS-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-LIQ-001",
+      "name": "本地液体燃料原料评价、转化与成品调合方法",
+      "outputSummary": "条件性本地燃料生产线；合格液体燃料；副产物处置行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ENE-LIQ-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-CHP-001",
+      "name": "锅炉—汽轮/动力设备热电联产与余热利用方法",
+      "outputSummary": "热电联产改造工程；余热利用工程；热电联产运行规程",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ENE-CHP-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-STM-001",
+      "name": "工业蒸汽、换热、凝结水回收与热网平衡方法",
+      "outputSummary": "工业蒸汽热网；换热泵站；凝结水回收工程",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ENE-STM-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-GEN-001",
+      "name": "标准小型内燃发电机组设计、总装与试验方法",
+      "outputSummary": "标准小型内燃发电机组；机组生产图纸；负载试验行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ENE-GEN-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-GEN-002",
+      "name": "标准中型内燃发电机组并联、冷却与连续运行方法",
+      "outputSummary": "标准中型内燃发电机组；并联发电站工程；连续运行规程",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ENE-GEN-002"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-HYD-001",
+      "name": "小型水轮机、调速与发电机组设计方法",
+      "outputSummary": "小型水轮发电机组；水力站工程；水轮机维护规程",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "NRG-GEN-001-A",
+          "name": "小型发电机组修复",
+          "score": 0.375
+        },
+        {
+          "id": "ELC-MOT-001-A",
+          "name": "电动机绕组设计",
+          "score": 0.313
+        },
+        {
+          "id": "NRG-GEN-001-B",
+          "name": "小型发电机组连续运行控制",
+          "score": 0.3
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ENE-HYD-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-WND-001",
+      "name": "小型风力机叶轮、塔架、变换与安全停机方法",
+      "outputSummary": "小型风力发电机组；风力场工程；安全停机规程",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "CNS-SIT-001-C",
+          "name": "施工安全组织方法",
+          "score": 0.2
+        },
+        {
+          "id": "FOD-NET-001-B",
+          "name": "储备轮换组织方法",
+          "score": 0.2
+        },
+        {
+          "id": "NRG-REN-001-B",
+          "name": "小型风力发电现场适配",
+          "score": 0.182
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ENE-WND-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-SOL-001",
+      "name": "回收光伏组件分级、阵列、逆变与并网方法",
+      "outputSummary": "太阳能发电设备组；太阳能场工程；组件分级行动",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "ENE-SOL-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-EMG-001",
+      "name": "移动应急电源、快速接入与关键负载恢复方法",
+      "outputSummary": "移动应急发电机组；快速接入工程；应急供电行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ENE-EMG-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-TRF-001",
+      "name": "配电变压器设计、绝缘、冷却与耐压试验方法",
+      "outputSummary": "标准配电变压器；变压器生产图纸；耐压试验行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ENE-TRF-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-MVD-001",
+      "name": "区域中压线路、电缆接头与安全间距设计方法",
+      "outputSummary": "中压配电电缆；区域中压主干工程；线路验收行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ENE-MVD-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-SWG-001",
+      "name": "中压开关、分段保护与变配电站联锁方法",
+      "outputSummary": "中压开关与保护设备组；变配电站工程；保护整定记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ENE-SWG-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-SYN-001",
+      "name": "多机组同步、频率电压控制与有功无功分配方法",
+      "outputSummary": "电网同步调度规程；并网验证行动；频率电压状态",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-ISL-001",
+      "name": "电网孤岛运行、黑启动与逐级恢复方法",
+      "outputSummary": "孤岛运行方案；黑启动行动；逐级恢复记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ENE-ISL-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-BES-001",
+      "name": "站级蓄电池储能功率控制、均衡与消防方法",
+      "outputSummary": "节点储能站；储能控制规程；电池故障隔离行动",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "ENE-BES-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "energy_grid",
+      "sourceFile": "specs/spec-m1-energy-production-grid-system-001.md",
+      "id": "ENE-MTR-001",
+      "name": "分级计量、线路损耗核算与用能责任分配方法",
+      "outputSummary": "分级电力计量；损耗核算记录；异常用能核查行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "water_sanitation_environment",
+      "sourceFile": "specs/spec-m1-water-sanitation-environment-system-001.md",
+      "id": "WSE-YLD-001",
+      "name": "水源安全产水量、生态下泄与季节配额核算",
+      "outputSummary": "水源配额记录；取水上限；旱季调整行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "water_sanitation_environment",
+      "sourceFile": "specs/spec-m1-water-sanitation-environment-system-001.md",
+      "id": "WSE-PMP-001",
+      "name": "取水泵站水力、汽蚀与备用机组设计",
+      "outputSummary": "泵站设备组；取水站工程；泵站试验行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "WSE-PMP-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "water_sanitation_environment",
+      "sourceFile": "specs/spec-m1-water-sanitation-environment-system-001.md",
+      "id": "WSE-COA-001",
+      "name": "原水混凝、絮凝与沉淀控制",
+      "outputSummary": "沉淀设备组；药剂配方；沉淀污泥记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "WSE-COA-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "water_sanitation_environment",
+      "sourceFile": "specs/spec-m1-water-sanitation-environment-system-001.md",
+      "id": "WSE-CAR-001",
+      "name": "活性炭吸附、异味与有机污染控制",
+      "outputSummary": "吸附处理工段；活性炭批次；更换再生行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "WSE-CAR-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "water_sanitation_environment",
+      "sourceFile": "specs/spec-m1-water-sanitation-environment-system-001.md",
+      "id": "WSE-TNK-001",
+      "name": "清水池、高位储罐与防二次污染设计",
+      "outputSummary": "清水储罐；储水设施；清洗消毒规程",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "LOG-RDS-001-B",
+          "name": "道路排水设计",
+          "score": 0.176
+        },
+        {
+          "id": "SET-SVC-001-B",
+          "name": "排污接入设计",
+          "score": 0.176
+        },
+        {
+          "id": "WTR-STO-001-A",
+          "name": "清水安全储存",
+          "score": 0.176
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "WSE-TNK-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "water_sanitation_environment",
+      "sourceFile": "specs/spec-m1-water-sanitation-environment-system-001.md",
+      "id": "WSE-HYD-001",
+      "name": "分区管网水力平衡、压力控制与末端保障",
+      "outputSummary": "配水分区；压力控制设施；末端压力记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "WSE-HYD-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "water_sanitation_environment",
+      "sourceFile": "specs/spec-m1-water-sanitation-environment-system-001.md",
+      "id": "WSE-SWG-001",
+      "name": "污水泵站、溢流控制与停电旁路设计",
+      "outputSummary": "污水提升设备；提升站工程；溢流应急行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "WSE-SWG-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "water_sanitation_environment",
+      "sourceFile": "specs/spec-m1-water-sanitation-environment-system-001.md",
+      "id": "WSE-BIO-001",
+      "name": "污水生化处理、曝气与污泥龄控制",
+      "outputSummary": "生化处理设备；污水厂工段；运行检验记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "WSE-BIO-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "water_sanitation_environment",
+      "sourceFile": "specs/spec-m1-water-sanitation-environment-system-001.md",
+      "id": "WSE-IND-001",
+      "name": "工业废水源头分流、预处理与责任追溯",
+      "outputSummary": "工业排水许可；预处理工程；违规排放行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "water_sanitation_environment",
+      "sourceFile": "specs/spec-m1-water-sanitation-environment-system-001.md",
+      "id": "WSE-PTH-001",
+      "name": "水源性病原监测、暴发判定与供水应急",
+      "outputSummary": "病原监测行动；煮沸/停供建议；暴发记录",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "WTR-MNT-001-B",
+          "name": "应急旁路供水",
+          "score": 0.25
+        },
+        {
+          "id": "FOD-PRO-001-B",
+          "name": "病虫监测施用",
+          "score": 0.176
+        },
+        {
+          "id": "ELC-NET-001-C",
+          "name": "应急恢复",
+          "score": 0.125
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "WSE-PTH-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "water_sanitation_environment",
+      "sourceFile": "specs/spec-m1-water-sanitation-environment-system-001.md",
+      "id": "WSE-SLD-001",
+      "name": "生活固废分类收集、称重与转运方法",
+      "outputSummary": "分类容器车辆组；收运任务；固废台账",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "water_sanitation_environment",
+      "sourceFile": "specs/spec-m1-water-sanitation-environment-system-001.md",
+      "id": "WSE-REC-001",
+      "name": "可回收物分选、清洗与再入库方法",
+      "outputSummary": "回收分选设施；再生原料批次；拒收记录",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "FOD-HAR-001-A",
+          "name": "作物收获方法",
+          "score": 0.267
+        },
+        {
+          "id": "POP-REF-002-A",
+          "name": "入境分诊方法",
+          "score": 0.267
+        },
+        {
+          "id": "CIV-SVC-001-C",
+          "name": "民用品回收服务组织方法",
+          "score": 0.2
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "WSE-REC-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "water_sanitation_environment",
+      "sourceFile": "specs/spec-m1-water-sanitation-environment-system-001.md",
+      "id": "WSE-LDF-001",
+      "name": "卫生填埋、防渗、渗滤液与填埋气控制",
+      "outputSummary": "卫生填埋工程；渗滤液设施；封场计划",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "WSE-LDF-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "water_sanitation_environment",
+      "sourceFile": "specs/spec-m1-water-sanitation-environment-system-001.md",
+      "id": "WSE-HZW-001",
+      "name": "危险废物识别、隔离、转运与处置方法",
+      "outputSummary": "危废暂存设施；危废批次；转运处置行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "water_sanitation_environment",
+      "sourceFile": "specs/spec-m1-water-sanitation-environment-system-001.md",
+      "id": "WSE-ENV-001",
+      "name": "水土空气环境基线、排放监测与损害追踪",
+      "outputSummary": "环境监测站；排放记录；污染修复工程",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "settlement_housing_public_works",
+      "sourceFile": "specs/spec-m1-settlement-housing-public-works-system-001.md",
+      "id": "URB-LND-001",
+      "name": "地块权属、用途、边界与公共通道登记方法",
+      "outputSummary": "地块对象；用途许可；土地争议复核行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "settlement_housing_public_works",
+      "sourceFile": "specs/spec-m1-settlement-housing-public-works-system-001.md",
+      "id": "URB-DEN-001",
+      "name": "人口密度、服务半径与建设容量核算",
+      "outputSummary": "住区容量；公共服务覆盖；扩建需求记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "settlement_housing_public_works",
+      "sourceFile": "specs/spec-m1-settlement-housing-public-works-system-001.md",
+      "id": "URB-HYG-001",
+      "name": "住宅采光、通风、潮湿与最低卫生设计",
+      "outputSummary": "住宅卫生标准；改造工程；住房健康状态",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "URB-HYG-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "settlement_housing_public_works",
+      "sourceFile": "specs/spec-m1-settlement-housing-public-works-system-001.md",
+      "id": "URB-WTR-001",
+      "name": "建筑给水、排水、卫生间与防回流设计",
+      "outputSummary": "室内给排水组；卫生设备组；接入验收",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "URB-WTR-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "settlement_housing_public_works",
+      "sourceFile": "specs/spec-m1-settlement-housing-public-works-system-001.md",
+      "id": "URB-ELC-001",
+      "name": "建筑低压配电、接地与用电保护设计",
+      "outputSummary": "入户电气组；建筑配电工程；安全验收",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "URB-ELC-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "settlement_housing_public_works",
+      "sourceFile": "specs/spec-m1-settlement-housing-public-works-system-001.md",
+      "id": "URB-THM-001",
+      "name": "建筑保温、供暖、通风与室内热环境设计",
+      "outputSummary": "暖通设备组；保温改造；室内热环境状态",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "URB-THM-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "settlement_housing_public_works",
+      "sourceFile": "specs/spec-m1-settlement-housing-public-works-system-001.md",
+      "id": "URB-RRF-001",
+      "name": "屋面、防水、雨棚与雨水导排设计",
+      "outputSummary": "屋面防水组；屋面修复工程；渗漏巡检",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "URB-RRF-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "settlement_housing_public_works",
+      "sourceFile": "specs/spec-m1-settlement-housing-public-works-system-001.md",
+      "id": "URB-RAD-001",
+      "name": "聚居点道路等级、交叉口与无障碍通行设计",
+      "outputSummary": "道路工程；公共通道；道路验收行动",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "GOV-NET-001",
+          "name": "多聚居点行政分级设计",
+          "score": 0.35
+        },
+        {
+          "id": "MIL-ORG-005",
+          "name": "聚居点守备部队编制设计",
+          "score": 0.217
+        },
+        {
+          "id": "CNS-INF-001-A",
+          "name": "道路工程设计",
+          "score": 0.211
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "URB-RAD-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "settlement_housing_public_works",
+      "sourceFile": "specs/spec-m1-settlement-housing-public-works-system-001.md",
+      "id": "URB-DRN-001",
+      "name": "街区雨水、边沟、涵洞与低点排涝设计",
+      "outputSummary": "排水沟涵构件；排水工程；积水风险图",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "URB-DRN-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "settlement_housing_public_works",
+      "sourceFile": "specs/spec-m1-settlement-housing-public-works-system-001.md",
+      "id": "URB-LGT-001",
+      "name": "公共照明布点、配电与维护方法",
+      "outputSummary": "路灯设备组；照明工程；夜间照明状态",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "POP-REF-005-C",
+          "name": "公共服务接入方法",
+          "score": 0.25
+        },
+        {
+          "id": "POP-NAT-003-B",
+          "name": "婴幼儿家庭照护方法",
+          "score": 0.235
+        },
+        {
+          "id": "SET-PUB-001-B",
+          "name": "聚居点照护设施配置",
+          "score": 0.235
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "URB-LGT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "settlement_housing_public_works",
+      "sourceFile": "specs/spec-m1-settlement-housing-public-works-system-001.md",
+      "id": "URB-FIR-001",
+      "name": "建筑耐火分区、疏散与消防水源设计",
+      "outputSummary": "消防验收；疏散图；消防水源工程",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "URB-FIR-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "settlement_housing_public_works",
+      "sourceFile": "specs/spec-m1-settlement-housing-public-works-system-001.md",
+      "id": "URB-RES-001",
+      "name": "消防站响应、灭火、救援与现场指挥方法",
+      "outputSummary": "消防站；消防队；火灾救援行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "settlement_housing_public_works",
+      "sourceFile": "specs/spec-m1-settlement-housing-public-works-system-001.md",
+      "id": "URB-MKT-001",
+      "name": "市场、摊位、冷链接入与人流卫生设计",
+      "outputSummary": "市场设施；摊位许可；市场卫生巡检",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "settlement_housing_public_works",
+      "sourceFile": "specs/spec-m1-settlement-housing-public-works-system-001.md",
+      "id": "URB-ACC-001",
+      "name": "学校、医疗、照护与行政设施无障碍配置",
+      "outputSummary": "公共设施改造；无障碍验收；服务可达状态",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "SET-PUB-001-B",
+          "name": "聚居点照护设施配置",
+          "score": 0.333
+        },
+        {
+          "id": "SET-PUB-001-A",
+          "name": "聚居点诊疗设施配置",
+          "score": 0.263
+        },
+        {
+          "id": "SET-PUB-001-C",
+          "name": "聚居点教育设施配置",
+          "score": 0.2
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "URB-ACC-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "settlement_housing_public_works",
+      "sourceFile": "specs/spec-m1-settlement-housing-public-works-system-001.md",
+      "id": "URB-MNT-001",
+      "name": "建筑构件寿命、预防维修与住区工单方法",
+      "outputSummary": "建筑维修工场；维护计划；危房封闭行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "settlement_housing_public_works",
+      "sourceFile": "specs/spec-m1-settlement-housing-public-works-system-001.md",
+      "id": "URB-DEM-001",
+      "name": "拆除安全、建筑废物分选与再利用方法",
+      "outputSummary": "拆除工程；再生构件批次；污染废物隔离",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "URB-DEM-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "resource_extraction",
+      "sourceFile": "specs/spec-m1-resource-extraction-forestry-recycling-system-001.md",
+      "id": "RSC-DRL-001",
+      "name": "浅层钻探、岩芯编录与矿体连续性验证",
+      "outputSummary": "钻探行动；岩芯档案；资源可信度状态",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "RSC-DRL-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "resource_extraction",
+      "sourceFile": "specs/spec-m1-resource-extraction-forestry-recycling-system-001.md",
+      "id": "RSC-RSV-001",
+      "name": "可采储量、贫化、回收率与边界品位核算",
+      "outputSummary": "可采储量表；采储计划；关闭条件",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "RSC-RSV-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "resource_extraction",
+      "sourceFile": "specs/spec-m1-resource-extraction-forestry-recycling-system-001.md",
+      "id": "RSC-FE-001",
+      "name": "铁矿物识别、分级与冶炼适配",
+      "outputSummary": "铁矿石批次；铁矿采区；冶炼适配记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "RSC-FE-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "resource_extraction",
+      "sourceFile": "specs/spec-m1-resource-extraction-forestry-recycling-system-001.md",
+      "id": "RSC-CU-001",
+      "name": "铜矿物识别、分级与选矿适配",
+      "outputSummary": "铜矿石批次；铜矿采区；选矿流程",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "RSC-CU-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "resource_extraction",
+      "sourceFile": "specs/spec-m1-resource-extraction-forestry-recycling-system-001.md",
+      "id": "RSC-AL-001",
+      "name": "铝质矿物识别、分级与加工适配",
+      "outputSummary": "铝质矿石批次；资源区；加工适配记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "RSC-AL-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "resource_extraction",
+      "sourceFile": "specs/spec-m1-resource-extraction-forestry-recycling-system-001.md",
+      "id": "RSC-PB-001",
+      "name": "铅锌矿物识别、伴生风险与分级方法",
+      "outputSummary": "铅锌矿批次；重金属风险区；选矿记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "RSC-PB-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "resource_extraction",
+      "sourceFile": "specs/spec-m1-resource-extraction-forestry-recycling-system-001.md",
+      "id": "RSC-COL-001",
+      "name": "固体矿物燃料勘查、分级与安全开采",
+      "outputSummary": "矿物燃料批次；燃料矿场；自燃监测行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "RSC-COL-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "resource_extraction",
+      "sourceFile": "specs/spec-m1-resource-extraction-forestry-recycling-system-001.md",
+      "id": "RSC-SIL-001",
+      "name": "石英砂纯度、粒度与玻璃原料分级",
+      "outputSummary": "石英砂批次；砂源区；玻璃适配记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "RSC-SIL-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "resource_extraction",
+      "sourceFile": "specs/spec-m1-resource-extraction-forestry-recycling-system-001.md",
+      "id": "RSC-SAW-001",
+      "name": "原木制材、干燥、分级与防腐方法",
+      "outputSummary": "锯材产品；锯材场；木材检验行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "RSC-SAW-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "resource_extraction",
+      "sourceFile": "specs/spec-m1-resource-extraction-forestry-recycling-system-001.md",
+      "id": "RSC-FOR-001",
+      "name": "林分调查、采伐限额与持续更新方法",
+      "outputSummary": "林场容量；采伐许可；更新验收行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "RSC-FOR-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "resource_extraction",
+      "sourceFile": "specs/spec-m1-resource-extraction-forestry-recycling-system-001.md",
+      "id": "RSC-LOG-001",
+      "name": "林区伐木、集材、运输与作业安全",
+      "outputSummary": "原木批次；集材场；林业作业任务",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "resource_extraction",
+      "sourceFile": "specs/spec-m1-resource-extraction-forestry-recycling-system-001.md",
+      "id": "RSC-SCR-001",
+      "name": "废钢剪切、除杂与炉料分级方法",
+      "outputSummary": "废钢料；废钢分选线；危险夹杂隔离",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "MED-NET-001-A",
+          "name": "分级诊疗组织方法",
+          "score": 0.25
+        },
+        {
+          "id": "RAW-SCR-001-C",
+          "name": "废旧材料分级回收",
+          "score": 0.25
+        },
+        {
+          "id": "CIV-TEX-001-A",
+          "name": "纤维原料分级",
+          "score": 0.2
+        }
+      ],
+      "finalDisposition": "merged_into_r4",
+      "resultingTechnologyIds": [
+        "RAW-SCR-001-C"
+      ],
+      "result": "与 RAW-SCR-001-C 的可复现能力重合，不重复建节点。"
+    },
+    {
+      "source": "resource_extraction",
+      "sourceFile": "specs/spec-m1-resource-extraction-forestry-recycling-system-001.md",
+      "id": "RSC-NFM-001",
+      "name": "废有色金属识别、分选与污染控制",
+      "outputSummary": "废有色料；分选线；成分检验行动",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "MET-SRT-001-A",
+          "name": "废金属材质判别标准",
+          "score": 0.222
+        },
+        {
+          "id": "MET-ROL-001-A",
+          "name": "金属轧制",
+          "score": 0.214
+        },
+        {
+          "id": "MED-IPC-001-D",
+          "name": "医疗感染控制",
+          "score": 0.188
+        }
+      ],
+      "finalDisposition": "merged_into_r4",
+      "resultingTechnologyIds": [
+        "MET-SRT-001-A"
+      ],
+      "result": "与 MET-SRT-001-A 的可复现能力重合，不重复建节点。"
+    },
+    {
+      "source": "resource_extraction",
+      "sourceFile": "specs/spec-m1-resource-extraction-forestry-recycling-system-001.md",
+      "id": "RSC-CMP-001",
+      "name": "遗产构件无损检查、寿命判定与再利用",
+      "outputSummary": "可复用构件；检验记录；限制使用规则",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "resource_extraction",
+      "sourceFile": "specs/spec-m1-resource-extraction-forestry-recycling-system-001.md",
+      "id": "RSC-CLS-001",
+      "name": "矿山关闭、边坡稳定、排水与污染控制",
+      "outputSummary": "关闭工程；长期监测；污染责任记录",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "RSC-CLS-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "resource_extraction",
+      "sourceFile": "specs/spec-m1-resource-extraction-forestry-recycling-system-001.md",
+      "id": "RSC-RCL-001",
+      "name": "表土回覆、植被恢复与矿区复垦验收",
+      "outputSummary": "复垦工程；恢复地块；复垦状态",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "RSC-RCL-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-BLT-001",
+      "name": "钢坯连贯浇注、缩孔控制与批次切分",
+      "outputSummary": "钢坯产品；浇注工段；炉批记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "MAT-BLT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-PLT-001",
+      "name": "钢板厚度、平直度与表面质量控制",
+      "outputSummary": "钢板生产线；板材牌号；成品检验",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "MAT-PLT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-PIP-001",
+      "name": "钢管成形、焊缝/无缝处理与压力检验",
+      "outputSummary": "钢管生产线；管材牌号；压力试验",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "MAT-PIP-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-COP-001",
+      "name": "铜电解/火法精炼与导电性能控制",
+      "outputSummary": "再生铜锭；铜精炼设施；导电检验",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "MAT-COP-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-ALU-001",
+      "name": "铝熔体净化、除气与铸锭质量控制",
+      "outputSummary": "再生铝锭；铝精炼设施；成分检验",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "MAT-ALU-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-ALY-001",
+      "name": "常用铜铝合金成分、熔配与牌号控制",
+      "outputSummary": "有色合金；熔配工段；牌号记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "MAT-ALY-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-CST-001",
+      "name": "铸件浇注系统、补缩与缺陷检验",
+      "outputSummary": "铸钢件；铸造工装；缺陷检验",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "MAT-CST-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-FRG-001",
+      "name": "锻件加热、变形量与纤维流线验收",
+      "outputSummary": "锻件；锻造工艺卡；验收行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "MAT-FRG-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-GLS-001",
+      "name": "平板玻璃熔制、成形、退火与光学检验",
+      "outputSummary": "平板玻璃；玻璃窑工段；检验记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "MAT-GLS-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-REF-001",
+      "name": "耐火砖、浇注料与炉衬寿命控制",
+      "outputSummary": "耐火材料；耐材窑；炉衬更换行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "MAT-REF-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-ACD-001",
+      "name": "酸碱连续制备、浓度控制与耐腐蚀输送",
+      "outputSummary": "基础酸；基础碱；耐腐蚀工段",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "MAT-ACD-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-REA-001",
+      "name": "通用试剂纯度、包装与实验室放行",
+      "outputSummary": "通用试剂；试剂线；放行记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "MAT-REA-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-POL-001",
+      "name": "基础树脂聚合、成形与残余单体控制",
+      "outputSummary": "基础树脂；聚合设施；批次检验",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "MAT-POL-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-ENG-001",
+      "name": "工程聚合物配混、增强与制件性能验证",
+      "outputSummary": "工程聚合物；配混线；性能试验",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "MAT-ENG-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-OXY-001",
+      "name": "工业氧气浓缩、压缩、充装与容器检查",
+      "outputSummary": "工业氧气；充装站；气瓶检查",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "CHM-GAS-001-A",
+          "name": "氧气浓缩工艺",
+          "score": 0.357
+        },
+        {
+          "id": "CHM-GAS-001-B",
+          "name": "医用氧气压缩与纯度控制",
+          "score": 0.211
+        },
+        {
+          "id": "MCH-FRM-001-A",
+          "name": "压力机作业工艺",
+          "score": 0.176
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "MAT-OXY-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-FUL-001",
+      "name": "液体燃料调合、稳定性与低温性能控制",
+      "outputSummary": "合格燃料；调合线；燃料检验",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "MAT-FUL-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-EFL-001",
+      "name": "冶金烟尘、酸碱废液与含金属污泥治理",
+      "outputSummary": "治理设施；危险副产物批次；排放记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "materials",
+      "sourceFile": "specs/spec-m1-materials-metallurgy-chemical-system-001.md",
+      "id": "MAT-BAL-001",
+      "name": "材料收得率、炉耗、返料与质量成本核算",
+      "outputSummary": "材料平衡表；返料行动；质量成本状态",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-LAT-001",
+      "name": "标准车床床身、主轴、进给与整机验收",
+      "outputSummary": "车床；生产图纸；几何验收",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "IME-LAT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-MIL-001",
+      "name": "标准铣床导轨、主轴、工作台与整机验收",
+      "outputSummary": "铣床；生产图纸；几何验收",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "IME-MIL-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-DRL-001",
+      "name": "标准钻床立柱、主轴与进给设计",
+      "outputSummary": "钻床；生产图纸；负载试验",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "IME-DRL-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-GRD-001",
+      "name": "标准磨床砂轮、主轴、冷却与精度验收",
+      "outputSummary": "磨床；生产图纸；精度试验",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "IME-GRD-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-PRS-001",
+      "name": "压力机机架、滑块、模具接口与安全保护",
+      "outputSummary": "压力机；生产图纸；安全验收",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "IME-PRS-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-BRG-001",
+      "name": "滚动轴承套圈、滚动体、热处理与游隙控制",
+      "outputSummary": "滚动轴承；轴承线；寿命抽检",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "IME-BRG-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-GER-001",
+      "name": "齿轮齿形、热处理、啮合与噪声检验",
+      "outputSummary": "齿轮轴类组；齿轮工艺；啮合试验",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "IME-GER-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-PMP-001",
+      "name": "离心泵系列化、密封、扬程与效率试验",
+      "outputSummary": "通用泵；泵试验台；性能曲线",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "IME-PMP-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-VLV-001",
+      "name": "工业阀门系列、密封等级与压力试验",
+      "outputSummary": "通用阀门；阀门线；压力记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "IME-VLV-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-BOM-001",
+      "name": "产品物料清单、版本和替代件控制",
+      "outputSummary": "物料清单；替代件批准；版本记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-MSA-001",
+      "name": "测量系统能力、重复性与再现性评估",
+      "outputSummary": "测量能力报告；量具限制；复校行动",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "MED-REH-001-C",
+          "name": "劳动能力评估",
+          "score": 0.267
+        },
+        {
+          "id": "ELC-INS-001-D",
+          "name": "压力测量",
+          "score": 0.214
+        },
+        {
+          "id": "WTR-SUR-001-A",
+          "name": "地表径流测量与季节流量评估",
+          "score": 0.211
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "IME-MSA-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-PRO-001",
+      "name": "过程能力、关键参数与失控处置",
+      "outputSummary": "过程控制图；停线行动；能力状态",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-FAT-001",
+      "name": "设备出厂验收、负载测试与交付基线",
+      "outputSummary": "验收行动；交付记录；设备基线",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "ELC-RAD-001-A",
+          "name": "基础无线电收发设计",
+          "score": 0.211
+        },
+        {
+          "id": "TRD-CON-001",
+          "name": "批次交付合同设计",
+          "score": 0.158
+        },
+        {
+          "id": "MED-DEV-001-B",
+          "name": "基础呼吸支持设备装配",
+          "score": 0.143
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "IME-FAT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-CBM-001",
+      "name": "振动、温度、油液与状态维修判定",
+      "outputSummary": "状态监测行动；维修工单；故障预警",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "IME-CBM-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-RBL-001",
+      "name": "可靠性、平均故障间隔与寿命数据分析",
+      "outputSummary": "可靠性记录；改型需求；寿命状态",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "IME-RBL-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-PLN-001",
+      "name": "关键设备停机窗口、检修资源与复产计划",
+      "outputSummary": "检修计划；停机工程；复产验收",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-REM-001",
+      "name": "再制造清洗、尺寸恢复、复装与性能放行",
+      "outputSummary": "再制造总成；再制造线；放行记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "IME-REM-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "machine_quality_maintenance",
+      "sourceFile": "specs/spec-m1-machine-tools-quality-maintenance-system-001.md",
+      "id": "IME-EOL-001",
+      "name": "设备报废判定、材料回收与不可用件销毁",
+      "outputSummary": "报废行动；回收批次；资产注销",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "transport_logistics",
+      "sourceFile": "specs/spec-m1-transport-logistics-vehicle-system-001.md",
+      "id": "TLG-PAV-001",
+      "name": "级配路基、稳定基层与耐久路面设计",
+      "outputSummary": "道路材料；铺筑工程；路面验收",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "TLG-PAV-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "transport_logistics",
+      "sourceFile": "specs/spec-m1-transport-logistics-vehicle-system-001.md",
+      "id": "TLG-GRD-001",
+      "name": "道路纵坡、横坡、弯道与视距设计",
+      "outputSummary": "道路线形；危险点改造；通行状态",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "TLG-GRD-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "transport_logistics",
+      "sourceFile": "specs/spec-m1-transport-logistics-vehicle-system-001.md",
+      "id": "TLG-BRG-001",
+      "name": "桥梁承载检测、限载与结构健康监测",
+      "outputSummary": "桥梁档案；限载行动；加固工程",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "TLG-BRG-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "transport_logistics",
+      "sourceFile": "specs/spec-m1-transport-logistics-vehicle-system-001.md",
+      "id": "TLG-WIN-001",
+      "name": "冬季、雨季与沙尘道路维持方法",
+      "outputSummary": "季节维护任务；物资储备；季节通行状态",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "transport_logistics",
+      "sourceFile": "specs/spec-m1-transport-logistics-vehicle-system-001.md",
+      "id": "TLG-LIC-001",
+      "name": "驾驶资格、车型签注与复训方法",
+      "outputSummary": "驾驶资格；培训设施；资格暂停行动",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "POP-AGE-001-B",
+          "name": "劳动资格转入方法",
+          "score": 0.25
+        },
+        {
+          "id": "MED-REH-001-A",
+          "name": "创伤康复方法",
+          "score": 0.2
+        },
+        {
+          "id": "SCI-TRN-001-B",
+          "name": "岗位训练方法",
+          "score": 0.2
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "TLG-LIC-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "transport_logistics",
+      "sourceFile": "specs/spec-m1-transport-logistics-vehicle-system-001.md",
+      "id": "TLG-FLT-001",
+      "name": "车辆车队资产、里程、油耗与维护调度",
+      "outputSummary": "车队对象；车辆任务；维护计划",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "transport_logistics",
+      "sourceFile": "specs/spec-m1-transport-logistics-vehicle-system-001.md",
+      "id": "TLG-TRL-001",
+      "name": "标准拖车、牵引接口与货物固定方法",
+      "outputSummary": "拖车；牵引标准；固定验收",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "TLG-TRL-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "transport_logistics",
+      "sourceFile": "specs/spec-m1-transport-logistics-vehicle-system-001.md",
+      "id": "TLG-REF-001",
+      "name": "冷藏车辆、温度记录与故障处置",
+      "outputSummary": "冷藏设备组；冷链任务；温度记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "TLG-REF-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "transport_logistics",
+      "sourceFile": "specs/spec-m1-transport-logistics-vehicle-system-001.md",
+      "id": "TLG-HAZ-001",
+      "name": "危险品车辆、容器、路线与应急隔离",
+      "outputSummary": "危险品容器；专用任务；事故行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "TLG-HAZ-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "transport_logistics",
+      "sourceFile": "specs/spec-m1-transport-logistics-vehicle-system-001.md",
+      "id": "TLG-MHE-001",
+      "name": "托盘、叉装、起重与机械装卸方法",
+      "outputSummary": "托盘；装卸设备；装卸站工程",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "TLG-MHE-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "transport_logistics",
+      "sourceFile": "specs/spec-m1-transport-logistics-vehicle-system-001.md",
+      "id": "TLG-SLT-001",
+      "name": "仓库库位、容量、兼容性与消防分区",
+      "outputSummary": "仓库设施；库位对象；兼容规则",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "NRG-GRD-001-B",
+          "name": "保护分区",
+          "score": 0.154
+        },
+        {
+          "id": "WTR-STO-001-B",
+          "name": "供水分区配水",
+          "score": 0.143
+        },
+        {
+          "id": "SET-BLK-001-B",
+          "name": "消防间隔规划",
+          "score": 0.133
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "TLG-SLT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "transport_logistics",
+      "sourceFile": "specs/spec-m1-transport-logistics-vehicle-system-001.md",
+      "id": "TLG-INV-001",
+      "name": "跨地点库存所有权、在途量与交接核对",
+      "outputSummary": "在途库存；交接记录；差异调查",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "transport_logistics",
+      "sourceFile": "specs/spec-m1-transport-logistics-vehicle-system-001.md",
+      "id": "TLG-RTE-001",
+      "name": "多任务路径、载重、时限与回程配载优化",
+      "outputSummary": "路线计划；回程任务；空驶状态",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "transport_logistics",
+      "sourceFile": "specs/spec-m1-transport-logistics-vehicle-system-001.md",
+      "id": "TLG-ACC-001",
+      "name": "交通事故现场、责任、救援与道路恢复",
+      "outputSummary": "事故对象；救援行动；恢复工程",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "transport_logistics",
+      "sourceFile": "specs/spec-m1-transport-logistics-vehicle-system-001.md",
+      "id": "TLG-SEC-001",
+      "name": "高风险货运护运、通信与交接方法",
+      "outputSummary": "护运任务；交接点；中断响应",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "TLG-SEC-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "transport_logistics",
+      "sourceFile": "specs/spec-m1-transport-logistics-vehicle-system-001.md",
+      "id": "TLG-HUB-001",
+      "name": "区域物流枢纽吞吐、排队与分流控制",
+      "outputSummary": "转运中心；吞吐计划；拥堵状态",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "MET-FOR-001-C",
+          "name": "纤维流线控制",
+          "score": 0.188
+        },
+        {
+          "id": "RAW-SAF-001-B",
+          "name": "矿井排水控制",
+          "score": 0.188
+        },
+        {
+          "id": "MET-IRN-001-A",
+          "name": "基础碳钢成分控制",
+          "score": 0.167
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "TLG-HUB-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "communications_data_instruments",
+      "sourceFile": "specs/spec-m1-communications-data-instrument-system-001.md",
+      "id": "ICD-SWX-001",
+      "name": "有线电话交换、编号与呼叫路由方法",
+      "outputSummary": "交换设备；交换站；编号方案",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "ELC-WIR-001-A",
+          "name": "有线电话设计",
+          "score": 0.25
+        },
+        {
+          "id": "LOG-SEC-001-A",
+          "name": "路线警戒组织方法",
+          "score": 0.222
+        },
+        {
+          "id": "ELC-WIR-001-B",
+          "name": "信号线路设计",
+          "score": 0.176
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ICD-SWX-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "communications_data_instruments",
+      "sourceFile": "specs/spec-m1-communications-data-instrument-system-001.md",
+      "id": "ICD-LNE-001",
+      "name": "区域信号线路、中继、避雷与故障定位",
+      "outputSummary": "中继设备；骨干线路；故障行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ICD-LNE-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "communications_data_instruments",
+      "sourceFile": "specs/spec-m1-communications-data-instrument-system-001.md",
+      "id": "ICD-POR-001",
+      "name": "便携无线电电源、频道与野外可靠性设计",
+      "outputSummary": "便携电台；生产图纸；野外试验",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ICD-POR-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "communications_data_instruments",
+      "sourceFile": "specs/spec-m1-communications-data-instrument-system-001.md",
+      "id": "ICD-RPT-001",
+      "name": "无线电中继、覆盖测量与盲区补偿",
+      "outputSummary": "中继站；覆盖图；盲区工程",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ICD-RPT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "communications_data_instruments",
+      "sourceFile": "specs/spec-m1-communications-data-instrument-system-001.md",
+      "id": "ICD-EMC-001",
+      "name": "电磁兼容、接地、屏蔽与干扰排查",
+      "outputSummary": "EMC检验；屏蔽改造；干扰记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ICD-EMC-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "communications_data_instruments",
+      "sourceFile": "specs/spec-m1-communications-data-instrument-system-001.md",
+      "id": "ICD-CMP-001",
+      "name": "标准计算设备整机组装与硬件验收",
+      "outputSummary": "计算设备；装配线；验收基线",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ICD-CMP-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "communications_data_instruments",
+      "sourceFile": "specs/spec-m1-communications-data-instrument-system-001.md",
+      "id": "ICD-STO-001",
+      "name": "数据存储介质分级、备份与恢复验证",
+      "outputSummary": "存储设备组；备份库；恢复行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ICD-STO-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "communications_data_instruments",
+      "sourceFile": "specs/spec-m1-communications-data-instrument-system-001.md",
+      "id": "ICD-LAN-001",
+      "name": "本地网络地址、交换、布线与故障隔离",
+      "outputSummary": "网络设备组；本地网络；网络日志",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ICD-LAN-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "communications_data_instruments",
+      "sourceFile": "specs/spec-m1-communications-data-instrument-system-001.md",
+      "id": "ICD-DBS-001",
+      "name": "行政主数据、版本、权限与变更审计",
+      "outputSummary": "主数据集；权限表；审计记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "communications_data_instruments",
+      "sourceFile": "specs/spec-m1-communications-data-instrument-system-001.md",
+      "id": "ICD-TIM-001",
+      "name": "统一时钟分发、漂移监测与校时",
+      "outputSummary": "时钟设备；时间站；校时行动",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "ICD-TIM-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "communications_data_instruments",
+      "sourceFile": "specs/spec-m1-communications-data-instrument-system-001.md",
+      "id": "ICD-VLT-001",
+      "name": "电压电流仪表量程、精度与安全隔离",
+      "outputSummary": "电压表；电流表；校准记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ICD-VLT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "communications_data_instruments",
+      "sourceFile": "specs/spec-m1-communications-data-instrument-system-001.md",
+      "id": "ICD-TMP-001",
+      "name": "温度传感、补偿、量程与校准",
+      "outputSummary": "温度仪表；温度校准；限制记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ICD-TMP-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "communications_data_instruments",
+      "sourceFile": "specs/spec-m1-communications-data-instrument-system-001.md",
+      "id": "ICD-PRS-001",
+      "name": "压力仪表结构、过压保护与校准",
+      "outputSummary": "压力仪表；压力校准；安全验收",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ICD-PRS-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "communications_data_instruments",
+      "sourceFile": "specs/spec-m1-communications-data-instrument-system-001.md",
+      "id": "ICD-FLW-001",
+      "name": "流量测量、直管段、介质修正与校准",
+      "outputSummary": "流量仪表；流量校准；安装规范",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "ICD-FLW-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "communications_data_instruments",
+      "sourceFile": "specs/spec-m1-communications-data-instrument-system-001.md",
+      "id": "ICD-AMI-001",
+      "name": "远程计量采集、数据校验与断点补传",
+      "outputSummary": "计量终端；远程计量网；异常核查",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "communications_data_instruments",
+      "sourceFile": "specs/spec-m1-communications-data-instrument-system-001.md",
+      "id": "ICD-DRC-001",
+      "name": "灾害断网、应急通信与分级恢复方法",
+      "outputSummary": "应急通信站；应急行动；恢复记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-PCP-001",
+      "name": "基层常见病、慢病随访与转诊判定",
+      "outputSummary": "基层门诊；随访记录；转诊行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-EMS-001",
+      "name": "急救呼叫、现场处置、分级后送与交接",
+      "outputSummary": "急救站；急救队；后送任务",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "MIL-TACTIC-005",
+          "name": "伤员现场处理与分级后送",
+          "score": 0.412
+        },
+        {
+          "id": "MED-TRI-001-C",
+          "name": "急救后送组织",
+          "score": 0.25
+        },
+        {
+          "id": "SCI-ARC-001-C",
+          "name": "可信度分级",
+          "score": 0.118
+        }
+      ],
+      "finalDisposition": "merged_into_r4",
+      "resultingTechnologyIds": [
+        "MED-TRI-001-C"
+      ],
+      "result": "与 MED-TRI-001-C 的可复现能力重合，不重复建节点。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-BED-001",
+      "name": "病床容量、护理强度与住院流转管理",
+      "outputSummary": "病区；床位状态；出入院记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-ANE-001",
+      "name": "麻醉前评估、给药、监护与复苏",
+      "outputSummary": "麻醉能力；监护记录；复苏行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "HLT-ANE-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-BLD-001",
+      "name": "血型检验、供血筛查、储存与输血安全",
+      "outputSummary": "血液批次；血库设施；输血记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "HLT-BLD-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-LAB-001",
+      "name": "临床检验质量控制、参考范围与复核",
+      "outputSummary": "检验室；检验结果；复核行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "HLT-LAB-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-IMG-001",
+      "name": "影像设备质量保证、辐射安全与阅片",
+      "outputSummary": "影像室；影像记录；设备质控",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "HLT-IMG-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-PHM-001",
+      "name": "基础药品处方、配发、相互作用与不良反应",
+      "outputSummary": "处方对象；药房；不良反应记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-ABX-001",
+      "name": "抗感染药敏、合理使用与耐药监测",
+      "outputSummary": "抗感染药；药敏行动；耐药状态",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "HLT-ABX-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-IVF-001",
+      "name": "补液、电解质、无菌配制与输注安全",
+      "outputSummary": "补液制剂；配制规程；输注记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "HLT-IVF-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-MAT-001",
+      "name": "高危妊娠识别、产程监护与转诊",
+      "outputSummary": "妇幼中心；高危队列；转诊行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "HLT-MAT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-NEO-001",
+      "name": "新生儿复苏、保温、喂养与危险征象监测",
+      "outputSummary": "新生儿照护用品；照护位；监测记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "HLT-NEO-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-CHD-001",
+      "name": "儿童生长、营养、免疫与发育筛查",
+      "outputSummary": "儿童健康档案；筛查行动；转介记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-CHR-001",
+      "name": "慢性病连续用药、功能与并发症管理",
+      "outputSummary": "慢病队列；长期处方；并发症状态",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-REH-001",
+      "name": "康复目标、训练处方、辅助器具与复评",
+      "outputSummary": "康复计划；辅助器具；能力复评",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-LTC-001",
+      "name": "长期照护等级、照护者负荷与机构转介",
+      "outputSummary": "照护等级；照护服务；转介行动",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "HLT-LTC-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-VAC-001",
+      "name": "疫苗冷链、接种登记与不良事件监测",
+      "outputSummary": "接种行动；冷链记录；免疫状态",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "MED-EPI-001-A",
+          "name": "疫情监测组织方法",
+          "score": 0.158
+        },
+        {
+          "id": "POP-MIG-001-B",
+          "name": "派驻登记",
+          "score": 0.125
+        },
+        {
+          "id": "POP-MIG-001-C",
+          "name": "迁出登记",
+          "score": 0.125
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "HLT-VAC-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "medical_public_health",
+      "sourceFile": "specs/spec-m1-medical-public-health-care-system-001.md",
+      "id": "HLT-OUT-001",
+      "name": "暴发调查、病例定义、实验室确认与解除",
+      "outputSummary": "暴发对象；防控行动；解除记录",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "RAW-GEO-001-C",
+          "name": "资源候选区划定调查方法",
+          "score": 0.13
+        },
+        {
+          "id": "SET-SUR-001-B",
+          "name": "可居住区域划定调查方法",
+          "score": 0.13
+        },
+        {
+          "id": "FOD-SED-001-B",
+          "name": "种子发芽试验",
+          "score": 0.105
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "HLT-OUT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-LIT-001",
+      "name": "基础识字、算术、公共规则与健康课程设计",
+      "outputSummary": "基础课程；学校班级；学习评估",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "SOC-LIT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-TEC-001",
+      "name": "工业、农业、医疗与行政职业课程标准",
+      "outputSummary": "职业课程；训练班；课程版本",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "SOC-TEC-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-APR-001",
+      "name": "学徒岗位、导师、工时与技能考核方法",
+      "outputSummary": "学徒关系；导师资格；结业考核",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "SOC-APR-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-CRT-001",
+      "name": "岗位资格、复训、暂停与恢复制度",
+      "outputSummary": "资格对象；考核中心；资格变更行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "SOC-CRT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-JOB-001",
+      "name": "技能、岗位空缺、地点与家庭约束匹配",
+      "outputSummary": "就业服务；岗位匹配行动；空缺状态",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-SFT-001",
+      "name": "岗位危险识别、个人防护与事故预防",
+      "outputSummary": "风险清单；防护用品配置；安全巡检",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "SOC-SFT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-WRK-001",
+      "name": "工时、休息、轮班与疲劳风险控制",
+      "outputSummary": "排班规则；疲劳状态；纠正行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-INC-001",
+      "name": "工伤登记、救治、调查与复工评估",
+      "outputSummary": "工伤对象；调查行动；复工记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-CHD-001",
+      "name": "托育容量、照护资格与儿童安全方法",
+      "outputSummary": "托育点；照护资格；安全记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-ELD-001",
+      "name": "老年功能评估、居家支持与照护转介",
+      "outputSummary": "老年照护等级；支持服务；转介行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-DIS-001",
+      "name": "伤残无障碍、辅助用品与就业适配",
+      "outputSummary": "适配用品组；岗位改造；参与状态",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-TEX-001",
+      "name": "标准衣物版型、尺码、耐用与修补设计",
+      "outputSummary": "基础衣物；工作服；尺码标准",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "SOC-TEX-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-SHO-001",
+      "name": "工作鞋靴楦型、防滑与耐磨设计",
+      "outputSummary": "鞋靴；生产图纸；耐用检验",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "SOC-SHO-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-FUR-001",
+      "name": "标准家具结构、材料利用与维修设计",
+      "outputSummary": "家具；维修规程；耐用检验",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "CNS-PRE-001-A",
+          "name": "标准构件设计",
+          "score": 0.333
+        },
+        {
+          "id": "CIV-APP-001-A",
+          "name": "家用风扇设计",
+          "score": 0.25
+        },
+        {
+          "id": "CIV-FUR-001-C",
+          "name": "标准家具制作",
+          "score": 0.25
+        }
+      ],
+      "finalDisposition": "merged_into_r4",
+      "resultingTechnologyIds": [
+        "CIV-FUR-001-C"
+      ],
+      "result": "与 CIV-FUR-001-C 的可复现能力重合，不重复建节点。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-APP-001",
+      "name": "家用风扇、加热与冷藏设备电气安全设计",
+      "outputSummary": "三类家电；生产图纸；安全验收",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "CIV-APP-001-C",
+          "name": "家用冷藏设备设计",
+          "score": 0.467
+        },
+        {
+          "id": "CIV-APP-001-A",
+          "name": "家用风扇设计",
+          "score": 0.4
+        },
+        {
+          "id": "CIV-APP-001-B",
+          "name": "家用加热器设计",
+          "score": 0.375
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "SOC-APP-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-HYG-001",
+      "name": "个人、经期与家庭卫生用品质量控制",
+      "outputSummary": "三类卫生产品；检验行动；供应状态",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "CIV-HYG-001-B",
+          "name": "个人卫生用品制作",
+          "score": 0.467
+        },
+        {
+          "id": "MED-PHM-001-C",
+          "name": "药品剂量质量控制",
+          "score": 0.313
+        },
+        {
+          "id": "CIV-HYG-001-A",
+          "name": "家庭清洁用品配制",
+          "score": 0.294
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "SOC-HYG-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-RNT-001",
+      "name": "民用品租用、维修、回收与再次发放方法",
+      "outputSummary": "租用关系；维修站；再发放记录",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "SOC-RNT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "labor_education_living",
+      "sourceFile": "specs/spec-m1-labor-education-living-standard-system-001.md",
+      "id": "SOC-LIV-001",
+      "name": "住房、食品、衣物、能源、照护与闲暇综合生活评估",
+      "outputSummary": "生活状态；缺口清单；改善行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-UNT-001",
+      "name": "统一记账单位、计价精度与换算规则",
+      "outputSummary": "记账单位；换算表；舍入记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ECO-UNT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-ACC-001",
+      "name": "账户分类、复式记录与月末核对",
+      "outputSummary": "账户；总账；差异调查",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ECO-ACC-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-BUD-001",
+      "name": "部门预算、用途、期限与追加修订方法",
+      "outputSummary": "预算案；拨款；修订行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ECO-BUD-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-CAS-001",
+      "name": "国库现金、实物、凭证与权限控制",
+      "outputSummary": "国库设施；收支凭证；盘点行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-REV-001",
+      "name": "人口、经营、土地和交易收入义务设计",
+      "outputSummary": "收入义务；征收记录；减免行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ECO-REV-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-INK-001",
+      "name": "实物上缴规格、验收、折价与入库方法",
+      "outputSummary": "上缴批次；验收行动；差异记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-PAY-001",
+      "name": "岗位报酬、公共配给与家庭权利登记",
+      "outputSummary": "报酬关系；配给权利；变更记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-PRC-001",
+      "name": "成本、稀缺、质量与地点价格记录方法",
+      "outputSummary": "报价；价格历史；异常调查",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-MKT-001",
+      "name": "市场准入、摊位、交易确认与欺诈处理",
+      "outputSummary": "市场关系；交易记录；违规行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-PRC-002",
+      "name": "公共采购需求、竞价、验收与付款方法",
+      "outputSummary": "采购订单；合同；付款记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ECO-PRC-002"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-CNT-001",
+      "name": "合同数量、质量、地点、期限与违约条款",
+      "outputSummary": "交付合同；违约对象；修订行动",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "TRD-NET-001",
+          "name": "区域长期供应合同设计",
+          "score": 0.15
+        },
+        {
+          "id": "MCH-GAG-001-A",
+          "name": "极限量规检验",
+          "score": 0.118
+        },
+        {
+          "id": "MED-PHM-001-C",
+          "name": "药品剂量质量控制",
+          "score": 0.111
+        }
+      ],
+      "finalDisposition": "merged_into_r4",
+      "resultingTechnologyIds": [
+        "TRD-CON-001"
+      ],
+      "result": "与 TRD-CON-001 的可复现能力重合，不重复建节点。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-AR-001",
+      "name": "应收应付、期限、逾期与坏账确认",
+      "outputSummary": "应收应付；催收行动；坏账记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-CLR-001",
+      "name": "多方债权抵扣、净额与结算确认",
+      "outputSummary": "抵扣方案；结算行动；结清记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-TRD-001",
+      "name": "外贸报关、规格、关税与边境交接",
+      "outputSummary": "报关批次；关税记录；边境交接",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "DIP-CHN-001",
+          "name": "常设外交联络与口译通信规程",
+          "score": 0.15
+        },
+        {
+          "id": "DIP-CON-001",
+          "name": "外部信号识别与安全接触规程",
+          "score": 0.15
+        },
+        {
+          "id": "TRD-VAL-001",
+          "name": "货物规格与交换价值记账标准",
+          "score": 0.15
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ECO-TRD-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-FX-001",
+      "name": "多种货物交换比、外部货币与风险折算",
+      "outputSummary": "外部估值表；汇兑记录；风险状态",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "ECO-FX-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-LOC-001",
+      "name": "地方成本、公共服务优先扣除与净产出",
+      "outputSummary": "地方净产出表；扣除记录；审计行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-TRN-001",
+      "name": "中央转移支付、用途约束与绩效复核",
+      "outputSummary": "转移支付；用途记录；复核行动",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "GOV-ACC-001",
+          "name": "地方预算与中央转移支付制度设计",
+          "score": 0.273
+        },
+        {
+          "id": "CHM-LAB-001-B",
+          "name": "标签复核标准",
+          "score": 0.118
+        },
+        {
+          "id": "WTR-REU-001-A",
+          "name": "中水回用处理",
+          "score": 0.111
+        }
+      ],
+      "finalDisposition": "merged_into_r4",
+      "resultingTechnologyIds": [
+        "GOV-ACC-001"
+      ],
+      "result": "与 GOV-ACC-001 的可复现能力重合，不重复建节点。"
+    },
+    {
+      "source": "budget_market_trade",
+      "sourceFile": "specs/spec-m1-budget-market-trade-revenue-system-001.md",
+      "id": "ECO-AUD-001",
+      "name": "财政、采购、市场与地方收入独立审计",
+      "outputSummary": "审计案件；纠正行动；公开结果",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "ECO-AUD-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-IDN-001",
+      "name": "外部势力身份、领导、领地与能力持续核验",
+      "outputSummary": "势力档案；可信度；复核行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "STA-IDN-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-SIG-001",
+      "name": "信号、使者、旗帜与接触意图判定",
+      "outputSummary": "接触事件；安全等级；接触行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-REP-001",
+      "name": "外交代表资格、授权范围与撤回方法",
+      "outputSummary": "代表对象；授权书；撤回行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "STA-REP-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-CHN-001",
+      "name": "常设联络渠道、翻译、记录与失联恢复",
+      "outputSummary": "联络渠道；翻译记录；恢复行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-NEG-001",
+      "name": "议程、底线、让步、文本与确认程序",
+      "outputSummary": "谈判议程；协议草案；确认记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "STA-NEG-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-AID-001",
+      "name": "救援、医疗、粮食与避难互助义务设计",
+      "outputSummary": "互助协议；援助任务；履约记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-TRS-001",
+      "name": "通行、关卡、路线安全与护运责任设计",
+      "outputSummary": "通行权；护运协议；交接记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-TRU-001",
+      "name": "停火线、观察、违规报告与解除条件",
+      "outputSummary": "停火协议；边界对象；违规案件",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "STA-TRU-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-MED-001",
+      "name": "第三方调停、事实核查与协议修订方法",
+      "outputSummary": "调停程序；事实报告；修订协议",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-PRT-001",
+      "name": "保护关系的防务、财政、外交与退出条款",
+      "outputSummary": "保护协议；义务表；退出行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "STA-PRT-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-SOV-001",
+      "name": "主权接管、资产债务、人员与档案移交方法",
+      "outputSummary": "主权移交书；资产并表；移交行动",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "STA-SOV-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-PWR-001",
+      "name": "中央与地方权限、执行责任与禁止事项划分",
+      "outputSummary": "权限表；地方机构；越权案件",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "STA-PWR-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-VET-001",
+      "name": "原地方人员核验、培训、授权与监督",
+      "outputSummary": "人员核验；任用行动；监督记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-SVC-001",
+      "name": "地方公共服务、法律与财政渐进接入",
+      "outputSummary": "接入计划；服务工程；完成状态",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-RES-001",
+      "name": "抵抗、合作、申诉与地方意见分类调查",
+      "outputSummary": "地方调查；风险状态；回应行动",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "GOV-SUR-001",
+          "name": "地方治理综合调查标准",
+          "score": 0.263
+        },
+        {
+          "id": "RAW-GEO-001-A",
+          "name": "地质踏勘调查方法",
+          "score": 0.222
+        },
+        {
+          "id": "GOV-APL-001",
+          "name": "地方申诉与规则修订规程",
+          "score": 0.211
+        }
+      ],
+      "finalDisposition": "merged_into_r4",
+      "resultingTechnologyIds": [
+        "GOV-SUR-001"
+      ],
+      "result": "与 GOV-SUR-001 的可复现能力重合，不重复建节点。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-APL-001",
+      "name": "地方申诉、规则复核、纠正与补偿方法",
+      "outputSummary": "申诉案件；纠正行动；补偿建议",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "GOV-APL-001",
+          "name": "地方申诉与规则修订规程",
+          "score": 0.375
+        },
+        {
+          "id": "POP-AUD-001-A",
+          "name": "人口账本复核方法",
+          "score": 0.235
+        },
+        {
+          "id": "QLT-RCL-001-C",
+          "name": "纠正措施组织方法",
+          "score": 0.235
+        }
+      ],
+      "finalDisposition": "merged_into_r4",
+      "resultingTechnologyIds": [
+        "GOV-APL-001"
+      ],
+      "result": "与 GOV-APL-001 的可复现能力重合，不重复建节点。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-LEG-001",
+      "name": "中央履约、公平、服务与用权合法性评估",
+      "outputSummary": "合法性状态；缺口清单；改进计划",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "diplomacy_integration",
+      "sourceFile": "specs/spec-m1-diplomacy-integration-legitimacy-system-001.md",
+      "id": "STA-NET-001",
+      "name": "多地方分级治理、跨区协调与中央复核",
+      "outputSummary": "行政分级；协调机构；中央复核",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "STA-NET-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-RSK-001",
+      "name": "多灾种风险源、暴露对象与脆弱性登记",
+      "outputSummary": "风险源；暴露清单；风险图",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-THR-001",
+      "name": "监测阈值、异常持续与误报复核方法",
+      "outputSummary": "触发阈值；候选事件；复核行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-REP-001",
+      "name": "接报、时间地点、来源与初始严重度登记",
+      "outputSummary": "事件对象；接报记录；初始等级",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-EVD-001",
+      "name": "事件证据可信度、冲突信息与范围更新",
+      "outputSummary": "证据对象；可信度；范围修订",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-WRN-001",
+      "name": "分级预警、覆盖对象与解除条件设计",
+      "outputSummary": "预警行动；覆盖名单；解除记录",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "EMR-WRN-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-ICS-001",
+      "name": "事件指挥、职责、任务和跨部门回执",
+      "outputSummary": "指挥结构；响应任务；回执记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-EVC-001",
+      "name": "疏散路线、交通、集合、清点与返还方法",
+      "outputSummary": "疏散任务；避难设施；返回行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-SAR-001",
+      "name": "搜索网格、失踪登记、救援安全与交接",
+      "outputSummary": "搜救任务；失踪对象；救援记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-SHL-001",
+      "name": "临时安置容量、家庭保全、供给与退出",
+      "outputSummary": "安置点；家庭关系；安置退出",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-MAS-001",
+      "name": "大量伤员分诊、后送、身份与家属通知",
+      "outputSummary": "伤员事件；后送任务；通知记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-HAZ-001",
+      "name": "化学、生物、火灾与污染区域隔离",
+      "outputSummary": "隔离区；防护任务；解除行动",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-DMG-001",
+      "name": "人员、设施、设备、库存与环境损害评估",
+      "outputSummary": "损害对象；评估报告；修复优先级",
+      "disposition": "retain_tech",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "EMR-DMG-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-CAS-001",
+      "name": "死亡、受伤、失踪、获救与身份确认",
+      "outputSummary": "人员结果；身份确认；人口账更新",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-LSS-001",
+      "name": "库存损失、污染、抢救与保险/责任证据",
+      "outputSummary": "损失批次；抢救行动；责任记录",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-RCV-001",
+      "name": "关键服务最低恢复、临时替代与复产验收",
+      "outputSummary": "恢复计划；替代工程；复产验收",
+      "disposition": "operation_or_record",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "operation_or_record",
+      "resultingTechnologyIds": [],
+      "result": "不作独立科技，保留为科技解锁后的操作或记录对象。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-REC-001",
+      "name": "灾后住房、基础设施与生计重建排序",
+      "outputSummary": "重建项目；安置转回；恢复状态",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "SCI-TRN-001-A",
+          "name": "基础教育课程设计",
+          "score": 0.222
+        },
+        {
+          "id": "ELC-RAD-001-A",
+          "name": "基础无线电收发设计",
+          "score": 0.211
+        },
+        {
+          "id": "SET-EXP-001-A",
+          "name": "模块化住区扩建设计",
+          "score": 0.211
+        }
+      ],
+      "finalDisposition": "retained_actual_technology",
+      "resultingTechnologyIds": [
+        "EMR-REC-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-INV-001",
+      "name": "事故原因、违规、系统缺陷与责任调查",
+      "outputSummary": "调查案件；原因链；纠正行动",
+      "disposition": "duplicate_review",
+      "r4MatchSuggestions": [
+        {
+          "id": "MOD-ANA-001",
+          "name": "故障根因、使用错误与设计缺陷区分规程",
+          "score": 0.2
+        },
+        {
+          "id": "RPR-DIA-001-C",
+          "name": "失效原因分析",
+          "score": 0.111
+        },
+        {
+          "id": "LOG-DSP-001-C",
+          "name": "运输任务连续调度",
+          "score": 0.1
+        }
+      ],
+      "finalDisposition": "merged_into_r4",
+      "resultingTechnologyIds": [
+        "MOD-ANA-001"
+      ],
+      "result": "与 MOD-ANA-001 的可复现能力重合，不重复建节点。"
+    },
+    {
+      "source": "events_recovery",
+      "sourceFile": "specs/spec-m1-events-disasters-war-recovery-system-001.md",
+      "id": "EMR-LES-001",
+      "name": "事件复盘、改进立项与复验闭环",
+      "outputSummary": "复盘报告；科研/工程候选；复验行动",
+      "disposition": "later_route",
+      "r4MatchSuggestions": [],
+      "finalDisposition": "retained_later_technology",
+      "resultingTechnologyIds": [
+        "EMR-LES-001"
+      ],
+      "result": "保留为单一可复现能力科技，产物分项登记。"
+    }
+  ]
+}

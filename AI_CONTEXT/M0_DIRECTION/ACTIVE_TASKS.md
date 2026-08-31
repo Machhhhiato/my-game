@@ -1,10 +1,10 @@
 ---
-workflow_version: 9
-milestone: M0-personal-playable
+workflow_version: 20
+milestone: M1-complete-playable-demo
 route_owner: M0-DIR-A:M0-H003
-overall_current_task: M0-L4-402-R3
+overall_current_task: M1-L4-523-A
 handoff_id: M0-H003
-updated_at: 2026-08-26
+updated_at: 2026-08-31
 ---
 
 # M0 当前任务路由
@@ -18,6 +18,32 @@ updated_at: 2026-08-26
 | 第一层 | `M0-L1-106` 工程与科技描述结构、风格与总规格冻结 | `accepted` | 无 | `ACCEPTED` |
 | 第二层 | `M0-L2-201-R1` 首座前哨工程故事补包 | `accepted` | 无 | `ACCEPTED` |
 | 第三层 | `M0-L3-301` 玩家可见文字包 | `accepted` | 动态字段继续阻塞到具有真实来源的相关实现批次 | `ACCEPTED` |
+| 第三层（M1 预研） | `M1-L3-501` 军队科技、装备型号与部队完整名称包 | `ready_user_review` | 本地任务日志确认 65 个槽位完整交付；首投型号范围通过，逐代改型属于下一批而非本任务缺失 | `REVIEW_REQUIRED` |
+| 第一层（M1 总树） | `M1-L1-503-R4` 终点缺口科技补入与完整树重建 | `completed_waiting_user_review` | R4 已补为 635 项科技、1,557 项独立产物、2,867 条科技前置和 33,980 点；186 页固定展开 PDF 已通过完整性、边界与渲染检查 | `REVIEW_REQUIRED` |
+| 第一层（M1 数值） | `M1-L1-504-R1` 主线两年与人口—科研闭环重算 | `completed_waiting_user_review` | 三种情景第24月为 80,428 / 100,627 / 150,403 人；普通主线为 408 项、20,125 点，知识部分约第23.94—23.96月完成；R4 补缺后一致性复核通过 | `REVIEW_REQUIRED` |
+| 第一层（M1 军事终点） | `M1-L1-506` 现代集团军军事产品与部队类型完整目录 | `accepted` | 形成15种部队类型、51项唯一军事产品；集团军只作完整性上限，不宣称第2年已具备对应规模 | `ACCEPTED` |
+| 第一层（M1 内政警务） | `M1-L1-507` 内政、警务与最低司法接口系统 | `accepted` | 形成6种组织、5种警务单位、6类设施、7项装备产品、5项法令、4项政策、13项科技和7项终点状态 | `ACCEPTED` |
+| 第一层（M1 农业生产） | `M1-L1-508` 农业生产、初级加工与食品供应闭环 | `accepted` | 形成8类农业容量、20项农产品、13项食品/饲料加工产品、9类支撑设施、5种组织、19项新增科技、5项法令、5项政策和8项状态 | `ACCEPTED` |
+| 第一层（M1 能源系统） | `M1-L1-509` 能源来源、燃料、发电、热力与区域电网闭环 | `accepted` | 形成8类能源容量、19项产品设备、13类设施、5种组织、18项新增科技、4项法令、5项政策和8项状态 | `ACCEPTED` |
+| 第一层（M1 全系统） | `M1-L1-510` 十二个剩余系统连续完整性设计 | `accepted` | 用户进入十万人力定额问题；12份系统规格和255项 R5 新增候选作为已接受的系统范围基线 | `ACCEPTED` |
+| 第一层（M1 人力容量） | `M1-L1-511` 十万人势力人口、岗位、工厂与公共机构容量基准 | `accepted` | 用户以“好的”接受并要求据此回审产品与体系；52,000个常设岗位和45个标准工厂容量作为精简基准 | `ACCEPTED` |
+| 第一层（M1 精简架构） | `M1-L1-512` 十万人规模系统、科技、产品、工程与法令精简 | `completed_waiting_user_review` | 18个讨论系统收为10个玩家系统；255项候选形成普通两年124项与后期19项科技，99项第2年产品目标收为82项，原子身份规则继续有效 | `REVIEW_REQUIRED` |
+| 第一层（M1 R5落地） | `M1-L1-513` 逐ID科技处置与精简R5重建 | `completed_waiting_user_review` | R5已完成857项科技、2,186项产物、3,287条前置、2,728条解锁与53,045点；132项产品全落位，282页完整PDF通过内容与渲染验证 | `REVIEW_REQUIRED` |
+| 第一层（M1 国家治理） | `M1-L1-514` 政策倾向、法律标准与临时法令重建 | `accepted_as_R6_input` | 治理对象目录已作为R6正文总审的正式输入；后续修改以R6大型审阅稿的用户意见为准 | `ACCEPTED` |
+| 第一层（M1 正文总审） | `M1-L1-515` 玩家尺度科技合并与确定性正文二次审查 | `completed_waiting_user_review` | R6已形成539项科技、85项工程、67项政策、90项法律标准与34项临时法令的连续审阅文档；等待用户快速通读退回 | `REVIEW_REQUIRED` |
+| 第一层（M1 挂机节奏与事件） | `M1-L1-516` 二十四小时挂机节奏与独立事件倒推 | `pacing_superseded` | 24个月映射24小时与首月20分钟已被用户否决；事件候选与完整事件不因此自动失效 | `SUPERSEDED_PACING` |
+| 第一层（M1 固定时钟与终局） | `M1-L1-518` 一秒一日、五分钟开局、两小时挂机与终局重算 | `baseline_superseded_by_M1-L1-521` | 一秒一天、自然公历、五分钟开局和能力终局方向保留；原七千五百秒、约二十点五三年与旧科技数量已由阶段一七千二百秒合同取代 | `SUPERSEDED_BASELINE` |
+| 第一层（M1 科技正文R7） | `M1-L1-517` 科技正文逐项串行审查 | `completed_waiting_user_review` | 539项源节点已经逐项审查并形成519项候选；471项当前、48项后移，总计41,090点；整树复审完成，正文仍非逐字接受 | `REVIEW_REQUIRED` |
+| 第一层（M1 文字规则） | `M1-L1-519` 科研、工程与临时法令文字权威源固化 | `completed_current_mandatory_source` | revision 24继续作为相关任务的强制全文来源；后续修订只能依据新的用户纠正升版 | `CURRENT_SOURCE` |
+| 第一层（M1 战前世界） | `M1-L1-520` 战前巨企文明、巨企战争与新生人格底线 | `core_direction_confirmed_detail_review` | 保留气候失控、锈斑瘟疫与轨道轰炸作为毁灭手段，以巨企战争补足基础原因；建立旧世界高技术低人格与新生社会低技术先当人的对照 | `DIRECTION_CONFIRMED` |
+| 第一层（M1 完整Demo阶段一） | `M1-L1-521` 完整试玩Demo范围、终局证据与实施边界 | `accepted` | 用户要求继续下一步，阶段一总计7200秒、前5分钟千人正循环、P01—P12与G01—G06终局证据、M0改造白名单和旧口径撤销进入正式基线 | `ACCEPTED` |
+| 第一层（M1 完整Demo阶段二） | `M1-L1-522` 完整Demo视觉与交互蓝图 | `accepted` | 战略控制尺度、科研直接入队与右键移出、固定生产行和工厂分配已写入基准；V4至V6反例保持退回 | `ACCEPTED` |
+| 第四层（M1 Demo视觉实现） | `M1-L4-523-A-R4` 千人阶段连续区域地图返工 | `accepted_integrated` | 用户已接受连续区域地图、R2千人循环与任务图层；已授权并入主目录、清理错误方向残留并推送 GitHub 备份 | `ACCEPTED` |
+| 第三层（M1 科技正文R7） | `M1-L3-502-R3` SET-SUR-001-B逐项返工 | `completed_candidate_pass_superseded` | R16只保留能力内容方向；已被R5十项串行批次接替，不再作为活动阻塞项 | `SUPERSEDED` |
+| 第三层（M1 科技正文R7十项批次） | `M1-L3-502-R5` 十项科技逐项串行文字 | `completed_waiting_user_review` | revision 10十项第二轮候选全部交付；实际退回ELC-SAF-001一轮、LOG-RTE-001-A一轮、LOG-RTE-001-C两轮 | `REVIEW_REQUIRED` |
+| 第三层（M1正式科技正文） | `M1-L3-502-R6` 正式科技正文第一批 | `stage01_completed_waiting_user_review` | 复用任务`01a045d9-3f1f-71b0-936b-e036d282cb92`逐项完成前十项；应用漏显结果均按准确turn ID从本地日志恢复 | `REVIEW_REQUIRED` |
+| 第三层（M1正式科技正文全树） | `M1-L3-502-R7` 全树续跑与事实标签 | `completed_waiting_user_review` | 同一第三层任务已完成28阶段；应用漏显均由本地日志恢复，第一层完成整树复审和机器对账 | `REVIEW_REQUIRED` |
+| 第三层（错误旧路由） | `M1-L3-503` 科技正文逐项串行重写 | `superseded_not_created` | 未创建；先前因遗漏真实第三层任务而误登记，不再作为当前恢复目标 | `SUPERSEDED` |
 | 第四层（能力） | `M0-L4-005` GitHub Skills/MCP 能力审计 | `accepted` | 无 | `ACCEPTED` |
 | 第四层（代码） | `M0-L4-402-R3` 岗位、探索顺序与整厂数量小修 | `implemented_waiting_user_recheck` | 用户一次性要求第一层直接完成三项底层小修并禁止启动试玩；自动验证通过，一次性例外已失效。后续修改恢复派发第四层；不自动进入 `M0-L4-403` | `WAITING_RECHECK` |
 | 第四层（边界） | `M0-L4-011` 可复用底座与旧代码删除边界审计 | `accepted` | 无 | `ACCEPTED` |

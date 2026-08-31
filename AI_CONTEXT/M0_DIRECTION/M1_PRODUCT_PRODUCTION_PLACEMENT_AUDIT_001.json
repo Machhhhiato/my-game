@@ -1,0 +1,5766 @@
+{
+  "auditId": "M1-PRODUCT-PRODUCTION-PLACEMENT-AUDIT-001",
+  "status": "complete",
+  "dateGate": false,
+  "canonicalProductCount": 132,
+  "yearTwoCatalogCount": 82,
+  "completeMilitaryCatalogCount": 51,
+  "militaryAliasCount": 3,
+  "earlyGapProductCount": 2,
+  "managementModeCounts": {
+    "flow_stock": 58,
+    "controlled_stock": 10,
+    "discrete_order": 64
+  },
+  "unresolvedProductCount": 0,
+  "products": [
+    {
+      "id": "Y2-PL-CIV-001",
+      "name": "基础纺织布",
+      "canonicalId": "Y2-PL-CIV-001",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CIV-TEX-001-C"
+      ],
+      "factoryClasses": [
+        "民用工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "轻工与纺织生产单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CIV-002",
+      "name": "标准工作服",
+      "canonicalId": "Y2-PL-CIV-002",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "SOC-TEX-001"
+      ],
+      "factoryClasses": [
+        "民用工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "轻工与纺织生产单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CIV-003",
+      "name": "防护工作服",
+      "canonicalId": "Y2-PL-CIV-003",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "SOC-SFT-001"
+      ],
+      "factoryClasses": [
+        "民用工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "轻工与纺织生产单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CIV-004",
+      "name": "工作鞋靴",
+      "canonicalId": "Y2-PL-CIV-004",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "SOC-SHO-001"
+      ],
+      "factoryClasses": [
+        "民用工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "轻工与纺织生产单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CIV-005",
+      "name": "标准周转容器",
+      "canonicalId": "Y2-PL-CIV-005",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "LOG-HND-001-B"
+      ],
+      "factoryClasses": [
+        "民用工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "轻工与纺织生产单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CIV-006",
+      "name": "空金属食品罐",
+      "canonicalId": "Y2-PL-CIV-006",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "Y2-PROD-CIV-006"
+      ],
+      "factoryClasses": [
+        "民用工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "轻工与纺织生产单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-FOD-002",
+      "name": "谷物粉",
+      "canonicalId": "Y2-PL-FOD-002",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "AGR-MIL-001"
+      ],
+      "factoryClasses": [
+        "食品加工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "食品批次加工单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-FOD-004",
+      "name": "干燥蔬菜",
+      "canonicalId": "Y2-PL-FOD-004",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "Y2-PROD-FOD-004"
+      ],
+      "factoryClasses": [
+        "食品加工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "食品批次加工单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-FOD-005",
+      "name": "腌制蔬菜",
+      "canonicalId": "Y2-PL-FOD-005",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "FOD-PRS-001-B"
+      ],
+      "factoryClasses": [
+        "食品加工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "食品批次加工单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-FOD-006",
+      "name": "发酵蔬菜",
+      "canonicalId": "Y2-PL-FOD-006",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "FOD-PRS-001-A"
+      ],
+      "factoryClasses": [
+        "食品加工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "食品批次加工单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-FOD-007",
+      "name": "罐藏主食",
+      "canonicalId": "Y2-PL-FOD-007",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "Y2-PROD-FOD-007"
+      ],
+      "factoryClasses": [
+        "食品加工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "食品批次加工单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-FOD-008",
+      "name": "罐藏蛋白食品",
+      "canonicalId": "Y2-PL-FOD-008",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "Y2-PROD-FOD-008"
+      ],
+      "factoryClasses": [
+        "食品加工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "食品批次加工单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-FOD-009",
+      "name": "罐藏蔬菜",
+      "canonicalId": "Y2-PL-FOD-009",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "Y2-PROD-FOD-009"
+      ],
+      "factoryClasses": [
+        "食品加工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "食品批次加工单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-BLD-001",
+      "name": "建筑石灰",
+      "canonicalId": "Y2-PL-BLD-001",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CNS-MAT-001-C"
+      ],
+      "factoryClasses": [
+        "建材厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "建材热加工或成形单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-BLD-002",
+      "name": "水泥",
+      "canonicalId": "Y2-PL-BLD-002",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CNS-CEM-001-B"
+      ],
+      "factoryClasses": [
+        "建材厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "建材热加工或成形单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-BLD-005",
+      "name": "分级建筑骨料",
+      "canonicalId": "Y2-PL-BLD-005",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "Y2-PROD-BLD-005"
+      ],
+      "factoryClasses": [
+        "建材厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "建材热加工或成形单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-BLD-006",
+      "name": "标准砌筑砖",
+      "canonicalId": "Y2-PL-BLD-006",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "Y2-PROD-BLD-006"
+      ],
+      "factoryClasses": [
+        "建材厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "建材热加工或成形单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-BLD-007",
+      "name": "标准预制构件",
+      "canonicalId": "Y2-PL-BLD-007",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CNS-PRE-001-A"
+      ],
+      "factoryClasses": [
+        "建材厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "建材热加工或成形单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-GLS-001",
+      "name": "标准玻璃容器",
+      "canonicalId": "Y2-PL-GLS-001",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CNS-GLS-001-D"
+      ],
+      "factoryClasses": [
+        "玻璃厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "玻璃熔制与成形单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-GLS-002",
+      "name": "普通窗用平板玻璃",
+      "canonicalId": "Y2-PL-GLS-002",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CNS-GLS-001-E"
+      ],
+      "factoryClasses": [
+        "玻璃厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "玻璃熔制与成形单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-STL-004",
+      "name": "标准钢板",
+      "canonicalId": "Y2-PL-STL-004",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "MET-ROL-001-C"
+      ],
+      "factoryClasses": [
+        "炼钢厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "钢铁冶炼与成材单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-STL-005",
+      "name": "标准钢棒",
+      "canonicalId": "Y2-PL-STL-005",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "MET-ROL-001-D"
+      ],
+      "factoryClasses": [
+        "炼钢厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "钢铁冶炼与成材单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-STL-006",
+      "name": "标准钢线材",
+      "canonicalId": "Y2-PL-STL-006",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "MET-ROL-001-E"
+      ],
+      "factoryClasses": [
+        "炼钢厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "钢铁冶炼与成材单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-STL-007",
+      "name": "标准钢管",
+      "canonicalId": "Y2-PL-STL-007",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "MAT-PIP-001"
+      ],
+      "factoryClasses": [
+        "炼钢厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "钢铁冶炼与成材单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-STL-008",
+      "name": "工具钢",
+      "canonicalId": "Y2-PL-STL-008",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "MET-ALY-001-A"
+      ],
+      "factoryClasses": [
+        "炼钢厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "钢铁冶炼与成材单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-STL-009",
+      "name": "弹簧钢",
+      "canonicalId": "Y2-PL-STL-009",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "MET-ALY-001-B"
+      ],
+      "factoryClasses": [
+        "炼钢厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "钢铁冶炼与成材单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-STL-010",
+      "name": "耐热合金",
+      "canonicalId": "Y2-PL-STL-010",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "MET-ALY-001-C"
+      ],
+      "factoryClasses": [
+        "炼钢厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "钢铁冶炼与成材单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-NFM-001",
+      "name": "再生铜锭",
+      "canonicalId": "Y2-PL-NFM-001",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "MET-NFR-001-A"
+      ],
+      "factoryClasses": [
+        "有色金属厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "有色金属分选熔炼单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-NFM-002",
+      "name": "再生铝锭",
+      "canonicalId": "Y2-PL-NFM-002",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "MET-NFR-001-B"
+      ],
+      "factoryClasses": [
+        "有色金属厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "有色金属分选熔炼单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-NFM-003",
+      "name": "常用有色合金锭",
+      "canonicalId": "Y2-PL-NFM-003",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "MET-NFR-001-C"
+      ],
+      "factoryClasses": [
+        "有色金属厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "有色金属分选熔炼单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CHM-001",
+      "name": "基础酸溶液",
+      "canonicalId": "Y2-PL-CHM-001",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CHM-ACD-001-A"
+      ],
+      "factoryClasses": [
+        "化工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "化工批次或连续生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CHM-002",
+      "name": "基础碱溶液",
+      "canonicalId": "Y2-PL-CHM-002",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CHM-ACD-001-B"
+      ],
+      "factoryClasses": [
+        "化工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "化工批次或连续生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CHM-003",
+      "name": "工业盐",
+      "canonicalId": "Y2-PL-CHM-003",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CHM-ACD-001-C"
+      ],
+      "factoryClasses": [
+        "化工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "化工批次或连续生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CHM-004",
+      "name": "通用工业试剂",
+      "canonicalId": "Y2-PL-CHM-004",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CHM-ACD-001-D"
+      ],
+      "factoryClasses": [
+        "化工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "化工批次或连续生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CHM-005",
+      "name": "肥皂",
+      "canonicalId": "Y2-PL-CHM-005",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CHM-CLN-001-A"
+      ],
+      "factoryClasses": [
+        "化工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "化工批次或连续生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CHM-006",
+      "name": "洗涤剂",
+      "canonicalId": "Y2-PL-CHM-006",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CHM-CLN-001-B"
+      ],
+      "factoryClasses": [
+        "化工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "化工批次或连续生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CHM-007",
+      "name": "消毒剂",
+      "canonicalId": "Y2-PL-CHM-007",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CHM-CLN-001-C"
+      ],
+      "factoryClasses": [
+        "化工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "化工批次或连续生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CHM-009",
+      "name": "基础肥料",
+      "canonicalId": "Y2-PL-CHM-009",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CHM-FRT-001-A"
+      ],
+      "factoryClasses": [
+        "化工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "化工批次或连续生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CHM-010",
+      "name": "浓缩工业氧气",
+      "canonicalId": "Y2-PL-CHM-010",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CHM-GAS-001-A"
+      ],
+      "factoryClasses": [
+        "化工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "化工批次或连续生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CHM-011",
+      "name": "瓶装医用氧气",
+      "canonicalId": "Y2-PL-CHM-011",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CHM-GAS-001-B"
+      ],
+      "factoryClasses": [
+        "化工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "化工批次或连续生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CHM-014",
+      "name": "润滑油",
+      "canonicalId": "Y2-PL-CHM-014",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "CHM-LUB-001-B"
+      ],
+      "factoryClasses": [
+        "化工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "化工批次或连续生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CHM-016",
+      "name": "合格液体燃料",
+      "canonicalId": "Y2-PL-CHM-016",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "NRG-FUL-001-A"
+      ],
+      "factoryClasses": [
+        "化工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "化工批次或连续生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CHM-017",
+      "name": "推进剂",
+      "canonicalId": "Y2-PL-CHM-017",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "controlled_stock",
+      "sourceTechnologyIds": [
+        "CHM-ENE-001-A"
+      ],
+      "factoryClasses": [
+        "化工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "化工批次或连续生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CHM-018",
+      "name": "起爆药",
+      "canonicalId": "Y2-PL-CHM-018",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "controlled_stock",
+      "sourceTechnologyIds": [
+        "CHM-ENE-001-B"
+      ],
+      "factoryClasses": [
+        "化工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "化工批次或连续生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-CHM-019",
+      "name": "工业爆破材料",
+      "canonicalId": "Y2-PL-CHM-019",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "controlled_stock",
+      "sourceTechnologyIds": [
+        "CHM-ENE-001-C"
+      ],
+      "factoryClasses": [
+        "化工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "化工批次或连续生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 3000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MCH-001",
+      "name": "通用手工具套装",
+      "canonicalId": "Y2-PL-MCH-001",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "MCH-HND-001-A"
+      ],
+      "factoryClasses": [
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "机械加工与装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MCH-002",
+      "name": "基础紧固件",
+      "canonicalId": "Y2-PL-MCH-002",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "Y2-PROD-MCH-002"
+      ],
+      "factoryClasses": [
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "机械加工与装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MCH-003",
+      "name": "基础传动件",
+      "canonicalId": "Y2-PL-MCH-003",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "Y2-PROD-MCH-003"
+      ],
+      "factoryClasses": [
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "机械加工与装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MCH-004",
+      "name": "通用滚动轴承",
+      "canonicalId": "Y2-PL-MCH-004",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "Y2-PROD-MCH-004"
+      ],
+      "factoryClasses": [
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "机械加工与装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MCH-005",
+      "name": "通用离心泵",
+      "canonicalId": "Y2-PL-MCH-005",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "MCH-PMP-001-B"
+      ],
+      "factoryClasses": [
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "机械加工与装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MCH-006",
+      "name": "通用工业阀门",
+      "canonicalId": "Y2-PL-MCH-006",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "MCH-PMP-001-B"
+      ],
+      "factoryClasses": [
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "机械加工与装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MCH-007",
+      "name": "通用工装",
+      "canonicalId": "Y2-PL-MCH-007",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "MCH-JIG-001-C"
+      ],
+      "factoryClasses": [
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "机械加工与装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MCH-008",
+      "name": "标准车床",
+      "canonicalId": "Y2-PL-MCH-008",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "IME-LAT-001"
+      ],
+      "factoryClasses": [
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "机械加工与装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MCH-009",
+      "name": "标准铣床",
+      "canonicalId": "Y2-PL-MCH-009",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "IME-MIL-001"
+      ],
+      "factoryClasses": [
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "机械加工与装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MCH-010",
+      "name": "标准钻床",
+      "canonicalId": "Y2-PL-MCH-010",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "IME-DRL-001"
+      ],
+      "factoryClasses": [
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "机械加工与装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MCH-011",
+      "name": "标准磨床",
+      "canonicalId": "Y2-PL-MCH-011",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "IME-GRD-001"
+      ],
+      "factoryClasses": [
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "机械加工与装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MCH-012",
+      "name": "工业锅炉",
+      "canonicalId": "Y2-PL-MCH-012",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "NRG-HTR-001-A"
+      ],
+      "factoryClasses": [
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "机械加工与装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MCH-013",
+      "name": "工业窑炉",
+      "canonicalId": "Y2-PL-MCH-013",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "NRG-HTR-001-B"
+      ],
+      "factoryClasses": [
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "机械加工与装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MCH-014",
+      "name": "金属熔炼炉",
+      "canonicalId": "Y2-PL-MCH-014",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MET-FUR-001-B"
+      ],
+      "factoryClasses": [
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "机械加工与装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-ELC-001",
+      "name": "低压绝缘电线",
+      "canonicalId": "Y2-PL-ELC-001",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "ELC-CAB-001-A"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "电气仪表装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-ELC-002",
+      "name": "动力电缆",
+      "canonicalId": "Y2-PL-ELC-002",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "ELC-CAB-001-A"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "电气仪表装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-ELC-003",
+      "name": "控制电缆",
+      "canonicalId": "Y2-PL-ELC-003",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "ELC-CAB-001-A"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "电气仪表装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-ELC-004",
+      "name": "标准鼠笼式电动机",
+      "canonicalId": "Y2-PL-ELC-004",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "ELC-MOT-001-B"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "电气仪表装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-ELC-005",
+      "name": "电动机备件包",
+      "canonicalId": "Y2-PL-ELC-005",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "ELC-MOT-001-B"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "电气仪表装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-ELC-006",
+      "name": "低压配电柜",
+      "canonicalId": "Y2-PL-ELC-006",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "Y2-PROD-ELC-006"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "电气仪表装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-ELC-008",
+      "name": "标准蓄电池组",
+      "canonicalId": "Y2-PL-ELC-008",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "NRG-STO-001-B"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "电气仪表装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-ELC-009",
+      "name": "电压表",
+      "canonicalId": "Y2-PL-ELC-009",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "ICD-VLT-001"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "电气仪表装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-ELC-010",
+      "name": "有线电话机",
+      "canonicalId": "Y2-PL-ELC-010",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "ELC-WIR-001-A"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "电气仪表装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-ELC-011",
+      "name": "便携无线电台",
+      "canonicalId": "Y2-PL-ELC-011",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "ELC-RAD-001-A"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "电气仪表装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-ELC-012",
+      "name": "固定无线电台",
+      "canonicalId": "Y2-PL-ELC-012",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "ELC-RAD-001-A"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "电气仪表装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-VEH-001",
+      "name": "标准货运推车",
+      "canonicalId": "Y2-PL-VEH-001",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "VEH-CAR-001"
+      ],
+      "factoryClasses": [
+        "车辆厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "车辆总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-VEH-002",
+      "name": "载货自行车",
+      "canonicalId": "Y2-PL-VEH-002",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "VEH-BIC-001"
+      ],
+      "factoryClasses": [
+        "车辆厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "车辆总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-VEH-003",
+      "name": "第1代民用轻型卡车",
+      "canonicalId": "Y2-PL-VEH-003",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "VEH-LTR-001"
+      ],
+      "factoryClasses": [
+        "车辆厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "车辆总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-VEH-004",
+      "name": "轻型卡车维修总成",
+      "canonicalId": "Y2-PL-VEH-004",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "Y2-PROD-VEH-004"
+      ],
+      "factoryClasses": [
+        "车辆厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "车辆总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MED-001",
+      "name": "基础医用敷料",
+      "canonicalId": "Y2-PL-MED-001",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "MED-SUP-001-A"
+      ],
+      "factoryClasses": [
+        "医疗工业厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "洁净耗材或医疗设备装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MED-002",
+      "name": "基础无菌耗材",
+      "canonicalId": "Y2-PL-MED-002",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "MED-SUP-001-B"
+      ],
+      "factoryClasses": [
+        "医疗工业厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "洁净耗材或医疗设备装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MED-003",
+      "name": "基础诊疗器械",
+      "canonicalId": "Y2-PL-MED-003",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MED-DEV-001-A"
+      ],
+      "factoryClasses": [
+        "医疗工业厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "洁净耗材或医疗设备装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MED-004",
+      "name": "基础手术器械组",
+      "canonicalId": "Y2-PL-MED-004",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MED-DEV-001-A"
+      ],
+      "factoryClasses": [
+        "医疗工业厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "洁净耗材或医疗设备装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MED-005",
+      "name": "基础呼吸支持设备组",
+      "canonicalId": "Y2-PL-MED-005",
+      "aliases": [],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MED-DEV-001-B"
+      ],
+      "factoryClasses": [
+        "医疗工业厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "洁净耗材或医疗设备装配单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "Y2-PL-MIL-001",
+      "name": "“守线”制式单兵枪械（步武—01）",
+      "canonicalId": "Y2-PL-MIL-001",
+      "aliases": [
+        "M1-MIL-PROD-001"
+      ],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-001"
+      ],
+      "factoryClasses": [
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "受控军械生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete",
+      "militaryRoute": "两年基础",
+      "primaryUse": "守备、步兵及各类需要单兵武器的部队"
+    },
+    {
+      "id": "Y2-PL-MIL-002",
+      "name": "“基准”标准枪械弹药（步弹—01）",
+      "canonicalId": "Y2-PL-MIL-002",
+      "aliases": [
+        "M1-MIL-PROD-004"
+      ],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "controlled_stock",
+      "sourceTechnologyIds": [
+        "MIL-EQP-002"
+      ],
+      "factoryClasses": [
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "受控军械生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "recipe_or_process_update_requires_batch_requalification; major_process_change_requires_unit_refit",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete",
+      "militaryRoute": "两年基础",
+      "primaryUse": "制式枪械、班组自动武器和精确射手武器"
+    },
+    {
+      "id": "Y2-PL-MIL-003",
+      "name": "“开路”工兵装备套装（工兵—01）",
+      "canonicalId": "Y2-PL-MIL-003",
+      "aliases": [
+        "M1-MIL-PROD-043"
+      ],
+      "scope": "year_two_factory_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-009"
+      ],
+      "factoryClasses": [
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "受控军械生产单元"
+      ],
+      "compatibleSiteForms": [
+        "共享作坊场院",
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete",
+      "militaryRoute": "两年基础",
+      "primaryUse": "工兵与战场救援部队"
+    },
+    {
+      "id": "M1-MIL-PROD-002",
+      "canonicalId": "M1-MIL-PROD-002",
+      "aliases": [],
+      "name": "“连声”班组自动火力武器（班火—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-003"
+      ],
+      "factoryClasses": [
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "两年基础",
+      "primaryUse": "轻型、摩托化与机械化步兵",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-003",
+      "canonicalId": "M1-MIL-PROD-003",
+      "aliases": [],
+      "name": "“静线”精确射手武器（精射—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-003"
+      ],
+      "factoryClasses": [
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "条件路线",
+      "primaryUse": "步兵与侦察部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-005",
+      "canonicalId": "M1-MIL-PROD-005",
+      "aliases": [],
+      "name": "“行装”单兵防护与负载携行套装（单装—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-008"
+      ],
+      "factoryClasses": [
+        "民用工厂",
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "两年基础",
+      "primaryUse": "全部地面部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-006",
+      "canonicalId": "M1-MIL-PROD-006",
+      "aliases": [],
+      "name": "“短弧”轻型迫击支援武器（曲火—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-004"
+      ],
+      "factoryClasses": [
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "两年基础",
+      "primaryUse": "轻型、摩托化与机械化步兵",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-007",
+      "canonicalId": "M1-MIL-PROD-007",
+      "aliases": [],
+      "name": "“开楔”近程反装甲武器（反装—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-006"
+      ],
+      "factoryClasses": [
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "条件路线",
+      "primaryUse": "步兵、反装甲与工兵部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-008",
+      "canonicalId": "M1-MIL-PROD-008",
+      "aliases": [],
+      "name": "“沉弧”重型迫击武器（重迫—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-008"
+      ],
+      "factoryClasses": [
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "条件路线",
+      "primaryUse": "炮兵与重型火力支援部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-009",
+      "canonicalId": "M1-MIL-PROD-009",
+      "aliases": [],
+      "name": "“远鸣”牵引野战火炮（野炮—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-005"
+      ],
+      "factoryClasses": [
+        "军事工厂",
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "条件路线",
+      "primaryUse": "炮兵部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-010",
+      "canonicalId": "M1-MIL-PROD-010",
+      "aliases": [],
+      "name": "“行雷”自行火炮（自炮—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-010"
+      ],
+      "factoryClasses": [
+        "军事工厂",
+        "车辆厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "炮兵与机械化部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-011",
+      "canonicalId": "M1-MIL-PROD-011",
+      "aliases": [],
+      "name": "“群啸”多管火箭炮（火箭—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-011"
+      ],
+      "factoryClasses": [
+        "军事工厂",
+        "车辆厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "集团军远程火力部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-012",
+      "canonicalId": "M1-MIL-PROD-012",
+      "aliases": [],
+      "name": "“短弧”配套迫击炮弹药（迫弹—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "controlled_stock",
+      "sourceTechnologyIds": [
+        "MIL-EXT-012"
+      ],
+      "factoryClasses": [
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "受控军用弹药生产单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "两年基础",
+      "primaryUse": "轻型与重型迫击武器",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-013",
+      "canonicalId": "M1-MIL-PROD-013",
+      "aliases": [],
+      "name": "“远鸣”配套炮兵弹药（炮弹—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "controlled_stock",
+      "sourceTechnologyIds": [
+        "MIL-EXT-013"
+      ],
+      "factoryClasses": [
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "受控军用弹药生产单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "条件路线",
+      "primaryUse": "牵引与自行火炮",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-014",
+      "canonicalId": "M1-MIL-PROD-014",
+      "aliases": [],
+      "name": "“群啸”配套火箭炮弹药（箭弹—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "controlled_stock",
+      "sourceTechnologyIds": [
+        "MIL-EXT-014"
+      ],
+      "factoryClasses": [
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "受控军用弹药生产单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "多管火箭炮",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-015",
+      "canonicalId": "M1-MIL-PROD-015",
+      "aliases": [],
+      "name": "“折枪”反装甲制导武器（反导—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-015"
+      ],
+      "factoryClasses": [
+        "军事工厂",
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "反装甲与机械化步兵",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-016",
+      "canonicalId": "M1-MIL-PROD-016",
+      "aliases": [],
+      "name": "“折枪”反装甲制导弹药（反导弹—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "controlled_stock",
+      "sourceTechnologyIds": [
+        "MIL-EXT-016"
+      ],
+      "factoryClasses": [
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "受控军用弹药生产单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "反装甲制导武器",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-017",
+      "canonicalId": "M1-MIL-PROD-017",
+      "aliases": [],
+      "name": "“仰角”便携低空防御武器（低防—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-007"
+      ],
+      "factoryClasses": [
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "条件路线",
+      "primaryUse": "防空与机动部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-018",
+      "canonicalId": "M1-MIL-PROD-018",
+      "aliases": [],
+      "name": "“天幕”机动近程防空系统（近防—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-018"
+      ],
+      "factoryClasses": [
+        "军事工厂",
+        "车辆厂",
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "防空与装甲部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-019",
+      "canonicalId": "M1-MIL-PROD-019",
+      "aliases": [],
+      "name": "“天幕”近程防空制导弹药（防导弹—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "controlled_stock",
+      "sourceTechnologyIds": [
+        "MIL-EXT-019"
+      ],
+      "factoryClasses": [
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "受控军用弹药生产单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "机动近程防空系统",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-020",
+      "canonicalId": "M1-MIL-PROD-020",
+      "aliases": [],
+      "name": "“定标”野战火力指挥与校射设备组（火控—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-020"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "条件路线",
+      "primaryUse": "炮兵、反装甲和防空部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-021",
+      "canonicalId": "M1-MIL-PROD-021",
+      "aliases": [],
+      "name": "“前路”轻型军用摩托车（军摩—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-012"
+      ],
+      "factoryClasses": [
+        "车辆厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "两年基础",
+      "primaryUse": "侦察、通信和路线警戒部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-022",
+      "canonicalId": "M1-MIL-PROD-022",
+      "aliases": [],
+      "name": "“远行”轻型军用卡车（轻运—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-013"
+      ],
+      "factoryClasses": [
+        "车辆厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "两年基础",
+      "primaryUse": "步兵、通信、医疗和军需部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-023",
+      "canonicalId": "M1-MIL-PROD-023",
+      "aliases": [],
+      "name": "“承载”中型军用卡车（中运—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-014"
+      ],
+      "factoryClasses": [
+        "车辆厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "两年基础",
+      "primaryUse": "炮兵、军需、维修和工程部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-024",
+      "canonicalId": "M1-MIL-PROD-024",
+      "aliases": [],
+      "name": "“重程”重型军用卡车（重运—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-024"
+      ],
+      "factoryClasses": [
+        "车辆厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "重炮、坦克保障和重型工程运输",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-025",
+      "canonicalId": "M1-MIL-PROD-025",
+      "aliases": [],
+      "name": "“载序”军用保障车辆模块组（军保—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-025"
+      ],
+      "factoryClasses": [
+        "车辆厂",
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "两年基础",
+      "primaryUse": "油料、水、弹药和维修运输；具体模块留在车辆订单中",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-026",
+      "canonicalId": "M1-MIL-PROD-026",
+      "aliases": [],
+      "name": "“先见”装甲侦察车（装侦—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-015"
+      ],
+      "factoryClasses": [
+        "车辆厂",
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "条件路线",
+      "primaryUse": "侦察与装甲部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-027",
+      "canonicalId": "M1-MIL-PROD-027",
+      "aliases": [],
+      "name": "“载步”装甲输送车（装输—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-027"
+      ],
+      "factoryClasses": [
+        "车辆厂",
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "机械化步兵",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-028",
+      "canonicalId": "M1-MIL-PROD-028",
+      "aliases": [],
+      "name": "“伴锋”步兵战车（步战—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-028"
+      ],
+      "factoryClasses": [
+        "车辆厂",
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "机械化步兵与装甲协同部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-029",
+      "canonicalId": "M1-MIL-PROD-029",
+      "aliases": [],
+      "name": "“砺石”轻型坦克（轻装—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-016"
+      ],
+      "factoryClasses": [
+        "车辆厂",
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "条件路线",
+      "primaryUse": "轻型装甲部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-030",
+      "canonicalId": "M1-MIL-PROD-030",
+      "aliases": [],
+      "name": "“中坚”中型坦克（中装—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-017"
+      ],
+      "factoryClasses": [
+        "车辆厂",
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "主体装甲部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-031",
+      "canonicalId": "M1-MIL-PROD-031",
+      "aliases": [],
+      "name": "“镇垒”重型坦克（重装—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-018"
+      ],
+      "factoryClasses": [
+        "车辆厂",
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "重型装甲支援部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-032",
+      "canonicalId": "M1-MIL-PROD-032",
+      "aliases": [],
+      "name": "“坚芯”标准坦克炮弹药（坦弹—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "controlled_stock",
+      "sourceTechnologyIds": [
+        "MIL-EXT-032"
+      ],
+      "factoryClasses": [
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "受控军用弹药生产单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "轻型、中型和重型坦克对应型号",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-033",
+      "canonicalId": "M1-MIL-PROD-033",
+      "aliases": [],
+      "name": "“援臂”装甲抢修与拖救车辆（装救—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-019"
+      ],
+      "factoryClasses": [
+        "车辆厂",
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "条件路线",
+      "primaryUse": "装甲、机械化与维修部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-034",
+      "canonicalId": "M1-MIL-PROD-034",
+      "aliases": [],
+      "name": "“破障”装甲工程车（装工—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-034"
+      ],
+      "factoryClasses": [
+        "车辆厂",
+        "机械制造厂",
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "工兵与装甲部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-035",
+      "canonicalId": "M1-MIL-PROD-035",
+      "aliases": [],
+      "name": "“护生”野战救护车（救护—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-035"
+      ],
+      "factoryClasses": [
+        "车辆厂",
+        "医疗工业厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "两年基础",
+      "primaryUse": "卫生与后送部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-036",
+      "canonicalId": "M1-MIL-PROD-036",
+      "aliases": [],
+      "name": "“联声”班组与车载通信设备套装（军通—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-010"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "两年基础",
+      "primaryUse": "全部机动作战与保障部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-037",
+      "canonicalId": "M1-MIL-PROD-037",
+      "aliases": [],
+      "name": "“中枢”野战指挥所设备组（指设—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-037"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "两年基础",
+      "primaryUse": "指挥通信部队和各级指挥机构",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-038",
+      "canonicalId": "M1-MIL-PROD-038",
+      "aliases": [],
+      "name": "“远目”军事侦察观察设备组（侦观—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-038"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂",
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "两年基础",
+      "primaryUse": "侦察、炮兵、反装甲和步兵部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-039",
+      "canonicalId": "M1-MIL-PROD-039",
+      "aliases": [],
+      "name": "“轻隼”近程侦察无人机系统（近无—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-039"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂",
+        "车辆厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "条件路线",
+      "primaryUse": "侦察、炮兵和前沿步兵部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-040",
+      "canonicalId": "M1-MIL-PROD-040",
+      "aliases": [],
+      "name": "“长隼”战术侦察无人机系统（战无—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-040"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂",
+        "车辆厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "集团军侦察与远程火力部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-041",
+      "canonicalId": "M1-MIL-PROD-041",
+      "aliases": [],
+      "name": "“听地”地面监视雷达（地监—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-041"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "侦察、防空和炮兵部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-042",
+      "canonicalId": "M1-MIL-PROD-042",
+      "aliases": [],
+      "name": "“静潮”电子战设备组（电战—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-042"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "指挥通信与电子战部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-044",
+      "canonicalId": "M1-MIL-PROD-044",
+      "aliases": [],
+      "name": "“断障”障碍侦测与开辟装备组（破障—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-044"
+      ],
+      "factoryClasses": [
+        "机械制造厂",
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 10000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "条件路线",
+      "primaryUse": "工兵、步兵和反装甲部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-045",
+      "canonicalId": "M1-MIL-PROD-045",
+      "aliases": [],
+      "name": "“架路”野战桥梁与道路保障装备组（路保—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-045"
+      ],
+      "factoryClasses": [
+        "机械制造厂",
+        "车辆厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "工兵与重型机动部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-046",
+      "canonicalId": "M1-MIL-PROD-046",
+      "aliases": [],
+      "name": "“续链”野战军需保障装备组（军需—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-046"
+      ],
+      "factoryClasses": [
+        "民用工厂",
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "两年基础",
+      "primaryUse": "军需运输和所有野战部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-047",
+      "canonicalId": "M1-MIL-PROD-047",
+      "aliases": [],
+      "name": "“续机”野战维修装备组（野修—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-047"
+      ],
+      "factoryClasses": [
+        "机械制造厂",
+        "电气、仪表与通信设备厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "两年基础",
+      "primaryUse": "维修、车辆、装甲与炮兵部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-048",
+      "canonicalId": "M1-MIL-PROD-048",
+      "aliases": [],
+      "name": "“续行”野战医疗与伤员后送装备套装（卫勤—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EQP-011"
+      ],
+      "factoryClasses": [
+        "医疗工业厂",
+        "民用工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "两年基础",
+      "primaryUse": "卫生与后送部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-049",
+      "canonicalId": "M1-MIL-PROD-049",
+      "aliases": [],
+      "name": "“火种”野战移动电源系统（野电—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-049"
+      ],
+      "factoryClasses": [
+        "电气、仪表与通信设备厂",
+        "机械制造厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "标准工厂场址",
+        "工业联合场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "两年基础",
+      "primaryUse": "指挥、通信、医疗、雷达和维修部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-050",
+      "canonicalId": "M1-MIL-PROD-050",
+      "aliases": [],
+      "name": "“垂行”运输直升机（陆航—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-050"
+      ],
+      "factoryClasses": [
+        "航空工业长期类别"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "工业联合场址",
+        "航空工业专用场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "陆军航空、机动运输和伤员后送部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-MIL-PROD-051",
+      "canonicalId": "M1-MIL-PROD-051",
+      "aliases": [],
+      "name": "“低袭”武装直升机（武直—01）",
+      "scope": "complete_military_catalog",
+      "productionManagementMode": "discrete_order",
+      "sourceTechnologyIds": [
+        "MIL-EXT-051"
+      ],
+      "factoryClasses": [
+        "航空工业长期类别",
+        "军事工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "军用装备总装与试验单元"
+      ],
+      "compatibleSiteForms": [
+        "工业联合场址",
+        "航空工业专用场址"
+      ],
+      "minimumPopulationReference": 30000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit",
+        "convert_output"
+      ],
+      "modelRefitRule": "small_update_tooling_and_standard; medium_update_refit_unit; major_update_new_unit_or_site",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "militaryRoute": "现代完整线",
+      "primaryUse": "陆军航空与装甲反击部队",
+      "status": "complete"
+    },
+    {
+      "id": "M1-PROD-LMB-001",
+      "canonicalId": "M1-PROD-LMB-001",
+      "aliases": [],
+      "name": "标准锯材",
+      "scope": "early_intuitive_gap_added",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "RSC-SAW-001"
+      ],
+      "factoryClasses": [
+        "民用工厂",
+        "建材厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "锯切、干燥与木材分级单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "process_update_requires_batch_requalification",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "M1-PROD-FOD-001",
+      "canonicalId": "M1-PROD-FOD-001",
+      "aliases": [],
+      "name": "标准烤制主食",
+      "scope": "early_intuitive_gap_added",
+      "productionManagementMode": "flow_stock",
+      "sourceTechnologyIds": [
+        "AGR-BAK-001"
+      ],
+      "factoryClasses": [
+        "食品加工厂"
+      ],
+      "compatibleProductionUnitTypes": [
+        "烘焙食品批次生产单元"
+      ],
+      "compatibleSiteForms": [
+        "小型专业作坊",
+        "共享作坊场院",
+        "标准工厂场址"
+      ],
+      "minimumPopulationReference": 1000,
+      "minimumPopulationIsDateGate": false,
+      "expansionModes": [
+        "add_shift",
+        "install_unit",
+        "extend_site",
+        "build_site",
+        "refit_unit"
+      ],
+      "modelRefitRule": "recipe_update_requires_food_safety_requalification",
+      "requiredIndependentCapacityAxes": [
+        "qualified_staff",
+        "equipment",
+        "building_space",
+        "utilities",
+        "material_supply",
+        "storage_and_logistics",
+        "safety_and_environment",
+        "maintenance_and_quality"
+      ],
+      "status": "complete"
+    }
+  ]
+}

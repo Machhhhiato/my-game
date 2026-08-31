@@ -3,15 +3,18 @@ import {
   isLeapYear,
   nextGameDate,
 } from '../src/m0/calendar';
-import { refreshMonthlyProjection } from '../src/m0/economy';
-import { clearM0State, loadM0State, saveM0State, type StorageLike } from '../src/m0/save';
+import { dailyResourceRate, refreshMonthlyProjection } from '../src/m0/economy';
+import { M0_LEGACY_SAVE_KEY, M0_V8_SAVE_KEY, clearM0State, loadM0State, saveM0State, type StorageLike } from '../src/m0/save';
 import {
   advanceOneDay,
   advanceRealTime,
   approveProject,
+  approveRecoveryProject,
+  approveOpeningProject,
   availableAmount,
   coverageDays,
   injectTestProject,
+  moveProjectInQueue,
   setDailyLinePositions,
   setDailyMode,
   setGameSpeed,
@@ -20,25 +23,32 @@ import {
   approveSurvey,
   configureSurvey,
   completeDroneRecharge,
+  contactExistingSettlement,
+  integrateExistingSettlement,
   selectSurveyRoute,
   setResearchDomainAutomatic,
   setResearchDomainOrder,
   setResearchFacilityEnabled,
   setResearchFacilityOpenPositions,
   setResearchMode,
+  removeResearchTarget,
+  setProductionAllocation,
+  setProjectPaused,
   setResearchTarget,
   setSurveyPaused,
   setRunning,
+  setOpeningServiceOperational,
 } from '../src/m0/simulation';
-import { M0_SAVE_KEY, createInitialM0State, setEventWindowPosition, setMapRotation } from '../src/m0/state';
-import type { M0State, Project, ScenarioConfig } from '../src/m0/types';
+import { M0_SAVE_KEY, createInitialM0State, livingPopulation, setEventWindowPosition, setMapRotation, workablePopulation } from '../src/m0/state';
+import type { M0State, OpeningProjectId, Project, ScenarioConfig } from '../src/m0/types';
 import {
   LOCATION_CELLS,
   MAP_ROTATION_LIMITS,
-  SPHERICAL_LOCAL_WINDOW,
+  REGION_MAP,
   futureFarmConclusion,
   intelStageName,
-  projectSphericalLocalWindow,
+  normalizeRegionCamera,
+  projectRegionMap,
   surveyConclusion,
   surveyPlanControlState,
   surveyVisibleFacts,
@@ -46,6 +56,7 @@ import {
   visibleCellTitle,
 } from '../src/m0/map';
 import { automaticSelectionForDefinitions, enabledResearchCapacity, researchDomainName, technologies, technologyName, type TechnologyDefinition } from '../src/m0/progression';
+import { OPENING_PROJECT_RULES, OPENING_SETTLEMENT_CELL_ID, RECOVERY_RULES, openingLoopEvidence } from '../src/m0/openingLoop';
 
 function expect(value: unknown, message: string): asserts value {
   if (!value) throw new Error(message);
@@ -87,6 +98,20 @@ function workforceTotal(state: M0State): number {
     + workforce.development
     + workforce.standby
     + projectWorkers;
+}
+
+function openingAtomicResults(state: M0State): Record<OpeningProjectId, boolean> {
+  return {
+    'opening-water-repair': state.settlement.services.water.operational,
+    'opening-food-source': state.settlement.services.foodSource.operational,
+    'opening-food-processing': state.settlement.services.foodProcessing.operational,
+    'opening-critical-power': state.settlement.services.power.operational,
+    'opening-sanitation': state.settlement.services.sanitation.operational,
+    'opening-basic-medical': state.settlement.services.medical.operational,
+    'opening-housing': state.settlement.services.housing.operational,
+    'opening-registration': state.settlement.services.registrationComplete,
+    'opening-basic-industry': state.settlement.basicProductionUnits > 0,
+  };
 }
 
 function testProject(
@@ -144,6 +169,8 @@ equal(JSON.stringify(nextGameDate({ year: 2001, month: 12, day: 31 })), JSON.str
 
 const initial = createInitialM0State();
 equal(JSON.stringify(initial.calendar), JSON.stringify({ year: 2001, month: 1, day: 1 }), 'test scenario supplies a common-year January first');
+equal(initial.clock.running, true, 'a new game starts running without a player command');
+equal(initial.clock.speed, 1, 'a new game starts at one-times speed');
 expect(!('safetyLines' in initial), 'player safety lines are absent from state');
 expect(!JSON.stringify(initial).includes('lockedCost'), 'project shadow cost is absent from state');
 expect(!JSON.stringify(initial).includes('"locked"'), 'locked stock is absent from state');
@@ -152,6 +179,8 @@ equal(initial.stocks.commonParts.amount, 41, 'approved waterworks cost immediate
 equal(initial.stocks.engineeringComponents.amount, 68, 'approved waterworks cost immediately deducts engineering components');
 equal(initial.projects[0].investedResources.commonParts, 4, 'waterworks records actual invested common parts');
 equal(initial.projects[0].investedResources.engineeringComponents, 12, 'waterworks records actual invested components');
+equal(dailyResourceRate(initial, 'water').outflow, 28, 'before settlement integration the unified water demand contains only the action team');
+equal(dailyResourceRate(initial, 'food').outflow, 28, 'before settlement integration the unified food demand contains only the action team');
 equal(JSON.stringify(initial.ui.eventWindow), JSON.stringify({ xRatio: 1, yRatio: 0.08 }), 'event window defaults to the map right');
 expect(!('populationDelta' in initial), 'transient population pulse is absent from game state');
 expect(!JSON.stringify(initial).includes('populationDelta'), 'transient population pulse is absent from save data');
@@ -166,7 +195,7 @@ equal(availableAmount(first, 'water'), 280, 'standard day one effective water');
 equal(availableAmount(first, 'food'), 562, 'standard day one effective food');
 equal(availableAmount(first, 'commonParts'), 41, 'standard day one effective common parts');
 equal(first.waterworks.workDone, 3, 'standard day one waterworks');
-equal(first.oldRepairableParts, 237, 'standard day one old parts');
+equal(first.oldRepairableParts, 240, 'standard maintenance returns three used parts to the repairable pool after repairing three');
 equal(first.ledger[0].resources.water.inflow, 28, 'standard day one water inflow');
 equal(first.ledger[0].resources.water.outflow, 28, 'standard day one water use');
 equal(first.ledger[0].resources.food.inflow, 30, 'standard day one food inflow');
@@ -240,6 +269,21 @@ const rejectedProject = approveProject(approvalBase, testProject('too-expensive'
 equal(rejectedProject.projects.some((project) => project.id === 'too-expensive'), false, 'insufficient actual stock rejects approval');
 equal(rejectedProject.stocks.alloy.amount, approvalBase.stocks.alloy.amount, 'rejected approval does not deduct stock');
 
+const commandProjectA = { ...testProject('command-project-a', 'P2'), queueOrder: 300, workRequired: 12 };
+const commandProjectB = { ...testProject('command-project-b', 'P2'), queueOrder: 301, workRequired: 12 };
+let strategicCommands = injectTestProject(injectTestProject(createInitialM0State(), commandProjectA), commandProjectB);
+strategicCommands = setProjectPaused(strategicCommands, 'command-project-a', true);
+equal(strategicCommands.projects.find((project) => project.id === 'command-project-a')?.status, 'paused', 'player can pause an engineering project without configuring its execution details');
+strategicCommands = setProjectPaused(strategicCommands, 'command-project-a', false);
+equal(strategicCommands.projects.find((project) => project.id === 'command-project-a')?.status, 'active', 'player can continue an engineering project');
+strategicCommands = moveProjectInQueue(strategicCommands, 'command-project-b', -1);
+expect(
+  (strategicCommands.projects.find((project) => project.id === 'command-project-b')?.queueOrder ?? 0)
+    < (strategicCommands.projects.find((project) => project.id === 'command-project-a')?.queueOrder ?? 0),
+  'player can change engineering order without assigning people, shifts or process steps',
+);
+equal(setProjectPaused(strategicCommands, 'hq-waterworks-restoration', true).projects[0].status, 'active', 'system recovery line is not exposed as a player engineering pause control');
+
 let negativeSegment = setDailyMode(createInitialM0State(), 'water', 'minimum');
 negativeSegment = advanceDays(negativeSegment, 10);
 equal(negativeSegment.stocks.water.amount, 280, 'negative segment keeps month-opening water unposted');
@@ -311,7 +355,7 @@ refreshMonthlyProjection(fullPartsStore);
 const fullPartsStoreDay = advanceOneDay(fullPartsStore);
 equal(availableAmount(fullPartsStoreDay, 'commonParts'), 90, 'full parts store remains at capacity');
 equal(fullPartsStoreDay.ledger[0].resources.commonParts.overflow, 0, 'repair stops instead of discarding overflow');
-equal(fullPartsStoreDay.oldRepairableParts, 237, 'only storable same-day repair consumes old parts');
+equal(fullPartsStoreDay.oldRepairableParts, 240, 'same-day maintenance use returns repaired parts to the repairable pool at a full store');
 
 let stableSafety = createInitialM0State();
 stableSafety.stocks.water.amount = 140;
@@ -443,21 +487,25 @@ equal(JSON.stringify(foodExhaustion.monthly.resources.food.exhaustionDate), JSON
 foodExhaustion = advanceDays(foodExhaustion, 3);
 equal(foodExhaustion.population.foodDebt, 1, 'food shortage begins on the predicted day');
 
-const pausedTime = advanceRealTime(createInitialM0State(), 20_000);
+const pausedTime = advanceRealTime(setRunning(createInitialM0State(), false), 1_000);
 equal(pausedTime.elapsedDays, 0, 'paused time does not advance');
-const runningTime = setRunning(createInitialM0State(), true);
-equal(advanceRealTime(runningTime, 19_000).elapsedDays, 0, 'nineteen seconds does not settle a day');
-equal(advanceRealTime(runningTime, 20_000).elapsedDays, 1, 'twenty seconds settles one day');
+const runningTime = setRunning(pausedTime, true);
+equal(advanceRealTime(runningTime, 999).elapsedDays, 0, 'less than one second does not settle a day');
+equal(advanceRealTime(runningTime, 1_000).elapsedDays, 1, 'restarting after pause continues one-second daily progression');
 const fastBase = setGameSpeed(setRunning(createInitialM0State(), true), 4);
-const fastResult = advanceRealTime(fastBase, 20_000);
+const fastResult = advanceRealTime(fastBase, 1_000);
 const sequentialResult = advanceDays(fastBase, 4);
 equal(JSON.stringify(fastResult.calendar), JSON.stringify(sequentialResult.calendar), 'four-times speed still advances every calendar day in sequence');
 equal(JSON.stringify(fastResult.monthly), JSON.stringify(sequentialResult.monthly), 'four-times speed matches sequential monthly accounting');
 equal(JSON.stringify(fastResult.projects), JSON.stringify(sequentialResult.projects), 'four-times speed does not skip project days');
+const monthBoundaryFastBase = setGameSpeed(setRunning(createInitialM0State(scenario('month-boundary-fast', 2001, 1, 29)), true), 4);
+const monthBoundaryFast = advanceRealTime(monthBoundaryFastBase, 1_000);
+const monthBoundarySequential = advanceDays(setRunning(createInitialM0State(scenario('month-boundary-fast', 2001, 1, 29)), true), 4);
+equal(JSON.stringify(monthBoundaryFast), JSON.stringify({ ...monthBoundarySequential, clock: monthBoundaryFast.clock }), 'four-times speed crosses natural month settlement exactly like four sequential days');
 let speedSequence = setRunning(createInitialM0State(), true);
-speedSequence = advanceRealTime(setGameSpeed(speedSequence, 1), 10_000);
-speedSequence = advanceRealTime(setGameSpeed(speedSequence, 2), 5_000);
-speedSequence = advanceRealTime(setGameSpeed(speedSequence, 4), 5_000);
+speedSequence = advanceRealTime(setGameSpeed(speedSequence, 1), 500);
+speedSequence = advanceRealTime(setGameSpeed(speedSequence, 2), 250);
+speedSequence = advanceRealTime(setGameSpeed(speedSequence, 4), 250);
 equal(speedSequence.elapsedDays, 2, 'changing speeds retains partial time and advances two full days');
 equal(JSON.stringify(speedSequence.ledger.map((entry) => entry.date)), JSON.stringify([
   { year: 2001, month: 1, day: 1 },
@@ -495,7 +543,7 @@ saveM0State(exhaustionState, exhaustionStorage);
 equal(JSON.stringify(loadM0State(exhaustionStorage).monthly.resources.water.exhaustionDate), JSON.stringify({ year: 2001, month: 1, day: 3 }), 'save reload preserves deterministic exhaustion node');
 storage.values.set(M0_SAVE_KEY, '{broken');
 equal(loadM0State(storage).elapsedDays, 0, 'broken M0 save resets to initial state');
-storage.values.set(M0_SAVE_KEY, JSON.stringify({ version: 7 }));
+storage.values.set(M0_SAVE_KEY, JSON.stringify({ version: 9 }));
 equal(loadM0State(storage).elapsedDays, 0, 'incomplete same-version save resets to initial state');
 
 const malformedProject = JSON.parse(JSON.stringify(first)) as M0State;
@@ -546,56 +594,97 @@ equal(loadM0State(storage).elapsedDays, 0, 'transient population pulse is reject
 const oldOnly = new MemoryStorage();
 oldOnly.values.set('always-game-m0-v1', JSON.stringify(first));
 loadM0State(oldOnly);
-expect(oldOnly.reads.every((key) => key === M0_SAVE_KEY), 'old M0 save key is never read');
+expect(oldOnly.reads.every((key) => key === M0_SAVE_KEY || key === M0_V8_SAVE_KEY || key === M0_LEGACY_SAVE_KEY), 'only current and explicit v8/v7 migration keys are read');
 const olderOnly = new MemoryStorage();
 olderOnly.values.set('always-game-text-idle-v6', JSON.stringify(first));
 loadM0State(olderOnly);
-expect(olderOnly.reads.every((key) => key === M0_SAVE_KEY), 'pre-M0 save key is never read');
+expect(olderOnly.reads.every((key) => key === M0_SAVE_KEY || key === M0_V8_SAVE_KEY || key === M0_LEGACY_SAVE_KEY), 'pre-M0 save key is never read');
+
+const v8Storage = new MemoryStorage();
+const v8State = JSON.parse(JSON.stringify(first)) as unknown as Record<string, unknown>;
+delete v8State.settlement;
+delete v8State.openingLoop;
+delete (v8State.scenario as Record<string, unknown>).existingSettlementPopulation;
+((v8State.production as Record<string, unknown>).lines as Array<Record<string, unknown>>) = ((v8State.production as Record<string, unknown>).lines as Array<Record<string, unknown>>)
+  .filter((line) => line.id !== 'common-parts-remanufacturing');
+v8State.version = 8;
+const v8SettlementCell = ((v8State.map as Record<string, unknown>).cells as Array<Record<string, unknown>>)
+  .find((cell) => cell.id === OPENING_SETTLEMENT_CELL_ID)!;
+Object.assign(v8SettlementCell, { terrain: 'plain', occupation: 'empty', water: 'dry', intel: 'unknown' });
+v8Storage.values.set(M0_V8_SAVE_KEY, JSON.stringify(v8State));
+const migratedV8 = loadM0State(v8Storage);
+equal(migratedV8.version, 9, 'strict v8 save migrates to v9');
+equal(migratedV8.settlement.population, 1_000, 'v8 migration adds the deterministic opening settlement source');
+equal(migratedV8.production.lines.some((line) => line.id === 'common-parts-remanufacturing'), true, 'v8 migration adds the persistent basic-industry production row');
+equal(v8Storage.values.has(M0_V8_SAVE_KEY), false, 'successful v8 migration consumes the explicit v8 key');
+expect(v8Storage.values.has(M0_SAVE_KEY), 'successful v8 migration writes the strict v9 save');
+
+const legacyStorage = new MemoryStorage();
+const legacyState = JSON.parse(JSON.stringify(v8State)) as Record<string, unknown>;
+delete legacyState.production;
+legacyState.version = 7;
+(legacyState.clock as Record<string, unknown>).millisecondsPerDay = 20_000;
+legacyStorage.values.set(M0_LEGACY_SAVE_KEY, JSON.stringify(legacyState));
+const migratedLegacy = loadM0State(legacyStorage);
+equal(migratedLegacy.version, 9, 'strict v7 save migrates through v8 to v9');
+equal(migratedLegacy.clock.millisecondsPerDay, 1_000, 'v7 migration adopts the one-second day');
+equal(migratedLegacy.research.manualQueue.length, 0, 'v7 migration does not preserve old automatic research authorization');
+expect(legacyStorage.values.has(M0_SAVE_KEY), 'successful v7 migration writes the strict v9 save');
+equal(legacyStorage.values.has(M0_LEGACY_SAVE_KEY), false, 'successful v7 migration consumes the explicit legacy key');
+const corruptLegacyStorage = new MemoryStorage();
+const corruptLegacy = JSON.parse(JSON.stringify(legacyState)) as Record<string, unknown>;
+corruptLegacy.unrecognizedField = true;
+corruptLegacyStorage.values.set(M0_LEGACY_SAVE_KEY, JSON.stringify(corruptLegacy));
+equal(JSON.stringify(loadM0State(corruptLegacyStorage)), JSON.stringify(createInitialM0State()), 'v7 migration rejects an old save that fails the exact legacy schema');
+equal(corruptLegacyStorage.values.has(M0_SAVE_KEY), false, 'rejected v7 save is never rewritten as v9');
 
 const timeStorage = new MemoryStorage();
 saveM0State(setRunning(createInitialM0State(), true), timeStorage);
 equal(loadM0State(timeStorage).elapsedDays, 0, 'save reload has no offline progression');
-clearM0State(storage);
+const pausedStorage = new MemoryStorage();
+saveM0State(setRunning(createInitialM0State(), false), pausedStorage);
+equal(loadM0State(pausedStorage).clock.running, false, 'explicit load preserves a saved paused clock');
+const clearStorage = new MemoryStorage();
+clearStorage.values.set(M0_SAVE_KEY, JSON.stringify(first));
+clearStorage.values.set(M0_V8_SAVE_KEY, JSON.stringify(v8State));
+clearStorage.values.set(M0_LEGACY_SAVE_KEY, JSON.stringify(legacyState));
+clearM0State(clearStorage);
+equal(clearStorage.values.has(M0_SAVE_KEY), false, 'new-game clearing removes the v9 save key');
+equal(clearStorage.values.has(M0_V8_SAVE_KEY), false, 'new-game clearing removes the v8 legacy key');
+equal(clearStorage.values.has(M0_LEGACY_SAVE_KEY), false, 'new-game clearing removes the v7 legacy key');
+const clearedState = loadM0State(clearStorage);
+equal(clearedState.elapsedDays, 0, 'cleared storage cannot revive the previous v7 game');
+equal(clearedState.clock.running, true, 'a fresh state after clearing resumes default idle progression');
 
 const capabilityMap = createInitialM0State();
-equal(capabilityMap.map.cells.length, 37, 'local map has exactly thirty-seven cells');
-equal(SPHERICAL_LOCAL_WINDOW.kind, 'spherical-local-window', 'map presentation identifies a spherical local window');
-equal(SPHERICAL_LOCAL_WINDOW.contentCellCount, 37, 'spherical shell contains exactly the frozen local content window');
-equal(SPHERICAL_LOCAL_WINDOW.wholePlanetCellCount, null, 'thirty-seven local cells never masquerade as the whole planet');
-equal(capabilityMap.map.cells.every((cell) => cell.neighbors.length >= 3 && cell.neighbors.length <= 6), true, 'local map has stable adjacency');
+equal(capabilityMap.map.cells.length, 469, 'regional map has the accepted standard-cell coverage');
+equal(REGION_MAP.kind, 'continuous-region', 'map presentation identifies a continuous region');
+equal(REGION_MAP.contentCellCount, 469, 'regional rules layer contains the deterministic radius-twelve grid');
+equal(REGION_MAP.spanKm, 24, 'regional map stays inside the accepted twenty-to-thirty kilometre scale');
+equal(capabilityMap.map.cells.every((cell) => cell.neighbors.length >= 3 && cell.neighbors.length <= 6), true, 'regional rules layer has stable adjacency');
 equal(capabilityMap.map.cells.filter((cell) => cell.occupation === 'industrial-ruin').length, 2, 'two industrial ruins are anchored');
-equal(JSON.stringify(createInitialM0State().map), JSON.stringify(createInitialM0State().map), 'local map is deterministic');
+equal(JSON.stringify(createInitialM0State().map), JSON.stringify(createInitialM0State().map), 'regional map is deterministic');
 equal(capabilityMap.map.cells.every((cell) => cell.neighbors.every((neighborId) => (
   capabilityMap.map.cells.find((neighbor) => neighbor.id === neighborId)?.neighbors.includes(cell.id)
-))), true, 'local map adjacency is symmetric');
-const centeredProjection = projectSphericalLocalWindow(capabilityMap.map.cells, { yaw: 0, pitch: 0 });
-const centerProjection = centeredProjection.find((cell) => cell.id === LOCATION_CELLS.headquarters)!;
-const edgeProjection = centeredProjection.find((cell) => cell.id === capabilityMap.map.cells.find((cell) => Math.max(Math.abs(cell.q), Math.abs(cell.r), Math.abs(cell.q + cell.r)) === 3)!.id)!;
-expect(edgeProjection.depth < centerProjection.depth && edgeProjection.scale < centerProjection.scale, 'local cells follow sphere depth instead of a flat board');
-equal(centerProjection.corners.length, 6, 'each local cell projects six real surface corners');
-const centerNeighborProjection = centeredProjection.find((cell) => cell.id === 'local-1-0')!;
-const projectedCornerKey = (corner: { xPercent: number; yPercent: number }): string => `${corner.xPercent.toFixed(6)},${corner.yPercent.toFixed(6)}`;
-const sharedProjectedCorners = centerProjection.corners
-  .map(projectedCornerKey)
-  .filter((corner) => centerNeighborProjection.corners.map(projectedCornerKey).includes(corner));
-equal(sharedProjectedCorners.length, 2, 'adjacent surface cells share the same projected edge instead of floating over each other');
-const mapLogicBeforeRotation = JSON.stringify(capabilityMap.map);
+))), true, 'regional rules-layer adjacency is symmetric');
+const regionalProjection = projectRegionMap(capabilityMap.map.cells);
+equal(regionalProjection.length, REGION_MAP.contentCellCount, 'every rules cell has one stable regional projection');
+equal(regionalProjection.map((cell) => cell.id).join('|'), capabilityMap.map.cells.map((cell) => cell.id).join('|'), 'regional projection preserves stable object ordering and IDs');
+const centerProjection = regionalProjection.find((cell) => cell.id === LOCATION_CELLS.headquarters)!;
+const centerNeighborProjection = regionalProjection.find((cell) => cell.id === 'local-1-0')!;
+equal(centerProjection.points.split(' ').length, 6, 'each regional rules cell projects one standard six-corner outline');
+expect(Math.hypot(centerProjection.center.x - centerNeighborProjection.center.x, centerProjection.center.y - centerNeighborProjection.center.y) > 0, 'adjacent regional anchors keep distinct world coordinates');
+const mapLogicBeforeCamera = JSON.stringify(capabilityMap.map);
+const camera = normalizeRegionCamera({ x: 9_999, y: -9_999, zoom: 99 });
+equal(camera.zoom, 2.6, 'continuous regional zoom clamps to the accepted local maximum');
+equal(JSON.stringify(capabilityMap.map), mapLogicBeforeCamera, 'camera normalization does not change stable map IDs, anchors, selection or intelligence');
+equal(JSON.stringify(projectRegionMap(capabilityMap.map.cells)), JSON.stringify(regionalProjection), 'same seed and state reproduce identical regional positions');
 const rotatedMapState = setMapRotation(capabilityMap, { yaw: 99, pitch: -99 });
-equal(rotatedMapState.ui.mapRotation.yaw, MAP_ROTATION_LIMITS.yaw, 'finite sphere rotation clamps yaw');
-equal(rotatedMapState.ui.mapRotation.pitch, -MAP_ROTATION_LIMITS.pitch, 'finite sphere rotation clamps pitch');
-equal(JSON.stringify(rotatedMapState.map), mapLogicBeforeRotation, 'rotating the shell does not change stable map IDs or intelligence');
-const rotatedProjection = projectSphericalLocalWindow(rotatedMapState.map.cells, rotatedMapState.ui.mapRotation);
-equal(rotatedProjection.map((cell) => cell.id).join('|'), centeredProjection.map((cell) => cell.id).join('|'), 'sphere projection preserves stable local-cell ordering and IDs');
-equal(rotatedProjection.some((cell) => !cell.visible), true, 'rotating to the finite edge hides local content behind an unexplored shell');
-const rotatedCenterProjection = rotatedProjection.find((cell) => cell.id === LOCATION_CELLS.headquarters)!;
-const rotatedNeighborProjection = rotatedProjection.find((cell) => cell.id === 'local-1-0')!;
-const rotatedSharedCorners = rotatedCenterProjection.corners
-  .map(projectedCornerKey)
-  .filter((corner) => rotatedNeighborProjection.corners.map(projectedCornerKey).includes(corner));
-equal(rotatedSharedCorners.length, 2, 'adjacent cells keep one shared edge while the sphere is rotated');
+equal(rotatedMapState.ui.mapRotation.yaw, MAP_ROTATION_LIMITS.yaw, 'legacy v9 camera metadata still clamps during save migration');
+equal(rotatedMapState.ui.mapRotation.pitch, -MAP_ROTATION_LIMITS.pitch, 'legacy v9 camera metadata still clamps during save migration');
 const rotationStorage = new MemoryStorage();
 saveM0State(rotatedMapState, rotationStorage);
-equal(JSON.stringify(loadM0State(rotationStorage).ui.mapRotation), JSON.stringify(rotatedMapState.ui.mapRotation), 'finite sphere rotation survives strict save reload');
+equal(JSON.stringify(loadM0State(rotationStorage).ui.mapRotation), JSON.stringify(rotatedMapState.ui.mapRotation), 'legacy camera metadata survives strict v9 save reload');
 for (const anchorId of Object.values(LOCATION_CELLS)) {
   equal(capabilityMap.map.cells.some((cell) => cell.id === anchorId), true, `stable location anchor ${anchorId} exists`);
 }
@@ -689,31 +778,104 @@ automaticResearch = setResearchDomainAutomatic(automaticResearch, 'surveying', t
 automaticResearch = setResearchDomainAutomatic(automaticResearch, 'manufacturing', true);
 automaticResearch = setResearchDomainAutomatic(automaticResearch, 'engineering', true);
 automaticResearch = setResearchDomainOrder(automaticResearch, ['surveying', 'manufacturing', 'engineering']);
-equal(automaticResearch.research.currentProjectId, 'restore-precision-manufacturing', 'automatic research completes another executable field before a blocked higher-priority field');
-equal(automaticResearch.research.blockedProjectId, 'adapt-survey-drone', 'automatic research keeps the blocked higher-priority field visible');
+equal(automaticResearch.research.currentProjectId, null, 'legacy automatic-domain fields cannot start research without a player queue');
+equal(automaticResearch.research.automaticDomains.length, 0, 'runtime clears legacy automatic-domain authorization');
 automaticResearch = advanceOneDay(automaticResearch);
-equal(automaticResearch.projects.find((project) => project.id === 'restore-precision-manufacturing')?.workDone, 6, 'automatic research uses the selected six-person daylight line');
+equal(automaticResearch.projects.some((project) => project.id === 'restore-precision-manufacturing'), false, 'an empty queue remains idle across a world day');
 automaticResearch = setResearchTarget(automaticResearch, 'adapt-survey-drone');
 equal(automaticResearch.research.currentSource, 'manual', 'player can switch from automatic to a distant manual target');
-equal(automaticResearch.projects.find((project) => project.id === 'restore-precision-manufacturing')?.workDone, 6, 'switching research source preserves partial progress');
+automaticResearch = advanceOneDay(automaticResearch);
+equal(automaticResearch.projects.find((project) => project.id === 'restore-precision-manufacturing')?.workDone, 6, 'player-queued research uses the selected six-person daylight line');
 automaticResearch = setResearchMode(automaticResearch, 'automatic');
-equal(automaticResearch.research.currentSource, 'automatic', 'player can switch back to field automatic research');
-equal(JSON.stringify(automaticResearch.research.domainOrder), JSON.stringify(['surveying', 'manufacturing', 'engineering']), 'research switching preserves player field order');
+equal(automaticResearch.research.currentSource, 'manual', 'legacy automatic mode cannot replace the player queue');
+
+let removableResearch = minimumDailyStaffing(createInitialM0State());
+removableResearch = setResearchTarget(removableResearch, 'adapt-survey-drone');
+removableResearch = removeResearchTarget(removableResearch, 'adapt-survey-drone');
+equal(JSON.stringify(removableResearch.research.manualQueue), JSON.stringify(['restore-precision-manufacturing']), 'right-click removal preserves the order of other queued research');
+removableResearch = advanceOneDay(removableResearch);
+equal(removableResearch.projects.find((project) => project.id === 'restore-precision-manufacturing')?.workDone, 6, 'current queued research records unfinished progress before removal');
+removableResearch = removeResearchTarget(removableResearch, 'restore-precision-manufacturing');
+equal(removableResearch.research.currentProjectId, null, 'removing the current research clears the active selection');
+equal(removableResearch.projects.some((project) => project.id === 'restore-precision-manufacturing'), false, 'removing current research deletes its unfinished project and progress');
+equal(removableResearch.research.manualQueue.length, 0, 'removing the last queued research leaves an empty queue');
+removableResearch = advanceDays(removableResearch, 8);
+equal(removableResearch.projects.some((project) => technologies.some((technology) => technology.id === project.id)), false, 'empty research queue remains idle across arbitrary world days');
+const removedResearchStorage = new MemoryStorage();
+saveM0State(removableResearch, removedResearchStorage);
+equal(JSON.stringify(loadM0State(removedResearchStorage)), JSON.stringify(removableResearch), 'removed research and deleted progress reload without resurrection');
 
 let underStaffedWorkshop = createInitialM0State();
 underStaffedWorkshop.research.completed.push('restore-precision-manufacturing');
 underStaffedWorkshop = approveCapabilityProject(underStaffedWorkshop, 'repair-precision-workshop');
-underStaffedWorkshop = advanceOneDay(underStaffedWorkshop);
-equal(underStaffedWorkshop.projects.find((project) => project.id === 'repair-precision-workshop')?.workDone, 0, 'workshop repair cannot gain partial progress below its nine-person requirement');
+equal(underStaffedWorkshop.projects.find((project) => project.id === 'repair-precision-workshop')?.status, 'paused', 'system protects population supply instead of stripping water or food jobs for an approved engineering project');
+equal(underStaffedWorkshop.projects.find((project) => project.id === 'repair-precision-workshop')?.pausedReason, 'staffing_shortage', 'a safely deferred engineering project records its staffing reason');
+let workshopResumeGuard = 0;
+while ((underStaffedWorkshop.projects.find((project) => project.id === 'repair-precision-workshop')?.workDone ?? 0) === 0 && workshopResumeGuard < 20) {
+  underStaffedWorkshop = advanceOneDay(underStaffedWorkshop);
+  equal(underStaffedWorkshop.population.waterDebt, 0, 'automatic workshop staffing never borrows from required water supply');
+  equal(underStaffedWorkshop.population.foodDebt, 0, 'automatic workshop staffing never borrows from required food supply');
+  workshopResumeGuard += 1;
+}
+equal(underStaffedWorkshop.projects.find((project) => project.id === 'repair-precision-workshop')?.workDone, 9, 'system resumes and staffs the workshop after safe water capacity frees enough labour');
 
 let capability = minimumDailyStaffing(createInitialM0State());
 capability = setResearchTarget(capability, 'adapt-survey-drone');
 equal(JSON.stringify(capability.research.manualQueue), JSON.stringify(['restore-precision-manufacturing', 'adapt-survey-drone']), 'distant target inserts every necessary prerequisite once');
 capability = advanceDays(capability, 4);
 equal(capability.research.completed.includes('restore-precision-manufacturing'), true, 'precision manufacturing research completes at six people for four days');
-equal(capability.research.currentProjectId, null, 'manual queue stops transparently at the physical prototype prerequisite');
-equal(capability.research.blockedProjectId, 'adapt-survey-drone', 'blocked distant target remains queued');
-equal(capability.research.blockedReason, 'physical-prerequisite', 'research exposes the physical prerequisite block');
+equal(capability.research.currentProjectId, 'adapt-survey-drone', 'second queued research starts without waiting for a production batch');
+equal(capability.projects.find((project) => project.id === 'adapt-survey-drone')?.workDone, 0, 'second queued research is selected immediately after the first completes');
+equal(capability.research.blockedProjectId, null, 'research does not expose a downstream product as its own prerequisite');
+equal(capability.research.blockedReason, null, 'research and production remain separate state machines');
+capability = advanceOneDay(capability);
+equal(capability.projects.find((project) => project.id === 'adapt-survey-drone')?.workDone, 6, 'second queued research advances on the next settlement day without a workshop or precision parts');
+capability = advanceDays(capability, 2);
+equal(capability.research.completed.includes('adapt-survey-drone'), true, 'second research completes while the workshop and precision-parts stock are absent');
+
+let lowPartsSurvey = approveSurvey(minimumDailyStaffing(createInitialM0State()), 'ruin-a');
+lowPartsSurvey.stocks.commonParts.amount = 0;
+lowPartsSurvey.monthly.resources.commonParts.accruedInflow = 0;
+lowPartsSurvey.monthly.resources.commonParts.accruedOutflow = 0;
+lowPartsSurvey = advanceOneDay(lowPartsSurvey);
+equal(lowPartsSurvey.projects.find((project) => project.id === 'survey-ruin-a')?.status, 'active', 'unrelated common-parts pressure cannot pause an approved survey');
+equal(lowPartsSurvey.map.surveys.find((survey) => survey.targetId === 'ruin-a')?.pauseReason, null, 'a normally running survey has no unexplained pause reason');
+
+let staffingPausedSurvey = approveSurvey(minimumDailyStaffing(createInitialM0State()), 'ruin-a');
+staffingPausedSurvey.population.normal = 14;
+staffingPausedSurvey.population.deceased = 14;
+staffingPausedSurvey = advanceOneDay(staffingPausedSurvey);
+equal(staffingPausedSurvey.projects.find((project) => project.id === 'survey-ruin-a')?.status, 'paused', 'a real staffing shortage can system-pause a survey');
+equal(staffingPausedSurvey.map.surveys.find((survey) => survey.targetId === 'ruin-a')?.pauseReason, 'staffing', 'system-paused survey records the concrete staffing reason');
+staffingPausedSurvey.population.normal = 28;
+staffingPausedSurvey.population.deceased = 0;
+staffingPausedSurvey = advanceOneDay(staffingPausedSurvey);
+equal(staffingPausedSurvey.projects.find((project) => project.id === 'survey-ruin-a')?.status, 'active', 'survey automatically resumes after the staffing condition recovers');
+equal(staffingPausedSurvey.map.surveys.find((survey) => survey.targetId === 'ruin-a')?.pauseReason, null, 'automatic survey resumption clears the system pause reason');
+
+for (const recoveryId of ['floor_common_parts', 'floor_engineering_components', 'floor_alloy'] as const) {
+  const resource = recoveryId === 'floor_common_parts' ? 'commonParts'
+    : recoveryId === 'floor_engineering_components' ? 'engineeringComponents' : 'alloy';
+  const rule = RECOVERY_RULES[recoveryId];
+  let recovery = minimumDailyStaffing(createInitialM0State());
+  recovery.stocks[resource].amount = 0;
+  recovery.monthly.resources[resource].accruedInflow = 0;
+  recovery.monthly.resources[resource].accruedOutflow = 0;
+  const precisionBefore = availableAmount(recovery, 'precisionParts');
+  recovery = approveRecoveryProject(recovery, recoveryId);
+  expect(recovery.projects.some((project) => project.id === recoveryId), `${resource} at zero has a player-approved zero-input recovery path`);
+  equal(Object.keys(recovery.projects.find((project) => project.id === recoveryId)!.investedResources).length, 0, `${resource} recovery has no material input`);
+  recovery = advanceDays(recovery, 6);
+  equal(recovery.projects.some((project) => project.id === recoveryId), false, `${resource} recovery leaves the queue after completion`);
+  equal(availableAmount(recovery, resource), rule.output, `${resource} recovery enters the unified monthly account`);
+  expect(availableAmount(recovery, resource) <= rule.cap, `${resource} recovery cannot exceed its safety cap`);
+  equal(availableAmount(recovery, 'precisionParts'), precisionBefore, `${resource} recovery never creates precision parts`);
+  const recoveryAtFloor = approveRecoveryProject(recovery, recoveryId);
+  equal(recoveryAtFloor.projects.some((project) => project.id === recoveryId), false, `${resource} recovery cannot be approved at or above its floor`);
+  const recoveryStorage = new MemoryStorage();
+  saveM0State(recovery, recoveryStorage);
+  equal(JSON.stringify(loadM0State(recoveryStorage)), JSON.stringify(recovery), `${resource} recovery result reloads deterministically`);
+}
 
 const repairPartsBefore = availableAmount(capability, 'commonParts');
 const repairComponentsBefore = availableAmount(capability, 'engineeringComponents');
@@ -732,33 +894,57 @@ capability = setDailyMode(capability, 'logistics', 'standard');
 const prototypePartsBefore = availableAmount(capability, 'commonParts');
 const prototypeComponentsBefore = availableAmount(capability, 'engineeringComponents');
 const prototypeAlloyBefore = availableAmount(capability, 'alloy');
-capability = approveCapabilityProject(capability, 'prototype-precision-parts');
-equal(availableAmount(capability, 'commonParts'), prototypePartsBefore - 2, 'prototype batch consumes two common parts');
-equal(availableAmount(capability, 'engineeringComponents'), prototypeComponentsBefore - 4, 'prototype batch consumes four engineering components');
-equal(availableAmount(capability, 'alloy'), prototypeAlloyBefore - 4, 'prototype batch consumes four alloy');
-equal(capability.projects.find((project) => project.id === 'prototype-precision-parts')?.staffing.planned, 6, 'prototype batch requires six workers');
-const duplicateWorkshopTask = approveCapabilityProject(capability, 'prototype-precision-parts');
-equal(duplicateWorkshopTask.projects.filter((project) => project.id === 'prototype-precision-parts').length, 1, 'precision workshop accepts only one active task at a time');
-capability = advanceDays(capability, 2);
+capability = setProductionAllocation(capability, 'precision-parts', 1);
+equal(capability.production.lines.find((line) => line.id === 'precision-parts')?.allocatedFactories, 1, 'player directly assigns the persistent factory to the fixed precision-parts row');
+const overAllocated = setProductionAllocation(capability, 'survey-drone', 1);
+equal(overAllocated.production.lines.reduce((sum, line) => sum + line.allocatedFactories, 0), 1, 'factory allocations never exceed the persistent factory pool');
+capability = advanceOneDay(capability);
+equal(availableAmount(capability, 'commonParts'), prototypePartsBefore - 2, 'precision line consumes two common parts when its batch starts');
+equal(availableAmount(capability, 'engineeringComponents'), prototypeComponentsBefore - 4, 'precision line consumes four engineering components when its batch starts');
+equal(availableAmount(capability, 'alloy'), prototypeAlloyBefore - 4, 'precision line consumes four alloy when its batch starts');
+equal(capability.production.lines.find((line) => line.id === 'precision-parts')?.progress, 6, 'persistent production records partial batch progress');
+const partialProductionStorage = new MemoryStorage();
+saveM0State(capability, partialProductionStorage);
+equal(JSON.stringify(loadM0State(partialProductionStorage).production), JSON.stringify(capability.production), 'factory allocation and partial production progress reload exactly');
+equal(JSON.stringify(advanceOneDay(loadM0State(partialProductionStorage))), JSON.stringify(advanceOneDay(capability)), 'partial production reload continues deterministically');
+capability = advanceOneDay(capability);
 equal(availableAmount(capability, 'precisionParts'), 4, 'prototype batch creates four physical precision parts after two days');
-equal(capability.research.currentProjectId, 'adapt-survey-drone', 'blocked distant research target resumes automatically after the physical prerequisite');
+equal(capability.production.lines.find((line) => line.id === 'precision-parts')?.batchesCompleted, 1, 'completed production batch is retained in the persistent line state');
+equal(capability.production.lines.find((line) => line.id === 'precision-parts')?.allocatedFactories, 1, 'batch completion retains the player allocation instead of auto-switching');
+capability = setProductionAllocation(capability, 'precision-parts', 0);
+capability = advanceOneDay(capability);
+equal(capability.research.currentProjectId, null, 'finished research stays independent of later production work');
+equal(capability.research.completed.includes('adapt-survey-drone'), true, 'precision production does not retroactively control research completion');
 const prototypeStorage = new MemoryStorage();
 saveM0State(capability, prototypeStorage);
 equal(JSON.stringify(loadM0State(prototypeStorage)), JSON.stringify(capability), 'prototype output and automatically resumed research save immediately without a stale projection');
-capability = advanceDays(capability, 3);
-equal(capability.research.completed.includes('adapt-survey-drone'), true, 'adapt survey drone completes without a second target click');
+capability = advanceDays(capability, 2);
+equal(capability.research.completed.includes('adapt-survey-drone'), true, 'adapt survey drone remains complete without a second target click');
 const dronePartsBefore = availableAmount(capability, 'commonParts');
 const droneComponentsBefore = availableAmount(capability, 'engineeringComponents');
 const droneAlloyBefore = availableAmount(capability, 'alloy');
-capability = approveCapabilityProject(capability, 'assemble-survey-drone');
-equal(availableAmount(capability, 'commonParts'), dronePartsBefore - 3, 'drone assembly consumes three common parts');
-equal(availableAmount(capability, 'engineeringComponents'), droneComponentsBefore - 10, 'drone assembly consumes ten engineering components');
-equal(availableAmount(capability, 'alloy'), droneAlloyBefore - 8, 'drone assembly consumes eight alloy');
-equal(capability.projects.find((project) => project.id === 'assemble-survey-drone')?.staffing.planned, 6, 'drone assembly requires six workers');
+capability = setProductionAllocation(capability, 'survey-drone', 1);
+equal(capability.production.lines.find((line) => line.id === 'survey-drone')?.allocatedFactories, 1, 'player can move the persistent factory to the fixed drone row without a confirmation step');
 capability = advanceDays(capability, 3);
+equal(availableAmount(capability, 'commonParts'), dronePartsBefore - 3, 'drone line consumes three common parts');
+equal(availableAmount(capability, 'engineeringComponents'), droneComponentsBefore - 10, 'drone line consumes ten engineering components');
+equal(availableAmount(capability, 'alloy'), droneAlloyBefore - 8, 'drone line consumes eight alloy');
 equal(capability.drone?.status, 'needs-charge', 'assembly creates a persistent asset that still needs initial recharge');
 equal(availableAmount(capability, 'precisionParts'), 2, 'drone consumes two precision parts and leaves the other two in ordinary inventory');
 equal(capability.drone?.rechargeApproved, false, 'first recharge still requires one explicit player approval');
+capability = advanceOneDay(capability);
+equal(capability.production.lines.find((line) => line.id === 'survey-drone')?.blockedReason, 'asset-limit', 'asset limit stops production without changing the fixed row allocation');
+equal(capability.production.lines.find((line) => line.id === 'survey-drone')?.allocatedFactories, 1, 'asset-limit blocking retains the player allocation and never auto-switches');
+
+let inputBlocked = JSON.parse(JSON.stringify(capability)) as M0State;
+inputBlocked.drone = null;
+inputBlocked.production.lines.find((line) => line.id === 'survey-drone')!.progress = 0;
+inputBlocked.stocks.engineeringComponents.amount = 0;
+inputBlocked.monthly.resources.engineeringComponents.accruedInflow = 0;
+inputBlocked.monthly.resources.engineeringComponents.accruedOutflow = 0;
+inputBlocked = advanceOneDay(inputBlocked);
+equal(inputBlocked.production.lines.find((line) => line.id === 'survey-drone')?.blockedReason, 'input-shortage', 'missing production input causes a real stopped line');
+equal(inputBlocked.production.lines.find((line) => line.id === 'survey-drone')?.allocatedFactories, 1, 'input shortage retains allocation instead of switching production');
 
 const backlogBeforeRecharge = capability.maintenanceBacklog;
 capability = completeDroneRecharge(capability);
@@ -783,79 +969,231 @@ expect(
 concurrentSurvey = advanceOneDay(concurrentSurvey);
 equal(concurrentSurvey.map.surveys.find((survey) => survey.targetId === 'ruin-b')?.droneAppliedStages.includes('area'), true, 'first-approved survey receives the single available drone');
 equal(concurrentSurvey.map.surveys.find((survey) => survey.targetId === 'ruin-a')?.droneAppliedStages.length, 0, 'same drone cannot serve a later-approved survey on the same day');
-equal(concurrentSurvey.map.surveys.find((survey) => survey.targetId === 'ruin-a')?.workDone, 0, 'later-approved survey pauses before the earlier approved survey when labor is short');
+equal(concurrentSurvey.map.surveys.find((survey) => survey.targetId === 'ruin-a')?.workDone, 2, 'later-approved survey still advances with system staffing while approval order controls scarce equipment');
 
-capability = approveSurvey(capability, 'ruin-a', 2, 1, true);
+capability = approveSurvey(capability, 'ruin-a', 6, 1, false);
 let surveyA = capability.map.surveys.find((survey) => survey.targetId === 'ruin-a')!;
-equal(surveyA.workers, 2, 'survey plan saves the two-person choice');
-equal(surveyA.maximumDays, 1, 'survey plan saves maximum daylight');
+equal(surveyA.workers, 2, 'system fixes survey staffing instead of exposing a player allocation');
+equal(surveyA.maximumDays, null, 'system owns survey duration instead of saving a player day limit');
+equal(surveyA.useDrone, true, 'system owns available survey equipment use');
+const rejectedSurveyMicromanagement = configureSurvey(capability, 'ruin-a', { workers: 6, maximumDays: 1, useDrone: false });
+equal(rejectedSurveyMicromanagement.map.surveys.find((survey) => survey.targetId === 'ruin-a')?.workers, 2, 'legacy survey configuration cannot change system staffing');
+equal(rejectedSurveyMicromanagement.map.surveys.find((survey) => survey.targetId === 'ruin-a')?.maximumDays, null, 'legacy survey configuration cannot impose a day limit');
 capability = advanceOneDay(capability);
 surveyA = capability.map.surveys.find((survey) => survey.targetId === 'ruin-a')!;
 equal(surveyA.stage, 'area', 'drone can independently cover the six-work direction-to-area jump');
-equal(surveyA.pauseReason, 'route-choice', 'same survey plan pauses for a real route choice instead of silently selecting');
+equal(surveyA.selectedRouteId, 'route-hq-ruin-a-old-road', 'system automatically selects the established route after area confirmation');
+equal(surveyA.pauseReason, null, 'survey continues without asking the player to choose a route');
 equal(surveyA.droneAppliedStages.filter((stage) => stage === 'area').length, 1, 'same drone bonus applies only once in area confirmation');
 equal(capability.drone?.rechargeApproved, true, 'an approved drone survey automatically queues return inspection and recharge');
-equal(surveyPlanControlState(surveyA).editable, true, 'approved route-choice survey keeps all plan controls editable');
+equal(surveyPlanControlState(surveyA).editable, true, 'active survey retains strategic pause control');
 equal(surveyPlanControlState(surveyA).needsApproval, false, 'approved survey does not show another plan-approval action');
-const routeChoiceSnapshot = JSON.parse(JSON.stringify(capability)) as M0State;
+const automaticRouteSnapshot = JSON.parse(JSON.stringify(capability)) as M0State;
 const partialSurveyStorage = new MemoryStorage();
 saveM0State(capability, partialSurveyStorage);
-equal(JSON.stringify(loadM0State(partialSurveyStorage).map.surveys), JSON.stringify(capability.map.surveys), 'route-choice pause and partial survey plan reload exactly');
-
-capability = advanceDays(capability, 2);
-capability = configureSurvey(capability, 'ruin-a', { maximumDays: null });
-capability = selectSurveyRoute(capability, 'ruin-a', 'route-hq-ruin-a-old-road');
-capability = advanceOneDay(capability);
-surveyA = capability.map.surveys.find((survey) => survey.targetId === 'ruin-a')!;
-equal(surveyA.stage, 'area', 'drone cannot independently complete route confirmation');
-equal(surveyA.workDone, 8, 'route confirmation receives one six-work drone reduction plus two human work');
-equal(capability.drone?.rechargeApproved, true, 'later drone sortie also enters the real recharge queue without another click');
-capability = advanceDays(capability, 2);
-surveyA = capability.map.surveys.find((survey) => survey.targetId === 'ruin-a')!;
-equal(surveyA.stage, 'route', 'route confirmation completes through remaining human work and automatically continues');
-equal(surveyVisibleFacts('ruin-a', surveyA.stage).join('').includes('旧路'), true, 'route confirmation exposes the frozen old-road fact');
+equal(JSON.stringify(loadM0State(partialSurveyStorage).map.surveys), JSON.stringify(capability.map.surveys), 'automatic route and partial survey progress reload exactly');
+const ignoredRouteCommand = selectSurveyRoute(capability, 'ruin-a', 'route-hq-ruin-b-damaged-road');
+equal(JSON.stringify(ignoredRouteCommand.map.surveys), JSON.stringify(capability.map.surveys), 'legacy route command cannot override the system route');
 capability = setSurveyPaused(capability, 'ruin-a', true);
+const pausedSurveyWork = capability.map.surveys.find((survey) => survey.targetId === 'ruin-a')!.workDone;
 capability = advanceDays(capability, 2);
+equal(capability.map.surveys.find((survey) => survey.targetId === 'ruin-a')?.workDone, pausedSurveyWork, 'player pause preserves exploration progress');
 capability = setSurveyPaused(capability, 'ruin-a', false);
-capability = advanceOneDay(capability);
+capability = advanceDays(capability, 20);
 surveyA = capability.map.surveys.find((survey) => survey.targetId === 'ruin-a')!;
-equal(surveyA.stage, 'route', 'drone cannot independently complete site confirmation');
-equal(surveyA.workDone, 8, 'site confirmation receives only one six-work drone reduction');
-capability = advanceDays(capability, 2);
-surveyA = capability.map.surveys.find((survey) => survey.targetId === 'ruin-a')!;
-equal(surveyA.stage, 'site', 'site confirmation finishes with remaining human work without another approval');
-equal(surveyPlanControlState(surveyA).editable, false, 'completed site confirmation closes plan-edit controls');
-equal(JSON.stringify(surveyA.droneAppliedStages), JSON.stringify(['area', 'route', 'site']), 'drone reduction is recorded once for each stage');
+equal(surveyA.stage, 'site', 'system route, equipment and staffing complete all exploration stages after one strategic start');
+equal(surveyPlanControlState(surveyA).editable, false, 'completed exploration closes strategic controls');
 equal(surveyConclusion('ruin-a', surveyA.stage)?.reason.includes('清理较重'), true, 'site confirmation exposes the frozen ruin A construction fact');
 
-capability = approveSurvey(capability, 'ruin-b', 2, 1, false);
-capability = advanceOneDay(capability);
+capability = approveSurvey(capability, 'ruin-b', 6, 1, false);
 let surveyB = capability.map.surveys.find((survey) => survey.targetId === 'ruin-b')!;
-equal(surveyB.workDone, 2, 'pure-human survey records partial work');
-equal(capability.drone?.rechargeApproved, false, 'pure-human plan does not submit a hidden drone recharge task');
+equal(`${surveyB.workers}/${surveyB.maximumDays}/${surveyB.useDrone}`, '2/null/true', 'second exploration start also ignores staffing, duration and equipment inputs');
 capability = advanceOneDay(capability);
+capability = advanceDays(capability, 20);
 surveyB = capability.map.surveys.find((survey) => survey.targetId === 'ruin-b')!;
-equal(surveyB.pauseReason, 'day-limit', 'survey pauses after the saved maximum daylight');
-equal(surveyB.workDone, 2, 'day-limit pause preserves partial progress');
-equal(surveyPlanControlState(surveyB).editable, true, 'day-limit pause keeps approved survey controls editable');
-capability = configureSurvey(capability, 'ruin-b', { workers: 4, useDrone: true });
-surveyB = capability.map.surveys.find((survey) => survey.targetId === 'ruin-b')!;
-equal(`${surveyB.workers}/${surveyB.useDrone}`, '4/true', 'approved paused survey accepts staffing and drone changes');
-capability = configureSurvey(capability, 'ruin-b', { workers: 2, useDrone: false });
-capability = configureSurvey(capability, 'ruin-b', { maximumDays: null });
-surveyB = capability.map.surveys.find((survey) => survey.targetId === 'ruin-b')!;
-equal(surveyB.pauseReason, null, 'clearing maximum daylight resumes the approved survey from partial progress');
-equal(capability.projects.find((project) => project.id === surveyB.projectId)?.status, 'active', 'cleared survey limit restores the existing project without another approval');
-capability = advanceDays(capability, 2);
-surveyB = capability.map.surveys.find((survey) => survey.targetId === 'ruin-b')!;
-equal(surveyB.stage, 'area', 'extended pure-human survey resumes from partial work');
-capability = selectSurveyRoute(capability, 'ruin-b', 'route-hq-ruin-b-damaged-road');
-capability = advanceDays(capability, 12);
-surveyB = capability.map.surveys.find((survey) => survey.targetId === 'ruin-b')!;
-equal(surveyB.stage, 'site', 'pure-human survey completes route and site confirmation');
-equal(surveyB.droneAppliedStages.length, 0, 'pure-human survey does not receive hidden drone work');
+equal(surveyB.stage, 'site', 'second exploration completes without player route or staffing commands');
 equal(surveyVisibleFacts('ruin-b', 'route').join('').includes('受损通路'), true, 'route stage exposes mud and damaged-passage facts');
 equal(surveyVisibleFacts('ruin-b', 'site').join('').includes('合金料'), true, 'site stage separately exposes the frozen alloy fact');
+
+let opening = minimumDailyStaffing(createInitialM0State({
+  id: 'opening-loop-proof',
+  startDate: { year: 2194, month: 1, day: 1 },
+  existingSettlementPopulation: 1_000,
+}));
+equal(opening.settlement.status, 'uncontacted', 'the existing settlement begins as a real but uncontacted population source');
+equal(opening.settlement.workforceEligible, 0, 'uncontacted population never becomes player labour');
+equal(opening.map.cells.find((cell) => cell.id === OPENING_SETTLEMENT_CELL_ID)?.occupation, 'settlement', 'existing population remains anchored at its map location');
+opening = integrateExistingSettlement(opening);
+equal(opening.settlement.status, 'uncontacted', 'population cannot be integrated before contact and minimum services');
+opening = contactExistingSettlement(opening);
+equal(opening.settlement.status, 'contacted', 'the 28-person action team can explicitly contact the existing settlement');
+opening = setDailyMode(opening, 'water', 'accelerated');
+opening = setDailyMode(opening, 'food', 'standard');
+opening = setDailyMode(opening, 'maintenance', 'accelerated');
+opening = setHeadquartersSalvageApproval(opening, true);
+
+const openingProjectIds = Object.keys(OPENING_PROJECT_RULES) as OpeningProjectId[];
+for (const projectId of openingProjectIds) {
+  let atomic = contactExistingSettlement(minimumDailyStaffing(createInitialM0State()));
+  atomic = approveOpeningProject(atomic, projectId);
+  atomic = advanceDays(atomic, 6);
+  const results = openingAtomicResults(atomic);
+  equal(results[projectId], true, `${projectId} completes its own atomic result`);
+  equal(Object.values(results).filter(Boolean).length, 1, `${projectId} cannot complete any other service or production result`);
+}
+
+let openingOrder = contactExistingSettlement(minimumDailyStaffing(createInitialM0State()));
+openingOrder = approveOpeningProject(openingOrder, 'opening-water-repair');
+openingOrder = approveOpeningProject(openingOrder, 'opening-basic-medical');
+openingOrder = moveProjectInQueue(openingOrder, 'opening-basic-medical', -1);
+expect(openingOrder.projects.find((project) => project.id === 'opening-basic-medical')!.queueOrder
+  < openingOrder.projects.find((project) => project.id === 'opening-water-repair')!.queueOrder,
+'player can change the order of atomic settlement projects');
+
+let protectedOpening = contactExistingSettlement(createInitialM0State({
+  id: 'opening-default-safety-proof',
+  startDate: { year: 2194, month: 1, day: 1 },
+  existingSettlementPopulation: 1_000,
+}));
+for (const projectId of openingProjectIds) protectedOpening = approveOpeningProject(protectedOpening, projectId);
+let protectedOpeningGuard = 0;
+while (protectedOpening.settlement.status !== 'ready-to-integrate' && protectedOpeningGuard < 120) {
+  protectedOpening = advanceOneDay(protectedOpening);
+  equal(protectedOpening.population.deceased, 0, 'default safety staffing prevents deaths while all nine settlement projects advance');
+  equal(protectedOpening.population.waterDebt, 0, 'default safety staffing never accumulates action-team water debt');
+  equal(protectedOpening.population.foodDebt, 0, 'default safety staffing never accumulates action-team food debt');
+  protectedOpeningGuard += 1;
+}
+equal(protectedOpening.settlement.status, 'ready-to-integrate', 'all nine concurrently approved settlement projects complete under default safety staffing');
+equal(protectedOpening.population.normal, 28, 'the original action team remains intact at the population-integration gate');
+protectedOpening = integrateExistingSettlement(protectedOpening);
+equal(protectedOpening.dailyPositions.maintenance, 5, 'integration assigns accelerated maintenance recovery when the construction queue left a backlog');
+protectedOpening = advanceDays(protectedOpening, 12);
+equal(protectedOpening.population.normal, 28, 'the original action team remains intact after population integration and continued default progression');
+equal(protectedOpening.population.deceased, 0, 'normal contact, construction and integration never kills the original action team');
+equal(protectedOpening.population.waterDebt, 0, 'normal post-integration progression keeps action-team water debt at zero');
+equal(protectedOpening.population.foodDebt, 0, 'normal post-integration progression keeps action-team food debt at zero');
+
+const deliberateOpeningOrder: OpeningProjectId[] = [
+  'opening-food-processing',
+  'opening-water-repair',
+  'opening-basic-medical',
+  'opening-food-source',
+  'opening-critical-power',
+  'opening-sanitation',
+  'opening-housing',
+  'opening-registration',
+  'opening-basic-industry',
+];
+for (const projectId of deliberateOpeningOrder) {
+  opening = approveOpeningProject(opening, projectId);
+  opening = advanceDays(opening, 6);
+}
+equal(opening.settlement.status, 'ready-to-integrate', 'population integration opens only after all nine atomic settlement projects complete');
+equal(opening.production.totalFactories, 3, 'the completed basic production site contributes three persistent units to the unified production pool');
+equal(opening.map.cells.find((cell) => cell.id === LOCATION_CELLS.openingSettlement)?.occupation, 'settlement', 'completed basic industry remains attached to the existing settlement identity');
+const readyOpening = opening;
+opening = integrateExistingSettlement(opening);
+equal(opening.settlement.status, 'served', 'player explicitly integrates population only after every minimum service is real');
+equal(opening.settlement.registeredPopulation, 1_000, 'one thousand existing residents enter the registered population ledger');
+equal(opening.settlement.servedPopulation, 1_000, 'one thousand existing residents enter the service ledger');
+equal(opening.settlement.locationCellId, OPENING_SETTLEMENT_CELL_ID, 'integrated population remains at the existing settlement instead of moving to headquarters');
+equal(opening.settlement.workforceEligible, 500, 'eligible settlement labour is derived from real residents');
+equal(opening.settlement.workforceAssigned, 450, 'four hundred fifty eligible residents remain auditable in local routine jobs');
+equal(opening.settlement.workforceEligible - opening.settlement.workforceAssigned, 50, 'five percent of served population enters the mobile workforce account');
+equal(livingPopulation(opening), 1_028, 'the unified supported population contains the action team and served settlement residents');
+equal(workablePopulation(opening), 78, 'the unified workable population contains the action team and fifty mobile settlement workers');
+equal(opening.workforce.workable, 78, 'integration immediately refreshes the live workforce ledger');
+equal(workforceTotal(opening), 78, 'the refreshed unified workforce remains fully conserved');
+equal(opening.dailyPositions.water, 6, 'integration preserves an already accelerated water line');
+equal(opening.dailyPositions.food, 5, 'integration restores the routine food line to standard staffing when mobile labour becomes available');
+equal(opening.dailyPositions.maintenance, 5, 'integration preserves an already accelerated maintenance line');
+equal(opening.dailyPositions.logistics, 3, 'integration restores the routine logistics line to standard staffing when mobile labour becomes available');
+equal(dailyResourceRate(opening, 'water').outflow, 1_028, 'integration raises real daily water demand from twenty-eight to one thousand twenty-eight');
+equal(dailyResourceRate(opening, 'food').outflow, 1_028, 'integration raises real daily food demand from twenty-eight to one thousand twenty-eight');
+expect(dailyResourceRate(opening, 'water').inflow >= 1_028, 'the completed water service enters the unified inflow and covers all supported residents');
+expect(dailyResourceRate(opening, 'food').inflow >= 1_028, 'the completed food source and processing services enter unified inflow and cover all supported residents');
+equal(dailyResourceRate(opening, 'commonParts').outflow, 5, 'served settlement facilities add two auditable parts of daily maintenance demand');
+const unifiedFlowDay = advanceOneDay(opening);
+const unifiedFlowLedger = unifiedFlowDay.ledger.at(-1)!;
+equal(unifiedFlowLedger.resources.water.outflow, 1_028, 'a real settled day consumes water for all one thousand twenty-eight supported residents');
+equal(unifiedFlowLedger.resources.food.outflow, 1_028, 'a real settled day consumes food for all one thousand twenty-eight supported residents');
+expect(unifiedFlowLedger.resources.water.inflow >= 1_028, 'a real settled day records settlement water service inflow in the core ledger');
+expect(unifiedFlowLedger.resources.food.inflow >= 1_028, 'a real settled day records settlement food service inflow in the core ledger');
+equal(unifiedFlowLedger.resources.commonParts.outflow, 5, 'a real settled day records the additional settlement service maintenance burden');
+
+const waterStopped = setOpeningServiceOperational(opening, 'water', false);
+expect(dailyResourceRate(waterStopped, 'water').inflow < dailyResourceRate(waterStopped, 'water').outflow, 'stopping the settlement water service creates a real unified water-flow gap');
+const waterStoppedDay = advanceOneDay(waterStopped);
+equal(waterStoppedDay.resourceShortages.water, true, 'the unified water account records a real shortage when settlement supply is stopped');
+equal(waterStoppedDay.openingLoop.currentMonth.waterGapDays, waterStopped.openingLoop.currentMonth.waterGapDays + 1, 'the real water-flow gap enters the natural-month evidence account');
+const foodStopped = setOpeningServiceOperational(opening, 'food', false);
+expect(dailyResourceRate(foodStopped, 'food').inflow < dailyResourceRate(foodStopped, 'food').outflow, 'stopping either settlement food service creates a real unified food-flow gap');
+const foodStoppedDay = advanceOneDay(foodStopped);
+equal(foodStoppedDay.resourceShortages.food, true, 'the unified food account records a real shortage when settlement supply is stopped');
+equal(foodStoppedDay.openingLoop.currentMonth.foodGapDays, foodStopped.openingLoop.currentMonth.foodGapDays + 1, 'the real food-flow gap enters the natural-month evidence account');
+
+const labourProofBase = testProject('mobile-labour-proof', 'P0');
+const labourProofProject = {
+  ...labourProofBase,
+  staffing: { ...labourProofBase.staffing, planned: 40 },
+  workRequired: 100,
+};
+const actionTeamProjectDay = advanceOneDay(injectTestProject(readyOpening, labourProofProject));
+const unifiedProjectDay = advanceOneDay(injectTestProject(opening, labourProofProject));
+const actionTeamProjectWork = actionTeamProjectDay.projects.find((project) => project.id === labourProofProject.id)?.workDone ?? 0;
+const unifiedProjectWork = unifiedProjectDay.projects.find((project) => project.id === labourProofProject.id)?.workDone ?? 0;
+expect(unifiedProjectWork > actionTeamProjectWork, 'the mobile workforce materially accelerates a real approved engineering project');
+equal(unifiedProjectWork, 40, 'all forty planned engineering positions can be filled from the unified workforce');
+
+opening = setDailyMode(opening, 'water', 'standard');
+opening = setDailyMode(opening, 'maintenance', 'standard');
+opening = setResearchTarget(opening, 'adapt-survey-drone');
+opening = advanceDays(opening, 8);
+expect(opening.research.completed.includes('adapt-survey-drone'), `opening-loop research reaches the industrial milestone without product coupling ${JSON.stringify({ research: opening.research, projects: opening.projects.filter((project) => technologies.some((technology) => technology.id === project.id)), workforce: opening.workforce, population: opening.population, settlement: opening.settlement, rates: { water: dailyResourceRate(opening, 'water'), food: dailyResourceRate(opening, 'food') }, shortages: opening.resourceShortages, warnings: opening.warnings })}`);
+opening = approveCapabilityProject(opening, 'repair-precision-workshop');
+opening = advanceDays(opening, 4);
+equal(opening.projects.find((project) => project.id === 'repair-precision-workshop')?.status, 'complete', 'opening loop includes a real completed production site');
+equal(opening.production.totalFactories, 4, 'the three settlement production units and one repaired workshop share one persistent production pool');
+opening = setDailyMode(opening, 'water', 'standard');
+opening = setDailyMode(opening, 'food', 'standard');
+opening = setDailyMode(opening, 'maintenance', 'standard');
+opening = setProductionAllocation(opening, 'common-parts-remanufacturing', 1);
+opening = setProductionAllocation(opening, 'precision-parts', 1);
+equal(opening.production.lines.find((line) => line.id === 'precision-parts')?.allocatedFactories, 1, 'basic industry evidence requires a player allocation on a fixed product row');
+equal(opening.production.lines.find((line) => line.id === 'common-parts-remanufacturing')?.allocatedFactories, 1, 'one real basic-industry unit sustains ordinary-parts maintenance from worn parts');
+equal(opening.production.lines.reduce((sum, line) => sum + line.allocatedFactories, 0), 2, 'fixed-line allocations remain below the four-unit persistent pool');
+const allocationClamp = setProductionAllocation(opening, 'survey-drone', 99);
+equal(allocationClamp.production.lines.reduce((sum, line) => sum + line.allocatedFactories, 0), 4, 'production allocation clamps at the unified persistent-unit total');
+
+let continuityGuard = 0;
+while (openingLoopEvidence(opening).consecutiveMonths < 3 && continuityGuard < 190) {
+  expect(dailyResourceRate(opening, 'water').inflow >= dailyResourceRate(opening, 'water').outflow, 'three-month proof uses the real balanced water account each day');
+  expect(dailyResourceRate(opening, 'food').inflow >= dailyResourceRate(opening, 'food').outflow, 'three-month proof uses the real balanced food account each day');
+  opening = advanceOneDay(opening);
+  continuityGuard += 1;
+}
+equal(openingLoopEvidence(opening).consecutiveMonths, 3, `three complete natural months retain daily water, food, critical-service, maintenance and conservation evidence ${JSON.stringify(opening.openingLoop)}`);
+equal(opening.openingLoop.continuityMonths.length, 3, 'only the latest three complete natural-month proofs are retained');
+expect(opening.openingLoop.continuityMonths.every((month) => month.waterMet && month.foodMet
+  && month.criticalServicesOperational && month.maintenanceRecoverable
+  && month.resourceAccountingConserved), 'all five continuity checks pass in every retained natural month');
+equal(opening.projects.some((project) => project.id === 'floor_common_parts'), false, 'the normal three-month industry loop never depends on the zero-input softlock recovery');
+expect(opening.oldRepairableParts > 0, 'the real maintenance and remanufacturing loop retains an auditable worn-parts stock after three months');
+opening = approveSurvey(opening, 'ruin-a');
+const completeOpeningEvidence = openingLoopEvidence(opening);
+equal(completeOpeningEvidence.items.length, 9, 'opening loop exposes the nine required evidence identities');
+equal(new Set(completeOpeningEvidence.items.map((item) => item.id)).size, 9, 'every opening-loop evidence identity is unique');
+equal(completeOpeningEvidence.passed, true, 'population, services, repair, industry, mobile labour and a player-approved idle queue pass together');
+const brokenOpening = setOpeningServiceOperational(opening, 'water', false);
+expect(dailyResourceRate(brokenOpening, 'water').inflow < dailyResourceRate(brokenOpening, 'water').outflow, 'the evidence failure is derived from the same real water account');
+equal(openingLoopEvidence(brokenOpening).items.find((item) => item.id === 'water_repeatable')?.status, 'blocked', 'a real water shutdown immediately blocks the water evidence');
+equal(openingLoopEvidence(brokenOpening).items.find((item) => item.id === 'water_repeatable')?.gap, '重复日供水能力未覆盖服务人口', 'blocked water evidence exposes one exact recovery gap');
+opening = setOpeningServiceOperational(brokenOpening, 'water', true);
+equal(openingLoopEvidence(opening).items.find((item) => item.id === 'water_repeatable')?.status, 'pass', 'restoring the service clears the water gap without changing history');
+const openingStorage = new MemoryStorage();
+saveM0State(opening, openingStorage);
+equal(JSON.stringify(loadM0State(openingStorage)), JSON.stringify(opening), 'settlement services, daily supply month and three-month evidence reload deterministically');
 
 const capabilityStorage = new MemoryStorage();
 saveM0State(capability, capabilityStorage);
@@ -885,12 +1223,25 @@ expectRejectedCapabilitySave((state) => { state.research.manualQueue.push('unkno
 expectRejectedCapabilitySave((state) => { state.research.facilities.push({ ...state.research.facilities[0] }); }, 'duplicate research facility ID resets safely');
 expectRejectedCapabilitySave((state) => { state.research.facilities[0].capacity = 0; }, 'zero-capacity research facility resets safely');
 expectRejectedCapabilitySave((state) => { state.research.facilities[0].openPositions = 7; }, 'research positions above building capacity reset safely');
+expectRejectedCapabilitySave((state) => { state.research.mode = 'automatic'; }, 'v8 save rejects automatic research mode');
+expectRejectedCapabilitySave((state) => { state.research.automaticDomains.push('surveying'); }, 'v8 save rejects automatic domain authorization');
+expectRejectedCapabilitySave((state) => { state.production.totalFactories += 1; }, 'factory pool must match the persistent completed facility');
+expectRejectedCapabilitySave((state) => { state.production.lines[0].workRequired += 1; }, 'fixed production recipe work cannot drift in a save');
+expectRejectedCapabilitySave((state) => { state.production.lines[0].allocatedFactories = 1; state.production.lines[1].allocatedFactories = 1; }, 'strict save rejects factory allocation above the total pool');
+expectRejectedCapabilitySave((state) => { state.settlement.status = 'ready-to-integrate'; }, 'strict v9 save rejects opening population integration before atomic projects complete');
+expectRejectedCapabilitySave((state) => { state.settlement.services.water.capacity = 1_100; }, 'strict v9 save rejects a service result without its completed atomic project');
+expectRejectedCapabilitySave((state) => { state.settlement.services.water.capacity = 0; }, 'strict v9 save rejects a completed atomic project whose own result disappeared', opening);
+expectRejectedCapabilitySave((state) => { state.workforce.development -= 1; state.workforce.workable -= 1; }, 'strict v9 save rejects a workforce ledger that omits one unified mobile worker', opening);
+expectRejectedCapabilitySave((state) => { state.openingLoop.currentMonth.waterGapDays = state.openingLoop.currentMonth.servedDays + 1; }, 'strict v9 save rejects impossible opening-loop daily gap accounting', opening);
 expectRejectedCapabilitySave((state) => { state.map.surveys[0].targetId = state.map.surveys[1].targetId; }, 'duplicate survey target resets safely');
 expectRejectedCapabilitySave((state) => { state.map.surveys[0].stage = 'invalid' as M0State['map']['surveys'][number]['stage']; }, 'invalid survey stage resets safely');
 expectRejectedCapabilitySave((state) => { state.map.surveys[0].projectId = 'missing-project'; }, 'invalid survey project reference resets safely');
 expectRejectedCapabilitySave((state) => { state.map.surveys[0].selectedRouteId = state.map.routes[0].id; }, 'direction-stage survey cannot already contain a route choice', createInitialM0State());
-expectRejectedCapabilitySave((state) => { state.map.surveys[0].paused = false; }, 'survey pause flag must match its route-choice project state', routeChoiceSnapshot);
-expectRejectedCapabilitySave((state) => { state.projects.find((project) => project.id === 'survey-ruin-a')!.pausedReason = 'player_pause'; }, 'survey pause reason must match its project pause reason', routeChoiceSnapshot);
+expectRejectedCapabilitySave((state) => { state.map.surveys[0].workers = 6; }, 'v8 save rejects player-managed exploration staffing');
+expectRejectedCapabilitySave((state) => { state.map.surveys[0].maximumDays = 1; }, 'v8 save rejects player-managed exploration duration');
+expectRejectedCapabilitySave((state) => { state.map.surveys[0].useDrone = false; }, 'v8 save rejects player-managed exploration equipment');
+expectRejectedCapabilitySave((state) => { state.map.surveys[0].selectedRouteId = state.map.routes[1].id; }, 'automatic survey route must still match its target', automaticRouteSnapshot);
+expectRejectedCapabilitySave((state) => { state.projects.find((project) => project.id === 'survey-ruin-a')!.pausedReason = 'player_pause'; }, 'survey pause reason must match its project pause reason', automaticRouteSnapshot);
 expectRejectedCapabilitySave((state) => {
   state.research.currentProjectId = null;
   state.research.currentSource = null;
@@ -907,4 +1258,4 @@ expectRejectedCapabilitySave((state) => {
   }
 }, 'charging drone must be in overnight or inspection phase');
 
-console.log('M0 stage A+B+402-R3 checks passed: per-person staffing, shared research workforce, approval-ordered surveys, explicit factory quantities, strict saves, capability progression, and resource accounting.');
+console.log('M0 core checks passed: one-second days, manual research and survey controls, capped recovery, atomic settlement projects, strict v7/v8-to-v9 migration, persistent factory conservation, deterministic saves, and three complete opening-loop months.');

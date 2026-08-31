@@ -1,6 +1,6 @@
 ---
 rule_set: M0-LAYER-AND-LANGUAGE
-version: 1
+version: 3
 status: accepted
 accepted_source: M0-S003-U143
 supersedes_ambiguous_interpretation_of:
@@ -10,6 +10,8 @@ authority_decisions:
   - D-M0-DIR-040
   - D-M0-DIR-046
   - D-M0-DIR-047
+  - D-M0-DIR-082
+  - D-M0-DIR-116
 ---
 
 # M0 层级、线程、记录与页面语言总规则
@@ -134,6 +136,25 @@ authority_decisions:
 ### 世界内正文
 
 科技、工程、事件、通知和日志只写世界事实。它们不解释开发模型、不复述账本、不提示玩家应该注意什么，也不把机制词当文学语言。
+
+科研、工程和临时法令另有强制全文源 `RESEARCH_ENGINEERING_EDICT_TEXT_RULES_001.md`。相关任务必须从第 1 行读到 EOF，并提交实际范围与 SHA-256；该文件中的`accepted_verbatim`、`positive_reference`、`review_candidate`和`rejected_example`不得混用。漏读或只读摘要时返回`BLOCKED_SOURCE`。
+
+### 科技文字的两层审查是默认核心流程
+
+科技事实和科技文风不得继续混在同一张“总体通过”表中。默认流程固定为：
+
+1. 第一层执行`fact_gate`，确认该科技应当作为独立节点存在；检查科技身份、相邻节点差异、前置能力、时代与产业位置、解锁对象和实施边界。
+2. `fact_gate`同时检查玩家可见科技名称：最多七个汉字，不得含标点、空格、字母或数字。逗号、顿号等并列符号说明身份需要重审，禁止只删符号或强行缩写。
+3. 逐项审查同步登记事实问题标签。确定性错误仍是`fact_gate: return/blocked`并停止正文；必须结合整树才能判断的合并、删除、下沉、重复里程碑、玩家价值或尺度疑问可标`pass_with_tree_review`。
+4. `fact_gate`未通过时停在当前对象，不生成正文；需要拆分、合并、删除、改前置或补上游事实时，先修科技结构。
+5. `fact_gate: pass`或`pass_with_tree_review`后，第三层才生成玩家正文。
+6. 第一层对实际正文执行独立`prose_gate`；检查正文是否像科技正文、是否写出值得记住的能力意义、语言是否自然顺畅、对象与主语是否稳定、因果是否专属、形式是否适合该项科技。
+7. 完全严肃科技只写正文，不设置第二行。只有确实采用笑话或黑色幽默时，才允许增加承担笑点或黑色后果的第二行；严肃画面、影响或收尾不能作为第二行存在。
+8. `prose_gate`失败只退回当前正文，但仍然阻止进入下一科技。事实正确不能替文风合格，语法正确也不能替玩家可读。
+9. `prose_gate: pass`只允许把正文标为`review_candidate`并提交用户；只有用户逐字接受后才能标记`accepted_verbatim`并交第四层接入。
+10. 全部正文完成后，第一层必须覆盖整棵树复审游戏设计合理性，并对每项给出`KEEP`、`MERGE`、`SPLIT`、`REMOVE`、`DEMOTE`、`REWIRE_PREREQUISITE`或`REWRITE_UNLOCK`裁决提案；不得只复查已有标签，也不得自动写回正式树。
+
+第一层在审查讨论中临时写出的改句默认标记`discarded_review_explanation`。除非用户明确要求将其送入正式审查，它不得作为第三层参考、正向语料或玩家文字。
 
 ### 四种文字身份
 

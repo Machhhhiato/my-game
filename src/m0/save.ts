@@ -1,8 +1,9 @@
-import { compareGameDates, gameDateOrdinal, isValidGameDate, nextGameDate, nextMonthStart } from './calendar';
+import { compareGameDates, daysInMonth, gameDateOrdinal, isValidGameDate, nextGameDate, nextMonthStart } from './calendar';
 import { refreshMonthlyProjection } from './economy';
 import { M0_DAY_MS, M0_SAVE_KEY, MODE_STAFF, createInitialM0State } from './state';
 import { createLocalMap, nextIntelStage, normalizeMapRotation, refreshMapIntel, surveyWorkRequired } from './map';
 import { enabledResearchCapacity, technologies } from './progression';
+import { unifiedWorkablePopulation } from './populationAccounting';
 import {
   M0_STATE_VERSION,
   RESOURCE_IDS,
@@ -12,6 +13,9 @@ import {
   type Project,
   type ResourceId,
 } from './types';
+
+export const M0_LEGACY_SAVE_KEY = 'always-game-m0-v7';
+export const M0_V8_SAVE_KEY = 'always-game-m0-v8';
 
 export interface StorageLike {
   getItem(key: string): string | null;
@@ -111,6 +115,32 @@ function isResourceCosts(value: unknown): boolean {
   ));
 }
 
+function isProductionState(value: unknown, openingRequired: boolean): boolean {
+  const expectedIds = openingRequired
+    ? ['common-parts-remanufacturing', 'precision-parts', 'survey-drone']
+    : ['precision-parts', 'survey-drone'];
+  if (!isRecord(value)
+    || !hasExactKeys(value, ['totalFactories', 'lines'])
+    || !isNonNegativeInteger(value.totalFactories)
+    || !Array.isArray(value.lines)
+    || value.lines.length !== expectedIds.length) return false;
+  const ids = value.lines.map((line) => isRecord(line) ? line.id : null);
+  if (new Set(ids).size !== expectedIds.length || expectedIds.some((id) => !ids.includes(id))) return false;
+  const allocated = value.lines.reduce<number>((sum, line) => sum + (isRecord(line) && isNonNegativeInteger(line.allocatedFactories) ? Number(line.allocatedFactories) : 0), 0);
+  if (allocated > Number(value.totalFactories)) return false;
+  return value.lines.every((line) => isRecord(line)
+    && hasExactKeys(line, ['id', 'allocatedFactories', 'progress', 'workRequired', 'batchesCompleted', 'blockedReason'])
+    && expectedIds.includes(line.id as string)
+    && isNonNegativeInteger(line.allocatedFactories)
+    && Number(line.allocatedFactories) <= Number(value.totalFactories)
+    && isNonNegativeNumber(line.progress)
+    && isNonNegativeNumber(line.workRequired)
+    && Number(line.workRequired) > 0
+    && Number(line.progress) < Number(line.workRequired)
+    && isNonNegativeInteger(line.batchesCompleted)
+    && ['facility-unavailable', 'technology-locked', 'input-shortage', 'asset-limit', null].includes(line.blockedReason as string | null));
+}
+
 function isProject(value: unknown): value is Project {
   if (!isRecord(value)
     || !hasExactKeys(value, [
@@ -133,6 +163,9 @@ function isProject(value: unknown): value is Project {
     && isBoolean(value.directRecovery)
     && isBoolean(value.autoResume)
     && PAUSE_REASONS.includes(value.pausedReason as string | null)
+    && ((value.status === 'active' || value.status === 'complete')
+      ? value.pausedReason === null
+      : value.pausedReason !== null)
     && isNonNegativeInteger(value.safeActiveDays)
     && isNonNegativeInteger(staffing.planned)
     && isNonNegativeInteger(staffing.actual)
@@ -467,21 +500,140 @@ function isCapabilityState(value: unknown, projects: Project[]): boolean {
     && value.drone.overnightStartedDay === null;
 }
 
-function isM0State(value: unknown): value is M0State {
-  if (!isRecord(value)
-    || !hasExactKeys(value, [
-      'version', 'scenario', 'calendar', 'elapsedDays', 'clock', 'population',
-      'dailyPositions', 'workforce', 'staffingShortage', 'feedback', 'stocks', 'monthly',
-      'resourceShortages', 'maintenanceBacklog', 'oldRepairableParts',
-      'headquartersSalvage', 'waterworks', 'projects', 'map', 'research', 'drone', 'warnings', 'events', 'ui',
-      'ledger',
+function isOpeningState(value: Record<string, unknown>, state: M0State): boolean {
+  if (!isRecord(value.settlement)) return false;
+  const settlement = value.settlement;
+  if (!hasExactKeys(settlement, [
+      'id', 'locationCellId', 'population', 'status', 'registeredPopulation',
+      'servedPopulation', 'servedSince', 'workforceEligible', 'workforceAssigned', 'basicProductionUnits', 'services',
     ])
-    || value.version !== M0_STATE_VERSION
+    || settlement.id !== 'opening-settlement-01'
+    || typeof settlement.locationCellId !== 'string'
+    || !isNonNegativeInteger(settlement.population)
+    || Number(settlement.population) !== state.scenario.existingSettlementPopulation
+    || Number(settlement.population) < 900
+    || Number(settlement.population) > 1_200
+    || !['uncontacted', 'contacted', 'services-approved', 'ready-to-integrate', 'served'].includes(settlement.status as string)
+    || !['registeredPopulation', 'servedPopulation', 'workforceEligible', 'workforceAssigned', 'basicProductionUnits']
+      .every((key) => isNonNegativeInteger(settlement[key]))
+    || Number(settlement.registeredPopulation) > Number(settlement.population)
+    || Number(settlement.servedPopulation) > Number(settlement.registeredPopulation)
+    || (settlement.servedSince !== null && !isDate(settlement.servedSince))
+    || Number(settlement.workforceAssigned) > Number(settlement.workforceEligible)
+    || !state.map.cells.some((cell) => cell.id === settlement.locationCellId && cell.occupation === 'settlement')
+    || !isRecord(settlement.services)
+    || !hasExactKeys(settlement.services, [
+      'water', 'foodSource', 'foodProcessing', 'power', 'sanitation', 'medical', 'housing', 'registrationComplete',
+    ])
+    || !isBoolean(settlement.services.registrationComplete)) return false;
+  const services = settlement.services;
+  for (const service of ['water', 'foodSource', 'foodProcessing', 'power', 'sanitation', 'medical', 'housing']) {
+    const capacity = services[service];
+    if (!isRecord(capacity)
+      || !hasExactKeys(capacity, ['capacity', 'operational'])
+      || !isNonNegativeInteger(capacity.capacity)
+      || !isBoolean(capacity.operational)) return false;
+  }
+  if (settlement.basicProductionUnits !== 0 && settlement.basicProductionUnits !== 3) return false;
+  const atomicResults: Record<string, boolean> = {
+    'opening-water-repair': Number((services.water as Record<string, unknown>).capacity) > 0,
+    'opening-food-source': Number((services.foodSource as Record<string, unknown>).capacity) > 0,
+    'opening-food-processing': Number((services.foodProcessing as Record<string, unknown>).capacity) > 0,
+    'opening-critical-power': Number((services.power as Record<string, unknown>).capacity) > 0,
+    'opening-sanitation': Number((services.sanitation as Record<string, unknown>).capacity) > 0,
+    'opening-basic-medical': Number((services.medical as Record<string, unknown>).capacity) > 0,
+    'opening-housing': Number((services.housing as Record<string, unknown>).capacity) > 0,
+    'opening-registration': services.registrationComplete === true,
+    'opening-basic-industry': settlement.basicProductionUnits === 3,
+  };
+  for (const [projectId, resultComplete] of Object.entries(atomicResults)) {
+    const projectComplete = state.projects.some((project) => project.id === projectId && project.status === 'complete');
+    if (projectComplete !== resultComplete) return false;
+  }
+  const atomicProjects = state.projects.filter((project) => Object.hasOwn(atomicResults, project.id));
+  const allAtomicResults = Object.values(atomicResults).every(Boolean);
+  if ((settlement.status === 'ready-to-integrate' || settlement.status === 'served') !== allAtomicResults
+    || (settlement.status === 'uncontacted' && atomicProjects.length > 0)
+    || (settlement.status === 'contacted' && atomicProjects.length > 0)
+    || (settlement.status === 'services-approved' && atomicProjects.length === 0)) return false;
+  if (settlement.status === 'served') {
+    if (settlement.registeredPopulation !== settlement.population
+      || settlement.servedPopulation !== settlement.population
+      || settlement.servedSince === null
+      || compareGameDates(settlement.servedSince as GameDate, state.calendar) > 0
+      || settlement.workforceEligible !== Math.floor(Number(settlement.population) * 0.5)
+      || settlement.workforceAssigned !== Math.max(0,
+        Number(settlement.workforceEligible) - Math.ceil(Number(settlement.population) * 0.05))) return false;
+  } else if (settlement.registeredPopulation !== 0
+    || settlement.servedPopulation !== 0
+    || settlement.servedSince !== null
+    || settlement.workforceEligible !== 0
+    || settlement.workforceAssigned !== 0) return false;
+
+  if (!isRecord(value.openingLoop)
+    || !hasExactKeys(value.openingLoop, ['continuityMonths', 'currentMonth'])
+    || !Array.isArray(value.openingLoop.continuityMonths)
+    || value.openingLoop.continuityMonths.length > 3) return false;
+  const currentMonth = value.openingLoop.currentMonth;
+  if (!isRecord(currentMonth)
+    || !hasExactKeys(currentMonth, [
+      'year', 'month', 'calendarDays', 'servedDays', 'waterGapDays', 'foodGapDays',
+      'criticalServiceGapDays', 'maintenanceGapDays',
+    ])
+    || !['year', 'month', 'calendarDays', 'servedDays', 'waterGapDays', 'foodGapDays',
+      'criticalServiceGapDays', 'maintenanceGapDays'].every((key) => isNonNegativeInteger(currentMonth[key]))
+    || Number(currentMonth.month) < 1
+    || Number(currentMonth.month) > 12
+    || Number(currentMonth.year) !== state.calendar.year
+    || Number(currentMonth.month) !== state.calendar.month
+    || Number(currentMonth.calendarDays) !== daysInMonth(state.calendar.year, state.calendar.month)
+    || Number(currentMonth.calendarDays) < 28
+    || Number(currentMonth.calendarDays) > 31
+    || Number(currentMonth.servedDays) > Number(currentMonth.calendarDays)
+    || Number(currentMonth.waterGapDays) > Number(currentMonth.servedDays)
+    || Number(currentMonth.foodGapDays) > Number(currentMonth.servedDays)
+    || Number(currentMonth.criticalServiceGapDays) > Number(currentMonth.servedDays)
+    || Number(currentMonth.maintenanceGapDays) > Number(currentMonth.servedDays)) return false;
+  return value.openingLoop.continuityMonths.every((month) => isRecord(month)
+    && hasExactKeys(month, [
+      'year', 'month', 'waterMet', 'foodMet', 'criticalServicesOperational',
+      'maintenanceRecoverable', 'resourceAccountingConserved',
+    ])
+    && isNonNegativeInteger(month.year)
+    && isNonNegativeInteger(month.month)
+    && Number(month.month) >= 1
+    && Number(month.month) <= 12
+    && ['waterMet', 'foodMet', 'criticalServicesOperational', 'maintenanceRecoverable', 'resourceAccountingConserved']
+      .every((key) => isBoolean(month[key])));
+}
+
+function isM0State(
+  value: unknown,
+  expectedVersion = Number(M0_STATE_VERSION),
+  expectedDayMs = M0_DAY_MS,
+  productionRequired = true,
+  openingRequired = expectedVersion >= 9,
+): value is M0State {
+  const topLevelKeys = [
+    'version', 'scenario', 'calendar', 'elapsedDays', 'clock', 'population',
+    'dailyPositions', 'workforce', 'staffingShortage', 'feedback', 'stocks', 'monthly',
+    'resourceShortages', 'maintenanceBacklog', 'oldRepairableParts',
+    'headquartersSalvage', 'waterworks', 'projects', 'map', 'research', 'drone', 'warnings', 'events', 'ui',
+    'ledger',
+  ];
+  if (productionRequired) topLevelKeys.push('production');
+  if (openingRequired) topLevelKeys.push('settlement', 'openingLoop');
+  if (!isRecord(value)
+    || !hasExactKeys(value, topLevelKeys)
+    || value.version !== expectedVersion
     || !isRecord(value.scenario)
-    || !hasExactKeys(value.scenario, ['id', 'startDate'])
+    || !hasExactKeys(value.scenario, openingRequired ? ['id', 'startDate', 'existingSettlementPopulation'] : ['id', 'startDate'])
     || typeof value.scenario.id !== 'string'
     || value.scenario.id.length === 0
     || !isDate(value.scenario.startDate)
+    || (openingRequired && (!isNonNegativeInteger(value.scenario.existingSettlementPopulation)
+      || Number(value.scenario.existingSettlementPopulation) < 900
+      || Number(value.scenario.existingSettlementPopulation) > 1_200))
     || !isDate(value.calendar)
     || compareGameDates(value.calendar, value.scenario.startDate) < 0
     || !isNonNegativeInteger(value.elapsedDays)
@@ -491,8 +643,8 @@ function isM0State(value: unknown): value is M0State {
     || !hasExactKeys(value.clock, ['running', 'elapsedMs', 'millisecondsPerDay', 'speed'])
     || !isBoolean(value.clock.running)
     || !isNonNegativeNumber(value.clock.elapsedMs)
-    || Number(value.clock.elapsedMs) >= M0_DAY_MS
-    || value.clock.millisecondsPerDay !== M0_DAY_MS
+    || Number(value.clock.elapsedMs) >= expectedDayMs
+    || value.clock.millisecondsPerDay !== expectedDayMs
     || !GAME_SPEEDS.includes(value.clock.speed as number)) return false;
 
   if (!isRecord(value.population)
@@ -552,6 +704,7 @@ function isM0State(value: unknown): value is M0State {
     || Number(value.waterworks.workDone) > Number(value.waterworks.workRequired)) return false;
 
   if (!Array.isArray(value.projects) || !value.projects.every(isProject)) return false;
+  if (productionRequired && !isProductionState(value.production, openingRequired)) return false;
   if (!isCapabilityState(value, value.projects)) return false;
   const projectIds = value.projects.map((project) => project.id);
   if (new Set(projectIds).size !== projectIds.length) return false;
@@ -573,6 +726,27 @@ function isM0State(value: unknown): value is M0State {
   if (assignedWorkers !== workforce.workable) return false;
 
   const state = value as unknown as M0State;
+  if (openingRequired && !isOpeningState(value, state)) return false;
+  if (state.workforce.workable !== unifiedWorkablePopulation(state)) return false;
+  if (productionRequired) {
+    const workshopReady = state.projects.some((project) => project.id === 'repair-precision-workshop' && project.status === 'complete');
+    const precisionLine = state.production.lines.find((line) => line.id === 'precision-parts');
+    const droneLine = state.production.lines.find((line) => line.id === 'survey-drone');
+    const remanufacturingLine = state.production.lines.find((line) => line.id === 'common-parts-remanufacturing');
+    const openingFactories = openingRequired ? state.settlement.basicProductionUnits : 0;
+    if (state.production.totalFactories !== openingFactories + (workshopReady ? 1 : 0)
+      || precisionLine?.workRequired !== 12
+      || droneLine?.workRequired !== 18
+      || (openingRequired && remanufacturingLine?.workRequired !== 6)
+      || state.research.mode !== 'manual'
+      || state.research.automaticDomains.length !== 0
+      || state.research.roundTarget !== null
+      || state.map.surveys.some((survey) => survey.workers !== 2
+        || survey.maximumDays !== null
+        || survey.useDrone !== true
+        || survey.pauseReason === 'route-choice'
+        || survey.pauseReason === 'day-limit')) return false;
+  }
   const activeResearchProject = state.projects.find((project) => (
     technologies.some((technology) => technology.id === project.id)
       && project.status === 'active'
@@ -623,9 +797,144 @@ export function saveM0State(state: M0State, storage: StorageLike = window.localS
   storage.setItem(M0_SAVE_KEY, JSON.stringify(state));
 }
 
+function migrateV7State(value: M0State): M0State {
+  const migrated = JSON.parse(JSON.stringify(value)) as M0State;
+  const legacyProjects = migrated.projects;
+  const workshopReady = legacyProjects.some((project) => project.id === 'repair-precision-workshop' && project.status === 'complete');
+  const legacyPrecision = legacyProjects.find((project) => project.id === 'prototype-precision-parts');
+  const legacyDrone = legacyProjects.find((project) => project.id === 'assemble-survey-drone');
+  (migrated as { version: number }).version = 8;
+  migrated.clock.millisecondsPerDay = M0_DAY_MS;
+  migrated.clock.elapsedMs = 0;
+  migrated.research.mode = 'manual';
+  migrated.research.manualQueue = [];
+  migrated.research.automaticDomains = [];
+  migrated.research.currentProjectId = null;
+  migrated.research.currentSource = null;
+  migrated.research.roundTarget = null;
+  migrated.research.blockedProjectId = null;
+  migrated.research.blockedReason = 'no-project';
+  for (const survey of migrated.map.surveys) {
+    survey.workers = 2;
+    survey.maximumDays = null;
+    survey.useDrone = true;
+    if (survey.stage === 'area' && survey.selectedRouteId === null) {
+      survey.selectedRouteId = migrated.map.routes.find((route) => route.targetId === survey.targetId)?.id ?? null;
+    }
+    const project = legacyProjects.find((candidate) => candidate.id === survey.projectId);
+    if (project) {
+      project.staffing.planned = 2;
+      if (survey.pauseReason === 'route-choice' || survey.pauseReason === 'day-limit') {
+        survey.paused = false;
+        survey.pauseReason = null;
+        project.status = 'active';
+        project.pausedReason = null;
+      }
+    }
+  }
+  migrated.projects = legacyProjects.filter((project) => (
+    !technologies.some((technology) => technology.id === project.id) || project.status === 'complete'
+  ) && project.id !== 'prototype-precision-parts' && project.id !== 'assemble-survey-drone');
+  migrated.production = {
+    totalFactories: workshopReady ? 1 : 0,
+    lines: [
+      {
+        id: 'precision-parts', allocatedFactories: legacyPrecision && legacyPrecision.status !== 'complete' && workshopReady ? 1 : 0,
+        progress: legacyPrecision && legacyPrecision.status !== 'complete' ? legacyPrecision.workDone : 0,
+        workRequired: 12, batchesCompleted: legacyPrecision?.status === 'complete' ? 1 : 0,
+        blockedReason: workshopReady ? null : 'facility-unavailable',
+      },
+      {
+        id: 'survey-drone', allocatedFactories: legacyDrone && legacyDrone.status !== 'complete' && workshopReady ? 1 : 0,
+        progress: legacyDrone && legacyDrone.status !== 'complete' ? legacyDrone.workDone : 0,
+        workRequired: 18, batchesCompleted: migrated.drone ? 1 : 0,
+        blockedReason: workshopReady ? (migrated.research.completed.includes('adapt-survey-drone') ? null : 'technology-locked') : 'facility-unavailable',
+      },
+    ],
+  };
+  const totalAllocated = migrated.production.lines.reduce((sum, line) => sum + line.allocatedFactories, 0);
+  if (totalAllocated > migrated.production.totalFactories) migrated.production.lines[1].allocatedFactories = 0;
+  return migrateV8State(migrated);
+}
+
+function normalizeLegacyOpeningMap(value: M0State): M0State {
+  const normalized = JSON.parse(JSON.stringify(value)) as M0State;
+  const expectedMap = createLocalMap();
+  const surveys = normalized.map.surveys;
+  const selectedCellId = expectedMap.cells.some((cell) => cell.id === normalized.map.selectedCellId)
+    ? normalized.map.selectedCellId
+    : expectedMap.selectedCellId;
+  normalized.map = {
+    ...expectedMap,
+    selectedCellId,
+    surveys,
+  };
+  refreshMapIntel(normalized.map);
+  return normalized;
+}
+
+function migrateV8State(value: M0State): M0State {
+  const migrated = normalizeLegacyOpeningMap(value);
+  const existingSettlementPopulation = 1_000;
+  const opening = createInitialM0State({
+    id: migrated.scenario.id,
+    startDate: migrated.scenario.startDate,
+    existingSettlementPopulation,
+  });
+  migrated.version = M0_STATE_VERSION;
+  migrated.scenario = {
+    ...migrated.scenario,
+    existingSettlementPopulation,
+  };
+  migrated.settlement = opening.settlement;
+  migrated.openingLoop = opening.openingLoop;
+  migrated.production.lines.push({
+    id: 'common-parts-remanufacturing',
+    allocatedFactories: 0,
+    progress: 0,
+    workRequired: 6,
+    batchesCompleted: 0,
+    blockedReason: 'facility-unavailable',
+  });
+  return migrated;
+}
+
 export function loadM0State(storage: StorageLike = window.localStorage): M0State {
   const raw = storage.getItem(M0_SAVE_KEY);
-  if (raw === null) return createInitialM0State();
+  if (raw === null) {
+    const v8Raw = storage.getItem(M0_V8_SAVE_KEY);
+    if (v8Raw !== null) {
+      try {
+        const parsedV8: unknown = JSON.parse(v8Raw);
+        if (!isRecord(parsedV8)) return createInitialM0State();
+        const validationCopy = normalizeLegacyOpeningMap(parsedV8 as unknown as M0State);
+        if (!isM0State(validationCopy, 8, 1_000, true, false)) return createInitialM0State();
+        const migrated = migrateV8State(parsedV8 as unknown as M0State);
+        if (!isM0State(migrated)) return createInitialM0State();
+        saveM0State(migrated, storage);
+        storage.removeItem(M0_V8_SAVE_KEY);
+        storage.removeItem(M0_LEGACY_SAVE_KEY);
+        return migrated;
+      } catch {
+        return createInitialM0State();
+      }
+    }
+    const legacyRaw = storage.getItem(M0_LEGACY_SAVE_KEY);
+    if (legacyRaw === null) return createInitialM0State();
+    try {
+      const legacy: unknown = JSON.parse(legacyRaw);
+      if (!isRecord(legacy)) return createInitialM0State();
+      const validationCopy = normalizeLegacyOpeningMap(legacy as unknown as M0State);
+      if (!isM0State(validationCopy, 7, 20_000, false, false)) return createInitialM0State();
+      const migrated = migrateV7State(validationCopy);
+      if (!isM0State(migrated)) return createInitialM0State();
+      saveM0State(migrated, storage);
+      storage.removeItem(M0_LEGACY_SAVE_KEY);
+      return migrated;
+    } catch {
+      return createInitialM0State();
+    }
+  }
 
   try {
     const parsed: unknown = JSON.parse(raw);
@@ -637,4 +946,6 @@ export function loadM0State(storage: StorageLike = window.localStorage): M0State
 
 export function clearM0State(storage: StorageLike = window.localStorage): void {
   storage.removeItem(M0_SAVE_KEY);
+  storage.removeItem(M0_V8_SAVE_KEY);
+  storage.removeItem(M0_LEGACY_SAVE_KEY);
 }

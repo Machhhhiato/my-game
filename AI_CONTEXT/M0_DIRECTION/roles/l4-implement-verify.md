@@ -13,6 +13,7 @@
 - `implement` 模式还必须读取 accepted 的 `day-night-execution-plan.md` 和本批已填写的 `NIGHT WORK ORDER`
 - 任务列出的冻结规格、内容、文本、代码基线和写入白名单
 - 第一层派发记录中的任务 ID、模型、输入提交和用户授权来源；任一缺失返回 `BLOCKED_DISPATCH`
+- 任务接入科研、工程或临时法令文字时，全文读取 `RESEARCH_ENGINEERING_EDICT_TEXT_RULES_001.md` 并核对字符串状态；没有 `accepted_verbatim` 时返回 `BLOCKED_TEXT`
 
 ## 四种工作模式
 

@@ -43,7 +43,7 @@ export const technologies: TechnologyDefinition[] = [
     automatic: true,
     order: 1,
     prerequisites: ['restore-precision-manufacturing'],
-    physicalPrerequisites: ['prototype-precision-parts'],
+    physicalPrerequisites: [],
     work: 18,
   },
 ];
@@ -166,6 +166,9 @@ export function queueTarget(research: ResearchState, id: string): string[] {
 
 export function completedCapability(state: M0State, id: string): boolean {
   return state.research.completed.includes(id)
+    || (id === 'prototype-precision-parts'
+      && state.production.lines.some((line) => line.id === 'precision-parts' && line.batchesCompleted > 0))
+    || (id === 'assemble-survey-drone' && state.drone !== null)
     || state.projects.some((project) => project.id === id && project.status === 'complete');
 }
 
@@ -310,11 +313,11 @@ function automaticSelection(state: M0State): ResearchSelection {
 
 export function selectResearch(state: M0State): ResearchSelection {
   const manual = firstIncompleteManual(state.research);
-  if (state.research.mode === 'manual' && manual) {
+  if (manual) {
     const block = technologyBlockReason(state, manual);
     return block === null
       ? { id: manual.id, source: 'manual', roundTarget: state.research.roundTarget, blockedProjectId: null, blockedReason: null }
       : { id: null, source: null, roundTarget: state.research.roundTarget, blockedProjectId: manual.id, blockedReason: block };
   }
-  return automaticSelection(state);
+  return { id: null, source: null, roundTarget: null, blockedProjectId: null, blockedReason: 'no-project' };
 }

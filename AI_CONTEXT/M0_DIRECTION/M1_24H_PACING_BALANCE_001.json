@@ -1,0 +1,75 @@
+{
+  "modelId": "M1-24H-PACING-BALANCE-001",
+  "version": 1,
+  "status": "superseded",
+  "supersededBy": "SPEC-M1-FIXED-DAY-10H-ENDGAME-PACING-R2-001",
+  "sourceTask": "M1-L1-516",
+  "clock": {
+    "worldMonths": 24,
+    "worldDaysReference": 730,
+    "realElapsedSeconds": 86400,
+    "openingMonthSeconds": 1200,
+    "remainingMonthAverageSeconds": 3704.347826,
+    "monthEndFormula": "m=1:1200; m>=2:1200+round((m-1)*85200/23)",
+    "calendarIsUnlockGate": false
+  },
+  "campaignScope": {
+    "r6TechnologyCount": 539,
+    "r6TotalResearchPoints": 43380,
+    "yearTwoMainlineTechnologyCount": 389,
+    "yearTwoMainlineResearchPoints": 25285,
+    "r6EngineeringCount": 85,
+    "yearTwoMainlineEngineeringCount": 74,
+    "allNodesRequiredBy24h": false
+  },
+  "openingLoop": {
+    "realEndSecond": 1200,
+    "openingMobileTeam": 28,
+    "generatedSettlementPopulationRange": [900, 1200],
+    "minimumRegisteredAndServedPopulation": 1000,
+    "waterDemandCoverage": 1.10,
+    "repeatableFoodDemandCoverage": 1.05,
+    "minimumMobileCivilianLaborShare": 0.05,
+    "oneTimeOpeningStockCountsAsRepeatableSupply": false,
+    "populationTeleportsToHeadquarters": false
+  },
+  "monthTargets": [
+    {"month":1,"realEndSecond":1200,"realEnd":"00:20:00","mainlineResearchCumulative":40,"referencePopulationBand":[1000,1200],"mainlineEngineeringCumulative":4},
+    {"month":2,"realEndSecond":4904,"realEnd":"01:21:44","mainlineResearchCumulative":100,"referencePopulationBand":[1000,2200]},
+    {"month":3,"realEndSecond":8609,"realEnd":"02:23:29","mainlineResearchCumulative":200,"referencePopulationBand":[1800,3500],"mainlineEngineeringCumulative":10},
+    {"month":4,"realEndSecond":12313,"realEnd":"03:25:13","mainlineResearchCumulative":350,"referencePopulationBand":[3000,5500]},
+    {"month":5,"realEndSecond":16017,"realEnd":"04:26:57","mainlineResearchCumulative":550,"referencePopulationBand":[4500,8000]},
+    {"month":6,"realEndSecond":19722,"realEnd":"05:28:42","mainlineResearchCumulative":800,"referencePopulationBand":[7000,11000],"mainlineEngineeringCumulative":22},
+    {"month":7,"realEndSecond":23426,"realEnd":"06:30:26","mainlineResearchCumulative":1100,"referencePopulationBand":[9000,14000]},
+    {"month":8,"realEndSecond":27130,"realEnd":"07:32:10","mainlineResearchCumulative":1450,"referencePopulationBand":[12000,18000]},
+    {"month":9,"realEndSecond":30835,"realEnd":"08:33:55","mainlineResearchCumulative":1900,"referencePopulationBand":[15000,22000]},
+    {"month":10,"realEndSecond":34539,"realEnd":"09:35:39","mainlineResearchCumulative":2500,"referencePopulationBand":[19000,27000],"mainlineEngineeringCumulative":35},
+    {"month":11,"realEndSecond":38243,"realEnd":"10:37:23","mainlineResearchCumulative":3250,"referencePopulationBand":[23000,32000]},
+    {"month":12,"realEndSecond":41948,"realEnd":"11:39:08","mainlineResearchCumulative":4200,"referencePopulationBand":[28000,38000]},
+    {"month":13,"realEndSecond":45652,"realEnd":"12:40:52","mainlineResearchCumulative":5400,"referencePopulationBand":[33000,43000]},
+    {"month":14,"realEndSecond":49357,"realEnd":"13:42:37","mainlineResearchCumulative":6800,"referencePopulationBand":[38000,48000]},
+    {"month":15,"realEndSecond":53061,"realEnd":"14:44:21","mainlineResearchCumulative":8500,"referencePopulationBand":[44000,55000],"mainlineEngineeringCumulative":50},
+    {"month":16,"realEndSecond":56765,"realEnd":"15:46:05","mainlineResearchCumulative":10400,"referencePopulationBand":[50000,61000]},
+    {"month":17,"realEndSecond":60470,"realEnd":"16:47:50","mainlineResearchCumulative":12500,"referencePopulationBand":[56000,67000]},
+    {"month":18,"realEndSecond":64174,"realEnd":"17:49:34","mainlineResearchCumulative":14800,"referencePopulationBand":[63000,73000]},
+    {"month":19,"realEndSecond":67878,"realEnd":"18:51:18","mainlineResearchCumulative":17100,"referencePopulationBand":[70000,79000]},
+    {"month":20,"realEndSecond":71583,"realEnd":"19:53:03","mainlineResearchCumulative":19400,"referencePopulationBand":[76000,84000],"mainlineEngineeringCumulative":64},
+    {"month":21,"realEndSecond":75287,"realEnd":"20:54:47","mainlineResearchCumulative":21500,"referencePopulationBand":[81000,90000]},
+    {"month":22,"realEndSecond":78991,"realEnd":"21:56:31","mainlineResearchCumulative":23200,"referencePopulationBand":[85000,95000]},
+    {"month":23,"realEndSecond":82696,"realEnd":"22:58:16","mainlineResearchCumulative":24500,"referencePopulationBand":[88000,99000]},
+    {"month":24,"realEndSecond":86400,"realEnd":"24:00:00","mainlineResearchCumulative":25285,"referencePopulationBand":[80000,105000],"mainlineEngineeringCumulative":74}
+  ],
+  "pacingRules": {
+    "minimumReferenceResearchCapacityBuffer": 0.05,
+    "progressFactsAreSeparateFromMonthlyAccountSettlement": true,
+    "offlineAndForegroundUseSameKernel": true,
+    "blockingDecisionPausesAffectedLaneOnly": true,
+    "maximumReturnHeadlines": 3,
+    "optionalResearchCanDelayMainline": true,
+    "earlyCompletionAllowed": true
+  },
+  "supersededNumericAssumptions": [
+    "M1-POPULATION-WORKFORCE-24M-001 opening month population and early research pacing",
+    "Any assumption that 408 technologies or 20125 research points remains the R6 year-two mainline"
+  ]
+}

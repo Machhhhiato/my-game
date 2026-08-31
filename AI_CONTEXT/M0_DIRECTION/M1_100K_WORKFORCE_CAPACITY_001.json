@@ -1,0 +1,215 @@
+{
+  "modelId": "M1-100K-WORKFORCE-CAPACITY-001",
+  "version": 3,
+  "status": "active_review",
+  "totalPopulation": 100000,
+  "dateGate": false,
+  "simulationAuthorized": false,
+  "accountingRules": [
+    "Every person belongs to exactly one primary population state and at most one full-time staffed position.",
+    "Reservists, recruitable population, volunteers and job seekers are views or states, not additional people.",
+    "Staffing creates a personnel ceiling only; equipment, facilities, inputs, skills and location can reduce effective capacity.",
+    "Ranges are alternatives and cannot all be set to their maximum at the same time."
+  ],
+  "populationLedger": {
+    "ageGroups": {
+      "age0To15": 18000,
+      "age16To64": 68000,
+      "age65Plus": 14000,
+      "total": 100000
+    },
+    "workingAgeStates": {
+      "staffedPositions": 52000,
+      "fullTimeEducation": 4000,
+      "illnessDisabilityParentalAndFullTimeCare": 7000,
+      "unemployedTransitionAndJobSeeking": 3000,
+      "otherTemporarilyUnavailable": 2000,
+      "total": 68000
+    }
+  },
+  "staffAllocations": [
+    {"id": "AGRICULTURE", "name": "农业与初级农产生产", "headcount": 8500, "populationShare": 0.085, "workforceShare": 0.1635, "reasonableRange": [6500, 12000]},
+    {"id": "RAW_RESOURCES", "name": "采矿、林业、拆解与再生资源", "headcount": 2500, "populationShare": 0.025, "workforceShare": 0.0481, "reasonableRange": [2000, 4000]},
+    {"id": "DIRECT_MANUFACTURING", "name": "制造工厂直接岗位", "headcount": 9000, "populationShare": 0.09, "workforceShare": 0.1731, "reasonableRange": [7500, 11000]},
+    {"id": "INDUSTRIAL_SUPPORT", "name": "工业维护、质量、计量与再制造", "headcount": 2500, "populationShare": 0.025, "workforceShare": 0.0481, "reasonableRange": [2000, 3500]},
+    {"id": "CONSTRUCTION", "name": "工程建设与公共工务", "headcount": 3500, "populationShare": 0.035, "workforceShare": 0.0673, "reasonableRange": [3000, 5000]},
+    {"id": "UTILITIES", "name": "能源、水务、环卫与废弃物处理", "headcount": 2500, "populationShare": 0.025, "workforceShare": 0.0481, "reasonableRange": [2000, 3500]},
+    {"id": "LOGISTICS", "name": "运输、仓储与物流调度", "headcount": 3500, "populationShare": 0.035, "workforceShare": 0.0673, "reasonableRange": [3000, 5000]},
+    {"id": "HEALTH", "name": "医疗与公共卫生", "headcount": 3500, "populationShare": 0.035, "workforceShare": 0.0673, "reasonableRange": [3000, 4500]},
+    {"id": "EDUCATION", "name": "学校、职业教育与教培", "headcount": 2800, "populationShare": 0.028, "workforceShare": 0.0538, "reasonableRange": [2300, 3500]},
+    {"id": "RESEARCH", "name": "科研、设计、试验与标准", "headcount": 1200, "populationShare": 0.012, "workforceShare": 0.0231, "reasonableRange": [900, 1800]},
+    {"id": "GOVERNMENT", "name": "政府、财政、登记、司法接口与外交", "headcount": 1500, "populationShare": 0.015, "workforceShare": 0.0288, "reasonableRange": [1000, 2000]},
+    {"id": "POLICE", "name": "警察与日常内部安全", "headcount": 800, "populationShare": 0.008, "workforceShare": 0.0154, "reasonableRange": [600, 1000]},
+    {"id": "FIRE_RESCUE", "name": "消防、技术救援与民事应急", "headcount": 500, "populationShare": 0.005, "workforceShare": 0.0096, "reasonableRange": [350, 700]},
+    {"id": "ACTIVE_MILITARY", "name": "现役军队", "headcount": 1500, "populationShare": 0.015, "workforceShare": 0.0288, "reasonableRange": [1200, 2500]},
+    {"id": "CIVIL_COMMERCE", "name": "商贸、零售、餐饮与居民服务", "headcount": 4000, "populationShare": 0.04, "workforceShare": 0.0769, "reasonableRange": [3000, 6000]},
+    {"id": "SOCIAL_CARE", "name": "儿童、老人、残障与社会照护", "headcount": 1500, "populationShare": 0.015, "workforceShare": 0.0288, "reasonableRange": [1000, 2500]},
+    {"id": "COMMUNICATIONS_DATA", "name": "通信网络、数据、档案与公共信息", "headcount": 1000, "populationShare": 0.01, "workforceShare": 0.0192, "reasonableRange": [700, 1500]},
+    {"id": "MOBILE_LABOR_RESERVE", "name": "公共劳动与机动人力预备队", "headcount": 1700, "populationShare": 0.017, "workforceShare": 0.0327, "reasonableRange": [1000, 3000]}
+  ],
+  "factoryCapacity": {
+    "directManufacturingHeadcount": 9000,
+    "standardIndustrialLaborEquivalentHeadcount": 200,
+    "standardIndustrialLaborEquivalents": 45,
+    "standardProductionUnitCount": 200,
+    "productionUnitRange": [180, 240],
+    "physicalSiteRange": [70, 110],
+    "catalogProductCount": 82,
+    "flowOrControlledStockProductCount": 60,
+    "discreteOrderProductCount": 22,
+    "locallyActiveFlowProductRange": [45, 55],
+    "industrialSupportHeadcount": 2500,
+    "standardProductionUnitMix": [
+      {"scale": "micro_specialist", "unitCount": 80, "headcountPerUnit": 10, "headcount": 800},
+      {"scale": "small", "unitCount": 60, "headcountPerUnit": 30, "headcount": 1800},
+      {"scale": "medium", "unitCount": 40, "headcountPerUnit": 80, "headcount": 3200},
+      {"scale": "large_standardized", "unitCount": 20, "headcountPerUnit": 160, "headcount": 3200}
+    ],
+    "categories": [
+      {"id": "Y2-FC-CIV", "name": "民用工厂", "units": 5, "headcount": 1000},
+      {"id": "Y2-FC-FOD", "name": "食品加工厂", "units": 5, "headcount": 1000},
+      {"id": "Y2-FC-BLD", "name": "建材厂", "units": 4, "headcount": 800},
+      {"id": "Y2-FC-GLS", "name": "玻璃厂", "units": 2, "headcount": 400},
+      {"id": "Y2-FC-STL", "name": "炼钢厂", "units": 4, "headcount": 800},
+      {"id": "Y2-FC-NFM", "name": "有色金属厂", "units": 2, "headcount": 400},
+      {"id": "Y2-FC-CHM", "name": "化工厂", "units": 5, "headcount": 1000},
+      {"id": "Y2-FC-MCH", "name": "机械制造厂", "units": 6, "headcount": 1200},
+      {"id": "Y2-FC-ELC", "name": "电气、仪表与通信设备厂", "units": 5, "headcount": 1000},
+      {"id": "Y2-FC-VEH", "name": "车辆厂", "units": 3, "headcount": 600},
+      {"id": "Y2-FC-MED", "name": "医疗工业厂", "units": 2, "headcount": 400},
+      {"id": "Y2-FC-MIL", "name": "军事工厂", "units": 2, "headcount": 400}
+    ]
+  },
+  "productionScaleProfiles": [
+    {
+      "totalPopulation": 1000,
+      "directManufacturingHeadcountBaseline": 90,
+      "directManufacturingHeadcountRange": [70, 110],
+      "industrialSupportHeadcountBaseline": 25,
+      "industrialSupportHeadcountRange": [20, 35],
+      "productionUnitBaseline": 24,
+      "productionUnitRange": [20, 30],
+      "physicalSiteBaseline": 16,
+      "physicalSiteRange": [12, 20],
+      "locallyActiveFlowProductRange": [16, 22],
+      "availableDiscreteOrderProductRange": [4, 8]
+    },
+    {
+      "totalPopulation": 3000,
+      "directManufacturingHeadcountBaseline": 270,
+      "industrialSupportHeadcountBaseline": 75,
+      "productionUnitBaseline": 42,
+      "physicalSiteBaseline": 28
+    },
+    {
+      "totalPopulation": 10000,
+      "directManufacturingHeadcountBaseline": 900,
+      "directManufacturingHeadcountRange": [700, 1100],
+      "industrialSupportHeadcountBaseline": 250,
+      "industrialSupportHeadcountRange": [200, 350],
+      "productionUnitBaseline": 80,
+      "productionUnitRange": [60, 100],
+      "physicalSiteBaseline": 45,
+      "physicalSiteRange": [35, 60],
+      "locallyActiveFlowProductRange": [30, 45],
+      "availableDiscreteOrderProductRange": [10, 18]
+    },
+    {
+      "totalPopulation": 30000,
+      "directManufacturingHeadcountBaseline": 2700,
+      "industrialSupportHeadcountBaseline": 750,
+      "productionUnitBaseline": 130,
+      "physicalSiteBaseline": 65
+    },
+    {
+      "totalPopulation": 100000,
+      "directManufacturingHeadcountBaseline": 9000,
+      "directManufacturingHeadcountRange": [7500, 11000],
+      "industrialSupportHeadcountBaseline": 2500,
+      "industrialSupportHeadcountRange": [2000, 3500],
+      "productionUnitBaseline": 200,
+      "productionUnitRange": [180, 240],
+      "physicalSiteBaseline": 90,
+      "physicalSiteRange": [70, 110],
+      "locallyActiveFlowProductRange": [45, 55],
+      "availableDiscreteOrderProductCount": 22
+    }
+  ],
+  "agricultureCapacity": {
+    "headcount": 8500,
+    "managedLandHectaresRange": [20000, 28000],
+    "productionDistrictRange": [20, 30],
+    "baselineCalorieSelfSupplyShareRange": [0.8, 0.9],
+    "roles": {
+      "fieldCrops": 3000,
+      "horticultureGreenhouseOrchards": 1200,
+      "livestockPoultryAquaculture": 1400,
+      "seedSoilIrrigationPlantHealthVeterinary": 900,
+      "collectionGradingDryingPrimaryHandling": 800,
+      "farmMachineryAndFieldRepair": 700,
+      "organizationExtensionSeasonalDispatch": 500
+    }
+  },
+  "engineeringCapacity": {
+    "headcount": 3500,
+    "fieldTeamCount": 29,
+    "generalConstructionTeams": {"count": 20, "headcountPerTeam": 100, "total": 2000},
+    "heavyCivilTeams": {"count": 5, "headcountPerTeam": 160, "total": 800},
+    "utilityEngineeringTeams": {"count": 4, "headcountPerTeam": 100, "total": 400},
+    "centralSurveyDesignManagement": 300
+  },
+  "researchCapacity": {
+    "headcount": 1200,
+    "directResearchers": 450,
+    "engineeringDesignPrototype": 350,
+    "laboratoryAndFieldTechnicians": 200,
+    "standardsMetrologyDataArchives": 150,
+    "organizationSafetyAdministration": 50,
+    "majorInstituteCount": 6,
+    "concurrentProjectRange": [8, 12]
+  },
+  "healthCapacity": {
+    "headcount": 3500,
+    "staffedBeds": 500,
+    "centralHospital": {"count": 1, "beds": 280},
+    "regionalHospitals": {"count": 4, "bedsPerHospital": 55, "totalBeds": 220},
+    "primaryCarePointRange": [10, 12],
+    "socialCareHeadcountSeparate": 1500
+  },
+  "educationCapacity": {
+    "headcount": 2800,
+    "teacherHeadcount": 1600,
+    "communitySchoolCount": 16,
+    "secondaryAndVocationalSchoolCount": 4,
+    "technicalInstituteCount": 1,
+    "childLearners": 18000,
+    "fullTimeYouthLearners": 4000
+  },
+  "governmentCapacity": {
+    "headcount": 1500,
+    "centralAdministrativeCenterCount": 1,
+    "localServiceCenterCount": 10
+  },
+  "policeCapacity": {
+    "headcount": 800,
+    "localStationCount": 10,
+    "regionalInvestigationAndEvidenceCenterCount": 1,
+    "dispatchCenterCount": 1,
+    "sharedTrainingOversightAndTemporaryCustody": true
+  },
+  "fireRescueCapacity": {
+    "headcount": 500,
+    "stationCount": 6
+  },
+  "militaryCapacity": {
+    "activeHeadcount": 1500,
+    "forceScale": "reinforced_regiment_or_brigade_skeleton",
+    "combat": 750,
+    "combatSupport": 200,
+    "logisticsMaintenanceRecovery": 300,
+    "commandStaffIntelligenceCommunications": 150,
+    "medicalTrainingPersonnel": 100,
+    "partTimeReserveRange": [3000, 5000],
+    "reserveIsAdditionalPopulation": false
+  }
+}

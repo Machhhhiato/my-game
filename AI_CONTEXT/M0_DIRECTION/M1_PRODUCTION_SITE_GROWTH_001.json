@@ -1,0 +1,55 @@
+{
+  "modelId": "M1-PRODUCTION-SITE-GROWTH-001",
+  "version": 1,
+  "status": "active_review",
+  "dateGate": false,
+  "simulationAuthorized": false,
+  "scaleProfiles": [
+    {"population": 1000, "directManufacturing": 90, "industrialSupport": 25, "productionUnits": 24, "physicalSites": 16},
+    {"population": 3000, "directManufacturing": 270, "industrialSupport": 75, "productionUnits": 42, "physicalSites": 28},
+    {"population": 10000, "directManufacturing": 900, "industrialSupport": 250, "productionUnits": 80, "physicalSites": 45},
+    {"population": 30000, "directManufacturing": 2700, "industrialSupport": 750, "productionUnits": 130, "physicalSites": 65},
+    {"population": 100000, "directManufacturing": 9000, "industrialSupport": 2500, "productionUnits": 200, "physicalSites": 90}
+  ],
+  "siteForms": [
+    {"id": "SITE-HOUSEHOLD", "name": "家庭或临时作业点", "directWorkerRange": [2, 5], "productionUnitRange": [1, 1]},
+    {"id": "SITE-SMALL-WORKSHOP", "name": "小型专业作坊", "directWorkerRange": [4, 15], "productionUnitRange": [1, 2]},
+    {"id": "SITE-SHARED-YARD", "name": "共享作坊场院", "directWorkerRange": [12, 60], "productionUnitRange": [2, 6]},
+    {"id": "SITE-STANDARD-FACTORY", "name": "标准工厂场址", "directWorkerRange": [50, 350], "productionUnitRange": [4, 12]},
+    {"id": "SITE-INDUSTRIAL-COMPLEX", "name": "工业联合场址", "directWorkerRange": [250, 1500], "productionUnitRange": [8, 30]}
+  ],
+  "capacityAxes": [
+    "qualified_staff",
+    "equipment",
+    "building_space",
+    "electricity",
+    "water_heat_industrial_gas",
+    "material_supply",
+    "storage_and_logistics",
+    "safety_and_environmental_permission",
+    "maintenance_and_quality",
+    "organization_and_proficiency"
+  ],
+  "growthActions": [
+    {"id": "ACTION-ADD-SHIFT", "name": "增加班次", "createsSite": false, "createsProductionUnit": false},
+    {"id": "ACTION-INSTALL-UNIT", "name": "原场址安装生产单元", "createsSite": false, "createsProductionUnit": true},
+    {"id": "ACTION-EXTEND-SITE", "name": "原场址扩建", "createsSite": false, "createsProductionUnit": false},
+    {"id": "ACTION-BUILD-SITE", "name": "新建物理场址", "createsSite": true, "createsProductionUnit": false},
+    {"id": "ACTION-REFIT-UNIT", "name": "生产单元技术改造", "createsSite": false, "createsProductionUnit": false},
+    {"id": "ACTION-CONVERT-OUTPUT", "name": "生产单元换产", "createsSite": false, "createsProductionUnit": false},
+    {"id": "ACTION-RETIRE-REPURPOSE", "name": "停产、合并或转用", "createsSite": false, "createsProductionUnit": false}
+  ],
+  "independentExpansionProjectTypes": [
+    "production_building_extension",
+    "electricity_and_distribution_expansion",
+    "water_heat_or_industrial_gas_expansion",
+    "input_and_output_storage_expansion",
+    "road_loading_and_internal_logistics_expansion",
+    "fire_hazardous_material_and_occupational_safety_retrofit",
+    "wastewater_emission_solid_waste_and_environmental_control_expansion"
+  ],
+  "expansionPlanIsAtomicProject": false,
+  "productionRequiresCommissioning": true,
+  "technologyAutomaticallyCreatesCapacity": false,
+  "populationAutomaticallyUnlocksTechnology": false
+}

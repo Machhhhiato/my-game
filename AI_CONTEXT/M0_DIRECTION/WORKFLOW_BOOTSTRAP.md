@@ -1,6 +1,6 @@
 ---
 workflow_id: always-game-m0-four-layer
-workflow_version: 7
+workflow_version: 8
 milestone: M0-personal-playable
 direction_branch: context/m0-direction
 active_tasks: AI_CONTEXT/M0_DIRECTION/ACTIVE_TASKS.md
@@ -38,6 +38,7 @@ session_routing: AI_CONTEXT/M0_DIRECTION/SESSION_ROUTING.md
 - 第一层开始任何下层工作前，必须先登记真实任务 ID、模型、基线、任务卡和允许范围。缺少登记时不得修改产品文件；无安全线程可用时返回 `BLOCKED_THREAD`。
 - 第一层发现下层缺陷后只做审查和退回。包括一行样式、一个字符串、一个测试断言在内的产品修订，都必须由同一第四层任务或正式接替任务完成。既有全局授权不构成越层例外。
 - 只有用户针对当次任务明确说“允许第一层直接修改”，第一层才可执行一次范围清楚的例外；必须记录原话、文件范围和结束点。过去的第一层补修只记为流程错误，不自动授权未来重复。
+- 下层任务显示`completed`但应用接口返回空列表、空`latestAssistantMessage`或漏显正文时，只能记为`API_EMPTY_READ`。第一层必须先以准确任务ID和回合ID核对本地rollout日志中的助手消息与`task_complete.last_agent_message`，不得直接判空、报`BLOCKED_THREAD`、重复派发或新建接替任务；用户说结果已返回时，这项本地核验优先于任何状态修改。
 
 ## 启动时的读取顺序
 
@@ -52,9 +53,11 @@ session_routing: AI_CONTEXT/M0_DIRECTION/SESSION_ROUTING.md
 9. 阅读 `PLAIN_LANGUAGE_RULES.md`。
 10. 阅读 `TASK_PACKAGES.md` 中对应任务卡。
 11. 阅读 `NEXT_ACTION.md` 指向的最新 session 或 amendment 原话证据；摘要不能代替这一步。
-12. 第四层 `implement` 任务还必须读取 accepted 的 `day-night-execution-plan.md` 和本批已经填写的 `NIGHT WORK ORDER`。
-13. 检查全部依赖、输入版本、项目归属、允许路径和禁止事项。
-14. 返回启动回执。第一层方向任务等待用户明确开始；第二至第四层由第一层派发时，以该派发和已满足依赖作为启动指令。第四层 `implement` 任务还必须具备可追溯写入授权；已经接受的项目内持续授权可以覆盖其范围内的操作，不需要重复询问，但不能替代任务卡、线程派发、白名单或阶段边界。启动语本身不授权执行产品任务。
+12. 任务涉及科研、工程或临时法令的名称、效果、正文、故事、审核、数据录入或页面接入时，必须全文读取 `RESEARCH_ENGINEERING_EDICT_TEXT_RULES_001.md` 并提供实际范围与 SHA-256 回执；科研文字任务还须全文读取该文件指向的 revision 6 原始语料。漏读时返回 `BLOCKED_SOURCE`。
+13. 第一层收取下层结果时，如应用接口未显示助手正文，先执行本地rollout日志二次核验；未核验不得登记为空交付或阻塞。
+14. 第四层 `implement` 任务还必须读取 accepted 的 `day-night-execution-plan.md` 和本批已经填写的 `NIGHT WORK ORDER`。
+15. 检查全部依赖、输入版本、项目归属、允许路径和禁止事项。
+16. 返回启动回执。第一层方向任务等待用户明确开始；第二至第四层由第一层派发时，以该派发和已满足依赖作为启动指令。第四层 `implement` 任务还必须具备可追溯写入授权；已经接受的项目内持续授权可以覆盖其范围内的操作，不需要重复询问，但不能替代任务卡、线程派发、白名单或阶段边界。启动语本身不授权执行产品任务。
 
 Codex 在每个新任务开始时建立一次全局到项目的说明链。安装或修改入口后，必须新建任务测试，不能用已经打开的旧任务证明新入口生效。全局入口还必须先检查 `AGENTS.override.md` 是否存在，因为它会覆盖同级 `AGENTS.md`。
 
@@ -78,7 +81,7 @@ Codex 在每个新任务开始时建立一次全局到项目的说明链。安�
 项目：Always Game
 里程碑：M0 个人完整试玩版
 层级：<第一至第四层｜名称>
-协议：M0 四层工作流 v7
+协议：M0 四层工作流 v8
 Git 基线：<branch>@<commit>
 任务目的地：<stable lane｜host｜建议标题>
 当前任务：<task_id｜名称>

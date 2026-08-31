@@ -1,0 +1,65 @@
+{
+  "manifestId": "M1-VISUAL-ASSET-MANIFEST-CALIBRATION-001",
+  "taskId": "M1-L1-522",
+  "status": "calibration_v1_complete_waiting_visual_review",
+  "date": "2026-08-30",
+  "productAssetAuthorized": false,
+  "canvasContract": {
+    "masterPx": [1536, 1024],
+    "aspectRatio": "3:2",
+    "mode": "RGBA",
+    "safeBoxPx": {"left": 122, "top": 61, "right": 1414, "bottom": 942},
+    "anchorPx": [768, 942],
+    "anchorNormalized": [0.5, 0.9199],
+    "derivativesPx": [[768, 512], [384, 256]],
+    "resizeRule": "contain_only_no_stretch_no_recrop"
+  },
+  "assets": [
+    {
+      "assetId": "FAC-WATER-INTAKE-CAL-001",
+      "displayName": "取水泵站",
+      "family": "map_facility",
+      "logicalFootprintAxial": [[0, 0]],
+      "generatedMaster": "visuals/m1-asset-calibration-v1/masters/facility-water-intake-master-001.png",
+      "normalizedMaster": "visuals/m1-asset-calibration-v1/normalized-1536/facility-water-intake-normalized-1536x1024.png",
+      "runtimeCandidate": "visuals/m1-asset-calibration-v1/runtime-768/facility-water-intake-768x512.png",
+      "labSample": "visuals/m1-asset-calibration-v1/lab-webp-768/facility-water-intake-768x512.webp",
+      "archivalPngSample": "visuals/m1-asset-calibration-v1/lab-384/facility-water-intake-384x256.png",
+      "normalizedOpaqueBoundsPx": {"left": 206, "top": 61, "right": 1329, "bottom": 942},
+      "lod": {"far": "functional_marker", "mid": "raster", "near": "raster_with_connections"},
+      "status": "calibration_candidate_not_product_asset"
+    },
+    {
+      "assetId": "FAC-STANDARD-FACTORY-CAL-001",
+      "displayName": "标准工厂",
+      "family": "map_facility",
+      "logicalFootprintAxial": [[0, 0], [1, 0], [0, 1], [1, -1]],
+      "generatedMaster": "visuals/m1-asset-calibration-v1/masters/facility-standard-factory-master-001.png",
+      "normalizedMaster": "visuals/m1-asset-calibration-v1/normalized-1536/facility-standard-factory-normalized-1536x1024.png",
+      "runtimeCandidate": "visuals/m1-asset-calibration-v1/runtime-768/facility-standard-factory-768x512.png",
+      "labSample": "visuals/m1-asset-calibration-v1/lab-webp-768/facility-standard-factory-768x512.webp",
+      "archivalPngSample": "visuals/m1-asset-calibration-v1/lab-384/facility-standard-factory-384x256.png",
+      "normalizedOpaqueBoundsPx": {"left": 122, "top": 79, "right": 1414, "bottom": 942},
+      "lod": {"far": "footprint_and_status_marker", "mid": "raster", "near": "raster_with_connections"},
+      "status": "calibration_candidate_not_product_asset"
+    },
+    {
+      "assetId": "FAC-INDUSTRIAL-CAMPUS-CAL-001",
+      "displayName": "联合厂区",
+      "family": "map_facility",
+      "logicalFootprintAxial": [[0, 0], [1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]],
+      "generatedMaster": "visuals/m1-asset-calibration-v1/masters/facility-industrial-campus-master-001.png",
+      "normalizedMaster": "visuals/m1-asset-calibration-v1/normalized-1536/facility-industrial-campus-normalized-1536x1024.png",
+      "runtimeCandidate": "visuals/m1-asset-calibration-v1/runtime-768/facility-industrial-campus-768x512.png",
+      "labSample": "visuals/m1-asset-calibration-v1/lab-webp-768/facility-industrial-campus-768x512.webp",
+      "archivalPngSample": "visuals/m1-asset-calibration-v1/lab-384/facility-industrial-campus-384x256.png",
+      "normalizedOpaqueBoundsPx": {"left": 122, "top": 107, "right": 1414, "bottom": 942},
+      "lod": {"far": "footprint_and_status_marker", "mid": "raster", "near": "raster_with_connections"},
+      "status": "calibration_candidate_not_product_asset"
+    }
+  ],
+  "requiredMapModes": ["default", "survey", "engineering", "logistics", "military"],
+  "requiredZooms": ["far", "mid", "near"],
+  "requiredViewports": ["1920x1080@1x", "1366x768@1x", "1920x1080@2x"],
+  "nextGate": "user_visual_review_then_fourth_layer_product_renderer_task"
+}

@@ -7,6 +7,7 @@ import {
   type ResourceId,
   type Stocks,
 } from './types';
+import { supportedPopulation } from './populationAccounting';
 
 export type ProtectedResource = 'water' | 'food' | 'commonParts';
 
@@ -27,21 +28,52 @@ export interface DailyResourceRate {
   outflow: number;
 }
 
-function livingPopulation(state: M0State): number {
-  return state.population.normal + state.population.unableToWork + state.population.critical;
+function settlementWaterInflow(state: M0State): number {
+  return state.settlement?.status === 'served' && state.settlement.services.water.operational
+    ? state.settlement.services.water.capacity : 0;
+}
+
+function settlementFoodInflow(state: M0State): number {
+  if (!state.settlement || state.settlement.status !== 'served'
+    || !state.settlement.services.foodSource.operational
+    || !state.settlement.services.foodProcessing.operational) return 0;
+  return Math.min(
+    state.settlement.services.foodSource.capacity,
+    state.settlement.services.foodProcessing.capacity,
+  );
+}
+
+export function settlementServiceMaintenanceDemand(state: M0State): number {
+  if (!state.settlement || state.settlement.status !== 'served') return 0;
+  const maintainedServices = [
+    state.settlement.services.water.operational,
+    state.settlement.services.foodSource.operational,
+    state.settlement.services.foodProcessing.operational,
+    state.settlement.services.power.operational,
+    state.settlement.services.sanitation.operational,
+    state.settlement.services.medical.operational,
+    state.settlement.services.housing.operational,
+  ].filter(Boolean).length;
+  return maintainedServices === 0 ? 0 : Math.ceil(state.settlement.servedPopulation / 500);
 }
 
 export function waterInflow(state: M0State): number {
   const workers = state.workforce.water;
-  if (workers < 2) return 0;
-  if (state.waterworks.repaired) return Math.min(44, 20 + workers * 4);
-  return Math.min(32, 20 + workers * 2);
+  const settlement = settlementWaterInflow(state);
+  if (workers < 2) return settlement;
+  const headquarters = state.waterworks.repaired
+    ? Math.min(44, 20 + workers * 4)
+    : Math.min(32, 20 + workers * 2);
+  return headquarters + settlement;
 }
 
 export function foodInflow(state: M0State): number {
-  if (state.workforce.food < 3 || state.workforce.logistics < 2) return 0;
-  if (state.workforce.food <= 5) return 5 + state.workforce.food * 5;
-  return Math.min(42, 30 + (state.workforce.food - 5) * 6);
+  const settlement = settlementFoodInflow(state);
+  if (state.workforce.food < 3 || state.workforce.logistics < 2) return settlement;
+  const headquarters = state.workforce.food <= 5
+    ? 5 + state.workforce.food * 5
+    : Math.min(42, 30 + (state.workforce.food - 5) * 6);
+  return headquarters + settlement;
 }
 
 export function maintenancePlan(state: M0State): MaintenancePlan {
@@ -65,7 +97,11 @@ export function availableAmount(state: M0State, resource: ResourceId): number {
 }
 
 export function dailyUse(state: M0State, resource: ProtectedResource): number {
-  return resource === 'commonParts' ? 3 : Math.max(1, livingPopulation(state));
+  return resource === 'commonParts'
+    ? 3 + settlementServiceMaintenanceDemand(state)
+    : Math.max(1, supportedPopulation(state) - (resource === 'water'
+      ? settlementWaterInflow(state)
+      : settlementFoodInflow(state)));
 }
 
 export function coverageDays(state: M0State, resource: ProtectedResource): number {
@@ -87,18 +123,19 @@ function commonPartsRate(state: M0State): DailyResourceRate {
   const plan = shouldUseHeadquartersSalvage(state)
     ? { repair: 4, consume: 3 }
     : maintenancePlan(state);
+  const maintenanceDemand = plan.consume + settlementServiceMaintenanceDemand(state);
   const repairSource = shouldUseHeadquartersSalvage(state) ? plan.repair : state.oldRepairableParts;
   const available = availableAmount(state, 'commonParts');
-  const repairCapacity = Math.max(0, state.stocks.commonParts.capacity - available + plan.consume);
+  const repairCapacity = Math.max(0, state.stocks.commonParts.capacity - available + maintenanceDemand);
   return {
     inflow: Math.min(plan.repair, repairSource, repairCapacity),
-    outflow: plan.consume,
+    outflow: maintenanceDemand,
   };
 }
 
 export function dailyResourceRate(state: M0State, resource: ResourceId): DailyResourceRate {
-  if (resource === 'water') return { inflow: waterInflow(state), outflow: livingPopulation(state) };
-  if (resource === 'food') return { inflow: foodInflow(state), outflow: livingPopulation(state) };
+  if (resource === 'water') return { inflow: waterInflow(state), outflow: supportedPopulation(state) };
+  if (resource === 'food') return { inflow: foodInflow(state), outflow: supportedPopulation(state) };
   if (resource === 'commonParts') return commonPartsRate(state);
   return { inflow: 0, outflow: 0 };
 }

@@ -1,4 +1,4 @@
-export const M0_STATE_VERSION = 7 as const;
+export const M0_STATE_VERSION = 9 as const;
 
 export type ResourceId = 'water' | 'food' | 'commonParts' | 'engineeringComponents' | 'alloy' | 'precisionParts';
 export type DailyLineId = 'water' | 'food' | 'maintenance' | 'logistics';
@@ -15,6 +15,8 @@ export type PauseReason =
   | null;
 export type ReturnTo = DailyLineId | 'development' | 'standby' | null;
 export type GameSpeed = 1 | 2 | 4;
+export type ProductionLineId = 'common-parts-remanufacturing' | 'precision-parts' | 'survey-drone';
+export type ProductionBlockReason = 'facility-unavailable' | 'technology-locked' | 'input-shortage' | 'asset-limit' | null;
 
 export interface GameDate {
   year: number;
@@ -25,6 +27,7 @@ export interface GameDate {
 export interface ScenarioConfig {
   id: string;
   startDate: GameDate;
+  existingSettlementPopulation?: number;
 }
 
 export interface Stock {
@@ -168,8 +171,30 @@ export type ResearchMode = 'manual' | 'automatic';
 export type ResearchDomain = 'manufacturing' | 'surveying' | 'engineering';
 export type CellIntel = 'unknown' | 'known' | 'candidate' | 'route' | 'site';
 export type TerrainId = 'hardground' | 'mud' | 'slope' | 'shore' | 'plain';
-export type OccupationId = 'empty' | 'headquarters' | 'waterworks' | 'food-site' | 'industrial-ruin' | 'future-site';
+export type OccupationId = 'empty' | 'headquarters' | 'waterworks' | 'food-site' | 'industrial-ruin' | 'future-site' | 'settlement';
 export type SurveyPauseReason = 'player' | 'day-limit' | 'route-choice' | 'staffing' | 'safety' | null;
+export type SurveyStatus = 'unstarted' | 'running' | 'player-paused' | 'system-paused' | 'completed';
+export type RecoveryProjectId = 'floor_common_parts' | 'floor_engineering_components' | 'floor_alloy';
+export type OpeningServiceId = 'water' | 'food' | 'power' | 'sanitation' | 'medical' | 'housing';
+export type OpeningProjectId = 'opening-water-repair'
+  | 'opening-food-source'
+  | 'opening-food-processing'
+  | 'opening-critical-power'
+  | 'opening-sanitation'
+  | 'opening-basic-medical'
+  | 'opening-housing'
+  | 'opening-registration'
+  | 'opening-basic-industry';
+export type OpeningEvidenceId =
+  | 'population_registered_served'
+  | 'water_repeatable'
+  | 'food_repeatable'
+  | 'critical_power'
+  | 'sanitation_medical'
+  | 'repair_sustainment'
+  | 'basic_industry'
+  | 'mobile_workforce'
+  | 'idle_queue';
 
 export interface ResearchFacility {
   id: string;
@@ -216,6 +241,72 @@ export interface SurveyRecord {
   selectedRouteId: string | null;
 }
 
+export interface OpeningServiceCapacity {
+  capacity: number;
+  operational: boolean;
+}
+
+export interface ExistingSettlementState {
+  id: 'opening-settlement-01';
+  locationCellId: string;
+  population: number;
+  status: 'uncontacted' | 'contacted' | 'services-approved' | 'ready-to-integrate' | 'served';
+  registeredPopulation: number;
+  servedPopulation: number;
+  servedSince: GameDate | null;
+  workforceEligible: number;
+  workforceAssigned: number;
+  basicProductionUnits: number;
+  services: {
+    water: OpeningServiceCapacity;
+    foodSource: OpeningServiceCapacity;
+    foodProcessing: OpeningServiceCapacity;
+    power: OpeningServiceCapacity;
+    sanitation: OpeningServiceCapacity;
+    medical: OpeningServiceCapacity;
+    housing: OpeningServiceCapacity;
+    registrationComplete: boolean;
+  };
+}
+
+export interface OpeningContinuityMonth {
+  year: number;
+  month: number;
+  waterMet: boolean;
+  foodMet: boolean;
+  criticalServicesOperational: boolean;
+  maintenanceRecoverable: boolean;
+  resourceAccountingConserved: boolean;
+}
+
+export interface OpeningCurrentMonth {
+  year: number;
+  month: number;
+  calendarDays: number;
+  servedDays: number;
+  waterGapDays: number;
+  foodGapDays: number;
+  criticalServiceGapDays: number;
+  maintenanceGapDays: number;
+}
+
+export interface OpeningLoopState {
+  continuityMonths: OpeningContinuityMonth[];
+  currentMonth: OpeningCurrentMonth;
+}
+
+export interface OpeningLoopEvidenceItem {
+  id: OpeningEvidenceId;
+  status: 'pass' | 'blocked';
+  gap: string | null;
+}
+
+export interface OpeningLoopEvidence {
+  items: OpeningLoopEvidenceItem[];
+  consecutiveMonths: number;
+  passed: boolean;
+}
+
 export interface M0MapState {
   cells: LocalMapCell[];
   routes: LocalMapRoute[];
@@ -235,6 +326,20 @@ export interface ResearchState {
   roundTarget: number | null;
   blockedProjectId: string | null;
   blockedReason: 'physical-prerequisite' | 'manual-choice' | 'no-project' | null;
+}
+
+export interface ProductionLineState {
+  id: ProductionLineId;
+  allocatedFactories: number;
+  progress: number;
+  workRequired: number;
+  batchesCompleted: number;
+  blockedReason: ProductionBlockReason;
+}
+
+export interface ProductionState {
+  totalFactories: number;
+  lines: ProductionLineState[];
 }
 
 export interface DroneAsset {
@@ -302,6 +407,9 @@ export interface M0State {
   projects: Project[];
   map: M0MapState;
   research: ResearchState;
+  production: ProductionState;
+  settlement: ExistingSettlementState;
+  openingLoop: OpeningLoopState;
   drone: DroneAsset | null;
   warnings: string[];
   events: M0Event[];
